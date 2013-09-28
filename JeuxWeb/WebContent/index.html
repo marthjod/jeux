@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script type="text/javascript" src="js/jquery-2.0.3.js"></script>
+<script type="text/javascript" src="js/get.js"></script>
+<script type="text/javascript" src="js/put.js"></script>
+<script type="text/javascript" src="js/input.js"></script>
+
+<script>
+			 $( document ).ready(function() {
+				 getRESTApiStatus($( "#rest-api-status" ));
+			 });
+		</script>
+<title>JEUX</title>
+</head>
+<body>
+
+	<div id="rest-api-status">REST API status unknown</div>
+
+	<div id="create-new-group">
+
+		Create new group:
+		<form action="#">
+			Name <input id="name" type="text"
+				onchange="check_submit_ready(this);" /> Round <input id="round"
+				type="number" size="2" maxlength="2" min="1"
+				onchange="check_submit_ready(this);" /> Min sets <input
+				id="min-sets" type="number" size="2" maxlength="2" min="1"
+				onchange="check_submit_ready(this);"
+				oninput="prefill_max_sets(this);" /> Max sets <input id="max-sets"
+				type="number" size="2" maxlength="2" min="1"
+				onchange="check_submit_ready(this);" /> <input type="submit"
+				id="submit-create-group" value="Create new group"
+				disabled="disabled" onclick="create_new_group(this);" /> <span
+				id="creation-result"> </span>
+
+		</form>
+
+	</div>
+
+</body>
+</html>

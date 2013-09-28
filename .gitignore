@@ -1,0 +1,9 @@
+*.jar
+jquery*.js
+*.class
+build/
+.settings/
+.classpath
+.project
+*.!sync
+*.swp*
