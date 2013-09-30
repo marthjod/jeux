@@ -25,9 +25,15 @@ public class CreateNewGroupServlet extends HttpServlet {
 		super();
 	}
 
+	/*
+	 * Sets HTTP response status code to 201 Created if group entity has been
+	 * successfully created, 500 Internal Server Error otherwise.
+	 */
 	@Override
 	protected void doPut(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
+
+		boolean groupCreated = false;
 
 		BufferedReader requestBody = new BufferedReader(request.getReader());
 		StringBuilder jsonData = new StringBuilder();
@@ -36,8 +42,14 @@ public class CreateNewGroupServlet extends HttpServlet {
 			jsonData.append(s);
 		}
 
-		createNewGroupBean.createNewGroup(jsonData.toString());
+		logger.debug("Received JSON data: '" + jsonData.toString() + "'");
 
+		groupCreated = createNewGroupBean.createNewGroup(jsonData.toString());
+		if (groupCreated) {
+			response.setStatus(HttpServletResponse.SC_CREATED);
+		} else {
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+		}
 	}
 
 }

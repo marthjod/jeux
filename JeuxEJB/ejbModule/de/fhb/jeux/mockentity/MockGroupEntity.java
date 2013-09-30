@@ -58,4 +58,9 @@ public class MockGroupEntity implements IGroup {
 		return completed;
 	}
 
+	@Override
+	public String toString() {
+		return "'" + this.name + "' (ID " + this.id + "), " + this.minSets
+				+ "-" + this.maxSets + " sets";
+	}
 }

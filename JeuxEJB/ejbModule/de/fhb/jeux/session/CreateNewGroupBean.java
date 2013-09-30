@@ -25,10 +25,17 @@ public class CreateNewGroupBean implements CreateNewGroupRemote,
 	public boolean createNewGroup(String jsonRepresentation) {
 		boolean success = false;
 
+		// TODO try/catch exception from Gson here
 		IGroup group = gson.fromJson(jsonRepresentation.toString(),
 				MockGroupEntity.class);
 
+		// if (success) {
+		logger.debug("Created group " + group.toString());
+		// } else {
+		// logger.debug("Failed to create group from JSON '"
+		// + jsonRepresentation + "'");
+		// }
+
 		return success;
 	}
-
 }

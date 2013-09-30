@@ -14,4 +14,7 @@ public interface IGroup {
 	public boolean isActive();
 
 	public boolean isCompleted();
+
+	@Override
+	public String toString();
 }
