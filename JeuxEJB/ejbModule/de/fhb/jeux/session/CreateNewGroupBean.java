@@ -2,7 +2,7 @@ package de.fhb.jeux.session;
 
 import javax.ejb.Stateless;
 
-import org.apache.log4j.Logger;
+import org.jboss.logging.Logger;
 
 import com.google.gson.Gson;
 

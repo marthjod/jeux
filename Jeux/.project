@@ -3,6 +3,8 @@
 	<name>Jeux</name>
 	<comment></comment>
 	<projects>
+		<project>JeuxEJB</project>
+		<project>JeuxWeb</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

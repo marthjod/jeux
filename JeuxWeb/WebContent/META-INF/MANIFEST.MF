@@ -1,4 +1,3 @@
 Manifest-Version: 1.0
-Class-Path: JeuxEJB.jar 
- log4j.jar
+Class-Path: JeuxEJB.jar
 
