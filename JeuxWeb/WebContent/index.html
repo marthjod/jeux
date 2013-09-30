@@ -22,18 +22,39 @@
 
 		Create new group:
 		<form action="#">
-			Name <input id="name" type="text"
-				onchange="check_submit_ready(this);" /> Round <input id="round"
-				type="number" size="2" maxlength="2" min="1"
-				onchange="check_submit_ready(this);" /> Min sets <input
-				id="min-sets" type="number" size="2" maxlength="2" min="1"
-				onchange="check_submit_ready(this);"
-				oninput="prefill_max_sets(this);" /> Max sets <input id="max-sets"
-				type="number" size="2" maxlength="2" min="1"
-				onchange="check_submit_ready(this);" /> <input type="submit"
-				id="submit-create-group" value="Create new group"
-				disabled="disabled" onclick="create_new_group(this);" /> <span
-				id="creation-result"> </span>
+		    Name 
+			     <input id="name" 
+			         type="text"
+			         onchange="check_submit_ready(this);" /> 
+		    Round 
+		         <input id="round"
+				    type="number" 
+				    size="2" 
+				    maxlength="2" 
+				    min="1"
+				    onchange="check_submit_ready(this);" /> 
+		     Min sets 
+		         <input id="min-sets" 
+		              type="number" 
+		              size="2" 
+		              maxlength="2" 
+		              min="1"
+				      onchange="check_submit_ready(this);"
+				      oninput="prefill_max_sets(this);" /> Max sets <input id="max-sets"
+				      type="number" 
+				      size="2" 
+				      maxlength="2" 
+				      min="1"
+				      onchange="check_submit_ready(this);" /> 
+		    <input id="submit-create-group"
+		        type="submit"
+				value="Create new group"
+				disabled="disabled" 
+				onclick="create_new_group(this);" /> 
+				
+				<span
+				    id="creation-result"> 
+				</span>
 
 		</form>
 
