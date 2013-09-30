@@ -37,6 +37,9 @@ function create_new_group(groupSubmit) {
 			window.setTimeout(function() {
 				$("#creation-result").html("");
 			}, 5000);
+		},
+		error : function () {
+			$("#creation-result").html("Failed to create group");
 		}
 	});
 }
