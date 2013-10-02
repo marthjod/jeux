@@ -1,16 +1,16 @@
 package de.fhb.jeux.mockentity;
 
+import de.fhb.jeux.model.IGroup;
 import de.fhb.jeux.model.IPlayer;
-import de.fhb.jeux.util.RandomUtils;
 
 public class MockPlayerEntity implements IPlayer {
 
-	private final int id;
-	private final int groupId;
-	private final String name;
-	private final int points;
-	private final int scoreRatio;
-	private final int rank;
+	private int id;
+	private IGroup group;
+	private String name;
+	private int points;
+	private int scoreRatio;
+	private int rank;
 
 	public MockPlayerEntity() {
 		this.id = RandomUtils.randInt(1, 12);
@@ -27,8 +27,8 @@ public class MockPlayerEntity implements IPlayer {
 	}
 
 	@Override
-	public int getGroupId() {
-		return groupId;
+	public IGroup getGroup() {
+		return this.group;
 	}
 
 	@Override
@@ -49,6 +49,12 @@ public class MockPlayerEntity implements IPlayer {
 	@Override
 	public int getRank() {
 		return rank;
+	}
+
+	@Override
+	public boolean equals(IPlayer player) {
+		// assuming unique IDs
+		return this.id == player.getId();
 	}
 
 }

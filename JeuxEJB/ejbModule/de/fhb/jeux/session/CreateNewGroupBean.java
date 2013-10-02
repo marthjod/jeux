@@ -5,6 +5,9 @@ import javax.ejb.Stateless;
 import org.jboss.logging.Logger;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonSyntaxException;
 
 import de.fhb.jeux.mockentity.MockGroupEntity;
 import de.fhb.jeux.model.IGroup;
@@ -15,7 +18,7 @@ public class CreateNewGroupBean implements CreateNewGroupRemote,
 
 	protected static Logger logger = Logger.getLogger(CreateNewGroupBean.class);
 
-	private final Gson gson;
+	private Gson gson;
 
 	public CreateNewGroupBean() {
 		this.gson = new Gson();
@@ -24,17 +27,28 @@ public class CreateNewGroupBean implements CreateNewGroupRemote,
 	@Override
 	public boolean createNewGroup(String jsonRepresentation) {
 		boolean success = false;
+		IGroup group;
 
-		// TODO try/catch exception from Gson here
-		IGroup group = gson.fromJson(jsonRepresentation.toString(),
-				MockGroupEntity.class);
+		try {
+			group = gson.fromJson(jsonRepresentation.toString(),
+					MockGroupEntity.class);
+			success = true;
+			logger.debug("Created group " + group.toString());
+		} catch (JsonIOException e) {
+			logger.error("JSON I/O error");
+			// TODO
+		} catch (JsonSyntaxException e) {
+			logger.error("JSON syntax error");
+			// TODO
+		} catch (JsonParseException e) {
+			logger.error("JSON parse error");
+			// TODO
+		}
 
-		// if (success) {
-		logger.debug("Created group " + group.toString());
-		// } else {
-		// logger.debug("Failed to create group from JSON '"
-		// + jsonRepresentation + "'");
-		// }
+		if (!success) {
+			logger.error("Failed to create group from JSON '"
+					+ jsonRepresentation + "'");
+		}
 
 		return success;
 	}

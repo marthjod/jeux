@@ -1,5 +1,7 @@
 package de.fhb.jeux.model;
 
+import java.util.List;
+
 public interface IGroup {
 	public int getId();
 
@@ -15,6 +17,9 @@ public interface IGroup {
 
 	public boolean isCompleted();
 
-	@Override
-	public String toString();
+	public List<IPlayer> getPlayers();
+
+	public List<IGame> getGames();
+
+	public boolean equals(IGroup group);
 }

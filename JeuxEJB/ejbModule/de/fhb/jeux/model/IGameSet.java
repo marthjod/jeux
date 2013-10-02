@@ -7,11 +7,9 @@ public interface IGameSet {
 
 	public int getPlayer2Score();
 
-	public int getWinnerId();
+	public IPlayer getWinner();
 
-	public int getGameId();
+	public IGame getGame();
 
-	public int getPlayer1Id();
-
-	public int getPlayer2Id();
+	public boolean equals(IGameSet gameSet);
 }

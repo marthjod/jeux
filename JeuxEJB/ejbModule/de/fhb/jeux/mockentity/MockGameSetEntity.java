@@ -1,17 +1,16 @@
 package de.fhb.jeux.mockentity;
 
+import de.fhb.jeux.model.IGame;
 import de.fhb.jeux.model.IGameSet;
-import de.fhb.jeux.util.RandomUtils;
+import de.fhb.jeux.model.IPlayer;
 
 public class MockGameSetEntity implements IGameSet {
 
-	private final int id;
-	private final int player1Score;
-	private final int player2Score;
-	private final int winnerId;
-	private final int gameId;
-	private final int player1Id;
-	private final int player2Id;
+	private int id;
+	private int player1Score;
+	private int player2Score;
+	private IPlayer winner;
+	private IGame game;
 
 	public MockGameSetEntity() {
 		this.id = RandomUtils.randInt(1, 12);
@@ -39,23 +38,18 @@ public class MockGameSetEntity implements IGameSet {
 	}
 
 	@Override
-	public int getWinnerId() {
-		return winnerId;
+	public IPlayer getWinner() {
+		return this.winner;
 	}
 
 	@Override
-	public int getGameId() {
-		return gameId;
+	public IGame getGame() {
+		return this.game;
 	}
 
 	@Override
-	public int getPlayer1Id() {
-		return player1Id;
+	public boolean equals(IGameSet gameSet) {
+		// assuming unique IDs
+		return this.id == gameSet.getId();
 	}
-
-	@Override
-	public int getPlayer2Id() {
-		return player2Id;
-	}
-
 }

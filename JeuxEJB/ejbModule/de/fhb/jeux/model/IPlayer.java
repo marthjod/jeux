@@ -3,7 +3,7 @@ package de.fhb.jeux.model;
 public interface IPlayer {
 	public int getId();
 
-	public int getGroupId();
+	public IGroup getGroup();
 
 	public String getName();
 
@@ -12,4 +12,6 @@ public interface IPlayer {
 	public int getScoreRatio();
 
 	public int getRank();
+
+	public boolean equals(IPlayer player);
 }

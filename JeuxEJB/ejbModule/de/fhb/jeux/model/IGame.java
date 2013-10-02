@@ -1,9 +1,19 @@
 package de.fhb.jeux.model;
 
+import java.util.List;
+
 public interface IGame {
 	public int getId();
 
-	public int getGroupId();
+	public IGroup getGroup();
 
-	public int getWinnerId();
+	public IPlayer getPlayer1();
+
+	public IPlayer getPlayer2();
+
+	public IPlayer getWinner();
+
+	public List<IGameSet> getSets();
+
+	public boolean equals(IGame game);
 }

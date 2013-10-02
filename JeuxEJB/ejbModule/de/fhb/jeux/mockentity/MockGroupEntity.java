@@ -1,17 +1,22 @@
 package de.fhb.jeux.mockentity;
 
+import java.util.List;
+
+import de.fhb.jeux.model.IGame;
 import de.fhb.jeux.model.IGroup;
-import de.fhb.jeux.util.RandomUtils;
+import de.fhb.jeux.model.IPlayer;
 
 public class MockGroupEntity implements IGroup {
 
-	private final int id;
-	private final String name;
-	private final int roundId;
-	private final int minSets;
-	private final int maxSets;
-	private final boolean active;
-	private final boolean completed;
+	private int id;
+	private String name;
+	private int roundId;
+	private int minSets;
+	private int maxSets;
+	private boolean active;
+	private boolean completed;
+	private List<IPlayer> players;
+	private List<IGame> games;
 
 	public MockGroupEntity() {
 		this.id = RandomUtils.randInt(1, 12);
@@ -62,5 +67,21 @@ public class MockGroupEntity implements IGroup {
 	public String toString() {
 		return "'" + this.name + "' (ID " + this.id + "), " + this.minSets
 				+ "-" + this.maxSets + " sets";
+	}
+
+	@Override
+	public List<IPlayer> getPlayers() {
+		return players;
+	}
+
+	@Override
+	public boolean equals(IGroup group) {
+		// assuming unique IDs
+		return this.id == group.getId();
+	}
+
+	@Override
+	public List<IGame> getGames() {
+		return this.games;
 	}
 }
