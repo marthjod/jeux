@@ -5,6 +5,7 @@ import java.util.List;
 import de.fhb.jeux.model.IGame;
 import de.fhb.jeux.model.IGroup;
 import de.fhb.jeux.model.IPlayer;
+import de.fhb.jeux.util.RandomUtils;
 
 public class MockGroupEntity implements IGroup {
 
@@ -19,7 +20,7 @@ public class MockGroupEntity implements IGroup {
 	private List<IGame> games;
 
 	public MockGroupEntity() {
-		this.id = RandomUtils.randInt(1, 12);
+		this.id = RandomUtils.randInt(1, 1000);
 		this.name = "Group " + this.id;
 		this.roundId = RandomUtils.randInt(1, 5);
 		this.minSets = 1;

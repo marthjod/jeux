@@ -6,6 +6,7 @@ import de.fhb.jeux.model.IGame;
 import de.fhb.jeux.model.IGameSet;
 import de.fhb.jeux.model.IGroup;
 import de.fhb.jeux.model.IPlayer;
+import de.fhb.jeux.util.RandomUtils;
 
 public class MockGameEntity implements IGame {
 
@@ -18,9 +19,15 @@ public class MockGameEntity implements IGame {
 	private List<IGameSet> sets;
 
 	public MockGameEntity() {
-		this.id = RandomUtils.randInt(1, 12);
-		this.groupId = RandomUtils.randInt(1, 6);
-		this.winnerId = RandomUtils.randInt(1, 50);
+		this.id = RandomUtils.randInt(1, 1000);
+		this.group = new MockGroupEntity();
+		this.winner = new MockPlayerEntity();
+	}
+
+	public MockGameEntity(IGroup group, IPlayer player1, IPlayer player2) {
+		this.group = group;
+		this.player1 = player1;
+		this.player2 = player2;
 	}
 
 	@Override

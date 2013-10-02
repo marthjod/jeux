@@ -3,6 +3,7 @@ package de.fhb.jeux.mockentity;
 import de.fhb.jeux.model.IGame;
 import de.fhb.jeux.model.IGameSet;
 import de.fhb.jeux.model.IPlayer;
+import de.fhb.jeux.util.RandomUtils;
 
 public class MockGameSetEntity implements IGameSet {
 
@@ -13,13 +14,11 @@ public class MockGameSetEntity implements IGameSet {
 	private IGame game;
 
 	public MockGameSetEntity() {
-		this.id = RandomUtils.randInt(1, 12);
+		this.id = RandomUtils.randInt(1, 1000);
 		this.player1Score = RandomUtils.randInt(1, 12);
 		this.player2Score = RandomUtils.randInt(1, 12);
-		this.winnerId = RandomUtils.randInt(1, 12);
-		this.gameId = RandomUtils.randInt(1, 12);
-		this.player1Id = RandomUtils.randInt(1, 12);
-		this.player2Id = this.winnerId;
+		this.winner = new MockPlayerEntity();
+		this.game = new MockGameEntity();
 	}
 
 	@Override

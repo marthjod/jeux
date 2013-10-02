@@ -2,6 +2,7 @@ package de.fhb.jeux.mockentity;
 
 import de.fhb.jeux.model.IGroup;
 import de.fhb.jeux.model.IPlayer;
+import de.fhb.jeux.util.RandomUtils;
 
 public class MockPlayerEntity implements IPlayer {
 
@@ -13,8 +14,8 @@ public class MockPlayerEntity implements IPlayer {
 	private int rank;
 
 	public MockPlayerEntity() {
-		this.id = RandomUtils.randInt(1, 12);
-		this.groupId = RandomUtils.randInt(1, 6);
+		this.id = RandomUtils.randInt(1, 1000);
+		this.group = new MockGroupEntity();
 		this.name = "Player " + this.id;
 		this.points = RandomUtils.randInt(0, 100);
 		this.scoreRatio = RandomUtils.randInt(-50, 50);
