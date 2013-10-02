@@ -1,4 +1,4 @@
-function create_new_group(groupSubmit) {
+function createNewGroup(groupSubmit) {
 	"use strict";
 
 	var minSets = 0, maxSets = 0, name = "", round = 0, sendData = {}, groupForm = null;

@@ -1,28 +1,50 @@
-function prefill_max_sets(minSetsInput) {
-	"use strict";
+function prefillMaxSets(minSetsInput) {
+    "use strict";
 
-	var minSets = $(minSetsInput).val();
+    var minSets = $(minSetsInput).val();
 
-	if (minSets === "1") {
-		$("#max-sets").val("1");
-	} else if (minSets === "2") {
-		$("#max-sets").val("3");
-	}
+    if (minSets === "1") {
+        $("#max-sets").val("1");
+    } else if (minSets === "2") {
+        $("#max-sets").val("3");
+    }
 }
 
-function check_submit_ready(inputElement) {
-	"use strict";
+function checkSubmitReady(inputElement) {
+    "use strict";
 
-	var groupForm = null, minSets = "", maxSets = "", name = "";
+    var groupForm = null, minSets = "", maxSets = "", name = "";
 
-	groupForm = $(inputElement).parent();
+    groupForm = $(inputElement).parent();
 
-	minSets = $(groupForm).find("#min-sets").val();
-	maxSets = $(groupForm).find("#max-sets").val();
-	name = $(groupForm).find("#name").val();
+    minSets = $(groupForm).find("#min-sets").val();
+    maxSets = $(groupForm).find("#max-sets").val();
+    name = $(groupForm).find("#name").val();
 
-	if (minSets !== "" && maxSets !== "" && name !== "") {
-		$("#submit-create-group").removeAttr("disabled");
-	}
+    if (minSets !== "" && maxSets !== "" && name !== "") {
+        $("#submit-create-group").removeAttr("disabled");
+    }
 
+}
+
+function checkAddNextPlayer(playerInput) {
+    "use strict";
+
+    if ($(playerInput).val() !== "") {
+        $("#add-player").removeAttr("disabled");
+    }
+}
+
+function createAdditionalPlayer(newPlayersElement) {
+    "use strict";
+
+    var createPlayersDiv = null;
+
+    createPlayersDiv = $(newPlayersElement).parent();
+
+    $("<br>").prependTo($(createPlayersDiv));
+    $("<input>").attr("class", "create-player").attr("type", "text").attr(
+            "onkeyup", "checkAddNextPlayer(this);").prependTo(
+            $(createPlayersDiv));
+    $("#add-player").attr("disabled", "disabled");
 }
