@@ -1,3 +1,5 @@
+// https://bugs.eclipse.org/bugs/show_bug.cgi?id=355036
+
 function prefillMaxSets(minSetsInput) {
     "use strict";
 
@@ -45,6 +47,6 @@ function createAdditionalPlayer(newPlayersElement) {
     $("<br>").prependTo($(createPlayersDiv));
     $("<input>").attr("class", "create-player").attr("type", "text").attr(
             "onkeyup", "checkAddNextPlayer(this);").prependTo(
-            $(createPlayersDiv));
+            $(createPlayersDiv)).focus();
     $("#add-player").attr("disabled", "disabled");
 }

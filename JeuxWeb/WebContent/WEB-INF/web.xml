@@ -9,16 +9,25 @@
   <load-on-startup>1</load-on-startup>
  </servlet>
  <servlet>
-  <servlet-name>CreateNewGroupServlet</servlet-name>
-  <servlet-class>de.fhb.jeux.controller.CreateNewGroupServlet</servlet-class>
+  <servlet-name>CreateGroupServlet</servlet-name>
+  <servlet-class>de.fhb.jeux.controller.CreateGroupServlet</servlet-class>
+ </servlet>
+ <servlet>
+  <display-name>CreatePlayersServlet</display-name>
+  <servlet-name>CreatePlayersServlet</servlet-name>
+  <servlet-class>de.fhb.jeux.controller.CreatePlayersServlet</servlet-class>
  </servlet>
  <servlet-mapping>
   <servlet-name>JAX-RS Servlet</servlet-name>
   <url-pattern>/rest/*</url-pattern>
  </servlet-mapping>
  <servlet-mapping>
-  <servlet-name>CreateNewGroupServlet</servlet-name>
+  <servlet-name>CreateGroupServlet</servlet-name>
   <url-pattern>/create-group</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>CreatePlayersServlet</servlet-name>
+  <url-pattern>/create-players</url-pattern>
  </servlet-mapping>
  <welcome-file-list>
   <welcome-file>/index.html</welcome-file>
