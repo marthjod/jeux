@@ -5,12 +5,15 @@ import javax.ejb.Stateless;
 import org.jboss.logging.Logger;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSyntaxException;
 
+import de.fhb.jeux.json.IPlayerAdapter;
 import de.fhb.jeux.mockentity.MockGroupEntity;
 import de.fhb.jeux.model.IGroup;
+import de.fhb.jeux.model.IPlayer;
 
 @Stateless
 public class CreateGroupBean implements CreateGroupRemote, CreateGroupLocal {
@@ -19,8 +22,11 @@ public class CreateGroupBean implements CreateGroupRemote, CreateGroupLocal {
 
 	private Gson gson;
 
-	public CreateNewGroupBean() {
-		this.gson = new Gson();
+	public CreateGroupBean() {
+		// see
+		// de.fhb.jeux.json.IPlayerAdapter.java
+		this.gson = new GsonBuilder().registerTypeAdapter(IPlayer.class,
+				new IPlayerAdapter().nullSafe()).create();
 	}
 
 	@Override
