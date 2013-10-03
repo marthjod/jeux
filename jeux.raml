@@ -1,0 +1,75 @@
+#%RAML 0.8
+---
+# RAML (RESTful API Modeling Language) specification for Jeux.
+#
+# Cf. http://raml.org and https://github.com/raml-org/raml-spec
+# for further information.
+
+title: Jeux REST API
+version: v1
+baseUri: http://localhost:8080/JeuxWeb
+
+/rest/v1:
+    /status:
+        get:
+            description: |
+                Get current API status ("ping" it).
+            mediaType: text/plain
+            responses:
+                200:
+                    body:
+                        text/plain:
+                            "OK"
+                    description: |
+                        All's well. So far.
+
+/create-group:
+    put:
+        description: |
+            Send data representing a group object to be created on the server.
+        body:
+            application/json:
+                example: |
+                    {
+                        maxSets:"3",
+                        minSets:"2",
+                        name:"Nuevo grupo",
+                        round:"1",
+                        active:true,
+                        completed:false
+                    }
+         responses:
+            201:
+                description: |
+                    Group object has been successfully created on the server.
+            500:
+                description: |
+                    Failure to create group object server-side.
+                    Reasons include: com.google.gson.Json(IO|Parse|Syntax)Exception, Exception
+
+/create-players:
+    put:
+        description: |
+            Send data representing array of player objects to be created on the server.
+        body:
+            application/json:
+                example: |
+                    [
+                       {
+                          "name":"Player Two",
+                          "groupName":"Group 2"
+                       },
+                       {
+                          "name":"Player One",
+                          "groupName":"Group 2"
+                       }
+                    ]
+        responses:
+            201:
+                description: |
+                    Player objects have been successfully created on the server.
+            500:
+                description: |
+                    Failure to create player objects server-side.
+                    Reasons include: com.google.gson.Json(IO|Parse|Syntax)Exception, Exception
+
