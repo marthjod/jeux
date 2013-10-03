@@ -35,9 +35,9 @@ public class CreateGroupBean implements CreateGroupRemote, CreateGroupLocal {
 		IGroup group;
 
 		try {
-			group = gson.fromJson(jsonRepresentation.toString(),
-					MockGroupEntity.class);
+			group = gson.fromJson(jsonRepresentation, MockGroupEntity.class);
 			success = true;
+			// logger.debug("\n" + gson.toJson(group));
 			logger.debug("Created group " + group.toString());
 		} catch (JsonIOException e) {
 			logger.error("JSON I/O error");
@@ -48,10 +48,13 @@ public class CreateGroupBean implements CreateGroupRemote, CreateGroupLocal {
 		} catch (JsonParseException e) {
 			logger.error("JSON parse error");
 			// TODO
+		} catch (Exception e) {
+			// TODO Pokémon
+			logger.error("Exception: " + e.getMessage());
 		}
 
 		if (!success) {
-			logger.error("Failed to create group from JSON '"
+			logger.error("Failed to create group from JSON input '"
 					+ jsonRepresentation + "'");
 		}
 
