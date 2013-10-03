@@ -1,8 +1,8 @@
 package de.fhb.jeux.session;
 
-import javax.ejb.Remote;
+import javax.ejb.Local;
 
-@Remote
-public interface CreateNewGroupRemote {
+@Local
+public interface CreateGroupLocal {
 	public boolean createNewGroup(String jsonRepresentation);
 }

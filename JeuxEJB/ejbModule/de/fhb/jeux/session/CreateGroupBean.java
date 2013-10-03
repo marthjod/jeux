@@ -13,10 +13,9 @@ import de.fhb.jeux.mockentity.MockGroupEntity;
 import de.fhb.jeux.model.IGroup;
 
 @Stateless
-public class CreateNewGroupBean implements CreateNewGroupRemote,
-		CreateNewGroupLocal {
+public class CreateGroupBean implements CreateGroupRemote, CreateGroupLocal {
 
-	protected static Logger logger = Logger.getLogger(CreateNewGroupBean.class);
+	protected static Logger logger = Logger.getLogger(CreateGroupBean.class);
 
 	private Gson gson;
 

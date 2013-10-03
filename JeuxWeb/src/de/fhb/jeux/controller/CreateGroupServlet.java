@@ -11,17 +11,17 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.jboss.logging.Logger;
 
-import de.fhb.jeux.session.CreateNewGroupLocal;
+import de.fhb.jeux.session.CreateGroupLocal;
 
-public class CreateNewGroupServlet extends HttpServlet {
+public class CreateGroupServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	protected static Logger logger = Logger
-			.getLogger(CreateNewGroupServlet.class);
+			.getLogger(CreateGroupServlet.class);
 
 	@EJB
-	private CreateNewGroupLocal createNewGroupBean;
+	private CreateGroupLocal createGroupBean;
 
-	public CreateNewGroupServlet() {
+	public CreateGroupServlet() {
 		super();
 	}
 
@@ -42,9 +42,7 @@ public class CreateNewGroupServlet extends HttpServlet {
 			jsonData.append(s);
 		}
 
-		logger.debug("Received JSON data: '" + jsonData.toString() + "'");
-
-		groupCreated = createNewGroupBean.createNewGroup(jsonData.toString());
+		groupCreated = createGroupBean.createNewGroup(jsonData.toString());
 		if (groupCreated) {
 			response.setStatus(HttpServletResponse.SC_CREATED);
 		} else {
