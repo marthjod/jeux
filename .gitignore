@@ -4,3 +4,5 @@ jquery*.js
 build/
 *.!sync
 *.swp*
+docs/
+EarContent/LICENSE
