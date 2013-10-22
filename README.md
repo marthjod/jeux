@@ -39,13 +39,13 @@ Modify the following entries in _JeuxEJB/.classpath_ and _JeuxWeb/.classpath_ to
 #### MySQL: Add user
 
 ```sql
-CREATE USER 'jeuxdb_user'@'localhost' IDENTIFIED BY '***';
+CREATE USER 'jeuxdb_user'@'localhost' 
+IDENTIFIED BY '***';
 
-GRANT SELECT ,
-INSERT ,
-
-UPDATE ,
-DELETE ON * . * TO 'jeuxdb_user'@'localhost' IDENTIFIED BY '***'
+GRANT SELECT, INSERT, UPDATE, DELETE 
+ON * . * 
+TO 'jeuxdb_user'@'localhost' 
+IDENTIFIED BY '***'
 ```
 
 
@@ -54,7 +54,7 @@ DELETE ON * . * TO 'jeuxdb_user'@'localhost' IDENTIFIED BY '***'
 - Connection URL: `jdbc:mysql://localhost:3306/<database name>`
 - Driver: `mysql-connector-java-<ver>-bin.jar`
 - JNDI: `java:jboss/datasources/JeuxDS`
-- User, pass see "MySQL"
+- User, password: see "MySQL"
 
 
 
