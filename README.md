@@ -20,6 +20,8 @@ Modify the following entries in _JeuxEJB/.classpath_ and _JeuxWeb/.classpath_ to
 
 ### Persistence
 
+#### Eclipse
+
 - _Project facets_ should include _JPA_
 - _ejbModule/META-INF/persistence.xml_ should look similar to:
 
@@ -31,4 +33,23 @@ Modify the following entries in _JeuxEJB/.classpath_ and _JeuxWeb/.classpath_ to
        <class>de.fhb.jeux.model.Group</class>
 	</persistence-unit>
 </persistence>
+```
+
+#### JBoss: Add data source
+
+- Connection URL: `jdbc:mysql://localhost:3306/<database name>`
+- Driver: ``mysql-connector-java-<ver>-bin.jar`
+- JNDI: ``java:jboss/datasources/JeuxDS`
+- 
+
+#### MySQL
+
+```sql
+CREATE USER 'jeuxdb_user'@'localhost' IDENTIFIED BY '***';
+
+GRANT SELECT ,
+INSERT ,
+
+UPDATE ,
+DELETE ON * . * TO 'jeuxdb_user'@'localhost' IDENTIFIED BY '***'
 ```
