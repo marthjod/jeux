@@ -1,0 +1,144 @@
+package de.fhb.jeux.model;
+
+import java.io.Serializable;
+import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+
+@Entity
+// MySQL does not allow "Group"
+// http://dev.mysql.com/doc/refman/5.1/en/reserved-words.html
+@Table(name = "Group_")
+@NamedQueries({
+		@NamedQuery(name = "Group.findAll", query = "SELECT g FROM Group g"),
+		@NamedQuery(name = "Group.findActive", query = "SELECT g FROM Group g WHERE g.active = true") })
+public class Group implements IGroup, Serializable {
+
+	private static final long serialVersionUID = 4301340014397931722L;
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
+
+	@Column
+	private String name;
+
+	@Column
+	private int roundId;
+
+	@Column
+	private int minSets;
+
+	@Column
+	private int maxSets;
+
+	@Column
+	private boolean active;
+
+	@Column
+	private boolean completed;
+
+	@Override
+	public int getRoundId() {
+		return roundId;
+	}
+
+	public void setRoundId(int roundId) {
+		this.roundId = roundId;
+	}
+
+	@Override
+	public int getMinSets() {
+		return minSets;
+	}
+
+	public void setMinSets(int minSets) {
+		this.minSets = minSets;
+	}
+
+	@Override
+	public int getMaxSets() {
+		return maxSets;
+	}
+
+	public void setMaxSets(int maxSets) {
+		this.maxSets = maxSets;
+	}
+
+	@Override
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+
+	@Override
+	public boolean isCompleted() {
+		return completed;
+	}
+
+	public void setCompleted(boolean completed) {
+		this.completed = completed;
+	}
+
+	@Override
+	public int getId() {
+		return id;
+	}
+
+	@Override
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("'");
+		sb.append(this.name);
+		sb.append("' (ID ");
+		sb.append(this.id);
+		sb.append("), round ");
+		sb.append(this.roundId);
+		sb.append(", active = ");
+		sb.append(this.active);
+		sb.append(", completed = ");
+		sb.append(this.completed);
+		sb.append(", ");
+		sb.append(this.minSets);
+		sb.append("-");
+		sb.append(this.maxSets);
+		sb.append(" sets");
+
+		return sb.toString();
+	}
+
+	@Override
+	public List<IPlayer> getPlayers() {
+		return null;
+	}
+
+	@Override
+	public List<IGame> getGames() {
+		return null;
+	}
+
+	@Override
+	public boolean equals(IGroup group) {
+		return false;
+	}
+
+}
