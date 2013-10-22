@@ -22,6 +22,7 @@ Modify the following entries in _JeuxEJB/.classpath_ and _JeuxWeb/.classpath_ to
 
 - _Project facets_ should include _JPA_
 - _ejbModule/META-INF/persistence.xml_ should look similar to:
+
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
