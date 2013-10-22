@@ -23,26 +23,20 @@ Modify the following entries in _JeuxEJB/.classpath_ and _JeuxWeb/.classpath_ to
 #### Eclipse
 
 - _Project facets_ should include _JPA_
-- _ejbModule/META-INF/persistence.xml_ should look similar to:
+- _ejbModule/META-INF/persistence.xml_ should exist and contain entries for used persistence entities:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
 	<persistence-unit name="JeuxEJB">
-	   <jta-data-source>java:jboss/datasources/JeuxDS</jta-data-source>
-       <class>de.fhb.jeux.model.Group</class>
+		<jta-data-source>java:jboss/datasources/JeuxDS</jta-data-source>
+        	<class>de.fhb.jeux.model.Group</class>
 	</persistence-unit>
 </persistence>
 ```
 
-#### JBoss: Add data source
 
-- Connection URL: `jdbc:mysql://localhost:3306/<database name>`
-- Driver: `mysql-connector-java-<ver>-bin.jar`
-- JNDI: `java:jboss/datasources/JeuxDS`
-- 
-
-#### MySQL
+#### MySQL: Add user
 
 ```sql
 CREATE USER 'jeuxdb_user'@'localhost' IDENTIFIED BY '***';
@@ -53,3 +47,14 @@ INSERT ,
 UPDATE ,
 DELETE ON * . * TO 'jeuxdb_user'@'localhost' IDENTIFIED BY '***'
 ```
+
+
+#### JBoss: Add data source
+
+- Connection URL: `jdbc:mysql://localhost:3306/<database name>`
+- Driver: `mysql-connector-java-<ver>-bin.jar`
+- JNDI: `java:jboss/datasources/JeuxDS`
+- User, pass see "MySQL"
+
+
+
