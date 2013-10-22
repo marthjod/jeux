@@ -38,8 +38,8 @@ Modify the following entries in _JeuxEJB/.classpath_ and _JeuxWeb/.classpath_ to
 #### JBoss: Add data source
 
 - Connection URL: `jdbc:mysql://localhost:3306/<database name>`
-- Driver: ``mysql-connector-java-<ver>-bin.jar`
-- JNDI: ``java:jboss/datasources/JeuxDS`
+- Driver: `mysql-connector-java-<ver>-bin.jar`
+- JNDI: `java:jboss/datasources/JeuxDS`
 - 
 
 #### MySQL
