@@ -23,6 +23,58 @@ baseUri: http://localhost:8080/JeuxWeb
                     description: |
                         All's well. So far.
 
+/rest/v1:
+    /groups:
+        get:
+            description: |
+                Get all groups from DB as plain text.
+            mediaType: text/plain
+            responses:
+                200:
+                    body:
+                        text/plain:
+                            example: |
+                                "'Some test group' (ID 1), round 1, active = true, completed = false, 1-1 sets
+                                 'Sweede Grubbe' (ID 2), round 1, active = true, completed = false, 2-3 sets"
+                                 
+/rest/v1:
+    /groups-json:
+        get:
+            description: |
+                Get all groups from DB as JSON.
+            mediaType: application/json
+            responses:
+                200:
+                    body:
+                        application/json:
+                            example: |
+                                [
+                                   {
+                                      "id":1,
+                                      "name":"Some test group",
+                                      "roundId":1,
+                                      "minSets":1,
+                                      "maxSets":1,
+                                      "active":true,
+                                      "completed":false
+                                   },
+                                   {
+                                      "id":2,
+                                      "name":"Sweede Grubbe",
+                                      "roundId":1,
+                                      "minSets":2,
+                                      "maxSets":3,
+                                      "active":true,
+                                      "completed":false
+                                   }
+                               ]
+
+/rest/v1:
+    /delete-group/{groupId}:
+        delete:
+            description: |
+                Delete DB entry for group with given ID = {groupId}.
+
 /create-group:
     put:
         description: |
@@ -46,6 +98,10 @@ baseUri: http://localhost:8080/JeuxWeb
                 description: |
                     Failure to create group object server-side.
                     Reasons include: com.google.gson.Json(IO|Parse|Syntax)Exception, Exception
+
+
+
+CONSIDERED DEPRECATED FOR THE TIME BEING:
 
 /create-players:
     put:

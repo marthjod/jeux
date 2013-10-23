@@ -4,8 +4,10 @@ import java.util.List;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
@@ -14,6 +16,7 @@ import org.jboss.logging.Logger;
 import com.google.gson.Gson;
 
 import de.fhb.jeux.model.IGroup;
+import de.fhb.jeux.session.DeleteGroupLocal;
 import de.fhb.jeux.session.GroupLocal;
 
 @Stateless
@@ -24,6 +27,9 @@ public class RESTfulAPIv1 {
 
 	@EJB
 	private GroupLocal groupBean;
+
+	@EJB
+	private DeleteGroupLocal deleteGroupBean;
 
 	private Gson gson;
 
@@ -68,5 +74,11 @@ public class RESTfulAPIv1 {
 		// close JS array
 		jsonData.append("]");
 		return jsonData.toString();
+	}
+
+	@DELETE
+	@Path("/delete-group/{groupId}")
+	public void deleteGroup(@PathParam("groupId") int groupId) {
+		deleteGroupBean.deleteGroup(groupBean.getGroupById(groupId));
 	}
 }

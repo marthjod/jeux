@@ -18,7 +18,7 @@ import javax.persistence.Table;
 @Table(name = "Group_")
 @NamedQueries({
 		@NamedQuery(name = "Group.findAll", query = "SELECT g FROM Group g"),
-		@NamedQuery(name = "Group.findActive", query = "SELECT g FROM Group g WHERE g.active = true") })
+		@NamedQuery(name = "Group.findById", query = "SELECT g FROM Group g WHERE g.id = :id") })
 public class Group implements IGroup, Serializable {
 
 	private static final long serialVersionUID = 4301340014397931722L;

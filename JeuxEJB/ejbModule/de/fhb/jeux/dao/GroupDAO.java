@@ -9,11 +9,16 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
+import org.jboss.logging.Logger;
+
+import de.fhb.jeux.model.Group;
 import de.fhb.jeux.model.IGroup;
 
 @Stateless
 @LocalBean
 public class GroupDAO {
+
+	protected static Logger logger = Logger.getLogger(GroupDAO.class);
 
 	@PersistenceContext
 	private EntityManager em;
@@ -23,10 +28,12 @@ public class GroupDAO {
 
 	public void addGroup(IGroup group) {
 		em.persist(group);
+		logger.debug("Persisted group '" + group.getName() + "'");
 	}
 
 	public void deleteGroup(IGroup group) {
 		em.remove(group);
+		logger.debug("Deleted group '" + group.getName() + "'");
 	}
 
 	public void updateGroup(IGroup group) {
@@ -41,5 +48,14 @@ public class GroupDAO {
 		groups = query.getResultList();
 
 		return groups;
+	}
+
+	public IGroup getGroupById(int groupId) {
+		IGroup group = new Group();
+		TypedQuery<IGroup> query = em.createNamedQuery("Group.findById",
+				IGroup.class);
+		query.setParameter("id", groupId);
+		group = query.getSingleResult();
+		return group;
 	}
 }

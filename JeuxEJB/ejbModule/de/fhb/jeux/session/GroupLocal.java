@@ -9,4 +9,6 @@ import de.fhb.jeux.model.IGroup;
 @Local
 public interface GroupLocal {
 	public List<IGroup> getAllGroups();
+
+	public IGroup getGroupById(int groupId);
 }

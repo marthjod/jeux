@@ -12,6 +12,17 @@ function prefillMaxSets(minSetsInput) {
     }
 }
 
+function clearForm(form) {
+    "use strict";
+
+    // http://stackoverflow.com/questions/680241/resetting-a-multi-stage-form-with-jquery
+
+    $(form).find("input:text, select, textarea").val("");
+    $(form).find("input[type=number]").val("");
+    $(form).find("input:radio, input:checkbox").removeAttr("checked")
+            .removeAttr("selected");
+}
+
 function checkSubmitReady(inputElement) {
     "use strict";
 
@@ -29,24 +40,24 @@ function checkSubmitReady(inputElement) {
 
 }
 
-function checkAddNextPlayer(playerInput) {
-    "use strict";
+// function checkAddNextPlayer(playerInput) {
+// "use strict";
+//
+// if ($(playerInput).val() !== "") {
+// $("#add-player").removeAttr("disabled");
+// }
+// }
 
-    if ($(playerInput).val() !== "") {
-        $("#add-player").removeAttr("disabled");
-    }
-}
-
-function createAdditionalPlayer(newPlayersElement) {
-    "use strict";
-
-    var createPlayersDiv = null;
-
-    createPlayersDiv = $(newPlayersElement).parent();
-
-    $("<br>").prependTo($(createPlayersDiv));
-    $("<input>").attr("class", "create-player").attr("type", "text").attr(
-            "onkeyup", "checkAddNextPlayer(this);").prependTo(
-            $(createPlayersDiv)).focus();
-    $("#add-player").attr("disabled", "disabled");
-}
+// function createAdditionalPlayer(newPlayersElement) {
+// "use strict";
+//
+// var createPlayersDiv = null;
+//
+// createPlayersDiv = $(newPlayersElement).parent();
+//
+// $("<br>").prependTo($(createPlayersDiv));
+// $("<input>").attr("class", "create-player").attr("type", "text").attr(
+// "onkeyup", "checkAddNextPlayer(this);").prependTo(
+// $(createPlayersDiv)).focus();
+// $("#add-player").attr("disabled", "disabled");
+// }

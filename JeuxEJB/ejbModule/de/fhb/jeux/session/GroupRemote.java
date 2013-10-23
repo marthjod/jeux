@@ -9,4 +9,6 @@ import de.fhb.jeux.model.IGroup;
 @Remote
 public interface GroupRemote {
 	public List<IGroup> getAllGroups();
+
+	public IGroup getGroupById(int groupId);
 }

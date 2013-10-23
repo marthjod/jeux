@@ -1,5 +1,6 @@
 package de.fhb.jeux.session;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 import org.jboss.logging.Logger;
@@ -10,8 +11,9 @@ import com.google.gson.JsonIOException;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSyntaxException;
 
+import de.fhb.jeux.dao.GroupDAO;
 import de.fhb.jeux.json.IPlayerAdapter;
-import de.fhb.jeux.mockentity.MockGroupEntity;
+import de.fhb.jeux.model.Group;
 import de.fhb.jeux.model.IGroup;
 import de.fhb.jeux.model.IPlayer;
 
@@ -19,6 +21,9 @@ import de.fhb.jeux.model.IPlayer;
 public class CreateGroupBean implements CreateGroupRemote, CreateGroupLocal {
 
 	protected static Logger logger = Logger.getLogger(CreateGroupBean.class);
+
+	@EJB
+	private GroupDAO groupDAO;
 
 	private Gson gson;
 
@@ -35,10 +40,14 @@ public class CreateGroupBean implements CreateGroupRemote, CreateGroupLocal {
 		IGroup group;
 
 		try {
-			group = gson.fromJson(jsonRepresentation, MockGroupEntity.class);
-			success = true;
+			group = gson.fromJson(jsonRepresentation, Group.class);
 			// logger.debug("\n" + gson.toJson(group));
-			logger.debug("Created group " + group.toString());
+
+			// persist new Group
+			groupDAO.addGroup(group);
+			logger.debug("Added group '" + group.getName() + "'");
+
+			success = true;
 		} catch (JsonIOException e) {
 			logger.error("JSON I/O error");
 			// TODO

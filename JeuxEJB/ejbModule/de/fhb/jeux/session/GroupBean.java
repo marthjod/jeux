@@ -22,4 +22,9 @@ public class GroupBean implements GroupRemote, GroupLocal {
 		return groupDAO.getAllGroups();
 	}
 
+	@Override
+	public IGroup getGroupById(int groupId) {
+		return groupDAO.getGroupById(groupId);
+	}
+
 }

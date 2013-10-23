@@ -2,9 +2,11 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" type="text/css" href="css/jeux.css">
         <script type="text/javascript" src="js/jquery-2.0.3.js"></script>
         <script type="text/javascript" src="js/get.js"></script>
         <script type="text/javascript" src="js/put.js"></script>
+        <script type="text/javascript" src="js/delete.js"></script>
         <script type="text/javascript" src="js/input.js"></script>
 
         <script>
@@ -19,66 +21,58 @@
 
         <div id="rest-api-status">REST API status unknown</div>
         <br />
-        <div id="show-all-groups"></div>
-        <br />
-
-<!-- 
-        <div id="create-new-group">
-
-            Create new group:
-            <form action="#">
-                Name
-                     <input id="name"
-                         type="text"
-                         onkeyup="checkSubmitReady(this);" />
-                Round
-                     <input id="round"
-                        type="number"
-                        size="2"
-                        maxlength="2"
-                        min="1"
-                        onkeyup="checkSubmitReady(this);" />
-                 Min sets
-                     <input id="min-sets"
-                         type="number"
-                         size="2"
-                         maxlength="2"
-                         min="1"
-                         onkeyup="checkSubmitReady(this);"
-                         oninput="prefillMaxSets(this);" /> Max sets <input id="max-sets"
-                         type="number"
-                         size="2"
-                         maxlength="2"
-                         min="1"
-                         onkeyup="checkSubmitReady(this);" />
-                         
-                Active? 
-		                <input id="group-active"
-		                    type="checkbox"
-		                />
-                <div id="create-players">
-                     <input type="button"
-                         id="add-player"
-                         value="Add player"
-                         onclick="createAdditionalPlayer(this);" />
-                </div>
-
-                <br />
-                <input id="submit-create-group"
-                    type="submit"
-                    value="Create new group"
-                    disabled="disabled"
-                    onclick="createNewGroup(this);" />
-
-                    <br />
-                    <span
-                        id="creation-result">
-                    </span>
-
-            </form>
-
+        <div id="show-all-groups">
+            <span class="title">Existing groups</span>
         </div>
- -->
- 
+        <br />
+        <div id="create-groups">
+            <span class="title">Create new group</span>
+	        <form id="create-group" action="#">
+	                Name
+	                     <input id="name"
+	                         type="text"
+	                         onkeyup="checkSubmitReady(this);" />
+	                <br />
+	                Round
+	                     <input id="round"
+	                        type="number"
+	                        size="2"
+	                        maxlength="2"
+	                        min="1"
+	                        onkeyup="checkSubmitReady(this);" />
+	                 <br />
+	                 Min sets
+	                     <input id="min-sets"
+	                         type="number"
+	                         size="2"
+	                         maxlength="2"
+	                         min="1"
+	                         onkeyup="checkSubmitReady(this);"
+	                         oninput="prefillMaxSets(this);" /> Max sets <input id="max-sets"
+	                         type="number"
+	                         size="2"
+	                         maxlength="2"
+	                         min="1"
+	                         onkeyup="checkSubmitReady(this);" />
+	                <br />         
+	                Active 
+			                <input id="group-active"
+			                    type="checkbox"
+			                />
+	
+	                <br />
+	                <input id="submit-create-group"
+	                    type="submit"
+	                    value="Create new group"
+	                    disabled="disabled"
+	                    onclick="createNewGroup(this);" />
+	
+	                    <br />
+	                    <span
+	                        id="creation-result">
+	                    </span>
+	
+	            </form>
+            </div>
     </body>
 </html>
