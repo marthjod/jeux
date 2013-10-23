@@ -11,8 +11,8 @@ import javax.persistence.TypedQuery;
 
 import org.jboss.logging.Logger;
 
-import de.fhb.jeux.model.Group;
 import de.fhb.jeux.model.IGroup;
+import de.fhb.jeux.persistence.ShowdownGroup;
 
 @Stateless
 @LocalBean
@@ -51,7 +51,7 @@ public class GroupDAO {
 	}
 
 	public IGroup getGroupById(int groupId) {
-		IGroup group = new Group();
+		IGroup group = new ShowdownGroup();
 		TypedQuery<IGroup> query = em.createNamedQuery("Group.findById",
 				IGroup.class);
 		query.setParameter("id", groupId);

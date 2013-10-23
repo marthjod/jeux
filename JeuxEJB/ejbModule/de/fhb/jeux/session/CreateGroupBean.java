@@ -13,9 +13,9 @@ import com.google.gson.JsonSyntaxException;
 
 import de.fhb.jeux.dao.GroupDAO;
 import de.fhb.jeux.json.IPlayerAdapter;
-import de.fhb.jeux.model.Group;
 import de.fhb.jeux.model.IGroup;
 import de.fhb.jeux.model.IPlayer;
+import de.fhb.jeux.persistence.ShowdownGroup;
 
 @Stateless
 public class CreateGroupBean implements CreateGroupRemote, CreateGroupLocal {
@@ -40,7 +40,7 @@ public class CreateGroupBean implements CreateGroupRemote, CreateGroupLocal {
 		IGroup group;
 
 		try {
-			group = gson.fromJson(jsonRepresentation, Group.class);
+			group = gson.fromJson(jsonRepresentation, ShowdownGroup.class);
 			// logger.debug("\n" + gson.toJson(group));
 
 			// persist new Group
