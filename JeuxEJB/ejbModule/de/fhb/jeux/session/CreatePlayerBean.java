@@ -1,8 +1,5 @@
 package de.fhb.jeux.session;
 
-import java.util.Iterator;
-import java.util.List;
-
 import javax.ejb.Stateless;
 
 import org.jboss.logging.Logger;
@@ -12,43 +9,47 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSyntaxException;
-import com.google.gson.reflect.TypeToken;
 
-import de.fhb.jeux.mockentity.MockPlayerEntity;
 import de.fhb.jeux.model.IPlayer;
+import de.fhb.jeux.persistence.ShowdownPlayer;
 
 @Stateless
-public class CreatePlayersBean implements CreatePlayersRemote,
-		CreatePlayersLocal {
+public class CreatePlayerBean implements CreatePlayerRemote, CreatePlayerLocal {
 
-	protected static Logger logger = Logger.getLogger(CreatePlayersBean.class);
+	protected static Logger logger = Logger.getLogger(CreatePlayerBean.class);
 
 	private Gson gson;
 
-	public CreatePlayersBean() {
+	public CreatePlayerBean() {
 		// this.gson = new GsonBuilder().registerTypeAdapter(IPlayer.class,
 		// new IPlayerAdapter().nullSafe()).create();
 		this.gson = new GsonBuilder().create();
 	}
 
 	@Override
-	public boolean createPlayers(String jsonRepresentation) {
+	public boolean createPlayer(String jsonRepresentation) {
 		boolean success = false;
 
-		List<IPlayer> players;
+		// List<IPlayer> players;
 
 		try {
 			// http://stackoverflow.com/questions/4318458/how-to-deserialize-a-list-using-gson-or-another-json-to-java
-			players = gson.fromJson(jsonRepresentation,
-					new TypeToken<List<MockPlayerEntity>>() {
-					}.getType());
+			// players = gson.fromJson(jsonRepresentation,
+			// new TypeToken<List<MockPlayerEntity>>() {
+			// }.getType());
+
+			// We must use ShowdownPlayer.class (no interface) here.
+			IPlayer player = gson.fromJson(jsonRepresentation,
+					ShowdownPlayer.class);
 			success = true;
 
 			// debug
-			Iterator<IPlayer> itPlayers = players.iterator();
-			while (itPlayers.hasNext()) {
-				logger.debug("Created player: " + itPlayers.next().toString());
-			}
+			// Iterator<IPlayer> itPlayers = players.iterator();
+			// while (itPlayers.hasNext()) {
+			// logger.debug("Created player: " + itPlayers.next().toString());
+			// }
+
+			logger.debug("Created player " + player.getName());
 
 		} catch (JsonIOException e) {
 			logger.error("JSON I/O error");
@@ -65,7 +66,7 @@ public class CreatePlayersBean implements CreatePlayersRemote,
 		}
 
 		if (!success) {
-			logger.error("Failed to create players from JSON input '"
+			logger.error("Failed to create player from JSON input '"
 					+ jsonRepresentation + "'");
 		}
 		return success;
