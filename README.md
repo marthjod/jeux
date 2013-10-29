@@ -43,7 +43,7 @@ CREATE USER 'jeuxdb_user'@'localhost'
 IDENTIFIED BY '***';
 
 GRANT SELECT, INSERT, UPDATE, DELETE 
-ON *.* 
+ON 'jeuxdb'.* 
 TO 'jeuxdb_user'@'localhost' 
 IDENTIFIED BY '***'
 ```
