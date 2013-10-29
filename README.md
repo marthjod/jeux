@@ -23,7 +23,7 @@ Modify the following entries in _JeuxEJB/.classpath_ and _JeuxWeb/.classpath_ to
 #### Eclipse
 
 - _Project facets_ should include _JPA_
-- _ejbModule/META-INF/persistence.xml_ should exist and contain an entry for each used persistence entities, e.g.:
+- _ejbModule/META-INF/persistence.xml_ should exist and contain an entry for each used persistence entity, e.g.:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
