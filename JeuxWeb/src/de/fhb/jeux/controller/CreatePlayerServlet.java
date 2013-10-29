@@ -13,7 +13,6 @@ import org.jboss.logging.Logger;
 
 import de.fhb.jeux.session.CreatePlayerLocal;
 
-// curl -X PUT -d "{'name': 'bla'}" http://localhost:8080/JeuxWeb/create-player
 public class CreatePlayerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -32,6 +31,7 @@ public class CreatePlayerServlet extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 
 		boolean playerCreated = false;
+		int groupId;
 
 		BufferedReader requestBody = new BufferedReader(request.getReader());
 		StringBuilder jsonData = new StringBuilder();
@@ -40,7 +40,17 @@ public class CreatePlayerServlet extends HttpServlet {
 			jsonData.append(s);
 		}
 
-		playerCreated = createPlayerBean.createPlayer(jsonData.toString());
+		try {
+			// get trailing number after last slash in URL
+			groupId = Integer.parseInt(
+					request.getRequestURL().substring(
+							request.getRequestURL().lastIndexOf("/") + 1), 10);
+			// logger.debug("Group ID from request URL = " + groupId);
+			playerCreated = createPlayerBean.createPlayer(jsonData.toString(),
+					groupId);
+		} catch (NumberFormatException e) {
+			logger.error(e.getClass().getName() + ": " + e.getMessage());
+		}
 
 		if (playerCreated) {
 			response.setStatus(HttpServletResponse.SC_CREATED);
@@ -48,5 +58,4 @@ public class CreatePlayerServlet extends HttpServlet {
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 		}
 	}
-
 }

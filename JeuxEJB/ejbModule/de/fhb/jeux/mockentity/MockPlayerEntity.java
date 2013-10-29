@@ -66,4 +66,9 @@ public class MockPlayerEntity implements IPlayer {
 		return "Player " + this.name;
 	}
 
+	@Override
+	public void setGroup(IGroup group) {
+		this.group = group;
+	}
+
 }

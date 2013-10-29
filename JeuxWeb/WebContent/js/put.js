@@ -7,7 +7,11 @@ function createNewGroup(groupSubmit) {
 
     minSets = $(groupForm).find("#min-sets").val();
     maxSets = $(groupForm).find("#max-sets").val();
-    round = $(groupForm).find("#round").val();
+    try {
+        round = parseInt($(groupForm).find("#round").val(), 10);
+    } catch (e) {
+        alert(e);
+    }
     name = $(groupForm).find("#name").val();
     active = $(groupForm).find("#group-active")[0].checked;
 
@@ -15,7 +19,7 @@ function createNewGroup(groupSubmit) {
         "minSets" : minSets,
         "maxSets" : maxSets,
         "name" : name,
-        "round" : round,
+        "roundId" : round,
         // newly-created cannot be completed
         "completed" : false,
         "active" : active
@@ -24,7 +28,7 @@ function createNewGroup(groupSubmit) {
     // assumption: all input values present
     // see checkSubmitReady()
     $.ajax({
-        url : "create-group",
+        url : "rest/v1/create-group",
         type : "PUT",
         data : JSON.stringify(sendGroup),
         contentType : "application/json",
@@ -80,7 +84,7 @@ function createNewPlayer(playerSubmit) {
         };
 
         $.ajax({
-            url : "create-player",
+            url : "create-player/" + groupId,
             type : "PUT",
             data : JSON.stringify(sendPlayer),
             contentType : "application/json",

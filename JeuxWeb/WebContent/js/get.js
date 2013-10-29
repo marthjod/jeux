@@ -11,7 +11,7 @@ function showAllGroups(showAllGroupsDiv, playerGroupSelect) {
 
     var i = 0, table = null, row = null, deletionCell = null;
 
-    $.get("rest/v1/groups-json", function(data) {
+    $.get("rest/v1/groups", function(data) {
 
         // showAllGroupsDiv
         $(showAllGroupsDiv).empty();

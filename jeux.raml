@@ -21,24 +21,10 @@ baseUri: http://localhost:8080/JeuxWeb
                         text/plain:
                             "OK"
                     description: |
-                        All's well. So far.
+                        All's well.
 
 /rest/v1:
     /groups:
-        get:
-            description: |
-                Get all groups from DB as plain text.
-            mediaType: text/plain
-            responses:
-                200:
-                    body:
-                        text/plain:
-                            example: |
-                                "'Some test group' (ID 1), round 1, active = true, completed = false, 1-1 sets
-                                 'Sweede Grubbe' (ID 2), round 1, active = true, completed = false, 2-3 sets"
-                                 
-/rest/v1:
-    /groups-json:
         get:
             description: |
                 Get all groups from DB as JSON.
@@ -75,40 +61,40 @@ baseUri: http://localhost:8080/JeuxWeb
             description: |
                 Delete DB entry for group with given ID = {groupId}.
 
-/create-group:
-    put:
-        description: |
-            Send data representing a group object to be created on the server.
-        body:
-            application/json:
-                example: |
-                    {
-                        maxSets:"3",
-                        minSets:"2",
-                        name:"Nuevo grupo",
-                        round:"1",
-                        active:true,
-                        completed:false
-                    }
-         responses:
-            201:
-                description: |
-                    Group object has been successfully created on the server.
-            500:
-                description: |
-                    Failure to create group object server-side.
-                    Reasons include: com.google.gson.Json(IO|Parse|Syntax)Exception, Exception
+/rest/v1:
+    /create-group:
+        put:
+            description: |
+                Send data representing a group object to be created on the server.
+            body:
+                application/json:
+                    example: |
+                        {
+                            maxSets:"3",
+                            minSets:"2",
+                            name:"Nuevo grupo",
+                            round:"1",
+                            active:true,
+                            completed:false
+                        }
+             responses:
+                201:
+                    description: |
+                        Group object has been successfully created on the server.
+                500:
+                    description: |
+                        Failure to create group object server-side.
 
-/create-player:
+/create-player/{groupId}:
     put:
         description: |
-            Send data representing player object to be created on the server.
+            Send data representing player object belonging to group {groupId} to be created on the server.
         body:
             application/json:
                 example: |
                    {
                       "name":"Player Two",
-                      "groupName":"Group 2"
+                      "groupId":2
                    },
         responses:
             201:

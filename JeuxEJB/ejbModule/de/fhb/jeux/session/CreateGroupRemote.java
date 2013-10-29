@@ -2,7 +2,9 @@ package de.fhb.jeux.session;
 
 import javax.ejb.Remote;
 
+import de.fhb.jeux.model.IGroup;
+
 @Remote
 public interface CreateGroupRemote {
-	public boolean createNewGroup(String jsonRepresentation);
+	public void createNewGroup(IGroup group);
 }

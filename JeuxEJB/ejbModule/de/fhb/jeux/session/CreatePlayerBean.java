@@ -1,5 +1,6 @@
 package de.fhb.jeux.session;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 import org.jboss.logging.Logger;
@@ -18,39 +19,27 @@ public class CreatePlayerBean implements CreatePlayerRemote, CreatePlayerLocal {
 
 	protected static Logger logger = Logger.getLogger(CreatePlayerBean.class);
 
+	@EJB
+	private GroupLocal groupBean;
+
 	private Gson gson;
 
 	public CreatePlayerBean() {
-		// this.gson = new GsonBuilder().registerTypeAdapter(IPlayer.class,
-		// new IPlayerAdapter().nullSafe()).create();
 		this.gson = new GsonBuilder().create();
 	}
 
 	@Override
-	public boolean createPlayer(String jsonRepresentation) {
+	public boolean createPlayer(String jsonRepresentation, int groupId) {
 		boolean success = false;
 
-		// List<IPlayer> players;
-
 		try {
-			// http://stackoverflow.com/questions/4318458/how-to-deserialize-a-list-using-gson-or-another-json-to-java
-			// players = gson.fromJson(jsonRepresentation,
-			// new TypeToken<List<MockPlayerEntity>>() {
-			// }.getType());
-
-			// We must use ShowdownPlayer.class (no interface) here.
+			// We must use an IPlayer implementation class (no interface) here.
 			IPlayer player = gson.fromJson(jsonRepresentation,
 					MockPlayerEntity.class);
+			player.setGroup(groupBean.getGroupById(groupId));
 			success = true;
-
-			// debug
-			// Iterator<IPlayer> itPlayers = players.iterator();
-			// while (itPlayers.hasNext()) {
-			// logger.debug("Created player: " + itPlayers.next().toString());
-			// }
-
-			logger.debug("Created player " + player.getName());
-
+			logger.debug("Created player " + player.getName() + " in group "
+					+ player.getGroup().getName());
 		} catch (JsonIOException e) {
 			logger.error("JSON I/O error");
 			// TODO

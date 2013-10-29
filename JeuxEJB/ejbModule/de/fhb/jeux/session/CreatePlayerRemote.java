@@ -4,5 +4,5 @@ import javax.ejb.Remote;
 
 @Remote
 public interface CreatePlayerRemote {
-	public boolean createPlayer(String jsonRepresentation);
+	public boolean createPlayer(String jsonRepresentation, int groupId);
 }

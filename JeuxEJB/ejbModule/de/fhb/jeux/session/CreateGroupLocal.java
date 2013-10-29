@@ -2,7 +2,9 @@ package de.fhb.jeux.session;
 
 import javax.ejb.Local;
 
+import de.fhb.jeux.model.IGroup;
+
 @Local
 public interface CreateGroupLocal {
-	public boolean createNewGroup(String jsonRepresentation);
+	public void createNewGroup(IGroup group);
 }

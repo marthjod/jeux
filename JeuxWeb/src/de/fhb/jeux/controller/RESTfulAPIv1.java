@@ -4,18 +4,24 @@ import java.util.List;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.jboss.logging.Logger;
 
 import com.google.gson.Gson;
 
 import de.fhb.jeux.model.IGroup;
+import de.fhb.jeux.persistence.ShowdownGroup;
+import de.fhb.jeux.session.CreateGroupLocal;
+import de.fhb.jeux.session.CreatePlayerLocal;
 import de.fhb.jeux.session.DeleteGroupLocal;
 import de.fhb.jeux.session.GroupLocal;
 
@@ -27,6 +33,12 @@ public class RESTfulAPIv1 {
 
 	@EJB
 	private GroupLocal groupBean;
+
+	@EJB
+	private CreatePlayerLocal createPlayerBean;
+
+	@EJB
+	private CreateGroupLocal createGroupBean;
 
 	@EJB
 	private DeleteGroupLocal deleteGroupBean;
@@ -43,18 +55,6 @@ public class RESTfulAPIv1 {
 
 	@GET
 	@Path("/groups")
-	@Produces(MediaType.TEXT_PLAIN)
-	public String allGroups() {
-		StringBuilder sb = new StringBuilder();
-		List<IGroup> groups = groupBean.getAllGroups();
-		for (IGroup group : groups) {
-			sb.append(group.toString() + "\n");
-		}
-		return sb.toString();
-	}
-
-	@GET
-	@Path("/groups-json")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String allGroupsJson() {
 		gson = new Gson();
@@ -80,5 +80,28 @@ public class RESTfulAPIv1 {
 	@Path("/delete-group/{groupId}")
 	public void deleteGroup(@PathParam("groupId") int groupId) {
 		deleteGroupBean.deleteGroup(groupBean.getGroupById(groupId));
+	}
+
+	// Test:
+	// curl -X PUT -H "Content-Type: application/json" -d
+	// '{"minSets":"1","maxSets":"1","name":"New
+	// group","roundId":1,"completed":false,"active":true}'
+	// http://localhost:8080/JeuxWeb/rest/v1/create-group
+	@PUT
+	@Path("/create-group")
+	@Consumes(MediaType.APPLICATION_JSON)
+	// Must use instantiable param for underlying Jackson here.
+	// TODO register Exception mapper
+	// http://docs.jboss.org/resteasy/docs/1.2.GA/userguide/html/ExceptionHandling.html
+	public Response createGroup(ShowdownGroup group) {
+		if (group != null) {
+			logger.debug("REST API deserialized group '" + group.getName()
+					+ "'");
+			createGroupBean.createNewGroup(group);
+			return Response.status(Response.Status.CREATED).build();
+		} else {
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+					.build();
+		}
 	}
 }
