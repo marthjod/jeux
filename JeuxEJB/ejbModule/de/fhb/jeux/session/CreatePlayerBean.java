@@ -10,8 +10,8 @@ import com.google.gson.JsonIOException;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSyntaxException;
 
+import de.fhb.jeux.mockentity.MockPlayerEntity;
 import de.fhb.jeux.model.IPlayer;
-import de.fhb.jeux.persistence.ShowdownPlayer;
 
 @Stateless
 public class CreatePlayerBean implements CreatePlayerRemote, CreatePlayerLocal {
@@ -40,7 +40,7 @@ public class CreatePlayerBean implements CreatePlayerRemote, CreatePlayerLocal {
 
 			// We must use ShowdownPlayer.class (no interface) here.
 			IPlayer player = gson.fromJson(jsonRepresentation,
-					ShowdownPlayer.class);
+					MockPlayerEntity.class);
 			success = true;
 
 			// debug

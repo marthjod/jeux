@@ -11,18 +11,19 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.jboss.logging.Logger;
 
-import de.fhb.jeux.session.CreatePlayersLocal;
+import de.fhb.jeux.session.CreatePlayerLocal;
 
-public class CreatePlayersServlet extends HttpServlet {
+// curl -X PUT -d "{'name': 'bla'}" http://localhost:8080/JeuxWeb/create-player
+public class CreatePlayerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	protected static Logger logger = Logger
-			.getLogger(CreatePlayersServlet.class);
+			.getLogger(CreatePlayerServlet.class);
 
 	@EJB
-	private CreatePlayersLocal createPlayersBean;
+	private CreatePlayerLocal createPlayerBean;
 
-	public CreatePlayersServlet() {
+	public CreatePlayerServlet() {
 		super();
 	}
 
@@ -30,7 +31,7 @@ public class CreatePlayersServlet extends HttpServlet {
 	protected void doPut(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
-		boolean playersCreated = false;
+		boolean playerCreated = false;
 
 		BufferedReader requestBody = new BufferedReader(request.getReader());
 		StringBuilder jsonData = new StringBuilder();
@@ -39,9 +40,9 @@ public class CreatePlayersServlet extends HttpServlet {
 			jsonData.append(s);
 		}
 
-		playersCreated = createPlayersBean.createPlayers(jsonData.toString());
+		playerCreated = createPlayerBean.createPlayer(jsonData.toString());
 
-		if (playersCreated) {
+		if (playerCreated) {
 			response.setStatus(HttpServletResponse.SC_CREATED);
 		} else {
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);

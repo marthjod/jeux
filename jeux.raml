@@ -99,33 +99,23 @@ baseUri: http://localhost:8080/JeuxWeb
                     Failure to create group object server-side.
                     Reasons include: com.google.gson.Json(IO|Parse|Syntax)Exception, Exception
 
-
-
-CONSIDERED DEPRECATED FOR THE TIME BEING:
-
-/create-players:
+/create-player:
     put:
         description: |
-            Send data representing array of player objects to be created on the server.
+            Send data representing player object to be created on the server.
         body:
             application/json:
                 example: |
-                    [
-                       {
-                          "name":"Player Two",
-                          "groupName":"Group 2"
-                       },
-                       {
-                          "name":"Player One",
-                          "groupName":"Group 2"
-                       }
-                    ]
+                   {
+                      "name":"Player Two",
+                      "groupName":"Group 2"
+                   },
         responses:
             201:
                 description: |
-                    Player objects have been successfully created on the server.
+                    Player object has been successfully created on the server.
             500:
                 description: |
-                    Failure to create player objects server-side.
+                    Failure to create player object server-side.
                     Reasons include: com.google.gson.Json(IO|Parse|Syntax)Exception, Exception
 

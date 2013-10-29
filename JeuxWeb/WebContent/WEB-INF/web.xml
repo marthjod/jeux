@@ -12,9 +12,8 @@
     <servlet-class>de.fhb.jeux.controller.CreateGroupServlet</servlet-class>
   </servlet>
   <servlet>
-    <display-name>CreatePlayersServlet</display-name>
-    <servlet-name>CreatePlayersServlet</servlet-name>
-    <servlet-class>de.fhb.jeux.controller.CreatePlayersServlet</servlet-class>
+    <servlet-name>CreatePlayerServlet</servlet-name>
+    <servlet-class>de.fhb.jeux.controller.CreatePlayerServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>JAX-RS Servlet</servlet-name>
@@ -25,8 +24,8 @@
     <url-pattern>/create-group</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>CreatePlayersServlet</servlet-name>
-    <url-pattern>/create-players</url-pattern>
+    <servlet-name>CreatePlayerServlet</servlet-name>
+    <url-pattern>/create-player</url-pattern>
   </servlet-mapping>
   <welcome-file-list>
     <welcome-file>/index.html</welcome-file>
