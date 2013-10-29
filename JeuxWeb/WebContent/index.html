@@ -12,7 +12,7 @@
         <script>
             $( document ).ready(function() {
              getRESTApiStatus($( "#rest-api-status" ));
-             showAllGroups($( "#show-all-groups" ));
+             showAllGroups($("#show-all-groups"), $("#player-select-group"));
             });
         </script>
         <title>JEUX</title>
@@ -31,7 +31,7 @@
 	                Name
 	                     <input id="name"
 	                         type="text"
-	                         onkeyup="checkSubmitReady(this);" />
+	                         onkeyup="checkGroupSubmitReady(this);" />
 	                <br />
 	                Round
 	                     <input id="round"
@@ -39,7 +39,7 @@
 	                        size="2"
 	                        maxlength="2"
 	                        min="1"
-	                        onkeyup="checkSubmitReady(this);" />
+	                        onkeyup="checkGroupSubmitReady(this);" />
 	                 <br />
 	                 Min sets
 	                     <input id="min-sets"
@@ -47,13 +47,13 @@
 	                         size="2"
 	                         maxlength="2"
 	                         min="1"
-	                         onkeyup="checkSubmitReady(this);"
+	                         onkeyup="checkGroupSubmitReady(this);"
 	                         oninput="prefillMaxSets(this);" /> Max sets <input id="max-sets"
 	                         type="number"
 	                         size="2"
 	                         maxlength="2"
 	                         min="1"
-	                         onkeyup="checkSubmitReady(this);" />
+	                         onkeyup="checkGroupSubmitReady(this);" />
 	                <br />         
 	                Active 
 			                <input id="group-active"
@@ -67,12 +67,30 @@
 	                    disabled="disabled"
 	                    onclick="createNewGroup(this);" />
 	
-	                    <br />
-	                    <span
-	                        id="creation-result">
-	                    </span>
-	
 	            </form>
+            </div>
+            <br />
+            <div id="create-players">
+                <span class="title">Create new player</span>
+                <form id="create-player" action="#">
+                    Name
+                         <input id="name"
+                             type="text"
+                             onkeyup="checkPlayerSubmitReady(this);" />
+                    <br />
+                    Group
+                        <select id="player-select-group"
+                            onchange="checkPlayerSubmitReady(this);">
+                            <option id="no-group-selected">No group selected</option>
+                        </select>
+                        
+                    <br />
+                    <input id="submit-create-player"
+                        type="submit"
+                        value="Create new player"
+                        disabled="disabled"
+                        onclick="createNewPlayer(this);" />
+                </form>
             </div>
     </body>
 </html>

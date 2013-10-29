@@ -6,13 +6,14 @@ function getRESTApiStatus(statusDiv) {
     });
 }
 
-function showAllGroups(showAllGroupsDiv) {
+function showAllGroups(showAllGroupsDiv, playerGroupSelect) {
     "use strict";
 
     var i = 0, table = null, row = null, deletionCell = null;
 
     $.get("rest/v1/groups-json", function(data) {
 
+        // showAllGroupsDiv
         $(showAllGroupsDiv).empty();
         $("<span>").attr("class", "title").html("Existing groups").appendTo(
                 showAllGroupsDiv);
@@ -58,9 +59,20 @@ function showAllGroups(showAllGroupsDiv) {
                                 "deleteGroup(this);");
                 deletionCell.appendTo(row);
                 row.appendTo(table);
+
+                // populate playerGroupSelect as well
+                // so that <option id="GROUP_ID">GROUP_NAME</option>
+                // are appended
+
+                if (playerGroupSelect !== undefined
+                        && playerGroupSelect !== null) {
+                    $("<option>").attr("id", "group-id-" + data[i].id).text(
+                            data[i].name).appendTo($(playerGroupSelect));
+                }
             }
 
             table.appendTo(showAllGroupsDiv);
+
         } else {
             $(showAllGroupsDiv).html("No or no valid group data available.");
         }

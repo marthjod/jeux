@@ -23,7 +23,7 @@ function clearForm(form) {
             .removeAttr("selected");
 }
 
-function checkSubmitReady(inputElement) {
+function checkGroupSubmitReady(inputElement) {
     "use strict";
 
     var groupForm = null, minSets = "", maxSets = "", name = "";
@@ -40,24 +40,32 @@ function checkSubmitReady(inputElement) {
 
 }
 
-// function checkAddNextPlayer(playerInput) {
-// "use strict";
-//
-// if ($(playerInput).val() !== "") {
-// $("#add-player").removeAttr("disabled");
-// }
-// }
+function checkPlayerSubmitReady(inputElement) {
+    "use strict";
 
-// function createAdditionalPlayer(newPlayersElement) {
-// "use strict";
-//
-// var createPlayersDiv = null;
-//
-// createPlayersDiv = $(newPlayersElement).parent();
-//
-// $("<br>").prependTo($(createPlayersDiv));
-// $("<input>").attr("class", "create-player").attr("type", "text").attr(
-// "onkeyup", "checkAddNextPlayer(this);").prependTo(
-// $(createPlayersDiv)).focus();
-// $("#add-player").attr("disabled", "disabled");
-// }
+    var playerForm = null, playerName = "", groupOptionId = "", inputOK = false;
+
+    playerForm = $(inputElement).parent();
+
+    groupOptionId = $(playerForm).find("option:selected").attr("id");
+
+    if (groupOptionId !== undefined && groupOptionId !== null
+            && typeof groupOptionId === "string"
+            && groupOptionId.startsWith("group-id-")) {
+        try {
+            parseInt(groupOptionId.replace("group-id-", ""), 10);
+            // parseInt did not fail
+            playerName = $(playerForm).find("input:text[id='name']").val();
+            if (playerName !== undefined && playerName !== null
+                    && typeof playerName === "string" && playerName.length > 0) {
+                inputOK = true;
+            }
+        } catch (e) {
+            alert(e);
+        }
+    }
+
+    if (inputOK) {
+        $(playerForm).find("#submit-create-player").removeAttr("disabled");
+    }
+}

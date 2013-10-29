@@ -12,16 +12,21 @@ function deleteGroup(deleteSubmit) {
     }
 
     if (sendOK) {
-        $.ajax({
-            url : "rest/v1/delete-group/" + groupId,
-            type : "DELETE",
-            success : function() {
-                alert("Group deleted");
-                showAllGroups($("#show-all-groups"));
-            },
-            error : function() {
-                alert("Error trying to delete group");
-            }
-        });
+        $
+                .ajax({
+                    url : "rest/v1/delete-group/" + groupId,
+                    type : "DELETE",
+                    success : function() {
+                        // alert("Group deleted");
+
+                        // remove as selection option
+                        $("#player-select-group").find("#group-id-" + groupId)
+                                .remove();
+                        showAllGroups($("#show-all-groups"));
+                    },
+                    error : function() {
+                        alert("Error trying to delete group");
+                    }
+                });
     }
 }

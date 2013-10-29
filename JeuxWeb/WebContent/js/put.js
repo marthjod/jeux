@@ -40,7 +40,7 @@ function createNewGroup(groupSubmit) {
             }, 3000);
 
             // refresh
-            showAllGroups($("#show-all-groups"));
+            showAllGroups($("#show-all-groups"), $("#player-select-group"));
 
         },
         error : function() {
@@ -49,43 +49,54 @@ function createNewGroup(groupSubmit) {
     });
 }
 
-// function createNewPlayersForGroup(groupSubmit) {
-// "use strict";
-//
-// var groupForm = null, i = 0, createdPlayers = [], sendPlayers = [], groupName
-// = "";
-//
-// groupForm = $(groupSubmit).parent();
-// groupName = $(groupForm).find("#name").val();
-//
-// createdPlayers = groupForm.find($(".create-player"));
-// if (createdPlayers.length > 0) {
-// for (i = 0; i < createdPlayers.length; i += 1) {
-// // non-empty player name?
-// if ($(createdPlayers[i]).val() !== "") {
-// // add player object with name attribute
-// // to group data
-// sendPlayers.push({
-// "name" : $(createdPlayers[i]).val(),
-// "groupName" : groupName
-// });
-// }
-//
-// // remove parsed input element
-// $(createdPlayers[i]).remove();
-// }
-//
-// $.ajax({
-// url : "create-players",
-// type : "PUT",
-// data : JSON.stringify(sendPlayers),
-// contentType : "application/json",
-// success : function() {
-//
-// },
-// error : function() {
-// $("#creation-result").html("Failed to create players");
-// }
-// });
-// }
-// }
+function createNewPlayer(playerSubmit) {
+    "use strict";
+
+    var playerForm = null, playerName = "", sendPlayer = {}, groupOptionId = "", groupId = -1, inputOK = false;
+
+    playerForm = $(playerSubmit).parent();
+
+    groupOptionId = $(playerForm).find("option:selected").attr("id");
+    if (groupOptionId !== undefined && groupOptionId !== null
+            && typeof groupOptionId === "string"
+            && groupOptionId.startsWith("group-id-")) {
+        try {
+            groupId = parseInt(groupOptionId.replace("group-id-", ""), 10);
+            // parseInt did not fail
+            playerName = $(playerForm).find("input:text[id='name']").val();
+            if (playerName !== undefined && playerName !== null
+                    && typeof playerName === "string" && playerName.length > 0) {
+                inputOK = true;
+            }
+        } catch (e) {
+            alert(e);
+        }
+    }
+
+    if (inputOK) {
+        sendPlayer = {
+            "name" : playerName,
+            "groupId" : groupId
+        };
+
+        $.ajax({
+            url : "create-player",
+            type : "PUT",
+            data : JSON.stringify(sendPlayer),
+            contentType : "application/json",
+            success : function() {
+                $(playerSubmit).attr("value", "Created.");
+                // disable submit button, clear values and success message
+                $(playerSubmit).attr("disabled", "disabled");
+                clearForm(playerSubmit);
+                window.setTimeout(function() {
+                    // reset text
+                    $(playerSubmit).attr("value", "Create new player");
+                }, 3000);
+            },
+            error : function() {
+                $(playerSubmit).attr("value", "Failed to create player");
+            }
+        });
+    }
+}
