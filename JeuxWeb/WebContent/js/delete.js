@@ -22,6 +22,11 @@ function deleteGroup(deleteSubmit) {
                         // remove as selection option
                         $("#player-select-group").find("#group-id-" + groupId)
                                 .remove();
+                        $("#rule-source-group").find(
+                                "#rule-source-group-id-" + groupId).remove();
+                        $("#rule-destination-group").find(
+                                "#rule-dest-group-id-" + groupId).remove();
+
                         showAllGroups($("#show-all-groups"));
                     },
                     error : function() {

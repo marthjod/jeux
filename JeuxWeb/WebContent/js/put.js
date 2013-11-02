@@ -44,7 +44,8 @@ function createNewGroup(groupSubmit) {
             }, 3000);
 
             // refresh
-            showAllGroups($("#show-all-groups"), $("#player-select-group"));
+            showAllGroups($("#show-all-groups"), $("#player-select-group"),
+                    $("#rule-source-group"), $("#rule-destination-group"));
 
         },
         error : function() {
@@ -102,5 +103,66 @@ function createNewPlayer(playerSubmit) {
                 $(playerSubmit).attr("value", "Failed to create player");
             }
         });
+    }
+}
+
+function createNewRoundSwitchRule(ruleSubmit) {
+    "use strict";
+
+    var ruleForm = null, srcGroupId = 0, destGroupId = 0, startWithRank = 0, additionalPlayers = 0, inputOK = false, sendRule = {};
+
+    ruleForm = $(ruleSubmit).parent();
+
+    if (ruleForm !== undefined && ruleForm !== null) {
+        try {
+            srcGroupId = parseInt($(ruleForm).find("#rule-source-group").find(
+                    "option:selected").attr("id").replace(
+                    "rule-source-group-id-", ""), 10);
+            destGroupId = parseInt($(ruleForm).find("#rule-destination-group")
+                    .find("option:selected").attr("id").replace(
+                            "rule-destination-group-id-", ""), 10);
+            startWithRank = parseInt(
+                    $(ruleForm).find("#rule-start-rank").val(), 10);
+
+            if ($(ruleForm).find("#rule-additional-players").val() !== "") {
+                additionalPlayers = parseInt($(ruleForm).find(
+                        "#rule-additional-players").val(), 10);
+            }
+
+            inputOK = true;
+        } catch (e) {
+            alert(e);
+        }
+
+        if (inputOK) {
+            sendRule = {
+                "srcGroupId" : srcGroupId,
+                "destGroupId" : destGroupId,
+                "startWithRank" : startWithRank,
+                "additionalPlayers" : additionalPlayers
+            };
+
+            $.ajax({
+                url : "rest/v1/create-roundswitchrule",
+                type : "PUT",
+                data : JSON.stringify(sendRule),
+                contentType : "application/json",
+                success : function() {
+                    $(ruleSubmit).attr("value", "Created.");
+                    // disable submit button, clear values and success message
+                    $(ruleSubmit).attr("disabled", "disabled");
+                    clearForm(ruleSubmit);
+                    window.setTimeout(function() {
+                        // reset text
+                        $(ruleSubmit).attr("value",
+                                "Create new round switch rule");
+                    }, 3000);
+                },
+                error : function() {
+                    $(ruleSubmit).attr("value",
+                            "Failed to create round switch rule");
+                }
+            });
+        }
     }
 }

@@ -18,6 +18,7 @@ import org.jboss.logging.Logger;
 
 import com.google.gson.Gson;
 
+import de.fhb.jeux.mockentity.MockRoundSwitchRuleEntity;
 import de.fhb.jeux.model.IGroup;
 import de.fhb.jeux.persistence.ShowdownGroup;
 import de.fhb.jeux.session.CreateGroupLocal;
@@ -95,9 +96,28 @@ public class RESTfulAPIv1 {
 	// http://docs.jboss.org/resteasy/docs/1.2.GA/userguide/html/ExceptionHandling.html
 	public Response createGroup(ShowdownGroup group) {
 		if (group != null) {
-			logger.debug("REST API deserialized group '" + group.getName()
-					+ "'");
+			logger.debug("Deserialized group '" + group.getName() + "'");
 			createGroupBean.createNewGroup(group);
+			return Response.status(Response.Status.CREATED).build();
+		} else {
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+					.build();
+		}
+	}
+
+	// Test: curl -X PUT -H "Content-Type: application/json" -d
+	// '{"srcGroupId":1, "destGroupId":2, "startWithRank":1,
+	// "additionalPlayers":1}'
+	// http://localhost:8080/JeuxWeb/rest/v1/create-roundswitchrule
+
+	@PUT
+	@Path("/create-roundswitchrule")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response createRoundSwitchRule(MockRoundSwitchRuleEntity rule) {
+		if (rule != null) {
+			logger.debug("Deserialized round switch rule '" + rule.toString()
+					+ "'");
+
 			return Response.status(Response.Status.CREATED).build();
 		} else {
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
