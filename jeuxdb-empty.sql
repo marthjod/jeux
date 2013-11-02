@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Oct 22, 2013 at 10:37 PM
+-- Generation Time: Nov 02, 2013 at 01:57 PM
 -- Server version: 5.5.31
 -- PHP Version: 5.4.16
 
@@ -91,6 +91,22 @@ CREATE TABLE IF NOT EXISTS `Player` (
   PRIMARY KEY (`id`),
   KEY `fk_Player_Group1_idx` (`groupId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `RoundSwitchRule`
+--
+
+CREATE TABLE IF NOT EXISTS `RoundSwitchRule` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `srcGroupId` int(11) NOT NULL COMMENT 'Group where players originate from.',
+  `destGroupId` int(11) NOT NULL COMMENT 'Group players should be in in the next round.',
+  `startWithRank` int(11) NOT NULL COMMENT 'Player with this rank in source group is the first to be moved from source group to destination group.',
+  `additionalPlayers` int(11) NOT NULL COMMENT 'How many additional players should be moved from source to destination group?',
+  `previousRoundId` int(11) NOT NULL COMMENT '(For safety. Remove if unused.) ',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Constraints for dumped tables
