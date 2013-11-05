@@ -13,6 +13,7 @@ import org.jboss.logging.Logger;
 
 import de.fhb.jeux.mockentity.MockPlayerEntity;
 import de.fhb.jeux.model.IPlayer;
+import de.fhb.jeux.persistence.ShowdownPlayer;
 
 @Stateless
 @LocalBean
@@ -51,7 +52,7 @@ public class PlayerDAO {
 	}
 
 	public IPlayer getPlayerById(int playerId) {
-		IPlayer player = new MockPlayerEntity();
+		IPlayer player = new ShowdownPlayer();
 		TypedQuery<IPlayer> query = em.createNamedQuery("Player.findById",
 				IPlayer.class);
 		query.setParameter("id", playerId);
