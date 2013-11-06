@@ -96,7 +96,7 @@ public class RESTfulAPIv1 {
 	// http://docs.jboss.org/resteasy/docs/1.2.GA/userguide/html/ExceptionHandling.html
 	public Response createGroup(GroupDTO groupDTO) {
 		if (groupDTO != null) {
-			logger.debug("Deserialized group DTO '" + groupDTO.getName() + "'");
+			logger.debug("Deserialized group DTO " + groupDTO);
 			createGroupBean.createNewGroup(groupDTO);
 			return Response.status(Response.Status.CREATED).build();
 		} else {

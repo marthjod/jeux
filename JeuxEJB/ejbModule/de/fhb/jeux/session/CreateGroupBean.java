@@ -24,11 +24,22 @@ public class CreateGroupBean implements CreateGroupRemote, CreateGroupLocal {
 	@Override
 	public void createNewGroup(GroupDTO groupDTO) {
 
-		// TODO SANITY-CHECKING HERE BEFORE PERSISTING
+		// TODO (MORE) SANITY-CHECKING HERE BEFORE PERSISTING
 
-		// persist new Group entity
-		IGroup newGroup = new ShowdownGroup(groupDTO);
-		groupDAO.addGroup(newGroup);
-		logger.debug("Added group '" + newGroup.getName() + "'");
+		boolean checkOK = false;
+
+		// creating "completed" groups is disallowed
+		if (groupDTO.getMinSets() <= groupDTO.getMaxSets()
+				&& !groupDTO.isCompleted()) {
+			checkOK = true;
+		}
+
+		if (checkOK) {
+			// persist new Group entity after having
+			// converted it from DTO
+			IGroup newGroup = new ShowdownGroup(groupDTO);
+			groupDAO.addGroup(newGroup);
+			logger.debug("Added group '" + newGroup.getName() + "'");
+		}
 	}
 }

@@ -60,4 +60,18 @@ public class GroupDTO {
 		return roundId;
 	}
 
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("<");
+		sb.append("'" + name + "' (" + id + ")");
+		sb.append(", min sets: " + minSets);
+		sb.append(", max sets: " + maxSets);
+		sb.append(", round ID: " + roundId);
+		sb.append(", active: " + active);
+		sb.append(", completed: " + completed);
+		sb.append(">");
+		return sb.toString();
+	}
+
 }
