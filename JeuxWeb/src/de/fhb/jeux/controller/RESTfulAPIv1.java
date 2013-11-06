@@ -92,7 +92,7 @@ public class RESTfulAPIv1 {
 	@Path("/create-group")
 	@Consumes(MediaType.APPLICATION_JSON)
 	// Must use instantiable param for underlying Jackson here.
-	// TODO register Exception mapper
+	// see de.fhb.jeux.exception for ExceptionMappers as described in
 	// http://docs.jboss.org/resteasy/docs/1.2.GA/userguide/html/ExceptionHandling.html
 	public Response createGroup(GroupDTO groupDTO) {
 		if (groupDTO != null) {
