@@ -18,9 +18,9 @@ import org.jboss.logging.Logger;
 
 import com.google.gson.Gson;
 
+import de.fhb.jeux.dto.GroupDTO;
 import de.fhb.jeux.mockentity.MockRoundSwitchRuleEntity;
 import de.fhb.jeux.model.IGroup;
-import de.fhb.jeux.persistence.ShowdownGroup;
 import de.fhb.jeux.session.CreateGroupLocal;
 import de.fhb.jeux.session.CreatePlayerLocal;
 import de.fhb.jeux.session.DeleteGroupLocal;
@@ -94,10 +94,10 @@ public class RESTfulAPIv1 {
 	// Must use instantiable param for underlying Jackson here.
 	// TODO register Exception mapper
 	// http://docs.jboss.org/resteasy/docs/1.2.GA/userguide/html/ExceptionHandling.html
-	public Response createGroup(ShowdownGroup group) {
-		if (group != null) {
-			logger.debug("Deserialized group '" + group.getName() + "'");
-			createGroupBean.createNewGroup(group);
+	public Response createGroup(GroupDTO groupDTO) {
+		if (groupDTO != null) {
+			logger.debug("Deserialized group DTO '" + groupDTO.getName() + "'");
+			createGroupBean.createNewGroup(groupDTO);
 			return Response.status(Response.Status.CREATED).build();
 		} else {
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR)

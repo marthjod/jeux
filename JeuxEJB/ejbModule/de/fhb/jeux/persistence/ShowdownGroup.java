@@ -12,6 +12,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
+import de.fhb.jeux.dto.GroupDTO;
 import de.fhb.jeux.model.IGame;
 import de.fhb.jeux.model.IGroup;
 import de.fhb.jeux.model.IPlayer;
@@ -48,6 +49,21 @@ public class ShowdownGroup implements IGroup, Serializable {
 
 	@Column
 	private boolean completed;
+
+	// needed by @Entity
+	public ShowdownGroup() {
+	}
+
+	// constructor for converting DTO to Entity
+	public ShowdownGroup(GroupDTO groupDTO) {
+		this.id = groupDTO.getId();
+		this.name = groupDTO.getName();
+		this.active = groupDTO.isActive();
+		this.completed = groupDTO.isCompleted();
+		this.minSets = groupDTO.getMinSets();
+		this.maxSets = groupDTO.getMaxSets();
+		this.roundId = groupDTO.getRoundId();
+	}
 
 	@Override
 	public int getRoundId() {
