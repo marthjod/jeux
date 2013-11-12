@@ -3,6 +3,7 @@ package de.fhb.jeux.persistence;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,12 +11,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import de.fhb.jeux.dto.GroupDTO;
 import de.fhb.jeux.model.IGame;
 import de.fhb.jeux.model.IGroup;
-import de.fhb.jeux.model.IPlayer;
 
 @Entity
 // MySQL does not allow "Group" for table name
@@ -49,6 +50,9 @@ public class ShowdownGroup implements IGroup, Serializable {
 
 	@Column
 	private boolean completed;
+	
+	@OneToMany(cascade=CascadeType.ALL, mappedBy = "group")
+	private List<ShowdownPlayer> players;
 
 	// needed by @Entity
 	public ShowdownGroup() {
@@ -146,9 +150,10 @@ public class ShowdownGroup implements IGroup, Serializable {
 		return sb.toString();
 	}
 
+	
 	@Override
-	public List<IPlayer> getPlayers() {
-		return null;
+	public List<ShowdownPlayer> getPlayers() {
+		return this.players;
 	}
 
 	@Override

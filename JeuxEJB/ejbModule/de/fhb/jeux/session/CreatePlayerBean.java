@@ -13,6 +13,7 @@ import com.google.gson.JsonSyntaxException;
 
 import de.fhb.jeux.mockentity.MockPlayerEntity;
 import de.fhb.jeux.model.IPlayer;
+import de.fhb.jeux.persistence.ShowdownPlayer;
 
 @Stateless
 public class CreatePlayerBean implements CreatePlayerRemote, CreatePlayerLocal {
@@ -35,7 +36,7 @@ public class CreatePlayerBean implements CreatePlayerRemote, CreatePlayerLocal {
 		try {
 			// We must use an IPlayer implementation class (no interface) here.
 			IPlayer player = gson.fromJson(jsonRepresentation,
-					MockPlayerEntity.class);
+					ShowdownPlayer.class);
 			player.setGroup(groupBean.getGroupById(groupId));
 			success = true;
 			logger.debug("Created player " + player.getName() + " in group "
