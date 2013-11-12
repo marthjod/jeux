@@ -10,12 +10,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import de.fhb.jeux.dto.GroupDTO;
-import de.fhb.jeux.model.IGame;
 import de.fhb.jeux.model.IGroup;
-import de.fhb.jeux.model.IPlayer;
 
 @Entity
 // MySQL does not allow "Group" for table name
@@ -49,6 +48,9 @@ public class ShowdownGroup implements IGroup, Serializable {
 
 	@Column
 	private boolean completed;
+
+	@OneToMany(mappedBy = "group")
+	private List<ShowdownPlayer> players;
 
 	// needed by @Entity
 	public ShowdownGroup() {
@@ -146,18 +148,13 @@ public class ShowdownGroup implements IGroup, Serializable {
 		return sb.toString();
 	}
 
-	@Override
-	public List<IPlayer> getPlayers() {
-		return null;
-	}
-
-	@Override
-	public List<IGame> getGames() {
-		return null;
+	public List<ShowdownPlayer> getPlayers() {
+		return players;
 	}
 
 	@Override
 	public boolean equals(IGroup group) {
+		// TODO
 		return false;
 	}
 

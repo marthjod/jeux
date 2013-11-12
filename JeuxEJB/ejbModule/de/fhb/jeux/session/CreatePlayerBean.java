@@ -5,14 +5,11 @@ import javax.ejb.Stateless;
 
 import org.jboss.logging.Logger;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonIOException;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonSyntaxException;
-
-import de.fhb.jeux.mockentity.MockPlayerEntity;
+import de.fhb.jeux.dao.PlayerDAO;
+import de.fhb.jeux.dto.PlayerDTO;
+import de.fhb.jeux.model.IGroup;
 import de.fhb.jeux.model.IPlayer;
+import de.fhb.jeux.persistence.ShowdownPlayer;
 
 @Stateless
 public class CreatePlayerBean implements CreatePlayerRemote, CreatePlayerLocal {
@@ -20,44 +17,29 @@ public class CreatePlayerBean implements CreatePlayerRemote, CreatePlayerLocal {
 	protected static Logger logger = Logger.getLogger(CreatePlayerBean.class);
 
 	@EJB
-	private GroupLocal groupBean;
-
-	private Gson gson;
+	private PlayerDAO playerDAO;
 
 	public CreatePlayerBean() {
-		this.gson = new GsonBuilder().create();
 	}
 
 	@Override
-	public boolean createPlayer(String jsonRepresentation, int groupId) {
-		boolean success = false;
+	public void createPlayer(PlayerDTO playerDTO, IGroup group) {
 
-		try {
-			// We must use an IPlayer implementation class (no interface) here.
-			IPlayer player = gson.fromJson(jsonRepresentation,
-					MockPlayerEntity.class);
-			player.setGroup(groupBean.getGroupById(groupId));
-			success = true;
-			logger.debug("Created player " + player.getName() + " in group "
-					+ player.getGroup().getName());
-		} catch (JsonIOException e) {
-			logger.error("JSON I/O error");
-			// TODO
-		} catch (JsonSyntaxException e) {
-			logger.error("JSON syntax error");
-			// TODO
-		} catch (JsonParseException e) {
-			logger.error("JSON parse error");
-			// TODO
-		} catch (Exception e) {
-			// TODO Pokémon
-			logger.error("Exception: " + e.getMessage());
-		}
+		boolean checkOK = false;
+		// TODO (MORE) SANITY-CHECKING HERE BEFORE PERSISTING
 
-		if (!success) {
-			logger.error("Failed to create player from JSON input '"
-					+ jsonRepresentation + "'");
+		// TESTING, REMOVE BEFORE FLIGHT
+		checkOK = true;
+
+		if (checkOK) {
+			// persist after converting
+			IPlayer newPlayer = new ShowdownPlayer(playerDTO);
+			// group must be set from here because it cannot GroupBean cannot be
+			// accessed later on (in the constructor, f.ex.).
+			// (CDI's fault)
+			newPlayer.setGroup(group);
+			playerDAO.addPlayer(newPlayer);
+			logger.debug("Added player '" + newPlayer.getName() + "'");
 		}
-		return success;
 	}
 }

@@ -71,18 +71,8 @@ public class MockGroupEntity implements IGroup {
 	}
 
 	@Override
-	public List<IPlayer> getPlayers() {
-		return players;
-	}
-
-	@Override
 	public boolean equals(IGroup group) {
 		// assuming unique IDs
 		return this.id == group.getId();
-	}
-
-	@Override
-	public List<IGame> getGames() {
-		return this.games;
 	}
 }
