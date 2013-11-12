@@ -85,23 +85,23 @@ baseUri: http://localhost:8080/JeuxWeb
                     description: |
                         Failure to create group object server-side.
 
-/create-player/{groupId}:
-    put:
-        description: |
-            Send data representing player object belonging to group {groupId} to be created on the server.
-        body:
-            application/json:
-                example: |
-                   {
-                      "name":"Player Two",
-                      "groupId":2
-                   },
-        responses:
-            201:
-                description: |
-                    Player object has been successfully created on the server.
-            500:
-                description: |
-                    Failure to create player object server-side.
-                    Reasons include: com.google.gson.Json(IO|Parse|Syntax)Exception, Exception
+/rest/v1:
+    /create-player:
+        put:
+            description: |
+                Send data representing player object to be created on the server.
+            body:
+                application/json:
+                    example: |
+                       {
+                          "name":"Player Two",
+                          "groupId":2
+                       },
+            responses:
+                201:
+                    description: |
+                        Player object has been successfully created on the server.
+                500:
+                    description: |
+                        Failure to create player object server-side.
 

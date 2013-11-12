@@ -7,17 +7,9 @@
     <servlet-class>javax.ws.rs.core.Application</servlet-class>
     <load-on-startup>1</load-on-startup>
   </servlet>
-  <servlet>
-    <servlet-name>CreatePlayerServlet</servlet-name>
-    <servlet-class>de.fhb.jeux.controller.CreatePlayerServlet</servlet-class>
-  </servlet>
   <servlet-mapping>
     <servlet-name>JAX-RS Servlet</servlet-name>
     <url-pattern>/rest/*</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>CreatePlayerServlet</servlet-name>
-    <url-pattern>/create-player/*</url-pattern>
   </servlet-mapping>
   <welcome-file-list>
     <welcome-file>/index.html</welcome-file>

@@ -85,7 +85,7 @@ function createNewPlayer(playerSubmit) {
         };
 
         $.ajax({
-            url : "create-player/" + groupId,
+            url : "rest/v1/create-player",
             type : "PUT",
             data : JSON.stringify(sendPlayer),
             contentType : "application/json",

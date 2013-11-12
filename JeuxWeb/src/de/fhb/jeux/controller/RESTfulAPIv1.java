@@ -19,6 +19,7 @@ import org.jboss.logging.Logger;
 import com.google.gson.Gson;
 
 import de.fhb.jeux.dto.GroupDTO;
+import de.fhb.jeux.dto.PlayerDTO;
 import de.fhb.jeux.mockentity.MockRoundSwitchRuleEntity;
 import de.fhb.jeux.model.IGroup;
 import de.fhb.jeux.session.CreateGroupLocal;
@@ -54,6 +55,7 @@ public class RESTfulAPIv1 {
 		return "OK\n";
 	}
 
+	// TODO without Gson?
 	@GET
 	@Path("/groups")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -97,7 +99,26 @@ public class RESTfulAPIv1 {
 	public Response createGroup(GroupDTO groupDTO) {
 		if (groupDTO != null) {
 			logger.debug("Deserialized group DTO " + groupDTO);
-			createGroupBean.createNewGroup(groupDTO);
+			createGroupBean.createGroup(groupDTO);
+			return Response.status(Response.Status.CREATED).build();
+		} else {
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+					.build();
+		}
+	}
+
+	@PUT
+	@Path("/create-player")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response createPlayer(PlayerDTO playerDTO) {
+		if (playerDTO != null) {
+			logger.debug("Deserialized player DTO " + playerDTO);
+
+			// we look for the group object here already, because CDI sucks.
+			// also, we can decide to reject the player if the group does not
+			// exist yet
+			IGroup group = groupBean.getGroupById(playerDTO.getGroupId());
+			createPlayerBean.createPlayer(playerDTO, group);
 			return Response.status(Response.Status.CREATED).build();
 		} else {
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
