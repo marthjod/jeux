@@ -22,7 +22,7 @@ public class CreateGroupBean implements CreateGroupRemote, CreateGroupLocal {
 	}
 
 	@Override
-	public void createNewGroup(GroupDTO groupDTO) {
+	public void createGroup(GroupDTO groupDTO) {
 
 		// TODO (MORE) SANITY-CHECKING HERE BEFORE PERSISTING
 

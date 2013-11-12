@@ -6,5 +6,5 @@ import de.fhb.jeux.dto.GroupDTO;
 
 @Remote
 public interface CreateGroupRemote {
-	public void createNewGroup(GroupDTO groupDTO);
+	public void createGroup(GroupDTO groupDTO);
 }
