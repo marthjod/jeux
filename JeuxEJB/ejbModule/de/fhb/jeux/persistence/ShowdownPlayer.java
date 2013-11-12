@@ -7,15 +7,20 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+
 import de.fhb.jeux.model.IGroup;
 import de.fhb.jeux.model.IPlayer;
 
 @Entity
+@Table(name = "player")
 @NamedQueries({
-		@NamedQuery(name = "Player.findAll", query = "SELECT g FROM ShowdownPlayer g"),
-		@NamedQuery(name = "Player.findById", query = "SELECT g FROM ShowdownPlayer g WHERE g.id = :id") })
+		@NamedQuery(name = "Player.findAll", query = "SELECT p FROM ShowdownPlayer p"),
+		@NamedQuery(name = "Player.findById", query = "SELECT p FROM ShowdownPlayer p WHERE p.id = :id") })
 
 
 public class ShowdownPlayer implements IPlayer, Serializable{
@@ -25,9 +30,6 @@ public class ShowdownPlayer implements IPlayer, Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	
-	@Column
-	private int groupId;
 	
 	@Column
 	private int points;
@@ -42,25 +44,26 @@ public class ShowdownPlayer implements IPlayer, Serializable{
 	private String name;
 	
 	
+	@ManyToOne
+	@JoinColumn(name = "groupId")
+	private ShowdownGroup group;
+	
+	
 	@Override
 	public int getId() {
 		return id;
 	}
-
+	
+	
 	@Override
-	public IGroup getGroup() {
-		return null;
+	public ShowdownGroup getGroup() {
+		return group;
 	}
 	
-	public void setGroupId(int groupId) {
-		this.groupId = groupId;
-	}
-
-	@Override
-	public void setGroup(IGroup group) {
+	public void setGroup(ShowdownGroup group) {
+		this.group = group;
 	}
 	
-
 	@Override
 	public String getName() {
 		return name;
@@ -109,7 +112,7 @@ public class ShowdownPlayer implements IPlayer, Serializable{
 		sb.append("' (ID ");
 		sb.append(this.id);
 		sb.append("), groupId ");
-		sb.append(this.groupId);
+		sb.append(this.group.getId());
 		sb.append(", name = ");
 		sb.append(this.name);
 		sb.append(", points ");
@@ -119,6 +122,11 @@ public class ShowdownPlayer implements IPlayer, Serializable{
 		sb.append("-");
 
 		return sb.toString();
+	}
+
+
+	@Override
+	public void setGroup(IGroup group) {
 	}
 
 }
