@@ -16,8 +16,6 @@ import javax.ws.rs.core.Response;
 
 import org.jboss.logging.Logger;
 
-import com.google.gson.Gson;
-
 import de.fhb.jeux.dto.GroupDTO;
 import de.fhb.jeux.dto.PlayerDTO;
 import de.fhb.jeux.mockentity.MockRoundSwitchRuleEntity;
@@ -45,8 +43,6 @@ public class RESTfulAPIv1 {
 	@EJB
 	private DeleteGroupLocal deleteGroupBean;
 
-	private Gson gson;
-
 	@GET
 	@Path("/status")
 	@Produces(MediaType.TEXT_PLAIN)
@@ -55,28 +51,12 @@ public class RESTfulAPIv1 {
 		return "OK\n";
 	}
 
-	// TODO without Gson?
 	@GET
 	@Path("/groups")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String allGroupsJson() {
-		gson = new Gson();
-		StringBuilder jsonData = new StringBuilder();
-		// open JS array
-		jsonData.append("[");
-
+	public List<IGroup> getAllGroups() {
 		List<IGroup> groups = groupBean.getAllGroups();
-		for (int i = 0; i < groups.size(); i++) {
-			// add JS object to JS array
-			jsonData.append(gson.toJson(groups.get(i)));
-			// add comma except after last element
-			if (i < groups.size() - 1) {
-				jsonData.append(",");
-			}
-		}
-		// close JS array
-		jsonData.append("]");
-		return jsonData.toString();
+		return groups;
 	}
 
 	@DELETE
