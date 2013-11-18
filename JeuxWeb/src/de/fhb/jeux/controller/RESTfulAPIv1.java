@@ -19,10 +19,12 @@ import org.jboss.logging.Logger;
 import de.fhb.jeux.dto.GroupDTO;
 import de.fhb.jeux.dto.PlayerDTO;
 import de.fhb.jeux.mockentity.MockRoundSwitchRuleEntity;
+import de.fhb.jeux.model.IGame;
 import de.fhb.jeux.model.IGroup;
 import de.fhb.jeux.session.CreateGroupLocal;
 import de.fhb.jeux.session.CreatePlayerLocal;
 import de.fhb.jeux.session.DeleteGroupLocal;
+import de.fhb.jeux.session.GameLocal;
 import de.fhb.jeux.session.GroupLocal;
 
 @Stateless
@@ -33,6 +35,9 @@ public class RESTfulAPIv1 {
 
 	@EJB
 	private GroupLocal groupBean;
+	
+	@EJB
+	private GameLocal gameBean;
 
 	@EJB
 	private CreatePlayerLocal createPlayerBean;
@@ -57,6 +62,14 @@ public class RESTfulAPIv1 {
 	public List<IGroup> getAllGroups() {
 		List<IGroup> groups = groupBean.getAllGroups();
 		return groups;
+	}
+	
+	@GET
+	@Path("/games")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<IGame> getAllGames() {
+		List<IGame> games = gameBean.getAllGames();
+		return games;
 	}
 
 	@DELETE

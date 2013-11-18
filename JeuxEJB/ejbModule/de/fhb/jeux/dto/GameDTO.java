@@ -6,6 +6,7 @@ public class GameDTO {
 	
 	private int id;
 	private int player1Id;
+	private String player1Name;
 	private int player2Id;
 	private int groupId;
 	private int winnerId;

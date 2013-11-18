@@ -52,12 +52,12 @@ public class GameDAO {
 	}
 
 	public IGame getGameById(int gameId) {
-		IGame group = new ShowdownGame();
+		IGame game = new ShowdownGame();
 		TypedQuery<IGame> query = em.createNamedQuery("Game.findById",
 				IGame.class);
 		query.setParameter("id", gameId);
-		group = query.getSingleResult();
-		return group;
+		game = query.getSingleResult();
+		return game;
 	}
 }
 
