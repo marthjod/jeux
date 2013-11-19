@@ -1,5 +1,6 @@
 package de.fhb.jeux.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -16,15 +17,19 @@ import javax.ws.rs.core.Response;
 
 import org.jboss.logging.Logger;
 
+import de.fhb.jeux.dto.GameDTO;
+import de.fhb.jeux.dto.GameSetDTO;
 import de.fhb.jeux.dto.GroupDTO;
 import de.fhb.jeux.dto.PlayerDTO;
 import de.fhb.jeux.mockentity.MockRoundSwitchRuleEntity;
 import de.fhb.jeux.model.IGame;
+import de.fhb.jeux.model.IGameSet;
 import de.fhb.jeux.model.IGroup;
 import de.fhb.jeux.session.CreateGroupLocal;
 import de.fhb.jeux.session.CreatePlayerLocal;
 import de.fhb.jeux.session.DeleteGroupLocal;
 import de.fhb.jeux.session.GameLocal;
+import de.fhb.jeux.session.GameSetLocal;
 import de.fhb.jeux.session.GroupLocal;
 
 @Stateless
@@ -39,6 +44,9 @@ public class RESTfulAPIv1 {
 	@EJB
 	private GameLocal gameBean;
 
+	@EJB
+	private GameSetLocal gameSetBean;
+	
 	@EJB
 	private CreatePlayerLocal createPlayerBean;
 
@@ -67,9 +75,29 @@ public class RESTfulAPIv1 {
 	@GET
 	@Path("/games")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<IGame> getAllGames() {
+	public List<GameDTO> getAllGames() {
 		List<IGame> games = gameBean.getAllGames();
-		return games;
+		List<GameDTO> gamesDTO = new ArrayList<GameDTO>();
+		
+		for (IGame game : games) {
+			GameDTO newGameDTO = new GameDTO(game);
+			gamesDTO.add(newGameDTO);
+		}
+		return gamesDTO;
+	}
+	
+	@GET
+	@Path("/gamesets")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<GameSetDTO> getAllGameSets() {
+		List<IGameSet> gameSets = gameSetBean.getAllGameSets();
+		List<GameSetDTO> gameSetsDTO = new ArrayList<GameSetDTO>();
+		
+		for (IGameSet gameSet : gameSets) {
+			GameSetDTO newGameSetDTO = new GameSetDTO(gameSet);
+			gameSetsDTO.add(newGameSetDTO);
+		}
+		return gameSetsDTO;
 	}
 
 	@DELETE

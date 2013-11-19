@@ -1,35 +1,40 @@
 package de.fhb.jeux.dto;
 
-import de.fhb.jeux.model.IGame;
 
-public class GameDTO {
+import de.fhb.jeux.model.IGameSet;
+
+public class GameSetDTO {
 	
-	private int id;
-	private int player1Id;
-	private String player1Name;
-	private int player2Id;
-	private String player2Name;
-	private int groupId;
-	private int winnerId;
-	private String winnerName;
-
-	public GameDTO(){
+	public GameSetDTO () {
 		
 	}
 	
-	public GameDTO(IGame gameEntity){
-		this.id = gameEntity.getId();
-		this.player1Id = gameEntity.getPlayer1().getId();
-		this.player2Id = gameEntity.getPlayer2().getId();
-		this.player1Name = gameEntity.getPlayer1().getName();
-		this.player2Name = gameEntity.getPlayer2().getName();
-		this.groupId = gameEntity.getGroup().getId();
-		this.winnerId = gameEntity.getWinner().getId();
-		this.winnerName = gameEntity.getWinner().getName();
+	private int id;
+	private int gameId;
+	private int player1Id;
+	private int player2Id;
+	private int winnerId;
+	private String winnerName;
+	private String player1Name;
+	private String player2Name;
+	
+	public GameSetDTO (IGameSet iGameSetEntity) {
+		this.id = iGameSetEntity.getId();
+		this.gameId = iGameSetEntity.getGame().getId();
+		this.player1Id = iGameSetEntity.getPlayer1().getId();
+		this.player2Id = iGameSetEntity.getPlayer2().getId();
+		this.winnerId  = iGameSetEntity.getWinner().getId();
+		this.player1Name = iGameSetEntity.getPlayer1().getName();
+		this.player2Name = iGameSetEntity.getPlayer2().getName();
+		this.winnerName = iGameSetEntity.getWinner().getName();
 	}
 
 	public int getId() {
 		return id;
+	}
+
+	public int getGameId() {
+		return gameId;
 	}
 
 	public int getPlayer1Id() {
@@ -40,14 +45,14 @@ public class GameDTO {
 		return player2Id;
 	}
 
-	public int getGroupId() {
-		return groupId;
-	}
-
 	public int getWinnerId() {
 		return winnerId;
 	}
-	
+
+	public String getWinnerName() {
+		return winnerName;
+	}
+
 	public String getPlayer1Name() {
 		return player1Name;
 	}
@@ -55,11 +60,7 @@ public class GameDTO {
 	public String getPlayer2Name() {
 		return player2Name;
 	}
-
-	public String getWinnerName() {
-		return winnerName;
-	}
-
+	
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
@@ -69,11 +70,13 @@ public class GameDTO {
 		sb.append(", Id: " + player1Id);
 		sb.append(", Player2: " + player2Name);
 		sb.append(", Id: " + player2Id);
-		sb.append(", group ID: " + groupId);
+		sb.append(", game ID: " + gameId);
 		sb.append(", Winner: " + winnerName);
 		sb.append(", winner ID: " + winnerId);
 		sb.append(">");
 		return sb.toString();
 	}
 	
+	
+
 }
