@@ -21,16 +21,19 @@ import de.fhb.jeux.dto.GameDTO;
 import de.fhb.jeux.dto.GameSetDTO;
 import de.fhb.jeux.dto.GroupDTO;
 import de.fhb.jeux.dto.PlayerDTO;
+import de.fhb.jeux.dto.RoundSwitchRuleDTO;
 import de.fhb.jeux.mockentity.MockRoundSwitchRuleEntity;
 import de.fhb.jeux.model.IGame;
 import de.fhb.jeux.model.IGameSet;
 import de.fhb.jeux.model.IGroup;
+import de.fhb.jeux.model.IRoundSwitchRule;
 import de.fhb.jeux.session.CreateGroupLocal;
 import de.fhb.jeux.session.CreatePlayerLocal;
 import de.fhb.jeux.session.DeleteGroupLocal;
 import de.fhb.jeux.session.GameLocal;
 import de.fhb.jeux.session.GameSetLocal;
 import de.fhb.jeux.session.GroupLocal;
+import de.fhb.jeux.session.RoundSwitchRuleLocal;
 
 @Stateless
 @Path("/rest/v1")
@@ -55,6 +58,9 @@ public class RESTfulAPIv1 {
 
 	@EJB
 	private DeleteGroupLocal deleteGroupBean;
+	
+	@EJB
+	private RoundSwitchRuleLocal roundSwitchRuleBean;
 
 	@GET
 	@Path("/status")
@@ -98,6 +104,20 @@ public class RESTfulAPIv1 {
 			gameSetsDTO.add(newGameSetDTO);
 		}
 		return gameSetsDTO;
+	}
+	
+	@GET
+	@Path("/roundswitchrules")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<RoundSwitchRuleDTO> getAllRoundSwitchRules() {
+		List<IRoundSwitchRule> rules = roundSwitchRuleBean.getAllRoundSwitchRule();
+		List<RoundSwitchRuleDTO> ruleSetsDTO = new ArrayList<RoundSwitchRuleDTO>();
+		
+		for (IRoundSwitchRule rule : rules) {
+			RoundSwitchRuleDTO newRoundSwitchRuleDTO = new RoundSwitchRuleDTO(rule);
+			ruleSetsDTO.add(newRoundSwitchRuleDTO);
+		}
+		return ruleSetsDTO;
 	}
 
 	@DELETE
