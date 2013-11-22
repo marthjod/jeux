@@ -21,6 +21,9 @@ public class CreateRoundSwitchRuleBean implements CreateRoundSwitchRuleRemote,
 	@EJB
 	private RoundSwitchRuleDAO ruleDAO;
 
+	@EJB
+	private GroupLocal groupBean;
+
 	public CreateRoundSwitchRuleBean() {
 	}
 
@@ -29,19 +32,47 @@ public class CreateRoundSwitchRuleBean implements CreateRoundSwitchRuleRemote,
 			IGroup srcGroup, IGroup destGroup) {
 
 		boolean success = false;
-		// persist after converting
-		IRoundSwitchRule newRule = new ShowdownRoundSwitchRule(ruleDTO);
-		// group must be set from here because GroupBean cannot be
-		// accessed later on (in the constructor, f.ex.).
-		// (CDI's fault)
-
 		if (srcGroup != null && destGroup != null) {
-			newRule.setSrcGroup(srcGroup);
-			newRule.setDestGroup(destGroup);
-			if (ruleDAO.addRoundSwitchRule(newRule)) {
-				success = true;
-				logger.debug("Added round switch rule " + newRule);
+			if (!srcGroup.equals(destGroup)) {
+				IRoundSwitchRule newRule = new ShowdownRoundSwitchRule(ruleDTO);
+				int srcGroupSize = groupBean.getGroupSize(srcGroup);
+				int destGroupSize = groupBean.getGroupSize(destGroup);
+
+				if (ruleDTO.getStartWithRank() > 0) {
+					if (ruleDTO.getStartWithRank() <= srcGroupSize) {
+
+						if (ruleDTO.getStartWithRank()
+								+ ruleDTO.getAdditionalPlayers() <= srcGroupSize) {
+
+							newRule.setSrcGroup(srcGroup);
+							newRule.setDestGroup(destGroup);
+							if (ruleDAO.addRoundSwitchRule(newRule)) {
+								success = true;
+								logger.info("Added round switch rule "
+										+ newRule + ".");
+							} else {
+								logger.warn("Adding round switch rule "
+										+ newRule + " failed.");
+							}
+						} else {
+							logger.warn("Too many players to be moved (last considered rank "
+									+ (ruleDTO.getStartWithRank() + ruleDTO
+											.getAdditionalPlayers())
+									+ " > source group size of "
+									+ srcGroupSize
+									+ ").");
+						}
+					} else {
+						logger.warn("Rank exceeds group size.");
+					}
+				} else {
+					logger.warn("Must start at least at rank 1.");
+				}
+			} else {
+				logger.warn("Source group equals destination group.");
 			}
+		} else {
+			logger.error("Source or destination group is null.");
 		}
 
 		return success;
