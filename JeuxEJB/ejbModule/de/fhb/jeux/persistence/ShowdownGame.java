@@ -73,9 +73,7 @@ public class ShowdownGame implements IGame, Serializable {
 
 	@Override
 	public IPlayer getWinner() {
-		if ( player1.getPoints() > player2.getPoints() )
-		return player1;
-		else return player2;
+		return player1.getPoints() > player2.getPoints() ? player1 : player2;
 	}
 
 	@Override
@@ -85,6 +83,7 @@ public class ShowdownGame implements IGame, Serializable {
 
 	@Override
 	public boolean equals(IGame game) {
+		// TODO
 		return false;
 	}
 

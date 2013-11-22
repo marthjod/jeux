@@ -47,7 +47,7 @@ public class GameSetDAO {
 			return gameSets;
 		}
 
-		public IGameSet getGameById(int gameSetId) {
+		public IGameSet getGameSetById(int gameSetId) {
 			IGameSet gameSet = new ShowdownGameSet();
 			TypedQuery<IGameSet> query = em.createNamedQuery("GameSet.findById",
 					IGameSet.class);
