@@ -36,7 +36,7 @@ Modify the following entries in _JeuxEJB/.classpath_ and _JeuxWeb/.classpath_ to
 ```
 
 
-#### MySQL: Add user
+#### <a name="mysql">MySQL: Add user</a>
 
 ```sql
 CREATE USER 'jeuxdb_user'@'localhost' 
@@ -54,7 +54,10 @@ IDENTIFIED BY '***'
 - Connection URL: `jdbc:mysql://localhost:3306/<database name>`
 - Driver: `mysql-connector-java-<ver>-bin.jar`
 - JNDI: `java:jboss/datasources/JeuxDS`
-- User, password: see "MySQL"
+- User, password: see <a href="mysql">MySQL</a>
 
 
+### Testing
 
+- Use the handy cURL snippets in testing-rest-api.* to fire requests against the REST API, 
+e.g. for quick tests of invalid input handling or debugging Ajax behavior.
