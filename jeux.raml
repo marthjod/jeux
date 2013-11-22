@@ -129,3 +129,24 @@ baseUri: http://localhost:8080/JeuxWeb
                     description: |
                         Failure to create player object server-side.
 
+/rest/v1:
+    /create-roundswitchrule:
+        put:
+            description: |
+                Send data representing a round-switch rule to server.
+            body:
+                application/json:
+                    example: |
+                        {
+                            "srcGroupId":1,
+                            "destGroupId":4,
+                            "startWithRank":1,
+                            "additionalPlayers":1
+                        },
+                    responses:
+                        201:
+                            description: |
+                                Rule object has been successfully created on the server.
+                        500:
+                            description: |
+                                Failure to create round-switch server-side.
