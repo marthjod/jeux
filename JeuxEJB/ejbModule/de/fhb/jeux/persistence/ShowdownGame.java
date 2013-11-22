@@ -23,34 +23,34 @@ import de.fhb.jeux.model.IPlayer;
 
 @Entity
 @Table(name = "Game")
-@NamedQueries({	@NamedQuery(name = "Game.findAll", query = "SELECT g FROM ShowdownGame g"),
-				@NamedQuery(name = "Game.findById", query = "SELECT g FROM ShowdownGame g WHERE g.id = :id")})
-
-public class ShowdownGame implements IGame, Serializable{
+@NamedQueries({
+		@NamedQuery(name = "Game.findAll", query = "SELECT g FROM ShowdownGame g"),
+		@NamedQuery(name = "Game.findById", query = "SELECT g FROM ShowdownGame g WHERE g.id = :id") })
+public class ShowdownGame implements IGame, Serializable {
 
 	private static final long serialVersionUID = -8766860086958636981L;
 	protected static Logger logger = Logger.getLogger(ShowdownGame.class);
 
-	public ShowdownGame(){
-		
+	public ShowdownGame() {
+
 	}
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "groupId")
 	private ShowdownGroup group;
-	
+
 	@OneToOne
 	@JoinColumn(name = "player1Id")
 	private ShowdownPlayer player1;
-	
+
 	@OneToOne
 	@JoinColumn(name = "player2Id")
 	private ShowdownPlayer player2;
-	
+
 	@Override
 	public int getId() {
 		return id;

@@ -18,15 +18,15 @@ public class GameSetDTO {
 	private String player1Name;
 	private String player2Name;
 	
-	public GameSetDTO (IGameSet iGameSetEntity) {
-		this.id = iGameSetEntity.getId();
-		this.gameId = iGameSetEntity.getGame().getId();
-		this.player1Id = iGameSetEntity.getPlayer1().getId();
-		this.player2Id = iGameSetEntity.getPlayer2().getId();
-		this.winnerId  = iGameSetEntity.getWinner().getId();
-		this.player1Name = iGameSetEntity.getPlayer1().getName();
-		this.player2Name = iGameSetEntity.getPlayer2().getName();
-		this.winnerName = iGameSetEntity.getWinner().getName();
+	public GameSetDTO (IGameSet gameSetEntity) {
+		this.id = gameSetEntity.getId();
+		this.gameId = gameSetEntity.getGame().getId();
+		this.player1Id = gameSetEntity.getPlayer1().getId();
+		this.player2Id = gameSetEntity.getPlayer2().getId();
+		this.winnerId  = gameSetEntity.getWinner().getId();
+		this.player1Name = gameSetEntity.getPlayer1().getName();
+		this.player2Name = gameSetEntity.getPlayer2().getName();
+		this.winnerName = gameSetEntity.getWinner().getName();
 	}
 
 	public int getId() {

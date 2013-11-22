@@ -11,12 +11,13 @@ import de.fhb.jeux.dao.GameDAO;
 @Stateless
 public class GameBean implements GameRemote, GameLocal {
 
-	@EJB 
+	@EJB
 	private GameDAO gameDAO;
-	
-    public GameBean() {
-    }
-    
+
+	public GameBean() {
+	}
+
+	@Override
 	public List<IGame> getAllGames() {
 		return gameDAO.getAllGames();
 	}

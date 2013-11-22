@@ -13,11 +13,12 @@ public class GameSetBean implements GameSetRemote, GameSetLocal {
 
 	@EJB
 	private GameSetDAO gameSetDAO;
-	
-    public GameSetBean() {
-    }
-    
-    public List<IGameSet> getAllGameSets() {
+
+	public GameSetBean() {
+	}
+
+	@Override
+	public List<IGameSet> getAllGameSets() {
 		return gameSetDAO.getAllGameSets();
 	}
 
