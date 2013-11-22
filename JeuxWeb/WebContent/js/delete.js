@@ -25,7 +25,8 @@ function deleteGroup(deleteSubmit) {
                         $("#rule-source-group").find(
                                 "#rule-source-group-id-" + groupId).remove();
                         $("#rule-destination-group").find(
-                                "#rule-dest-group-id-" + groupId).remove();
+                                "#rule-destination-group-id-" + groupId)
+                                .remove();
 
                         showAllGroups($("#show-all-groups"));
                     },
