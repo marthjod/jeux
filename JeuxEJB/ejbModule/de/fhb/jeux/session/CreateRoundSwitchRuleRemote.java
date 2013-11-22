@@ -2,9 +2,11 @@ package de.fhb.jeux.session;
 
 import javax.ejb.Remote;
 
-import de.fhb.jeux.model.IRoundSwitchRule;
+import de.fhb.jeux.dto.RoundSwitchRuleDTO;
+import de.fhb.jeux.model.IGroup;
 
 @Remote
 public interface CreateRoundSwitchRuleRemote {
-	public void createNewRoundSwitchRule(IRoundSwitchRule rule);
+	public boolean createRoundSwitchRule(RoundSwitchRuleDTO ruleDTO,
+			IGroup srcGroup, IGroup destGroup);
 }

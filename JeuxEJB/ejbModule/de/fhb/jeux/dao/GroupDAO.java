@@ -6,6 +6,7 @@ import java.util.List;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
@@ -55,7 +56,13 @@ public class GroupDAO {
 		TypedQuery<IGroup> query = em.createNamedQuery("Group.findById",
 				IGroup.class);
 		query.setParameter("id", groupId);
-		group = query.getSingleResult();
+		try {
+			group = query.getSingleResult();
+		} catch (NoResultException e) {
+			// reset because callers should test for null
+			group = null;
+			logger.error("Group ID " + groupId + ": " + e.getMessage());
+		}
 		return group;
 	}
 }

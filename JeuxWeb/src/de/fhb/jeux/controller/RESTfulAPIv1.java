@@ -21,10 +21,10 @@ import de.fhb.jeux.dto.GameSetDTO;
 import de.fhb.jeux.dto.GroupDTO;
 import de.fhb.jeux.dto.PlayerDTO;
 import de.fhb.jeux.dto.RoundSwitchRuleDTO;
-import de.fhb.jeux.mockentity.MockRoundSwitchRuleEntity;
 import de.fhb.jeux.model.IGroup;
 import de.fhb.jeux.session.CreateGroupLocal;
 import de.fhb.jeux.session.CreatePlayerLocal;
+import de.fhb.jeux.session.CreateRoundSwitchRuleLocal;
 import de.fhb.jeux.session.DeleteGroupLocal;
 import de.fhb.jeux.session.GameLocal;
 import de.fhb.jeux.session.GameSetLocal;
@@ -54,6 +54,9 @@ public class RESTfulAPIv1 {
 
 	@EJB
 	private DeleteGroupLocal deleteGroupBean;
+
+	@EJB
+	private CreateRoundSwitchRuleLocal createRoundSwitchRuleBean;
 
 	@EJB
 	private RoundSwitchRuleLocal roundSwitchRuleBean;
@@ -149,11 +152,20 @@ public class RESTfulAPIv1 {
 	@PUT
 	@Path("/create-roundswitchrule")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response createRoundSwitchRule(MockRoundSwitchRuleEntity rule) {
-		if (rule != null) {
-			logger.debug("Deserialized round switch rule '" + rule.toString()
-					+ "'");
+	public Response createRoundSwitchRule(RoundSwitchRuleDTO rule) {
+		boolean createdSuccessfully = false;
 
+		if (rule != null) {
+			logger.debug("Deserialized round switch rule DTO " + rule);
+			IGroup srcGroup = groupBean.getGroupById(rule.getSrcGroupId());
+			IGroup destGroup = groupBean.getGroupById(rule.getDestGroupId());
+			if (createRoundSwitchRuleBean.createRoundSwitchRule(rule, srcGroup,
+					destGroup)) {
+				createdSuccessfully = true;
+			}
+		}
+
+		if (createdSuccessfully) {
 			return Response.status(Response.Status.CREATED).build();
 		} else {
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR)

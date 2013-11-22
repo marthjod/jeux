@@ -15,5 +15,4 @@ public interface RoundSwitchRuleRemote {
 	public List<RoundSwitchRuleDTO> getAllRoundSwitchRuleDTOs();
 
 	public IRoundSwitchRule getRoundSwitchRuleById(int roundSwitchRuleId);
-
 }

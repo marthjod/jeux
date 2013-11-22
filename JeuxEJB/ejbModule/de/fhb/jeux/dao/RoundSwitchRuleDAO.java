@@ -26,25 +26,32 @@ public class RoundSwitchRuleDAO {
 	public RoundSwitchRuleDAO() {
 	}
 
-	public void addRoundSwitchRule(IRoundSwitchRule rule) {
-		em.persist(rule);
-		logger.debug("Persisted RoundSwitchRule '" + rule.toString() + "'");
+	public boolean addRoundSwitchRule(IRoundSwitchRule rule) {
+		boolean success = false;
+		try {
+			em.persist(rule);
+			success = true;
+			logger.debug("Persisted RoundSwitchRule " + rule);
+		} catch (Exception e) {
+			logger.error(rule + ": " + e.getMessage());
+		}
+		return success;
 	}
 
 	public void deleteRoundSwitchRule(IRoundSwitchRule rule) {
 		em.remove(rule);
-		logger.debug("Deleted RoundSwitchRule '" + rule.toString() + "'");
+		logger.debug("Deleted RoundSwitchRule " + rule);
 	}
 
 	public void updateRoundSwitchRule(IRoundSwitchRule rule) {
 		em.merge(rule);
 	}
-	
+
 	public List<IRoundSwitchRule> getAllRoundSwitchRules() {
 		List<IRoundSwitchRule> rules = new ArrayList<IRoundSwitchRule>();
 
-		TypedQuery<IRoundSwitchRule> query = em.createNamedQuery("RoundSwitchRule.findAll",
-				IRoundSwitchRule.class);
+		TypedQuery<IRoundSwitchRule> query = em.createNamedQuery(
+				"RoundSwitchRule.findAll", IRoundSwitchRule.class);
 		rules = query.getResultList();
 
 		return rules;
@@ -52,8 +59,8 @@ public class RoundSwitchRuleDAO {
 
 	public IRoundSwitchRule getRoundSwitchRuleById(int roundSwitchRuleId) {
 		IRoundSwitchRule rule = new ShowdownRoundSwitchRule();
-		TypedQuery<IRoundSwitchRule> query = em.createNamedQuery("RoundSwitchRule.findById",
-				IRoundSwitchRule.class);
+		TypedQuery<IRoundSwitchRule> query = em.createNamedQuery(
+				"RoundSwitchRule.findById", IRoundSwitchRule.class);
 		query.setParameter("id", roundSwitchRuleId);
 		rule = query.getSingleResult();
 		return rule;
