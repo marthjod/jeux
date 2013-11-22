@@ -7,6 +7,8 @@ import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 
+import org.jboss.logging.Logger;
+
 import de.fhb.jeux.dao.RoundSwitchRuleDAO;
 import de.fhb.jeux.dto.RoundSwitchRuleDTO;
 import de.fhb.jeux.model.IRoundSwitchRule;
@@ -15,6 +17,9 @@ import de.fhb.jeux.model.IRoundSwitchRule;
 @LocalBean
 public class RoundSwitchRuleBean implements RoundSwitchRuleRemote,
 		RoundSwitchRuleLocal {
+
+	protected static Logger logger = Logger
+			.getLogger(RoundSwitchRuleBean.class);
 
 	@EJB
 	RoundSwitchRuleDAO roundSwitchRuleDAO;
