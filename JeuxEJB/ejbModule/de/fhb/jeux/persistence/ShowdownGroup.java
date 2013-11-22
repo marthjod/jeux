@@ -47,9 +47,6 @@ public class ShowdownGroup implements IGroup, Serializable {
 	@Column
 	private boolean completed;
 
-	// @OneToMany(mappedBy = "group", fetch = FetchType.EAGER)
-	// private List<ShowdownPlayer> players;
-
 	// needed by @Entity
 	public ShowdownGroup() {
 	}
@@ -127,6 +124,7 @@ public class ShowdownGroup implements IGroup, Serializable {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
+		sb.append("<");
 		sb.append("'");
 		sb.append(this.name);
 		sb.append("' (ID ");
@@ -142,18 +140,22 @@ public class ShowdownGroup implements IGroup, Serializable {
 		sb.append("-");
 		sb.append(this.maxSets);
 		sb.append(" sets");
+		sb.append(">");
 
 		return sb.toString();
 	}
 
-	// public List<ShowdownPlayer> getPlayers() {
-	// return players;
-	// }
-
 	@Override
 	public boolean equals(IGroup group) {
-		// TODO
-		return false;
-	}
+		boolean equal = false;
 
+		if (group != null) {
+			// TODO
+			// assuming unique IDs as sufficient for identity
+			if (this.id == group.getId()) {
+				equal = true;
+			}
+		}
+		return equal;
+	}
 }
