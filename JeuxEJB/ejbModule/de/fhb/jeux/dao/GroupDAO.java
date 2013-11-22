@@ -32,9 +32,19 @@ public class GroupDAO {
 		logger.debug("Persisted group '" + group.getName() + "'");
 	}
 
-	public void deleteGroup(IGroup group) {
-		em.remove(group);
-		logger.debug("Deleted group '" + group.getName() + "'");
+	public boolean deleteGroup(IGroup group) {
+		boolean success = false;
+		if (group != null) {
+			try {
+				em.remove(group);
+				success = true;
+				logger.debug("Deleted group '" + group.getName() + "'");
+			} catch (Exception e) {
+				logger.error("Deleting group '" + group.getName() + "': "
+						+ e.getMessage());
+			}
+		}
+		return success;
 	}
 
 	public void updateGroup(IGroup group) {

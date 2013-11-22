@@ -18,10 +18,10 @@ public class DeleteGroupBean implements DeleteGroupRemote, DeleteGroupLocal {
 	@Override
 	public boolean deleteGroup(IGroup group) {
 		boolean deleted = false;
-		groupDAO.deleteGroup(group);
 
-		// em.remove() returns void...
-		deleted = true;
+		if (groupDAO.deleteGroup(group)) {
+			deleted = true;
+		}
 
 		return deleted;
 	}

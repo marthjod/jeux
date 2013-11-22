@@ -99,8 +99,13 @@ public class RESTfulAPIv1 {
 
 	@DELETE
 	@Path("/delete-group/{groupId}")
-	public void deleteGroup(@PathParam("groupId") int groupId) {
-		deleteGroupBean.deleteGroup(groupBean.getGroupById(groupId));
+	public Response deleteGroup(@PathParam("groupId") int groupId) {
+		if (deleteGroupBean.deleteGroup(groupBean.getGroupById(groupId))) {
+			return Response.status(Response.Status.OK).build();
+		} else {
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+					.build();
+		}
 	}
 
 	// Test:
