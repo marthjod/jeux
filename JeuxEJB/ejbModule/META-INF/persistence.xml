@@ -4,5 +4,8 @@
 	   <jta-data-source>java:jboss/datasources/JeuxDS</jta-data-source>
        <class>de.fhb.jeux.persistence.ShowdownGroup</class>
        <class>de.fhb.jeux.persistence.ShowdownPlayer</class>
+       <class>de.fhb.jeux.persistence.ShowdownGame</class>
+       <class>de.fhb.jeux.persistence.ShowdownGameSet</class>
+       <class>de.fhb.jeux.persistence.ShowdownRoundSwitchRule</class>
 	</persistence-unit>
 </persistence>
