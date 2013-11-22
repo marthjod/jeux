@@ -54,7 +54,7 @@ IDENTIFIED BY '***'
 - Connection URL: `jdbc:mysql://localhost:3306/<database name>`
 - Driver: `mysql-connector-java-<ver>-bin.jar`
 - JNDI: `java:jboss/datasources/JeuxDS`
-- User, password: see <a href="mysql">MySQL</a>
+- User, password: see <a href="#mysql">MySQL</a>
 
 
 ### Testing
