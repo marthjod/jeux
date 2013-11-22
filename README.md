@@ -36,7 +36,7 @@ Modify the following entries in _JeuxEJB/.classpath_ and _JeuxWeb/.classpath_ to
 ```
 
 
-#### <a name="mysql">MySQL: Add user</a>
+#### MySQL: Add user
 
 ```sql
 CREATE USER 'jeuxdb_user'@'localhost' 
@@ -54,7 +54,7 @@ IDENTIFIED BY '***'
 - Connection URL: `jdbc:mysql://localhost:3306/<database name>`
 - Driver: `mysql-connector-java-<ver>-bin.jar`
 - JNDI: `java:jboss/datasources/JeuxDS`
-- User, password: see <a href="#mysql">MySQL</a>
+- User, password: see <a href="#mysql-add-user">MySQL</a>
 
 
 ### Testing
