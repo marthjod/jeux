@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Nov 02, 2013 at 01:57 PM
+-- Generation Time: Nov 22, 2013 at 04:19 PM
 -- Server version: 5.5.31
 -- PHP Version: 5.4.16
 
@@ -32,6 +32,8 @@ CREATE TABLE IF NOT EXISTS `Game` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `groupId` int(11) NOT NULL COMMENT 'Group in which this game is played',
   `winnerId` int(11) NOT NULL COMMENT 'Player who won the entire game, i.e. all its sets',
+  `player1Id` int(11) NOT NULL,
+  `player2Id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_Game_Player_idx` (`winnerId`),
   KEY `fk_Game_Group1_idx` (`groupId`)
@@ -73,7 +75,7 @@ CREATE TABLE IF NOT EXISTS `Group_` (
   `active` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Is this group''s games currently being played?',
   `completed` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Have all this group''s games been played?',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=13 ;
 
 -- --------------------------------------------------------
 
@@ -90,7 +92,7 @@ CREATE TABLE IF NOT EXISTS `Player` (
   `rank` int(2) NOT NULL DEFAULT '0' COMMENT 'Rank in group. Updated after all this group''s games have been completed',
   PRIMARY KEY (`id`),
   KEY `fk_Player_Group1_idx` (`groupId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=5 ;
 
 -- --------------------------------------------------------
 

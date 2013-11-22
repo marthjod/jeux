@@ -22,7 +22,7 @@ import de.fhb.jeux.model.IPlayer;
 @Entity
 @Table(name = "Player")
 @NamedQueries({
-		@NamedQuery(name = "Player.findAll",  query = "SELECT p FROM ShowdownPlayer p"),
+		@NamedQuery(name = "Player.findAll", query = "SELECT p FROM ShowdownPlayer p"),
 		@NamedQuery(name = "Player.findById", query = "SELECT p FROM ShowdownPlayer p WHERE p.id = :id") })
 public class ShowdownPlayer implements IPlayer, Serializable {
 
