@@ -1,6 +1,5 @@
 package de.fhb.jeux.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -23,10 +22,7 @@ import de.fhb.jeux.dto.GroupDTO;
 import de.fhb.jeux.dto.PlayerDTO;
 import de.fhb.jeux.dto.RoundSwitchRuleDTO;
 import de.fhb.jeux.mockentity.MockRoundSwitchRuleEntity;
-import de.fhb.jeux.model.IGame;
-import de.fhb.jeux.model.IGameSet;
 import de.fhb.jeux.model.IGroup;
-import de.fhb.jeux.model.IRoundSwitchRule;
 import de.fhb.jeux.session.CreateGroupLocal;
 import de.fhb.jeux.session.CreatePlayerLocal;
 import de.fhb.jeux.session.DeleteGroupLocal;
@@ -43,13 +39,13 @@ public class RESTfulAPIv1 {
 
 	@EJB
 	private GroupLocal groupBean;
-	
+
 	@EJB
 	private GameLocal gameBean;
 
 	@EJB
 	private GameSetLocal gameSetBean;
-	
+
 	@EJB
 	private CreatePlayerLocal createPlayerBean;
 
@@ -58,7 +54,7 @@ public class RESTfulAPIv1 {
 
 	@EJB
 	private DeleteGroupLocal deleteGroupBean;
-	
+
 	@EJB
 	private RoundSwitchRuleLocal roundSwitchRuleBean;
 
@@ -74,50 +70,28 @@ public class RESTfulAPIv1 {
 	@Path("/groups")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<IGroup> getAllGroups() {
-		List<IGroup> groups = groupBean.getAllGroups();
-		return groups;
+		return groupBean.getAllGroups();
 	}
-	
+
 	@GET
 	@Path("/games")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<GameDTO> getAllGames() {
-		List<IGame> games = gameBean.getAllGames();
-		List<GameDTO> gamesDTO = new ArrayList<GameDTO>();
-		
-		for (IGame game : games) {
-			GameDTO newGameDTO = new GameDTO(game);
-			gamesDTO.add(newGameDTO);
-		}
-		return gamesDTO;
+		return gameBean.getAllGameDTOs();
 	}
-	
+
 	@GET
 	@Path("/gamesets")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<GameSetDTO> getAllGameSets() {
-		List<IGameSet> gameSets = gameSetBean.getAllGameSets();
-		List<GameSetDTO> gameSetsDTO = new ArrayList<GameSetDTO>();
-		
-		for (IGameSet gameSet : gameSets) {
-			GameSetDTO newGameSetDTO = new GameSetDTO(gameSet);
-			gameSetsDTO.add(newGameSetDTO);
-		}
-		return gameSetsDTO;
+		return gameSetBean.getAllGameSetDTOs();
 	}
-	
+
 	@GET
 	@Path("/roundswitchrules")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<RoundSwitchRuleDTO> getAllRoundSwitchRules() {
-		List<IRoundSwitchRule> rules = roundSwitchRuleBean.getAllRoundSwitchRule();
-		List<RoundSwitchRuleDTO> ruleSetsDTO = new ArrayList<RoundSwitchRuleDTO>();
-		
-		for (IRoundSwitchRule rule : rules) {
-			RoundSwitchRuleDTO newRoundSwitchRuleDTO = new RoundSwitchRuleDTO(rule);
-			ruleSetsDTO.add(newRoundSwitchRuleDTO);
-		}
-		return ruleSetsDTO;
+		return roundSwitchRuleBean.getAllRoundSwitchRuleDTOs();
 	}
 
 	@DELETE
