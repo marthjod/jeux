@@ -22,12 +22,36 @@ baseUri: http://localhost:8080/JeuxWeb
                             "OK"
                     description: |
                         All's well.
+                        
+/rest/v1:
+    /games:
+        get:
+            description: |
+                Get all games from DB.
+            mediaType: application/json
+            responses:
+                200:
+                    body:
+                        application/json
+                500
+                
+/rest/v1:
+    /roundswitchrules:
+        get:
+            description: |
+                Get all round-switch rules from DB.
+            mediaType: application/json
+            responses:
+                200:
+                    body:
+                        application/json
+                500
 
 /rest/v1:
     /groups:
         get:
             description: |
-                Get all groups from DB as JSON.
+                Get all groups from DB.
             mediaType: application/json
             responses:
                 200:
