@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Nov 22, 2013 at 04:19 PM
+-- Generation Time: Nov 23, 2013 at 02:06 AM
 -- Server version: 5.5.31
 -- PHP Version: 5.4.16
 
@@ -36,7 +36,9 @@ CREATE TABLE IF NOT EXISTS `Game` (
   `player2Id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_Game_Player_idx` (`winnerId`),
-  KEY `fk_Game_Group1_idx` (`groupId`)
+  KEY `fk_Game_Group1_idx` (`groupId`),
+  KEY `fk_Game_Player1` (`player1Id`),
+  KEY `fk_Game_Player2` (`player2Id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -75,7 +77,7 @@ CREATE TABLE IF NOT EXISTS `Group_` (
   `active` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Is this group''s games currently being played?',
   `completed` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Have all this group''s games been played?',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=13 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=17 ;
 
 -- --------------------------------------------------------
 
@@ -92,7 +94,7 @@ CREATE TABLE IF NOT EXISTS `Player` (
   `rank` int(2) NOT NULL DEFAULT '0' COMMENT 'Rank in group. Updated after all this group''s games have been completed',
   PRIMARY KEY (`id`),
   KEY `fk_Player_Group1_idx` (`groupId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=9 ;
 
 -- --------------------------------------------------------
 
@@ -104,10 +106,12 @@ CREATE TABLE IF NOT EXISTS `RoundSwitchRule` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `srcGroupId` int(11) NOT NULL COMMENT 'Group where players originate from.',
   `destGroupId` int(11) NOT NULL COMMENT 'Group players should be in in the next round.',
-  `startWithRank` int(11) NOT NULL COMMENT 'Player with this rank in source group is the first to be moved from source group to destination group.',
-  `additionalPlayers` int(11) NOT NULL COMMENT 'How many additional players should be moved from source to destination group?',
-  `previousRoundId` int(11) NOT NULL COMMENT '(For safety. Remove if unused.) ',
-  PRIMARY KEY (`id`)
+  `startWithRank` int(3) NOT NULL COMMENT 'Player with this rank in source group is the first to be moved from source group to destination group.',
+  `additionalPlayers` int(3) NOT NULL COMMENT 'How many additional players should be moved from source to destination group?',
+  `previousRoundId` int(3) NOT NULL COMMENT '(For safety. Remove if unused.) ',
+  PRIMARY KEY (`id`),
+  KEY `fk_rule_src_group` (`srcGroupId`),
+  KEY `fk_rule_dest_group` (`destGroupId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
@@ -118,17 +122,32 @@ CREATE TABLE IF NOT EXISTS `RoundSwitchRule` (
 -- Constraints for table `Game`
 --
 ALTER TABLE `Game`
-  ADD CONSTRAINT `fk_Game_Group1` FOREIGN KEY (`groupId`) REFERENCES `Group_` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_Game_Player` FOREIGN KEY (`winnerId`) REFERENCES `Player` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_Game_Group` FOREIGN KEY (`groupId`) REFERENCES `Group_` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_Game_Winner` FOREIGN KEY (`winnerId`) REFERENCES `Player` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_Game_Player1` FOREIGN KEY (`player1Id`) REFERENCES `Player` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_Game_Player2` FOREIGN KEY (`player2Id`) REFERENCES `Player` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `GameSet`
 --
 ALTER TABLE `GameSet`
-  ADD CONSTRAINT `fk_GameSet_Game1` FOREIGN KEY (`gameId`) REFERENCES `Game` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_GameSet_Game` FOREIGN KEY (`gameId`) REFERENCES `Game` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_GameSet_Player1` FOREIGN KEY (`player1Id`) REFERENCES `Player` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_GameSet_Player2` FOREIGN KEY (`player2Id`) REFERENCES `Player` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_GameSet_Player3` FOREIGN KEY (`winnerId`) REFERENCES `Player` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_GameSet_Winner` FOREIGN KEY (`winnerId`) REFERENCES `Player` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Constraints for table `Player`
+--
+ALTER TABLE `Player`
+  ADD CONSTRAINT `fk_player_groupid` FOREIGN KEY (`groupId`) REFERENCES `Group_` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `RoundSwitchRule`
+--
+ALTER TABLE `RoundSwitchRule`
+  ADD CONSTRAINT `fk_rule_src_group` FOREIGN KEY (`srcGroupId`) REFERENCES `Group_` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_rule_dest_group` FOREIGN KEY (`destGroupId`) REFERENCES `Group_` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
