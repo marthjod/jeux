@@ -6,5 +6,5 @@ import de.fhb.jeux.model.IGroup;
 
 @Local
 public interface DeleteGroupLocal {
-	public boolean deleteGroup(IGroup group);
+	public int deleteGroup(IGroup group);
 }

@@ -12,27 +12,37 @@ function deleteGroup(deleteSubmit) {
     }
 
     if (sendOK) {
-        $
-                .ajax({
-                    url : "rest/v1/delete-group/" + groupId,
-                    type : "DELETE",
-                    success : function() {
-                        // alert("Group deleted");
 
-                        // remove as selection option
-                        $("#player-select-group").find("#group-id-" + groupId)
-                                .remove();
-                        $("#rule-source-group").find(
-                                "#rule-source-group-id-" + groupId).remove();
-                        $("#rule-destination-group").find(
-                                "#rule-destination-group-id-" + groupId)
-                                .remove();
+        if (window
+                .confirm("Warning: Removing this group\nwill also delete all players\nand games belonging to this group!")) {
+            $
+                    .ajax({
+                        url : "rest/v1/delete-group/" + groupId,
+                        type : "DELETE",
+                        success : function() {
+                            // alert("Group deleted");
 
-                        showAllGroups($("#show-all-groups"));
-                    },
-                    error : function() {
-                        alert("Error trying to delete group");
-                    }
-                });
+                            // remove as selectable option
+                            $("#player-select-group").find(
+                                    "#group-id-" + groupId).remove();
+                            $("#rule-source-group").find(
+                                    "#rule-source-group-id-" + groupId)
+                                    .remove();
+                            $("#rule-destination-group").find(
+                                    "#rule-destination-group-id-" + groupId)
+                                    .remove();
+
+                            showAllGroups($("#show-all-groups"));
+                        },
+                        statusCode : {
+                            409 : function() {
+                                alert("Conflict trying to delete group (violated constraint).");
+                            },
+                            500 : function() {
+                                alert("Server error while trying to delete group.");
+                            }
+                        }
+                    });
+        }
     }
 }

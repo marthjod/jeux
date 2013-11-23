@@ -16,6 +16,7 @@ import javax.ws.rs.core.Response;
 
 import org.jboss.logging.Logger;
 
+import de.fhb.jeux.dao.GroupDAO;
 import de.fhb.jeux.dto.GameDTO;
 import de.fhb.jeux.dto.GameSetDTO;
 import de.fhb.jeux.dto.GroupDTO;
@@ -100,8 +101,12 @@ public class RESTfulAPIv1 {
 	@DELETE
 	@Path("/delete-group/{groupId}")
 	public Response deleteGroup(@PathParam("groupId") int groupId) {
-		if (deleteGroupBean.deleteGroup(groupBean.getGroupById(groupId))) {
+		int result = deleteGroupBean.deleteGroup(groupBean
+				.getGroupById(groupId));
+		if (GroupDAO.DELETION_OK == result) {
 			return Response.status(Response.Status.OK).build();
+		} else if (GroupDAO.DELETION_CONFLICT == result) {
+			return Response.status(Response.Status.FORBIDDEN).build();
 		} else {
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
 					.build();
@@ -137,7 +142,8 @@ public class RESTfulAPIv1 {
 		if (playerDTO != null) {
 			logger.debug("Deserialized player DTO " + playerDTO);
 
-			// we look for the group object here already, because CDI sucks.
+			// we look for the group object here already, because CDI
+			// implementation sucks.
 			// also, we can decide to reject the player if the group does not
 			// exist yet
 			IGroup group = groupBean.getGroupById(playerDTO.getGroupId());

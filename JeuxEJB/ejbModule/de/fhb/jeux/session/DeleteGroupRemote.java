@@ -6,5 +6,5 @@ import de.fhb.jeux.model.IGroup;
 
 @Remote
 public interface DeleteGroupRemote {
-	public boolean deleteGroup(IGroup group);
+	public int deleteGroup(IGroup group);
 }

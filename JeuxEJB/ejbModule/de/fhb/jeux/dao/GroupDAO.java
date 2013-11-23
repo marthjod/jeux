@@ -24,6 +24,12 @@ public class GroupDAO {
 	@PersistenceContext
 	private EntityManager em;
 
+	// mimick HTTP statuses
+	// 409 = violated constraints
+	public static final int DELETION_CONFLICT = 409;
+	public static final int DELETION_OK = 200;
+	public static final int DELETION_UNKNOWN_ERR = 500;
+
 	public GroupDAO() {
 	}
 
@@ -32,19 +38,32 @@ public class GroupDAO {
 		logger.debug("Persisted group '" + group.getName() + "'");
 	}
 
-	public boolean deleteGroup(IGroup group) {
-		boolean success = false;
+	public int deleteGroup(IGroup group) {
+		int result = DELETION_UNKNOWN_ERR;
 		if (group != null) {
+			// save for debug message b/c group object may be removed then
+			// already
+			String groupName = group.getName();
+
 			try {
 				em.remove(group);
-				success = true;
-				logger.debug("Deleted group '" + group.getName() + "'");
+				result = DELETION_OK;
+				logger.debug("Deleted group '" + groupName + "'");
+			} catch (RuntimeException e) {
+				// TODO
+				// PersistenceException, MySQLConstraintViolatedEx thrown only
+				// after em.remove() ?!!
+				result = DELETION_CONFLICT;
+				logger.error("Deleting group '" + groupName + "': "
+						+ e.getClass().getCanonicalName() + " "
+						+ e.getMessage());
 			} catch (Exception e) {
-				logger.error("Deleting group '" + group.getName() + "': "
+				logger.error("Deleting group '" + groupName + "': "
+						+ e.getClass().getCanonicalName() + " "
 						+ e.getMessage());
 			}
 		}
-		return success;
+		return result;
 	}
 
 	public void updateGroup(IGroup group) {

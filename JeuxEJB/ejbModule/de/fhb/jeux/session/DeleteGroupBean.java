@@ -16,14 +16,8 @@ public class DeleteGroupBean implements DeleteGroupRemote, DeleteGroupLocal {
 	}
 
 	@Override
-	public boolean deleteGroup(IGroup group) {
-		boolean deleted = false;
-
-		if (groupDAO.deleteGroup(group)) {
-			deleted = true;
-		}
-
-		return deleted;
+	// return value ~= HTTP status code
+	public int deleteGroup(IGroup group) {
+		return groupDAO.deleteGroup(group);
 	}
-
 }
