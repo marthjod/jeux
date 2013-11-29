@@ -17,7 +17,7 @@ function deleteGroup(deleteSubmit) {
                 .confirm("Warning: Removing this group\nwill also delete all players\nand games belonging to this group!")) {
             $
                     .ajax({
-                        url : "rest/v1/delete-group/" + groupId,
+                        url : "rest/admin/delete-group/" + groupId,
                         type : "DELETE",
                         success : function() {
                             // alert("Group deleted");

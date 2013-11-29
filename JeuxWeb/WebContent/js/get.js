@@ -1,7 +1,7 @@
 function getRESTApiStatus(statusDiv) {
     "use strict";
 
-    $.get("rest/v1/status", function(data) {
+    $.get("rest/audience/status", function(data) {
         $(statusDiv).html("REST API status " + data);
     });
 }
@@ -13,7 +13,7 @@ function showAllGroups(showAllGroupsDiv, playerGroupSelect, ruleSrcGroupSelect,
     var i = 0, table = null, row = null, deletionCell = null, playerGroupSelectOK = false, ruleGroupSelectsOK = false;
 
     $
-            .get("rest/v1/groups",
+            .get("rest/audience/groups",
                     function(data) {
 
                         if (playerGroupSelect !== undefined

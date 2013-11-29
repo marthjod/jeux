@@ -1,0 +1,134 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" type="text/css" href="css/jeux.css">
+        <script type="text/javascript" src="js/jquery-2.0.3.js"></script>
+        <script type="text/javascript" src="js/globals.js"></script>
+        <script type="text/javascript" src="js/get.js"></script>
+        <script type="text/javascript" src="js/put.js"></script>
+        <script type="text/javascript" src="js/delete.js"></script>
+        <script type="text/javascript" src="js/input.js"></script>
+
+        <script>
+            $( document ).ready(function() {
+                getRESTApiStatus($( "#rest-api-status" ));
+                showAllGroups($("#show-all-groups"), $("#player-select-group"), $("#rule-source-group"), $("#rule-destination-group"));
+            });
+        </script>
+        <title>JEUX Administrative View</title>
+    </head>
+    <body>
+       <div id="rest-api-status">
+           REST API status unknown
+       </div>
+       <br />
+       <div id="show-all-groups">
+            <span class="title">Existing groups</span>
+        </div>
+        <br />
+        <div id="create-groups">
+            <span class="title">Create new group</span>
+            <form id="create-group" action="#">
+                    Name
+                         <input id="name"
+                             type="text"
+                             onkeyup="checkGroupSubmitReady(this);" />
+                    <br />
+                    Round
+                         <input id="round"
+                            type="number"
+                            size="2"
+                            maxlength="2"
+                            min="1"
+                            onkeyup="checkGroupSubmitReady(this);" />
+                     <br />
+                     Min sets
+                         <input id="min-sets"
+                             type="number"
+                             size="2"
+                             maxlength="2"
+                             min="1"
+                             onkeyup="checkGroupSubmitReady(this);"
+                             oninput="prefillMaxSets(this);" /> Max sets <input id="max-sets"
+                             type="number"
+                             size="2"
+                             maxlength="2"
+                             min="1"
+                             onkeyup="checkGroupSubmitReady(this);" />
+                    <br />         
+                    Active 
+                            <input id="group-active"
+                                type="checkbox"
+                            />
+    
+                    <br />
+                    <input id="submit-create-group"
+                        type="submit"
+                        value="Create new group"
+                        disabled="disabled"
+                        onclick="createNewGroup(this);" />
+    
+                </form>
+            </div>
+            <br />
+            <div id="create-players">
+                <span class="title">Create new player</span>
+                <form id="create-player" action="#">
+                    Name
+                         <input id="name"
+                             type="text"
+                             onkeyup="checkPlayerSubmitReady(this);" />
+                    <br />
+                    Group
+                        <select id="player-select-group"
+                            onchange="checkPlayerSubmitReady(this);">
+                            <option id="no-group-selected">No group selected</option>
+                        </select>
+                        
+                    <br />
+                    <input id="submit-create-player"
+                        type="submit"
+                        value="Create new player"
+                        disabled="disabled"
+                        onclick="createNewPlayer(this);" />
+                </form>
+            </div>
+            <br />
+            <div id="create-roundswitchrules">
+                <span class="title">Create new round-switch rule</span>
+                <form id="create-roundswitchrule" action="#">
+                    Source group
+                        <select id="rule-source-group"
+                            onchange="checkRuleSubmitReady(this);">
+                            <option id="no-source-group-selected">No source group selected</option>
+                        </select>
+                    <br />
+                    Destination group
+                        <select id="rule-destination-group"
+                            onchange="checkRuleSubmitReady(this);">
+                            <option id="no-destination-group-selected">No destination group selected</option>
+                        </select>
+                    <br />
+                    Start with rank
+                        <input id="rule-start-rank"
+                            type="number"
+                            size="2"
+                            min="1"
+                            onchange="checkRuleSubmitReady(this);" />
+                    Additional players
+                        <input id="rule-additional-players"
+                            type="number"
+                            size="2"
+                            min="0"
+                            onchange="checkRuleSubmitReady(this);" />
+                    <br />
+                    <input id="submit-create-rule"
+                        type="submit"
+                        value="Create new round-switch rule"
+                        disabled="disabled"
+                        onclick="createNewRoundSwitchRule(this);" />
+                </form>
+            </div>    
+    </body>
+</html>

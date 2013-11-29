@@ -28,7 +28,7 @@ function createNewGroup(groupSubmit) {
     // assumption: all input values present
     // see checkSubmitReady()
     $.ajax({
-        url : "rest/v1/create-group",
+        url : "rest/admin/create-group",
         type : "PUT",
         data : JSON.stringify(sendGroup),
         contentType : "application/json",
@@ -85,7 +85,7 @@ function createNewPlayer(playerSubmit) {
         };
 
         $.ajax({
-            url : "rest/v1/create-player",
+            url : "rest/admin/create-player",
             type : "PUT",
             data : JSON.stringify(sendPlayer),
             contentType : "application/json",
@@ -143,7 +143,7 @@ function createNewRoundSwitchRule(ruleSubmit) {
             };
 
             $.ajax({
-                url : "rest/v1/create-roundswitchrule",
+                url : "rest/admin/create-roundswitchrule",
                 type : "PUT",
                 data : JSON.stringify(sendRule),
                 contentType : "application/json",

@@ -1,24 +1,18 @@
 package de.fhb.jeux.controller;
 
-import java.util.List;
-
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.jboss.logging.Logger;
 
 import de.fhb.jeux.dao.GroupDAO;
-import de.fhb.jeux.dto.GameDTO;
-import de.fhb.jeux.dto.GameSetDTO;
 import de.fhb.jeux.dto.GroupDTO;
 import de.fhb.jeux.dto.PlayerDTO;
 import de.fhb.jeux.dto.RoundSwitchRuleDTO;
@@ -27,25 +21,17 @@ import de.fhb.jeux.session.CreateGroupLocal;
 import de.fhb.jeux.session.CreatePlayerLocal;
 import de.fhb.jeux.session.CreateRoundSwitchRuleLocal;
 import de.fhb.jeux.session.DeleteGroupLocal;
-import de.fhb.jeux.session.GameLocal;
-import de.fhb.jeux.session.GameSetLocal;
 import de.fhb.jeux.session.GroupLocal;
 import de.fhb.jeux.session.RoundSwitchRuleLocal;
 
 @Stateless
-@Path("/rest/v1")
-public class RESTfulAPIv1 {
+@Path("/rest/admin")
+public class AdminAPI {
 
-	protected static Logger logger = Logger.getLogger(RESTfulAPIv1.class);
+	protected static Logger logger = Logger.getLogger(AdminAPI.class);
 
 	@EJB
 	private GroupLocal groupBean;
-
-	@EJB
-	private GameLocal gameBean;
-
-	@EJB
-	private GameSetLocal gameSetBean;
 
 	@EJB
 	private CreatePlayerLocal createPlayerBean;
@@ -62,45 +48,11 @@ public class RESTfulAPIv1 {
 	@EJB
 	private RoundSwitchRuleLocal roundSwitchRuleBean;
 
-	@GET
-	@Path("/status")
-	@Produces(MediaType.TEXT_PLAIN)
-	public String apiStatus() {
-		logger.debug("REST API status request");
-		return "OK\n";
-	}
-
-	@GET
-	@Path("/groups")
-	@Produces(MediaType.APPLICATION_JSON)
-	public List<IGroup> getAllGroups() {
-		return groupBean.getAllGroups();
-	}
-
-	@GET
-	@Path("/games")
-	@Produces(MediaType.APPLICATION_JSON)
-	public List<GameDTO> getAllGames() {
-		return gameBean.getAllGameDTOs();
-	}
-
-	@GET
-	@Path("/gamesets")
-	@Produces(MediaType.APPLICATION_JSON)
-	public List<GameSetDTO> getAllGameSets() {
-		return gameSetBean.getAllGameSetDTOs();
-	}
-
-	@GET
-	@Path("/roundswitchrules")
-	@Produces(MediaType.APPLICATION_JSON)
-	public List<RoundSwitchRuleDTO> getAllRoundSwitchRules() {
-		return roundSwitchRuleBean.getAllRoundSwitchRuleDTOs();
-	}
-
 	@DELETE
 	@Path("/delete-group/{groupId}")
 	public Response deleteGroup(@PathParam("groupId") int groupId) {
+		logger.debug("Request for group deletion");
+
 		int result = deleteGroupBean.deleteGroup(groupBean
 				.getGroupById(groupId));
 		if (GroupDAO.DELETION_OK == result) {
@@ -113,11 +65,6 @@ public class RESTfulAPIv1 {
 		}
 	}
 
-	// Test:
-	// curl -X PUT -H "Content-Type: application/json" -d
-	// '{"minSets":"1","maxSets":"1","name":"New
-	// group","roundId":1,"completed":false,"active":true}'
-	// http://localhost:8080/JeuxWeb/rest/v1/create-group
 	@PUT
 	@Path("/create-group")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -125,6 +72,7 @@ public class RESTfulAPIv1 {
 	// see de.fhb.jeux.exception for ExceptionMappers as described in
 	// http://docs.jboss.org/resteasy/docs/1.2.GA/userguide/html/ExceptionHandling.html
 	public Response createGroup(GroupDTO groupDTO) {
+		logger.debug("Request for group creation");
 		if (groupDTO != null) {
 			logger.debug("Deserialized group DTO " + groupDTO);
 			createGroupBean.createGroup(groupDTO);
@@ -139,6 +87,8 @@ public class RESTfulAPIv1 {
 	@Path("/create-player")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response createPlayer(PlayerDTO playerDTO) {
+		logger.debug("Request for player creation");
+
 		if (playerDTO != null) {
 			logger.debug("Deserialized player DTO " + playerDTO);
 
@@ -155,15 +105,12 @@ public class RESTfulAPIv1 {
 		}
 	}
 
-	// Test: curl -X PUT -H "Content-Type: application/json" -d
-	// '{"srcGroupId":1, "destGroupId":2, "startWithRank":1,
-	// "additionalPlayers":1}'
-	// http://localhost:8080/JeuxWeb/rest/v1/create-roundswitchrule
-
 	@PUT
 	@Path("/create-roundswitchrule")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response createRoundSwitchRule(RoundSwitchRuleDTO rule) {
+		logger.debug("Request for rule creation");
+
 		boolean createdSuccessfully = false;
 
 		if (rule != null) {
