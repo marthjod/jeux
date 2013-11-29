@@ -1,4 +1,4 @@
-## jeux README
+## JEUX README
 
 ### Import 3rd-party sources
 
@@ -57,7 +57,33 @@ IDENTIFIED BY '***'
 - User, password: see <a href="#mysql-add-user">MySQL</a>
 
 
-### Testing
+### Authentication
 
-- Use the handy cURL snippets in testing-rest-api.* to fire requests against the REST API, 
-e.g. for quick tests of invalid input handling or debugging Ajax behavior.
+#### JBoss: Handle users for HTTP Digest authentication
+
+- Add to _.../jboss-as-7.1.1.Final/standalone/configuration/standalone.xml_:
+
+```xml
+<security-domains>
+...
+    <security-domain name="JeuxWeb" cache-type="default">
+        <authentication>
+            <login-module code="UsersRoles" flag="required">
+                <module-option name="usersProperties" value="users.properties"/>
+                <module-option name="rolesProperties" value="roles.properties"/>
+                <module-option name="realm" value="JEUX Administrative view"/>
+                <module-option name="hashAlgorithm" value="MD5"/>
+                <module-option name="hashEncoding" value="RFC2617"/>
+                <module-option name="hashUserPassword" value="false"/>
+                <module-option name="hashStorePassword" value="true"/>
+                <module-option name="passwordIsA1Hash" value="true"/>
+                <module-option name="storeDigestCallback" value="org.jboss.security.auth.callback.RFC2617Digest"/>
+            </login-module>
+        </authentication>
+    </security-domain>
+...
+</security-domains>
+```
+
+- Cf. [https://community.jboss.org/message/744521?_sscc=t](https://community.jboss.org/message/744521?_sscc=t)
+- Appropriate _users.properties_ and _roles.properties_ must be in class path (OR put under _properties/_ and configure deployment assembly accordingly, i.e. _properties/_ -> _WEB-INF/classes_)
