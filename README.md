@@ -2,9 +2,9 @@
 
 ### Import 3rd-party sources
 
-1. Import `commons-math3-3.2.jar` into _Jeux/EarContent_
-2. Import `gson-2.2.4.jar` into _Jeux/EarContent_
-3. Place `jquery-2.0.3.js` under _JeuxWeb/WebContent/js_
+1. Import ("Import/File system...") [`commons-math3-3.2.jar`](http://commons.apache.org/proper/commons-math) into _Jeux/EarContent_
+3. Import [`commons-codec-1.8.jar`](http://commons.apache.org/proper/commons-codec) into _Jeux/EarContent_
+3. Place [`jquery-2.0.3.js`](http://jquery.com/) under _JeuxWeb/WebContent/js_
 
 ### Deployment configuration after Eclipse import
 

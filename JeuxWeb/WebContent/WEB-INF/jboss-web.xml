@@ -1,0 +1,3 @@
+<jboss-web>
+ <security-domain>JeuxWeb</security-domain>
+</jboss-web> 
