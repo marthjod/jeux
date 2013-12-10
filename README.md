@@ -4,7 +4,7 @@
 
 1. Import ("Import/File system...") [`commons-math3-3.2.jar`](http://commons.apache.org/proper/commons-math) into _Jeux/EarContent_
 3. Import [`commons-codec-1.8.jar`](http://commons.apache.org/proper/commons-codec) into _Jeux/EarContent_
-3. Place [`jquery-2.0.3.js`](http://jquery.com/) under _JeuxWeb/WebContent/js_
+3. Import [`jquery-2.0.3.js`](http://jquery.com/) into _JeuxWeb/WebContent/js_
 
 ### Deployment configuration after Eclipse import
 
@@ -50,11 +50,36 @@ TO 'jeuxdb_user'@'localhost';
 
 #### JBoss: Add data source
 
+- Copy driver JAR ([mysql-connector-java-5.1.27-bin.jar](http://dev.mysql.com/downloads/connector/j/)) to  _.../jboss-as-7.1.1.Final/standalone/deployment_ first
+
+##### JBoss Management Console (http://localhost:9999 if working)
 - Connection URL: `jdbc:mysql://localhost:3306/<database name>`
 - Driver: `mysql-connector-java-<ver>-bin.jar`
 - JNDI: `java:jboss/datasources/JeuxDS`
 - User, password: see <a href="#mysql-add-user">MySQL</a>
 
+
+##### -OR- manually
+
+```xml
+<datasource jta="false" jndi-name="java:jboss/datasources/JeuxDS" pool-name="JeuxDS" enabled="true" use-ccm="false">
+    <connection-url>jdbc:mysql://localhost:3306/jeuxdb</connection-url>
+    <driver-class>com.mysql.jdbc.Driver</driver-class>
+    <driver>mysql-connector-java-5.1.27-bin.jar</driver>
+    <security>
+        <user-name>jeuxdb_user</user-name>
+        <password>***</password>
+    </security>
+    <validation>
+        <validate-on-match>false</validate-on-match>
+        <background-validation>false</background-validation>
+    </validation>
+    <statement>
+        <share-prepared-statements>false</share-prepared-statements>
+    </statement>
+</datasource>
+```
+                
 
 ### Authentication
 
@@ -86,3 +111,16 @@ TO 'jeuxdb_user'@'localhost';
 
 - Cf. [https://community.jboss.org/message/744521?_sscc=t](https://community.jboss.org/message/744521?_sscc=t)
 - Appropriate _users.properties_ and _roles.properties_ must be in class path (OR put under _properties/_ and configure deployment assembly accordingly, i.e. _properties/_ -> _WEB-INF/classes_)
+
+
+### Logging
+
+- Set log level to DEBUG (_.../jboss-as-7.1.1.Final/standalone/configuration/standalone.xml_)
+
+```xml
+...
+    <profile>
+        <subsystem xmlns="urn:jboss:domain:logging:1.1">
+            <console-handler name="CONSOLE">
+                <level name="DEBUG"/>
+```                
