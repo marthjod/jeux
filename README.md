@@ -43,9 +43,8 @@ CREATE USER 'jeuxdb_user'@'localhost'
 IDENTIFIED BY '***';
 
 GRANT SELECT, INSERT, UPDATE, DELETE 
-ON 'jeuxdb'.* 
-TO 'jeuxdb_user'@'localhost' 
-IDENTIFIED BY '***'
+ON `jeuxdb`.* 
+TO 'jeuxdb_user'@'localhost';
 ```
 
 
@@ -59,7 +58,7 @@ IDENTIFIED BY '***'
 
 ### Authentication
 
-#### JBoss: Handle users for HTTP Digest authentication
+#### [JBoss](http://www.jboss.org/jbossas/downloads): Handle users for HTTP Digest authentication
 
 - Add to _.../jboss-as-7.1.1.Final/standalone/configuration/standalone.xml_:
 
