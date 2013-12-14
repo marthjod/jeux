@@ -6,12 +6,19 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
+import org.jboss.logging.Logger;
+
 import de.fhb.jeux.dao.GroupDAO;
+import de.fhb.jeux.dto.GroupDTO;
+import de.fhb.jeux.dto.PlayerDTO;
 import de.fhb.jeux.model.IGroup;
 import de.fhb.jeux.model.IPlayer;
+import de.fhb.jeux.persistence.ShowdownPlayer;
 
 @Stateless
 public class GroupBean implements GroupRemote, GroupLocal {
+
+	protected static Logger logger = Logger.getLogger(GroupBean.class);
 
 	@EJB
 	private GroupDAO groupDAO;
@@ -23,8 +30,8 @@ public class GroupBean implements GroupRemote, GroupLocal {
 	}
 
 	@Override
-	public List<IGroup> getAllGroups() {
-		return groupDAO.getAllGroups();
+	public List<GroupDTO> getAllGroupDTOs() {
+		return groupDAO.getAllGroupDTOs();
 	}
 
 	@Override
@@ -32,18 +39,19 @@ public class GroupBean implements GroupRemote, GroupLocal {
 		return groupDAO.getGroupById(groupId);
 	}
 
-	@Override
-	public List<IPlayer> getPlayersInGroup(IGroup group) {
-		List<IPlayer> allPlayers = playerBean.getAllPlayers();
-		List<IPlayer> groupPlayers = new ArrayList<IPlayer>();
+	private List<ShowdownPlayer> getPlayersInGroup(IGroup group) {
+		return groupDAO.getPlayersInGroup(group);
+	}
 
-		for (IPlayer player : allPlayers) {
-			if (player.getGroup().equals(group)) {
-				groupPlayers.add(player);
+	@Override
+	public List<PlayerDTO> getPlayerDTOsInGroup(IGroup group) {
+		List<PlayerDTO> playerDTOs = new ArrayList<PlayerDTO>();
+		if (group != null) {
+			for (IPlayer player : getPlayersInGroup(group)) {
+				playerDTOs.add(new PlayerDTO(player));
 			}
 		}
-
-		return groupPlayers;
+		return playerDTOs;
 	}
 
 	@Override

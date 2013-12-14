@@ -1,14 +1,18 @@
 package de.fhb.jeux.persistence;
 
 import java.io.Serializable;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import de.fhb.jeux.dto.GroupDTO;
@@ -46,6 +50,9 @@ public class ShowdownGroup implements IGroup, Serializable {
 
 	@Column
 	private boolean completed;
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "group")
+	private List<ShowdownPlayer> players;
 
 	// needed by @Entity
 	public ShowdownGroup() {
@@ -119,6 +126,10 @@ public class ShowdownGroup implements IGroup, Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public List<ShowdownPlayer> getPlayers() {
+		return this.players;
 	}
 
 	@Override

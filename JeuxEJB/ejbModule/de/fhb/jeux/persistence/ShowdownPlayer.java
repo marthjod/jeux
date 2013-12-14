@@ -122,19 +122,19 @@ public class ShowdownPlayer implements IPlayer, Serializable {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append(" Rank: ");
-		sb.append(this.rank);
-		sb.append("' (ID ");
-		sb.append(this.id);
-		sb.append("), groupId ");
-		sb.append(this.group.getId());
-		sb.append(", name = ");
+		sb.append("<");
 		sb.append(this.name);
+		sb.append(" (");
+		sb.append(this.id);
+		sb.append("), group '");
+		sb.append(this.group.getName());
+		sb.append("', rank ");
+		sb.append(this.rank);
 		sb.append(", points ");
 		sb.append(this.points);
 		sb.append(", scoreRatio ");
 		sb.append(this.scoreRatio);
-		sb.append("-");
+		sb.append(">");
 
 		return sb.toString();
 	}

@@ -1,5 +1,8 @@
 package de.fhb.jeux.model;
 
+import java.util.List;
+
+import de.fhb.jeux.persistence.ShowdownPlayer;
 
 public interface IGroup {
 	public int getId();
@@ -11,6 +14,8 @@ public interface IGroup {
 	public int getMinSets();
 
 	public int getMaxSets();
+
+	public List<ShowdownPlayer> getPlayers();
 
 	public boolean isActive();
 

@@ -6,6 +6,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
@@ -13,6 +14,8 @@ import org.jboss.logging.Logger;
 
 import de.fhb.jeux.dto.GameDTO;
 import de.fhb.jeux.dto.GameSetDTO;
+import de.fhb.jeux.dto.GroupDTO;
+import de.fhb.jeux.dto.PlayerDTO;
 import de.fhb.jeux.dto.RoundSwitchRuleDTO;
 import de.fhb.jeux.model.IGroup;
 import de.fhb.jeux.session.GameLocal;
@@ -49,9 +52,9 @@ public class AudienceAPI {
 	@GET
 	@Path("/groups")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<IGroup> getAllGroups() {
+	public List<GroupDTO> getAllGroups() {
 		logger.debug("Returning all groups");
-		return groupBean.getAllGroups();
+		return groupBean.getAllGroupDTOs();
 	}
 
 	@GET
@@ -76,5 +79,15 @@ public class AudienceAPI {
 	public List<RoundSwitchRuleDTO> getAllRoundSwitchRules() {
 		logger.debug("Returning all rules");
 		return roundSwitchRuleBean.getAllRoundSwitchRuleDTOs();
+	}
+
+	@GET
+	@Path("/players/group/{groupId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<PlayerDTO> getPlayerDTOsInGroup(
+			@PathParam("groupId") int groupId) {
+		logger.debug("Returning players in group #" + groupId);
+		IGroup group = groupBean.getGroupById(groupId);
+		return groupBean.getPlayerDTOsInGroup(group);
 	}
 }

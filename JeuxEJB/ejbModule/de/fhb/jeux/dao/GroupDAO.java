@@ -12,8 +12,10 @@ import javax.persistence.TypedQuery;
 
 import org.jboss.logging.Logger;
 
+import de.fhb.jeux.dto.GroupDTO;
 import de.fhb.jeux.model.IGroup;
 import de.fhb.jeux.persistence.ShowdownGroup;
+import de.fhb.jeux.persistence.ShowdownPlayer;
 
 @Stateless
 @LocalBean
@@ -70,16 +72,6 @@ public class GroupDAO {
 		em.merge(group);
 	}
 
-	public List<IGroup> getAllGroups() {
-		List<IGroup> groups = new ArrayList<IGroup>();
-
-		TypedQuery<IGroup> query = em.createNamedQuery("Group.findAll",
-				IGroup.class);
-		groups = query.getResultList();
-
-		return groups;
-	}
-
 	public IGroup getGroupById(int groupId) {
 		IGroup group = new ShowdownGroup();
 		TypedQuery<IGroup> query = em.createNamedQuery("Group.findById",
@@ -93,5 +85,40 @@ public class GroupDAO {
 			logger.error("Group ID " + groupId + ": " + e.getMessage());
 		}
 		return group;
+	}
+
+	// private because handles PEs,
+	// but only DTOs should leave this layer
+	private List<IGroup> getAllGroups() {
+		List<IGroup> groups = new ArrayList<IGroup>();
+
+		TypedQuery<IGroup> query = em.createNamedQuery("Group.findAll",
+				IGroup.class);
+		groups = query.getResultList();
+
+		return groups;
+	}
+
+	public List<GroupDTO> getAllGroupDTOs() {
+		List<GroupDTO> groupDTOs = new ArrayList<GroupDTO>();
+		List<IGroup> groups = getAllGroups();
+
+		for (IGroup group : groups) {
+			// populate list of group DTOs from Persistent Entities
+			groupDTOs.add(new GroupDTO(group));
+		}
+
+		return groupDTOs;
+	}
+
+	public List<ShowdownPlayer> getPlayersInGroup(IGroup group) {
+		List<ShowdownPlayer> players = new ArrayList<ShowdownPlayer>();
+		if (group != null) {
+			players = group.getPlayers();
+			logger.debug("Players in group '" + group.getName() + "': "
+					+ players);
+		}
+
+		return players;
 	}
 }
