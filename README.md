@@ -123,4 +123,8 @@ TO 'jeuxdb_user'@'localhost';
         <subsystem xmlns="urn:jboss:domain:logging:1.1">
             <console-handler name="CONSOLE">
                 <level name="DEBUG"/>
-```                
+...
+            <logger category="de.fhb.jeux">
+                <level name="DEBUG"/>
+            </logger>
+```
