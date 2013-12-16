@@ -66,8 +66,9 @@ public class AdminViewFilter implements Filter {
 				}
 
 				// TODO see AdminLoginServlet
-				if (AuthUtils.checkAuthTokens("admin", serverSecret,
-						authCookie.getValue())) {
+				if (authCookie != null
+						&& AuthUtils.checkAuthTokens("admin", serverSecret,
+								authCookie.getValue())) {
 					userAuthenticated = true;
 				}
 			}
