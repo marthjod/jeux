@@ -26,12 +26,10 @@ public class GameBean implements GameRemote, GameLocal {
 
 	// flat DTOs for response output
 	public List<GameDTO> getAllGameDTOs() {
-		List<IGame> games = getAllGames();
 		List<GameDTO> gamesDTO = new ArrayList<GameDTO>();
 
-		for (IGame game : games) {
-			GameDTO newGameDTO = new GameDTO(game);
-			gamesDTO.add(newGameDTO);
+		for (IGame game : getAllGames()) {
+			gamesDTO.add(new GameDTO(game));
 		}
 
 		return gamesDTO;

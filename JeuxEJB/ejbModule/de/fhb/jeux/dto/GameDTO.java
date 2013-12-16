@@ -1,31 +1,57 @@
 package de.fhb.jeux.dto;
 
+import java.util.ArrayList;
+
 import de.fhb.jeux.model.IGame;
+import de.fhb.jeux.model.IGroup;
+import de.fhb.jeux.model.IPlayer;
+import de.fhb.jeux.persistence.ShowdownGameSet;
 
 public class GameDTO {
-	
+
 	private int id;
 	private int player1Id;
 	private String player1Name;
 	private int player2Id;
 	private String player2Name;
 	private int groupId;
+	private String groupName;
 	private int winnerId;
 	private String winnerName;
+	private ArrayList<GameSetDTO> sets;
 
-	public GameDTO(){
-		
+	public GameDTO() {
 	}
-	
-	public GameDTO(IGame gameEntity){
-		this.id = gameEntity.getId();
-		this.player1Id = gameEntity.getPlayer1().getId();
-		this.player2Id = gameEntity.getPlayer2().getId();
-		this.player1Name = gameEntity.getPlayer1().getName();
-		this.player2Name = gameEntity.getPlayer2().getName();
-		this.groupId = gameEntity.getGroup().getId();
-		this.winnerId = gameEntity.getWinner().getId();
-		this.winnerName = gameEntity.getWinner().getName();
+
+	public GameDTO(IGame gameEntity) {
+		id = gameEntity.getId();
+
+		// avoid multiple calls to getWinner(), f.ex.
+		IPlayer player1 = gameEntity.getPlayer1();
+		IPlayer player2 = gameEntity.getPlayer2();
+		IGroup group = gameEntity.getGroup();
+		// winner may be null
+		IPlayer winner = gameEntity.getWinner();
+
+		player1Id = player1.getId();
+		player2Id = player2.getId();
+		player1Name = player1.getName();
+		player2Name = player2.getName();
+		groupId = group.getId();
+		groupName = group.getName();
+
+		if (winner != null) {
+			winnerId = winner.getId();
+			winnerName = winner.getName();
+		} else {
+			winnerId = 0;
+			winnerName = "Unknown";
+		}
+
+		sets = new ArrayList<GameSetDTO>();
+		for (ShowdownGameSet setEntity : gameEntity.getSets()) {
+			sets.add(new GameSetDTO(setEntity));
+		}
 	}
 
 	public int getId() {
@@ -44,10 +70,14 @@ public class GameDTO {
 		return groupId;
 	}
 
+	public String getGroupName() {
+		return groupName;
+	}
+
 	public int getWinnerId() {
 		return winnerId;
 	}
-	
+
 	public String getPlayer1Name() {
 		return player1Name;
 	}
@@ -58,6 +88,10 @@ public class GameDTO {
 
 	public String getWinnerName() {
 		return winnerName;
+	}
+
+	public ArrayList<GameSetDTO> getSets() {
+		return sets;
 	}
 
 	@Override
@@ -75,5 +109,5 @@ public class GameDTO {
 		sb.append(">");
 		return sb.toString();
 	}
-	
+
 }

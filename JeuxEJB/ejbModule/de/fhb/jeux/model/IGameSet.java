@@ -12,8 +12,4 @@ public interface IGameSet {
 	public IGame getGame();
 
 	public boolean equals(IGameSet gameSet);
-
-	public IPlayer getPlayer1();
-
-	public IPlayer getPlayer2();
 }

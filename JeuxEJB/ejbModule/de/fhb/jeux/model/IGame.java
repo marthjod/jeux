@@ -2,6 +2,8 @@ package de.fhb.jeux.model;
 
 import java.util.List;
 
+import de.fhb.jeux.persistence.ShowdownGameSet;
+
 public interface IGame {
 	public int getId();
 
@@ -13,7 +15,7 @@ public interface IGame {
 
 	public IPlayer getWinner();
 
-	public List<IGameSet> getSets();
+	public List<ShowdownGameSet> getSets();
 
 	public boolean equals(IGame game);
 }
