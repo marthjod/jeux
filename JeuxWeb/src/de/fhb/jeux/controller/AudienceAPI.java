@@ -75,10 +75,12 @@ public class AudienceAPI {
 	}
 
 	@GET
-	@Path("/games")
+	@Path("/games/played/group/id/{groupId}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<GameDTO> getGameDTOs() {
-		logger.debug("Returning games");
-		return gameBean.getAllGameDTOs();
+	public List<GameDTO> getPlayedGameDTOsInGroup(
+			@PathParam("groupId") int groupId) {
+		logger.debug("Returning played games for group #" + groupId);
+		IGroup group = groupBean.getGroupById(groupId);
+		return gameBean.getPlayedGameDTOsInGroup(group);
 	}
 }

@@ -6,12 +6,13 @@ import javax.ejb.Local;
 
 import de.fhb.jeux.dto.GameDTO;
 import de.fhb.jeux.model.IGame;
+import de.fhb.jeux.model.IGroup;
 
 @Local
 public interface GameLocal {
 
-	public List<IGame> getAllGames();
+	public List<GameDTO> getPlayedGameDTOsInGroup(IGroup group);
 
-	public List<GameDTO> getAllGameDTOs();
+	public List<IGame> getGamesInGroup(IGroup group);
 
 }

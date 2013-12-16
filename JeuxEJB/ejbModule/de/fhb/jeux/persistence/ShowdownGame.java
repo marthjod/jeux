@@ -29,7 +29,8 @@ import de.fhb.jeux.model.IPlayer;
 @Table(name = "Game")
 @NamedQueries({
 		@NamedQuery(name = "Game.findAll", query = "SELECT g FROM ShowdownGame g"),
-		@NamedQuery(name = "Game.findById", query = "SELECT g FROM ShowdownGame g WHERE g.id = :id") })
+		@NamedQuery(name = "Game.findById", query = "SELECT g FROM ShowdownGame g WHERE g.id = :id"),
+		@NamedQuery(name = "Game.findAllInGroup", query = "SELECT g FROM ShowdownGame g WHERE g.group = :group") })
 public class ShowdownGame implements IGame, Serializable {
 
 	private static final long serialVersionUID = -8766860086958636981L;
