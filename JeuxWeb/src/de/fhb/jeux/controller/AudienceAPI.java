@@ -13,7 +13,6 @@ import javax.ws.rs.core.MediaType;
 import org.jboss.logging.Logger;
 
 import de.fhb.jeux.dto.GameDTO;
-import de.fhb.jeux.dto.GameSetDTO;
 import de.fhb.jeux.dto.GroupDTO;
 import de.fhb.jeux.dto.PlayerDTO;
 import de.fhb.jeux.dto.RoundSwitchRuleDTO;
@@ -52,42 +51,34 @@ public class AudienceAPI {
 	@GET
 	@Path("/groups")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<GroupDTO> getAllGroups() {
+	public List<GroupDTO> getAllGroupDTOs() {
 		logger.debug("Returning all groups");
 		return groupBean.getAllGroupDTOs();
 	}
 
 	@GET
-	@Path("/games")
-	@Produces(MediaType.APPLICATION_JSON)
-	public List<GameDTO> getAllGames() {
-		logger.debug("Returning all games");
-		return gameBean.getAllGameDTOs();
-	}
-
-	@GET
-	@Path("/gamesets")
-	@Produces(MediaType.APPLICATION_JSON)
-	public List<GameSetDTO> getAllGameSets() {
-		logger.debug("Returning all game sets");
-		return gameSetBean.getAllGameSetDTOs();
-	}
-
-	@GET
 	@Path("/roundswitchrules")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<RoundSwitchRuleDTO> getAllRoundSwitchRules() {
+	public List<RoundSwitchRuleDTO> getAllRoundSwitchRuleDTOs() {
 		logger.debug("Returning all rules");
 		return roundSwitchRuleBean.getAllRoundSwitchRuleDTOs();
 	}
 
 	@GET
-	@Path("/players/group/{groupId}")
+	@Path("/players/group/id/{groupId}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<PlayerDTO> getPlayerDTOsInGroup(
 			@PathParam("groupId") int groupId) {
 		logger.debug("Returning players in group #" + groupId);
 		IGroup group = groupBean.getGroupById(groupId);
 		return groupBean.getPlayerDTOsInGroup(group);
+	}
+
+	@GET
+	@Path("/games")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<GameDTO> getGameDTOs() {
+		logger.debug("Returning games");
+		return gameBean.getAllGameDTOs();
 	}
 }

@@ -49,7 +49,7 @@ public class AdminAPI {
 	private RoundSwitchRuleLocal roundSwitchRuleBean;
 
 	@DELETE
-	@Path("/delete-group/{groupId}")
+	@Path("/delete-group/id/{groupId}")
 	public Response deleteGroup(@PathParam("groupId") int groupId) {
 		logger.debug("Request for group deletion");
 
