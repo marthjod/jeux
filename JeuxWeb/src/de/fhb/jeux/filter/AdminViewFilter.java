@@ -46,6 +46,10 @@ public class AdminViewFilter implements Filter {
 		 */
 
 		if (request instanceof HttpServletRequest) {
+
+			logger.debug("Request for "
+					+ ((HttpServletRequest) request).getRequestURL().toString());
+
 			boolean userAuthenticated = false;
 			Cookie[] cookies = ((HttpServletRequest) request).getCookies();
 			Cookie authCookie = null;
