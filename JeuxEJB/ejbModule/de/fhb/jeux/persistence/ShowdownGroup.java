@@ -167,15 +167,7 @@ public class ShowdownGroup implements IGroup, Serializable {
 
 	@Override
 	public boolean equals(IGroup group) {
-		boolean equal = false;
-
-		if (group != null) {
-			// TODO
-			// assuming unique IDs as sufficient for identity
-			if (this.id == group.getId()) {
-				equal = true;
-			}
-		}
-		return equal;
+		// assuming unique IDs as sufficient for identity
+		return this.id == group.getId();
 	}
 }

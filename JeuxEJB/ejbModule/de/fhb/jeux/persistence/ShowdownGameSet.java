@@ -90,8 +90,8 @@ public class ShowdownGameSet implements IGameSet, Serializable {
 
 	@Override
 	public boolean equals(IGameSet gameSet) {
-		// TODO
-		return false;
+		// assuming unique IDs
+		return this.id == gameSet.getId();
 	}
 
 }

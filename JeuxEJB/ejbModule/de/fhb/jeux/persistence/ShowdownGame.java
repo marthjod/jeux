@@ -83,8 +83,7 @@ public class ShowdownGame implements IGame, Serializable {
 
 	@Override
 	public boolean equals(IGame game) {
-		// TODO
-		return false;
+		// assuming unique IDs
+		return this.id == game.getId();
 	}
-
 }

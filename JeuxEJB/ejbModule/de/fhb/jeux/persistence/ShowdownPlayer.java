@@ -115,8 +115,7 @@ public class ShowdownPlayer implements IPlayer, Serializable {
 
 	@Override
 	public boolean equals(IPlayer player) {
-		// TODO
-		return false;
+		return this.id == player.getId();
 	}
 
 	@Override
