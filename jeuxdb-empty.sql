@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.0.4
+-- version 4.0.9
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Nov 23, 2013 at 02:06 AM
--- Server version: 5.5.31
--- PHP Version: 5.4.16
+-- Generation Time: Dec 16, 2013 at 05:58 PM
+-- Server version: 5.6.14
+-- PHP Version: 5.5.6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -19,8 +19,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `jeuxdb`
 --
-CREATE DATABASE IF NOT EXISTS `jeuxdb` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-USE `jeuxdb`;
 
 -- --------------------------------------------------------
 
@@ -31,7 +29,7 @@ USE `jeuxdb`;
 CREATE TABLE IF NOT EXISTS `Game` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `groupId` int(11) NOT NULL COMMENT 'Group in which this game is played',
-  `winnerId` int(11) NOT NULL COMMENT 'Player who won the entire game, i.e. all its sets',
+  `winnerId` int(11) DEFAULT NULL COMMENT 'Player who won the entire game, i.e. all its sets',
   `player1Id` int(11) NOT NULL,
   `player2Id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
@@ -53,12 +51,8 @@ CREATE TABLE IF NOT EXISTS `GameSet` (
   `player2Score` int(3) NOT NULL DEFAULT '0',
   `winnerId` int(11) NOT NULL DEFAULT '0' COMMENT 'Player who has scored more',
   `gameId` int(11) NOT NULL COMMENT 'Game this set is part of',
-  `player1Id` int(11) NOT NULL,
-  `player2Id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_GameSet_Game1_idx` (`gameId`),
-  KEY `fk_GameSet_Player1_idx` (`player1Id`),
-  KEY `fk_GameSet_Player2_idx` (`player2Id`),
   KEY `fk_GameSet_Player3_idx` (`winnerId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
@@ -77,7 +71,7 @@ CREATE TABLE IF NOT EXISTS `Group_` (
   `active` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Is this group''s games currently being played?',
   `completed` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Have all this group''s games been played?',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=17 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=5 ;
 
 -- --------------------------------------------------------
 
@@ -94,7 +88,7 @@ CREATE TABLE IF NOT EXISTS `Player` (
   `rank` int(2) NOT NULL DEFAULT '0' COMMENT 'Rank in group. Updated after all this group''s games have been completed',
   PRIMARY KEY (`id`),
   KEY `fk_Player_Group1_idx` (`groupId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=9 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=4 ;
 
 -- --------------------------------------------------------
 
@@ -123,18 +117,16 @@ CREATE TABLE IF NOT EXISTS `RoundSwitchRule` (
 --
 ALTER TABLE `Game`
   ADD CONSTRAINT `fk_Game_Group` FOREIGN KEY (`groupId`) REFERENCES `Group_` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_Game_Winner` FOREIGN KEY (`winnerId`) REFERENCES `Player` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_Game_Player1` FOREIGN KEY (`player1Id`) REFERENCES `Player` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_Game_Player2` FOREIGN KEY (`player2Id`) REFERENCES `Player` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_Game_Player1` FOREIGN KEY (`player1Id`) REFERENCES `Player` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_Game_Player2` FOREIGN KEY (`player2Id`) REFERENCES `Player` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_Game_Winner` FOREIGN KEY (`winnerId`) REFERENCES `Player` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `GameSet`
 --
 ALTER TABLE `GameSet`
-  ADD CONSTRAINT `fk_GameSet_Game` FOREIGN KEY (`gameId`) REFERENCES `Game` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_GameSet_Player1` FOREIGN KEY (`player1Id`) REFERENCES `Player` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_GameSet_Player2` FOREIGN KEY (`player2Id`) REFERENCES `Player` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_GameSet_Winner` FOREIGN KEY (`winnerId`) REFERENCES `Player` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_GameSet_Game` FOREIGN KEY (`gameId`) REFERENCES `Game` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_GameSet_Winner` FOREIGN KEY (`winnerId`) REFERENCES `Player` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `Player`
@@ -146,8 +138,8 @@ ALTER TABLE `Player`
 -- Constraints for table `RoundSwitchRule`
 --
 ALTER TABLE `RoundSwitchRule`
-  ADD CONSTRAINT `fk_rule_src_group` FOREIGN KEY (`srcGroupId`) REFERENCES `Group_` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_rule_dest_group` FOREIGN KEY (`destGroupId`) REFERENCES `Group_` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `fk_rule_dest_group` FOREIGN KEY (`destGroupId`) REFERENCES `Group_` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_rule_src_group` FOREIGN KEY (`srcGroupId`) REFERENCES `Group_` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
