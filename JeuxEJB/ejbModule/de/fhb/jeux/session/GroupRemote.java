@@ -15,6 +15,4 @@ public interface GroupRemote {
 	public IGroup getGroupById(int groupId);
 
 	public List<PlayerDTO> getPlayerDTOsInGroup(IGroup group);
-
-	public int getGroupSize(IGroup group);
 }

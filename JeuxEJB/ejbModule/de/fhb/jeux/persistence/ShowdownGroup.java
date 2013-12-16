@@ -14,6 +14,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import de.fhb.jeux.dto.GroupDTO;
 import de.fhb.jeux.model.IGroup;
@@ -50,6 +51,9 @@ public class ShowdownGroup implements IGroup, Serializable {
 
 	@Column
 	private boolean completed;
+
+	@Transient
+	private int size;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "group")
 	private List<ShowdownPlayer> players;
@@ -126,6 +130,11 @@ public class ShowdownGroup implements IGroup, Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	@Override
+	public int getSize() {
+		return this.players.size();
 	}
 
 	public List<ShowdownPlayer> getPlayers() {

@@ -15,6 +15,8 @@ public interface IGroup {
 
 	public int getMaxSets();
 
+	public int getSize();
+
 	public List<ShowdownPlayer> getPlayers();
 
 	public boolean isActive();

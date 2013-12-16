@@ -53,9 +53,4 @@ public class GroupBean implements GroupRemote, GroupLocal {
 		}
 		return playerDTOs;
 	}
-
-	@Override
-	public int getGroupSize(IGroup group) {
-		return getPlayersInGroup(group).size();
-	}
 }
