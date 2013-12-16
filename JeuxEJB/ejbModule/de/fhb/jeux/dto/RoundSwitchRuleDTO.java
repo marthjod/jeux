@@ -9,8 +9,8 @@ public class RoundSwitchRuleDTO {
 	}
 
 	public RoundSwitchRuleDTO(IRoundSwitchRule roundSwitchRuleEntity) {
-		this.srcGroupId = roundSwitchRuleEntity.getSrcGroupId();
-		this.destGroupId = roundSwitchRuleEntity.getDestGroupId();
+		this.srcGroupId = roundSwitchRuleEntity.getSrcGroup().getId();
+		this.destGroupId = roundSwitchRuleEntity.getDestGroup().getId();
 		this.previousRoundId = roundSwitchRuleEntity.getPreviousRoundId();
 		this.startWithRank = roundSwitchRuleEntity.getStartWithRank();
 		this.additionalPlayers = roundSwitchRuleEntity.getAdditionalPlayers();

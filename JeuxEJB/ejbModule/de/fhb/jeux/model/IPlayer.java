@@ -5,8 +5,6 @@ public interface IPlayer {
 
 	public IGroup getGroup();
 
-	public void setGroup(IGroup group);
-
 	public String getName();
 
 	public int getPoints();

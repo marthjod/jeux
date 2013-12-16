@@ -33,11 +33,13 @@ public class ShowdownRoundSwitchRule implements IRoundSwitchRule, Serializable {
 	public ShowdownRoundSwitchRule() {
 	}
 
-	public ShowdownRoundSwitchRule(RoundSwitchRuleDTO ruleDTO) {
+	public ShowdownRoundSwitchRule(RoundSwitchRuleDTO ruleDTO, IGroup srcGroup,
+			IGroup destGroup) {
 		this.previousRoundId = ruleDTO.getPreviousRoundId();
 		this.startWithRank = ruleDTO.getStartWithRank();
 		this.additionalPlayers = ruleDTO.getAdditionalPlayers();
-		// this.srcGroup =
+		this.srcGroup = (ShowdownGroup) srcGroup;
+		this.destGroup = (ShowdownGroup) destGroup;
 	}
 
 	@Id
@@ -62,8 +64,8 @@ public class ShowdownRoundSwitchRule implements IRoundSwitchRule, Serializable {
 	private ShowdownGroup destGroup;
 
 	@Override
-	public int getSrcGroupId() {
-		return srcGroup.getId();
+	public IGroup getSrcGroup() {
+		return this.srcGroup;
 	}
 
 	@Override
@@ -77,8 +79,8 @@ public class ShowdownRoundSwitchRule implements IRoundSwitchRule, Serializable {
 	}
 
 	@Override
-	public int getDestGroupId() {
-		return destGroup.getId();
+	public IGroup getDestGroup() {
+		return this.destGroup;
 	}
 
 	@Override

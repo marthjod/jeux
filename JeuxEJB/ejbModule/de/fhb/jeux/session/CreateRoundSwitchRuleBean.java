@@ -34,9 +34,9 @@ public class CreateRoundSwitchRuleBean implements CreateRoundSwitchRuleRemote,
 		boolean success = false;
 		if (srcGroup != null && destGroup != null) {
 			if (!srcGroup.equals(destGroup)) {
-				IRoundSwitchRule newRule = new ShowdownRoundSwitchRule(ruleDTO);
-				int srcGroupSize = groupBean.getGroupSize(srcGroup);
-				int destGroupSize = groupBean.getGroupSize(destGroup);
+				IRoundSwitchRule newRule = new ShowdownRoundSwitchRule(ruleDTO,
+						srcGroup, destGroup);
+				int srcGroupSize = srcGroup.getSize();
 
 				if (ruleDTO.getStartWithRank() > 0) {
 					if (ruleDTO.getStartWithRank() <= srcGroupSize) {

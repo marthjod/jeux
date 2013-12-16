@@ -54,12 +54,13 @@ public class ShowdownPlayer implements IPlayer, Serializable {
 	}
 
 	// constructor for converting DTO to Entity
-	public ShowdownPlayer(PlayerDTO playerDTO) {
+	public ShowdownPlayer(PlayerDTO playerDTO, IGroup group) {
 		this.id = playerDTO.getId();
 		this.name = playerDTO.getName();
 		this.points = playerDTO.getPoints();
 		this.scoreRatio = playerDTO.getScoreRatio();
 		this.rank = playerDTO.getRank();
+		this.group = (ShowdownGroup) group;
 	}
 
 	@Override
@@ -70,11 +71,6 @@ public class ShowdownPlayer implements IPlayer, Serializable {
 	@Override
 	public IGroup getGroup() {
 		return group;
-	}
-
-	@Override
-	public void setGroup(IGroup group) {
-		this.group = (ShowdownGroup) group;
 	}
 
 	@Override

@@ -28,16 +28,12 @@ public class CreatePlayerBean implements CreatePlayerRemote, CreatePlayerLocal {
 		boolean checkOK = false;
 		// TODO (MORE) SANITY-CHECKING HERE BEFORE PERSISTING
 
-		// TESTING, REMOVE BEFORE FLIGHT
+		// TODO TESTING, REMOVE BEFORE FLIGHT
 		checkOK = true;
 
 		if (checkOK) {
 			// persist after converting
-			IPlayer newPlayer = new ShowdownPlayer(playerDTO);
-			// group must be set from here because it cannot GroupBean cannot be
-			// accessed later on (in the constructor, f.ex.).
-			// (CDI's fault)
-			newPlayer.setGroup(group);
+			IPlayer newPlayer = new ShowdownPlayer(playerDTO, group);
 			playerDAO.addPlayer(newPlayer);
 			logger.debug("Added player '" + newPlayer.getName() + "'");
 		}
