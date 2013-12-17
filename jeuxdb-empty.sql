@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Dec 17, 2013 at 03:54 PM
+-- Generation Time: Dec 18, 2013 at 12:32 AM
 -- Server version: 5.6.14
 -- PHP Version: 5.5.6
 
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS `Game` (
   KEY `fk_Game_Group1_idx` (`groupId`),
   KEY `fk_Game_Player1` (`player1Id`),
   KEY `fk_Game_Player2` (`player2Id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=7 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=12 ;
 
 -- --------------------------------------------------------
 
@@ -49,12 +49,12 @@ CREATE TABLE IF NOT EXISTS `GameSet` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `player1Score` int(3) NOT NULL DEFAULT '0',
   `player2Score` int(3) NOT NULL DEFAULT '0',
-  `winnerId` int(11) NOT NULL DEFAULT '0' COMMENT 'Player who has scored more',
+  `winnerId` int(11) DEFAULT NULL COMMENT 'Player who has scored more',
   `gameId` int(11) NOT NULL COMMENT 'Game this set is part of',
   PRIMARY KEY (`id`),
   KEY `fk_GameSet_Game1_idx` (`gameId`),
   KEY `fk_GameSet_Player3_idx` (`winnerId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=7 ;
 
 -- --------------------------------------------------------
 
@@ -71,7 +71,7 @@ CREATE TABLE IF NOT EXISTS `Group_` (
   `active` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Is this group''s games currently being played?',
   `completed` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Have all this group''s games been played?',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=7 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=11 ;
 
 -- --------------------------------------------------------
 
@@ -88,7 +88,7 @@ CREATE TABLE IF NOT EXISTS `Player` (
   `rank` int(2) NOT NULL DEFAULT '0' COMMENT 'Rank in group. Updated after all this group''s games have been completed',
   PRIMARY KEY (`id`),
   KEY `fk_Player_Group1_idx` (`groupId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=8 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=17 ;
 
 -- --------------------------------------------------------
 
