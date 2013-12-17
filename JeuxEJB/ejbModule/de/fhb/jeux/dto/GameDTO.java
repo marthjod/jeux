@@ -97,17 +97,28 @@ public class GameDTO {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
+		int i;
+
 		sb.append("<");
-		sb.append("'" + "' (" + id + ")");
-		sb.append(", Player1: " + player1Name);
-		sb.append(", Id: " + player1Id);
-		sb.append(", Player2: " + player2Name);
-		sb.append(", Id: " + player2Id);
+		sb.append("ID " + id);
+		sb.append(", Player 1: " + player1Name);
+		sb.append(" (ID " + player1Id + ")");
+		sb.append(", Player 2: " + player2Name);
+		sb.append(" (ID " + player2Id + ")");
 		sb.append(", group ID: " + groupId);
 		sb.append(", Winner: " + winnerName);
-		sb.append(", winner ID: " + winnerId);
+		sb.append(" (ID " + winnerId + ")");
+
+		// game sets
+		if (sets.size() > 0) {
+			sb.append(" [");
+			for (i = 0; i < sets.size(); i++) {
+				sb.append(sets.get(i) + ", ");
+			}
+			sb.append("]");
+		}
+
 		sb.append(">");
 		return sb.toString();
 	}
-
 }

@@ -51,10 +51,12 @@ public class GameSetDTO {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("<");
-		sb.append("'" + "' (" + id + ")");
+		sb.append("ID " + id);
 		sb.append(", game ID: " + gameId);
-		sb.append(", Winner: " + winnerName);
-		sb.append(", winner ID: " + winnerId);
+		sb.append(", player 1 score: " + player1Score);
+		sb.append(", player 2 score: " + player2Score);
+		sb.append(", winner: " + winnerName);
+		sb.append(" (ID " + winnerId + ")");
 		sb.append(">");
 		return sb.toString();
 	}
