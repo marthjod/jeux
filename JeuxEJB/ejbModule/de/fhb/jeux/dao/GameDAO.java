@@ -41,15 +41,37 @@ public class GameDAO {
 		em.merge(game);
 	}
 
-	public List<IGame> getGamesInGroup(IGroup group) {
-		List<IGame> games = new ArrayList<IGame>();
+	// public List<IGame> getGamesInGroup(IGroup group) {
+	// List<IGame> games = new ArrayList<IGame>();
+	//
+	// TypedQuery<IGame> query = em.createNamedQuery("Game.findAllInGroup",
+	// IGame.class);
+	// query.setParameter("group", group);
+	// games = query.getResultList();
+	//
+	// return games;
+	// }
 
-		TypedQuery<IGame> query = em.createNamedQuery("Game.findAllInGroup",
+	public List<IGame> getPlayedGamesInGroup(IGroup group) {
+		List<IGame> playedGames = new ArrayList<IGame>();
+
+		TypedQuery<IGame> query = em.createNamedQuery("Game.findPlayedInGroup",
 				IGame.class);
 		query.setParameter("group", group);
-		games = query.getResultList();
+		playedGames = query.getResultList();
 
-		return games;
+		return playedGames;
+	}
+
+	public List<IGame> getUnplayedGamesInGroup(IGroup group) {
+		List<IGame> unplayedGames = new ArrayList<IGame>();
+
+		TypedQuery<IGame> query = em.createNamedQuery(
+				"Game.findUnplayedInGroup", IGame.class);
+		query.setParameter("group", group);
+		unplayedGames = query.getResultList();
+
+		return unplayedGames;
 	}
 
 	// for deletion...

@@ -20,32 +20,32 @@ public class GameBean implements GameRemote, GameLocal {
 	public GameBean() {
 	}
 
-	private List<GameDTO> getGameDTOsInGroup(IGroup group) {
-		List<GameDTO> gameDTOs = new ArrayList<GameDTO>();
+	// @Override
+	// public List<IGame> getGamesInGroup(IGroup group) {
+	// return gameDAO.getGamesInGroup(group);
+	// }
 
-		for (IGame game : getGamesInGroup(group)) {
-			gameDTOs.add(new GameDTO(game));
+	public List<GameDTO> getPlayedGameDTOsInGroup(IGroup group) {
+		List<IGame> playedGames = gameDAO.getPlayedGamesInGroup(group);
+		List<GameDTO> playedGameDTOs = new ArrayList<GameDTO>();
+
+		for (IGame playedGame : playedGames) {
+			playedGameDTOs.add(new GameDTO(playedGame));
 		}
 
-		return gameDTOs;
+		return playedGameDTOs;
 	}
 
 	@Override
-	public List<IGame> getGamesInGroup(IGroup group) {
-		return gameDAO.getGamesInGroup(group);
-	}
+	public List<GameDTO> getUnplayedGameDTOsInGroup(IGroup group) {
+		List<IGame> unplayedGames = gameDAO.getUnplayedGamesInGroup(group);
+		List<GameDTO> unplayedGameDTOs = new ArrayList<GameDTO>();
 
-	public List<GameDTO> getPlayedGameDTOsInGroup(IGroup group) {
-		List<GameDTO> allGames = getGameDTOsInGroup(group);
-		List<GameDTO> playedGames = new ArrayList<GameDTO>();
-
-		for (GameDTO game : allGames) {
-			if (game.getWinnerId() != 0) {
-				playedGames.add(game);
-			}
+		for (IGame unplayedGame : unplayedGames) {
+			unplayedGameDTOs.add(new GameDTO(unplayedGame));
 		}
 
-		return playedGames;
+		return unplayedGameDTOs;
 	}
 
 }

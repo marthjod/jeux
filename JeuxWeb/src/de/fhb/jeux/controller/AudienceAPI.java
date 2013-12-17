@@ -83,4 +83,14 @@ public class AudienceAPI {
 		IGroup group = groupBean.getGroupById(groupId);
 		return gameBean.getPlayedGameDTOsInGroup(group);
 	}
+
+	@GET
+	@Path("/games/unplayed/group/id/{groupId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<GameDTO> getUnplayedGameDTOsInGroup(
+			@PathParam("groupId") int groupId) {
+		logger.debug("-> Unplayed games for group #" + groupId);
+		IGroup group = groupBean.getGroupById(groupId);
+		return gameBean.getUnplayedGameDTOsInGroup(group);
+	}
 }
