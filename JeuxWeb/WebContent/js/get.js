@@ -29,23 +29,23 @@ function showAllGroups(showAllGroupsDiv, playerGroupSelect, ruleSrcGroupSelect, 
 
         // showAllGroupsDiv
         $(showAllGroupsDiv).empty();
+        table = $("<table>");
+        row = $("<tr>");
+
+        $("<th>").html("Name").appendTo(row);
+        $("<th>").html("ID").appendTo(row);
+        $("<th>").html("Round").appendTo(row);
+        $("<th>").html("Min sets").appendTo(row);
+        $("<th>").html("Max sets").appendTo(row);
+        $("<th>").html("Active").appendTo(row);
+        $("<th>").html("Completed").appendTo(row);
+        $("<th>").appendTo(row);
+        row.appendTo(table);
 
         if (typeof data !== undefined && data !== null && typeof data === "object" && data.hasOwnProperty("length") && data.length > 0) {
 
-            table = $("<table>");
-            row = $("<tr>");
-
-            $("<th>").html("Name").appendTo(row);
-            $("<th>").html("ID").appendTo(row);
-            $("<th>").html("Round").appendTo(row);
-            $("<th>").html("Min sets").appendTo(row);
-            $("<th>").html("Max sets").appendTo(row);
-            $("<th>").html("Active").appendTo(row);
-            $("<th>").html("Completed").appendTo(row);
-            $("<th>").appendTo(row);
-            row.appendTo(table);
-
             for (i = 0; i < data.length; i++) {
+
                 row = $("<tr>").attr("id", "group-id-" + data[i].id);
                 $("<td>").attr("class", "group-name").html(data[i].name).appendTo(row);
                 $("<td>").attr("class", "group-id").html(data[i].id).appendTo(row);
@@ -121,27 +121,31 @@ function showGames(showGamesDiv, status) {
 
                                 $("<span>").attr("class", "title").html(group.name).appendTo(showGamesDiv);
                                 $("<br>").appendTo(showGamesDiv);
-                                table = $("<table>");
-                                row = $("<tr>");
-
-                                $("<th>").html("Player 1").appendTo(row);
-                                $("<th>").html("Player 2").appendTo(row);
-                                $("<th>").html("Winner").appendTo(row);
-                                if (status === "unplayed") {
-                                    $("<th>").appendTo(row);
-                                }
-                                row.appendTo(table);
 
                                 for (i = 0; i < gamesData.length; i++) {
+
+                                    table = $("<table>");
+                                    row = $("<tr>");
+
+                                    $("<th>").html("Player 1").appendTo(row);
+                                    $("<th>").html("Player 2").appendTo(row);
+                                    if (status === "played") {
+                                        $("<th>").html("Winner").appendTo(row);
+                                    } else if (status === "unplayed") {
+                                        $("<th>").appendTo(row);
+                                    }
+                                    row.appendTo(table);
+
                                     row = $("<tr>").attr("id", "game-id-" + gamesData[i].id);
                                     $("<td>").attr("class", "player1").html(gamesData[i].player1Name).appendTo(row);
                                     $("<td>").attr("class", "player2").html(gamesData[i].player2Name).appendTo(row);
-                                    $("<td>").attr("class", "winner").html(gamesData[i].winnerName).appendTo(row);
 
                                     if (status === "unplayed") {
                                         updateCell = $("<td>");
                                         $("<input>").attr("type", "submit").attr("value", "Update game").appendTo(updateCell).attr("onclick", "updateGame(this);");
                                         updateCell.appendTo(row);
+                                    } else if (status === "played") {
+                                        $("<td>").attr("class", "winner").html(gamesData[i].winnerName).appendTo(row);
                                     }
 
                                     row.appendTo(table);
@@ -151,30 +155,27 @@ function showGames(showGamesDiv, status) {
                                         row = $("<tr>");
                                         $("<th>").attr("class", "gamesets-header").html("Player 1 score").appendTo(row);
                                         $("<th>").attr("class", "gamesets-header").html("Player 2 score").appendTo(row);
-                                        $("<th>").attr("class", "gamesets-header").html("Winner").appendTo(row);
                                         row.appendTo(table);
 
                                         for (j = 0; j < gamesData[i].sets.length; j++) {
                                             row = $("<tr>").attr("id", "gameset-id-" + gamesData[i].sets[j].id);
 
                                             if (status === "unplayed") {
-                                                $("<td>").attr("class", "player1-score").append($("<input>").prop("type", "number").val(gamesData[i].sets[j].player1Score)).appendTo(row);
-                                                $("<td>").attr("class", "player2-score").append($("<input>").prop("type", "number").val(gamesData[i].sets[j].player2Score)).appendTo(row);
+                                                $("<td>").attr("class", "player1-score").append($("<input>").prop("type", "number").prop("min", "0").val(gamesData[i].sets[j].player1Score)).appendTo(row);
+                                                $("<td>").attr("class", "player2-score").append($("<input>").prop("type", "number").prop("min", "0").val(gamesData[i].sets[j].player2Score)).appendTo(row);
                                             } else {
                                                 $("<td>").attr("class", "player1-score").html(gamesData[i].sets[j].player1Score).appendTo(row);
                                                 $("<td>").attr("class", "player2-score").html(gamesData[i].sets[j].player2Score).appendTo(row);
                                             }
 
-                                            $("<td>").attr("class", "winner").html(gamesData[i].sets[j].winnerName).appendTo(row);
                                             row.appendTo(table);
                                         }
                                     }
+
+                                    table.appendTo(showGamesDiv);
+                                    $("<br>").appendTo(showGamesDiv);
                                 }
 
-                                table.appendTo(showGamesDiv);
-                                $("<br>").appendTo(showGamesDiv);
-                            } else {
-                                $(showGamesDiv).html("No or no valid data for played games available.");
                             }
                         });
                     }(groupsData[k], status));
