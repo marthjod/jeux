@@ -27,6 +27,7 @@ import de.fhb.jeux.session.DeletePlayerLocal;
 import de.fhb.jeux.session.GroupLocal;
 import de.fhb.jeux.session.PlayerLocal;
 import de.fhb.jeux.session.RoundSwitchRuleLocal;
+import de.fhb.jeux.session.UpdateGameLocal;
 
 @Stateless
 @Path("/rest/admin")
@@ -51,6 +52,9 @@ public class AdminAPI {
 
 	@EJB
 	private DeleteGroupLocal deleteGroupBean;
+
+	@EJB
+	private UpdateGameLocal updateGameBean;
 
 	@EJB
 	private CreateRoundSwitchRuleLocal createRoundSwitchRuleBean;
@@ -160,13 +164,7 @@ public class AdminAPI {
 			GameDTO updatedGame) {
 		logger.debug("Request for game update");
 
-		boolean updatedSuccessfully = false;
-
-		// TODO
-		logger.debug(updatedGame);
-		updatedSuccessfully = true;
-
-		if (updatedSuccessfully) {
+		if (updateGameBean.updateGame(updatedGame)) {
 			return Response.status(Response.Status.OK).build();
 		} else {
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR)

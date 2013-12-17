@@ -74,7 +74,7 @@ public class GameDAO {
 		return unplayedGames;
 	}
 
-	// for deletion...
+	// for deletion and updates
 	public IGame getGameById(int gameId) {
 		IGame game = new ShowdownGame();
 		TypedQuery<IGame> query = em.createNamedQuery("Game.findById",

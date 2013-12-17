@@ -5,9 +5,15 @@ public interface IGameSet {
 
 	public int getPlayer1Score();
 
+	public void setPlayer1Score(int score);
+
 	public int getPlayer2Score();
 
+	public void setPlayer2Score(int score);
+
 	public IPlayer getWinner();
+
+	public void setWinner(IPlayer winner);
 
 	public IGame getGame();
 

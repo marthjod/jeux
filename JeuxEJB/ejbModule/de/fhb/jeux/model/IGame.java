@@ -18,4 +18,6 @@ public interface IGame {
 	public List<ShowdownGameSet> getSets();
 
 	public boolean equals(IGame game);
+
+	public void setSets(List<ShowdownGameSet> sets);
 }

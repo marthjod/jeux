@@ -83,4 +83,35 @@ public class ShowdownGameSet implements IGameSet, Serializable {
 		return this.id == gameSet.getId();
 	}
 
+	@Override
+	public void setPlayer1Score(int score) {
+		player1Score = score;
+	}
+
+	@Override
+	public void setPlayer2Score(int score) {
+		player2Score = score;
+	}
+
+	@Override
+	public void setWinner(IPlayer winner) {
+		this.winner = (ShowdownPlayer) winner;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("<");
+		sb.append("ID " + id);
+		sb.append(", game ID: " + game.getId());
+		sb.append(", player 1 score: " + player1Score);
+		sb.append(", player 2 score: " + player2Score);
+		if (winner != null) {
+			sb.append(", winner: " + winner.getName());
+			sb.append(" (ID " + winner.getId() + ")");
+		}
+		sb.append(">");
+		return sb.toString();
+	}
+
 }

@@ -175,10 +175,12 @@ function createNewRoundSwitchRule(ruleSubmit) {
 
 function updateGame(updateSubmit) {
 
-    var inputOK = false, gameId = 0, gameSetId = 0, rows = [], i = 0, set = {}, player1Score = 0, player2Score = 0, updatedGame = {};
+    var inputOK = false, gameId = 0, gameSetId = 0, rows = [], i = 0, set = {}, player1Id = 0, player2Id = 0, player1Score = 0, player2Score = 0, updatedGame = {};
 
     try {
         gameId = parseInt($(updateSubmit).parent().parent().attr("id").replace("game-id-", ""), 10);
+        player1Id = parseInt($(updateSubmit).parent().parent().find("td.player1")[0].id.replace("player-id-", ""), 10);
+        player2Id = parseInt($(updateSubmit).parent().parent().find("td.player2")[0].id.replace("player-id-", ""), 10);
         inputOK = true;
     } catch (e) {
         alert(e);
@@ -190,6 +192,8 @@ function updateGame(updateSubmit) {
 
         updatedGame = {
             "id" : gameId,
+            "player1Id" : player1Id,
+            "player2Id" : player2Id,
             "sets" : []
         };
 
@@ -228,7 +232,11 @@ function updateGame(updateSubmit) {
             data : JSON.stringify(updatedGame),
             contentType : "application/json",
             success : function() {
-                // TODO
+                $(updateSubmit).attr("value", "Game updated.").attr("disabled", "disabled");
+                window.setTimeout(function() {
+                    // reset text
+                    $(updateSubmit).attr("value", "Update game").removeAttr("disabled");
+                }, 3000);
             },
             statusCode : {
                 403 : function() {
