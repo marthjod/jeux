@@ -4,6 +4,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -13,6 +14,7 @@ import javax.ws.rs.core.Response;
 import org.jboss.logging.Logger;
 
 import de.fhb.jeux.dao.GroupDAO;
+import de.fhb.jeux.dto.GameDTO;
 import de.fhb.jeux.dto.GroupDTO;
 import de.fhb.jeux.dto.PlayerDTO;
 import de.fhb.jeux.dto.RoundSwitchRuleDTO;
@@ -145,6 +147,27 @@ public class AdminAPI {
 
 		if (createdSuccessfully) {
 			return Response.status(Response.Status.CREATED).build();
+		} else {
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+					.build();
+		}
+	}
+
+	@POST
+	@Path("/update-game/id/{gameId}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response updateGame(@PathParam("gameId") int gameId,
+			GameDTO updatedGame) {
+		logger.debug("Request for game update");
+
+		boolean updatedSuccessfully = false;
+
+		// TODO
+		logger.debug(updatedGame);
+		updatedSuccessfully = true;
+
+		if (updatedSuccessfully) {
+			return Response.status(Response.Status.OK).build();
 		} else {
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
 					.build();
