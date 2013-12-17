@@ -6,6 +6,7 @@ import java.util.List;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
@@ -31,9 +32,22 @@ public class PlayerDAO {
 		logger.debug("Persisted player '" + player.getName() + "'");
 	}
 
-	public void deletePlayer(IPlayer player) {
-		em.remove(player);
-		logger.debug("Deleted player '" + player.getName() + "'");
+	public boolean deletePlayer(IPlayer player) {
+		boolean success = false;
+		if (player != null) {
+			String playerName = player.getName();
+			try {
+				em.remove(player);
+				success = true;
+				logger.debug("Deleted player '" + playerName + "'");
+			} catch (Exception e) {
+				logger.error("Failed to delete player '" + playerName + "'");
+				logger.error(e.getClass().getCanonicalName() + " "
+						+ e.getMessage());
+			}
+		}
+
+		return success;
 	}
 
 	public void updatePlayer(IPlayer player) {
@@ -55,7 +69,13 @@ public class PlayerDAO {
 		TypedQuery<IPlayer> query = em.createNamedQuery("Player.findById",
 				IPlayer.class);
 		query.setParameter("id", playerId);
-		player = query.getSingleResult();
+		try {
+			player = query.getSingleResult();
+		} catch (NoResultException e) {
+			// reset because callers should test for null
+			player = null;
+			logger.error("Player ID " + playerId + ": " + e.getMessage());
+		}
 		return player;
 	}
 }

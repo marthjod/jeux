@@ -91,6 +91,8 @@ function createNewPlayer(playerSubmit) {
             data : JSON.stringify(sendPlayer),
             contentType : "application/json",
             success : function() {
+                showAllPlayers($("#show-all-players"));
+
                 $(playerSubmit).attr("value", "Created.");
                 // disable submit button, clear values and success
                 // message

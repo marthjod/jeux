@@ -13,6 +13,7 @@
             $( document ).ready(function() {
                 getRESTApiStatus($( "#rest-api-status" ));
                 showAllGroups($("#show-all-groups"), $("#player-select-group"), $("#rule-source-group"), $("#rule-destination-group"));
+                showAllPlayers($("#show-all-players"));
             });
         </script>
         <title>JEUX Administrative View</title>
@@ -21,10 +22,6 @@
        <div id="rest-api-status">
            REST API status unknown
        </div>
-       <br />
-       <div id="show-all-groups">
-            <span class="title">Existing groups</span>
-        </div>
         <br />
         <div id="create-groups">
             <span class="title">Create new group</span>
@@ -128,6 +125,14 @@
                         disabled="disabled"
                         onclick="createNewRoundSwitchRule(this);" />
                 </form>
-            </div>    
+            </div>  
+           
+	        <br /> 
+	        <br />
+		    <div id="show-all-groups">
+		    </div>
+		    <br />
+		    <div id="show-all-players">
+		    </div>  
     </body>
 </html>

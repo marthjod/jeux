@@ -29,8 +29,6 @@ function showAllGroups(showAllGroupsDiv, playerGroupSelect, ruleSrcGroupSelect, 
 
         // showAllGroupsDiv
         $(showAllGroupsDiv).empty();
-        $("<span>").attr("class", "title").html("Existing groups").appendTo(showAllGroupsDiv);
-        $("<br>").appendTo(showAllGroupsDiv);
 
         if (typeof data !== undefined && data !== null && typeof data === "object" && data.hasOwnProperty("length") && data.length > 0) {
 
@@ -57,7 +55,7 @@ function showAllGroups(showAllGroupsDiv, playerGroupSelect, ruleSrcGroupSelect, 
                 $("<td>").attr("class", "group-active").html(data[i].active.toString()).appendTo(row);
                 $("<td>").attr("class", "group-completed").html(data[i].completed.toString()).appendTo(row);
                 deletionCell = $("<td>");
-                $("<input>").attr("type", "submit").attr("value", "Delete group").attr("class", "delete-button").appendTo(deletionCell).attr("onclick", "deleteGroup(this);");
+                $("<input>").attr("type", "submit").attr("value", "Delete group").appendTo(deletionCell).attr("onclick", "deleteGroup(this);");
                 deletionCell.appendTo(row);
                 row.appendTo(table);
 
@@ -91,9 +89,6 @@ function showPlayedGames(showPlayedGamesDiv) {
     var i = 0, j = 0, k = 0, table = null, row = null, group = [];
 
     $(showPlayedGamesDiv).empty();
-    $("<span>").attr("class", "title").html("Played games").appendTo(showPlayedGamesDiv);
-    $("<br>").appendTo(showPlayedGamesDiv);
-    $("<br>").appendTo(showPlayedGamesDiv);
 
     // first, get all groups
 
@@ -150,6 +145,65 @@ function showPlayedGames(showPlayedGamesDiv) {
                 }(groupsData[k]));
             }
 
+        }
+    });
+}
+
+function showAllPlayers(showPlayersDiv) {
+    "use strict";
+
+    var i = 0, k = 0, table = null, row = null, deletionCell = null;
+
+    $(showPlayersDiv).empty();
+
+    // first, get all groups
+
+    $.get("rest/audience/groups", function(groupsData) {
+        if (typeof groupsData !== undefined && groupsData !== null && typeof groupsData === "object" && groupsData.hasOwnProperty("length") && groupsData.length !== 0) {
+
+            for (k = 0; k < groupsData.length; k++) {
+                (function(group) {
+                    $.get("rest/audience/players/group/id/" + group.id, function(playersData) {
+                        if (typeof playersData !== undefined && playersData !== null && typeof playersData === "object" && playersData.hasOwnProperty("length") && playersData.length > 0) {
+
+                            $("<span>").attr("class", "title").html(group.name).appendTo(showPlayersDiv);
+                            $("<br>").appendTo(showPlayersDiv);
+                            table = $("<table>");
+                            row = $("<tr>");
+
+                            $("<th>").html("Name").appendTo(row);
+                            $("<th>").html("ID").appendTo(row);
+                            $("<th>").html("Rank").appendTo(row);
+                            $("<th>").html("Points").appendTo(row);
+                            $("<th>").html("Score ratio").appendTo(row);
+                            $("<th>").appendTo(row);
+                            row.appendTo(table);
+
+                            for (i = 0; i < playersData.length; i++) {
+                                row = $("<tr>").attr("id", "player-id-" + playersData[i].id);
+                                $("<td>").attr("class", "player-name").html(playersData[i].name).appendTo(row);
+                                $("<td>").attr("class", "player-id").html(playersData[i].id).appendTo(row);
+                                $("<td>").attr("class", "player-rank").html(playersData[i].rank).appendTo(row);
+                                $("<td>").attr("class", "player-points").html(playersData[i].points).appendTo(row);
+                                $("<td>").attr("class", "player-score-ratio").html(playersData[i].scoreRatio).appendTo(row);
+                                deletionCell = $("<td>");
+                                $("<input>").attr("type", "submit").attr("value", "Delete player").appendTo(deletionCell).attr("onclick", "deletePlayer(this);");
+                                deletionCell.appendTo(row);
+                                row.appendTo(table);
+                            }
+
+                            table.appendTo(showPlayersDiv);
+                            $("<br>").appendTo(showPlayersDiv);
+                        } else {
+                            // $(showPlayersDiv).html("No or no valid data for
+                            // players available for " + group.name + ".<br
+                            // />");
+                        }
+
+                    });
+                }(groupsData[k]));
+
+            }
         }
     });
 }

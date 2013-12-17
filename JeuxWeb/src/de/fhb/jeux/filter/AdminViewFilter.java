@@ -47,8 +47,8 @@ public class AdminViewFilter implements Filter {
 
 		if (request instanceof HttpServletRequest) {
 
-			logger.debug("Request for "
-					+ ((HttpServletRequest) request).getRequestURL().toString());
+			String req = ((HttpServletRequest) request).getMethod() + " "
+					+ ((HttpServletRequest) request).getRequestURI().toString();
 
 			boolean userAuthenticated = false;
 			Cookie[] cookies = ((HttpServletRequest) request).getCookies();
@@ -74,13 +74,13 @@ public class AdminViewFilter implements Filter {
 			}
 
 			if (userAuthenticated) {
-				logger.debug("Authentication successful, provided cookie: "
-						+ authCookie.getName() + "=" + authCookie.getValue());
+				logger.debug("OK: " + req + " (cookie '" + authCookie.getName()
+						+ "=" + authCookie.getValue() + "')");
 				// OK, move along
 				chain.doFilter(request, response);
 			} else {
 				// !userAuthenticated
-				logger.warn("Authentication unsuccessful");
+				logger.warn("Authentication failed for " + req);
 				if (authCookie != null) {
 					logger.warn("Provided cookie: " + authCookie.getName()
 							+ "=" + authCookie.getValue());
