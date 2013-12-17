@@ -26,6 +26,8 @@ function deleteGroup(deleteSubmit) {
 
                     showAllGroups($("#show-all-groups"));
                     showAllPlayers($("#show-all-players"));
+                    // refresh because deletion cascades for games, too
+                    showGames($("#show-unplayed-games"), "unplayed");
                 },
                 statusCode : {
                     409 : function() {
@@ -61,6 +63,8 @@ function deletePlayer(deleteSubmit) {
             type : "DELETE",
             success : function() {
                 showAllPlayers($("#show-all-players"));
+                // refresh because player deletion cascades for his games, too
+                showGames($("#show-unplayed-games"), "unplayed");
             },
             statusCode : {
                 403 : function() {

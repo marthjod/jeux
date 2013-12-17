@@ -27,7 +27,6 @@ function showAllGroups(showAllGroupsDiv, playerGroupSelect, ruleSrcGroupSelect, 
             $("<option>").attr("id", "no-destination-group-selected").text("No destination group selected").appendTo($(ruleDestGroupSelect));
         }
 
-        // showAllGroupsDiv
         $(showAllGroupsDiv).empty();
         table = $("<table>");
         row = $("<tr>");
@@ -59,11 +58,6 @@ function showAllGroups(showAllGroupsDiv, playerGroupSelect, ruleSrcGroupSelect, 
                 deletionCell.appendTo(row);
                 row.appendTo(table);
 
-                // populate playerGroupSelect as well
-                // so that <option
-                // id="GROUP_ID">GROUP_NAME</option>
-                // are appended
-
                 if (playerGroupSelectOK) {
                     $("<option>").attr("id", "group-id-" + data[i].id).text(data[i].name).appendTo($(playerGroupSelect));
                 }
@@ -77,7 +71,7 @@ function showAllGroups(showAllGroupsDiv, playerGroupSelect, ruleSrcGroupSelect, 
             table.appendTo(showAllGroupsDiv);
 
         } else {
-            $(showAllGroupsDiv).html("No or no valid group data available.");
+            // $(showAllGroupsDiv).html("No or no valid group data available.");
         }
 
     });
@@ -86,7 +80,7 @@ function showAllGroups(showAllGroupsDiv, playerGroupSelect, ruleSrcGroupSelect, 
 function showGames(showGamesDiv, status) {
     "use strict";
 
-    var i = 0, j = 0, k = 0, table = null, setsTable = null, row = null, urlPrefix = "", updateCell = null, statusKnown = false;
+    var i = 0, j = 0, k = 0, gameTable = null, setsTable = null, row = null, urlPrefix = "", updateCell = null, statusKnown = false;
 
     if (typeof status !== undefined && status !== null && typeof status === "string") {
         if (status === "played") {
@@ -124,7 +118,7 @@ function showGames(showGamesDiv, status) {
 
                                 for (i = 0; i < gamesData.length; i++) {
 
-                                    table = $("<table>");
+                                    gameTable = $("<table>");
                                     row = $("<tr>");
 
                                     $("<th>").html("Player 1").appendTo(row);
@@ -134,7 +128,7 @@ function showGames(showGamesDiv, status) {
                                     } else if (status === "unplayed") {
                                         $("<th>").appendTo(row);
                                     }
-                                    row.appendTo(table);
+                                    row.appendTo(gameTable);
 
                                     row = $("<tr>").attr("id", "game-id-" + gamesData[i].id);
                                     $("<td>").attr("class", "player1").attr("id", "player-id-" + gamesData[i].player1Id).html(gamesData[i].player1Name).appendTo(row);
@@ -148,7 +142,7 @@ function showGames(showGamesDiv, status) {
                                         $("<td>").attr("class", "winner").html(gamesData[i].winnerName).appendTo(row);
                                     }
 
-                                    row.appendTo(table);
+                                    row.appendTo(gameTable);
 
                                     if (gamesData[i].hasOwnProperty("sets")) {
 
@@ -173,10 +167,10 @@ function showGames(showGamesDiv, status) {
                                             row.appendTo(setsTable);
                                         }
 
-                                        setsTable.appendTo(table);
+                                        setsTable.appendTo(gameTable);
                                     }
 
-                                    table.appendTo(showGamesDiv);
+                                    gameTable.appendTo(showGamesDiv);
                                     $("<br>").appendTo(showGamesDiv);
                                 }
 
@@ -241,10 +235,8 @@ function showAllPlayers(showPlayersDiv) {
                             // players available for " + group.name + ".<br
                             // />");
                         }
-
                     });
                 }(groupsData[k]));
-
             }
         }
     });
