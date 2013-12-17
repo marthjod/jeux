@@ -83,70 +83,107 @@ function showAllGroups(showAllGroupsDiv, playerGroupSelect, ruleSrcGroupSelect, 
     });
 }
 
-function showPlayedGames(showPlayedGamesDiv) {
+function showGames(showGamesDiv, status) {
     "use strict";
 
-    var i = 0, j = 0, k = 0, table = null, row = null, group = [];
+    var i = 0, j = 0, k = 0, table = null, row = null, urlPrefix = "", updateCell = null, statusKnown = false;
 
-    $(showPlayedGamesDiv).empty();
+    if (typeof status !== undefined && status !== null && typeof status === "string") {
+        if (status === "played") {
+            urlPrefix = "rest/audience/games/played/group/id/";
+            statusKnown = true;
+        } else if (status === "unplayed") {
+            urlPrefix = "rest/audience/games/unplayed/group/id/";
+            statusKnown = true;
+        }
+    }
 
-    // first, get all groups
+    if (statusKnown) {
 
-    $.get("rest/audience/groups", function(groupsData) {
-        if (typeof groupsData !== undefined && groupsData !== null && typeof groupsData === "object" && groupsData.hasOwnProperty("length") && groupsData.length !== 0) {
+        $(showGamesDiv).empty();
 
-            for (k = 0; k < groupsData.length; k++) {
-                (function(group) {
-                    $.get("rest/audience/games/played/group/id/" + group.id, function(gamesData) {
+        // first, get all groups
 
-                        if (typeof gamesData !== undefined && gamesData !== null && typeof gamesData === "object" && gamesData.hasOwnProperty("length") && gamesData.length > 0) {
+        $.get("rest/audience/groups", function(groupsData) {
+            if (typeof groupsData !== undefined && groupsData !== null && typeof groupsData === "object" && groupsData.hasOwnProperty("length") && groupsData.length !== 0) {
 
-                            $("<span>").attr("class", "title").html(group.name).appendTo(showPlayedGamesDiv);
-                            $("<br>").appendTo(showPlayedGamesDiv);
-                            table = $("<table>");
-                            row = $("<tr>");
+                // next, iterate thru groups
 
-                            $("<th>").html("Player 1").appendTo(row);
-                            $("<th>").html("Player 2").appendTo(row);
-                            $("<th>").html("Winner").appendTo(row);
-                            row.appendTo(table);
+                for (k = 0; k < groupsData.length; k++) {
 
-                            for (i = 0; i < gamesData.length; i++) {
-                                row = $("<tr>").attr("id", "game-id-" + gamesData[i].id);
-                                $("<td>").attr("class", "player1").html(gamesData[i].player1Name).appendTo(row);
-                                $("<td>").attr("class", "player2").html(gamesData[i].player2Name).appendTo(row);
-                                $("<td>").attr("class", "winner").html(gamesData[i].winnerName).appendTo(row);
+                    // iterate thru individual group's data
+
+                    (function(group, status) {
+
+                        $.get(urlPrefix + group.id, function(gamesData) {
+
+                            if (typeof gamesData !== undefined && gamesData !== null && typeof gamesData === "object" && gamesData.hasOwnProperty("length") && gamesData.length > 0) {
+
+                                $("<span>").attr("class", "title").html(group.name).appendTo(showGamesDiv);
+                                $("<br>").appendTo(showGamesDiv);
+                                table = $("<table>");
+                                row = $("<tr>");
+
+                                $("<th>").html("Player 1").appendTo(row);
+                                $("<th>").html("Player 2").appendTo(row);
+                                $("<th>").html("Winner").appendTo(row);
+                                if (status === "unplayed") {
+                                    $("<th>").appendTo(row);
+                                }
                                 row.appendTo(table);
 
-                                if (gamesData[i].hasOwnProperty("sets")) {
+                                for (i = 0; i < gamesData.length; i++) {
+                                    row = $("<tr>").attr("id", "game-id-" + gamesData[i].id);
+                                    $("<td>").attr("class", "player1").html(gamesData[i].player1Name).appendTo(row);
+                                    $("<td>").attr("class", "player2").html(gamesData[i].player2Name).appendTo(row);
+                                    $("<td>").attr("class", "winner").html(gamesData[i].winnerName).appendTo(row);
 
-                                    row = $("<tr>");
-                                    $("<th>").attr("class", "gamesets-header").html("Player 1 score").appendTo(row);
-                                    $("<th>").attr("class", "gamesets-header").html("Player 2 score").appendTo(row);
-                                    $("<th>").attr("class", "gamesets-header").html("Winner").appendTo(row);
+                                    if (status === "unplayed") {
+                                        updateCell = $("<td>");
+                                        $("<input>").attr("type", "submit").attr("value", "Update game").appendTo(updateCell).attr("onclick", "updateGame(this);");
+                                        updateCell.appendTo(row);
+                                    }
+
                                     row.appendTo(table);
 
-                                    for (j = 0; j < gamesData[i].sets.length; j++) {
-                                        row = $("<tr>").attr("id", "gameset-id-" + gamesData[i].sets[j].id);
-                                        $("<td>").attr("class", "player1-score").html(gamesData[i].sets[j].player1Score).appendTo(row);
-                                        $("<td>").attr("class", "player2-score").html(gamesData[i].sets[j].player2Score).appendTo(row);
-                                        $("<td>").attr("class", "winner").html(gamesData[i].sets[j].winnerName).appendTo(row);
+                                    if (gamesData[i].hasOwnProperty("sets")) {
+
+                                        row = $("<tr>");
+                                        $("<th>").attr("class", "gamesets-header").html("Player 1 score").appendTo(row);
+                                        $("<th>").attr("class", "gamesets-header").html("Player 2 score").appendTo(row);
+                                        $("<th>").attr("class", "gamesets-header").html("Winner").appendTo(row);
                                         row.appendTo(table);
+
+                                        for (j = 0; j < gamesData[i].sets.length; j++) {
+                                            row = $("<tr>").attr("id", "gameset-id-" + gamesData[i].sets[j].id);
+
+                                            if (status === "unplayed") {
+                                                $("<td>").attr("class", "player1-score").append($("<input>").prop("type", "number").val(gamesData[i].sets[j].player1Score)).appendTo(row);
+                                                $("<td>").attr("class", "player2-score").append($("<input>").prop("type", "number").val(gamesData[i].sets[j].player2Score)).appendTo(row);
+                                            } else {
+                                                $("<td>").attr("class", "player1-score").html(gamesData[i].sets[j].player1Score).appendTo(row);
+                                                $("<td>").attr("class", "player2-score").html(gamesData[i].sets[j].player2Score).appendTo(row);
+                                            }
+
+                                            $("<td>").attr("class", "winner").html(gamesData[i].sets[j].winnerName).appendTo(row);
+                                            row.appendTo(table);
+                                        }
                                     }
                                 }
+
+                                table.appendTo(showGamesDiv);
+                                $("<br>").appendTo(showGamesDiv);
+                            } else {
+                                $(showGamesDiv).html("No or no valid data for played games available.");
                             }
+                        });
+                    }(groupsData[k], status));
 
-                            table.appendTo(showPlayedGamesDiv);
-                            $("<br>").appendTo(showPlayedGamesDiv);
-                        } else {
-                            $(showPlayedGamesDiv).html("No or no valid data for played games available.");
-                        }
-                    });
-                }(groupsData[k]));
+                }
+
             }
-
-        }
-    });
+        });
+    }
 }
 
 function showAllPlayers(showPlayersDiv) {

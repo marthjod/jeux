@@ -12,7 +12,7 @@
         <script>
             $( document ).ready(function() {
              getRESTApiStatus($( "#rest-api-status" ));
-             showPlayedGames($("#show-played-games"));
+             showGames($("#show-played-games"), "played");
             });
         </script>
         <title>JEUX</title>
@@ -22,9 +22,10 @@
             REST API status unknown
         </div>
         <br />
+        <span class="title">Played games</span>
         <div id="show-played-games">
         </div>
-         
+        <br /> 
         <div id="admin-login">
             <!-- DIGEST auth by web server -->
             <a href="login">Go to administrative view</a>

@@ -14,6 +14,7 @@
                 getRESTApiStatus($( "#rest-api-status" ));
                 showAllGroups($("#show-all-groups"), $("#player-select-group"), $("#rule-source-group"), $("#rule-destination-group"));
                 showAllPlayers($("#show-all-players"));
+                showGames($("#show-unplayed-games"), "unplayed");
             });
         </script>
         <title>JEUX Administrative View</title>
@@ -133,6 +134,10 @@
 		    </div>
 		    <br />
 		    <div id="show-all-players">
-		    </div>  
+		    </div>
+		    <br />
+            <span class="title">Unplayed games</span>
+            <div id="show-unplayed-games">
+            </div>
     </body>
 </html>
