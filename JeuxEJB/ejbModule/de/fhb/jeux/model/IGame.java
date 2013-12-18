@@ -20,4 +20,8 @@ public interface IGame {
 	public boolean equals(IGame game);
 
 	public void setSets(List<ShowdownGameSet> sets);
+
+	public void setWinner(IPlayer winner);
+
+	public boolean hasWinner();
 }

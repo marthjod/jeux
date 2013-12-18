@@ -80,7 +80,7 @@ public class ShowdownGameSet implements IGameSet, Serializable {
 	@Override
 	public boolean equals(IGameSet gameSet) {
 		// assuming unique IDs
-		return this.id == gameSet.getId();
+		return id == gameSet.getId();
 	}
 
 	@Override
@@ -95,6 +95,7 @@ public class ShowdownGameSet implements IGameSet, Serializable {
 
 	@Override
 	public void setWinner(IPlayer winner) {
+		// this.
 		this.winner = (ShowdownPlayer) winner;
 	}
 

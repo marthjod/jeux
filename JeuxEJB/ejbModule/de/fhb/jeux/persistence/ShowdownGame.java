@@ -137,19 +137,31 @@ public class ShowdownGame implements IGame, Serializable {
 	}
 
 	@Override
+	public boolean hasWinner() {
+		return winner != null;
+	}
+
+	@Override
+	public void setWinner(IPlayer winner) {
+		// this.
+		this.winner = (ShowdownPlayer) winner;
+	}
+
+	@Override
 	public List<ShowdownGameSet> getSets() {
 		return sets;
 	}
 
 	@Override
 	public void setSets(List<ShowdownGameSet> sets) {
+		// this.
 		this.sets = sets;
 	}
 
 	@Override
 	public boolean equals(IGame game) {
 		// assuming unique IDs
-		return this.id == game.getId();
+		return id == game.getId();
 	}
 
 	@Override

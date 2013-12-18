@@ -18,4 +18,6 @@ public interface IGameSet {
 	public IGame getGame();
 
 	public boolean equals(IGameSet gameSet);
+
+	public boolean hasWinner();
 }

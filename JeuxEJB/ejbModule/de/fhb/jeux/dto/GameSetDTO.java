@@ -19,8 +19,24 @@ public class GameSetDTO {
 		gameId = gameSetEntity.getGame().getId();
 		player1Score = gameSetEntity.getPlayer1Score();
 		player2Score = gameSetEntity.getPlayer2Score();
-		winnerId = gameSetEntity.getWinner().getId();
-		winnerName = gameSetEntity.getWinner().getName();
+
+		if (gameSetEntity.getWinner() != null) {
+			winnerId = gameSetEntity.getWinner().getId();
+			winnerName = gameSetEntity.getWinner().getName();
+		} else {
+			winnerId = 0;
+			winnerName = "Unknown";
+		}
+	}
+
+	public GameSetDTO(int id, int gameId, int winnerId, int player1Score,
+			int player2Score, String winnerName) {
+		this.id = id;
+		this.gameId = gameId;
+		this.winnerId = winnerId;
+		this.player1Score = player1Score;
+		this.player2Score = player2Score;
+		this.winnerName = winnerName;
 	}
 
 	public int getId() {
@@ -33,6 +49,10 @@ public class GameSetDTO {
 
 	public int getWinnerId() {
 		return winnerId;
+	}
+
+	public boolean hasWinner() {
+		return winnerId != 0;
 	}
 
 	public String getWinnerName() {
@@ -61,4 +81,27 @@ public class GameSetDTO {
 		return sb.toString();
 	}
 
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public void setGameId(int gameId) {
+		this.gameId = gameId;
+	}
+
+	public void setWinnerId(int winnerId) {
+		this.winnerId = winnerId;
+	}
+
+	public void setPlayer1Score(int player1Score) {
+		this.player1Score = player1Score;
+	}
+
+	public void setPlayer2Score(int player2Score) {
+		this.player2Score = player2Score;
+	}
+
+	public void setWinnerName(String winnerName) {
+		this.winnerName = winnerName;
+	}
 }
