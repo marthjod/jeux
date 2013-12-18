@@ -9,7 +9,7 @@ function getRESTApiStatus(statusDiv) {
 function showGroups(showGroupsDiv, playerGroupSelect, ruleSrcGroupSelect, ruleDestGroupSelect) {
     "use strict";
 
-    var i = 0, table = null, row = null, deletionCell = null, playerGroupSelectOK = false, ruleGroupSelectsOK = false;
+    var i = 0, table = null, currentGroup = null, row = null, gameGenerationCell = null, deletionCell = null, playerGroupSelectOK = false, ruleGroupSelectsOK = false, gameGenerationCell = null;
 
     $.get("rest/audience/groups", function(data) {
 
@@ -45,35 +45,38 @@ function showGroups(showGroupsDiv, playerGroupSelect, ruleSrcGroupSelect, ruleDe
 
             for (i = 0; i < data.length; i++) {
 
-                row = $("<tr>").attr("id", "group-id-" + data[i].id);
-                $("<td>").attr("class", "group-name").html(data[i].name).appendTo(row);
-                $("<td>").attr("class", "group-id").html(data[i].id).appendTo(row);
-                $("<td>").attr("class", "group-round-id").html(data[i].roundId).appendTo(row);
-                $("<td>").attr("class", "group-minsets").html(data[i].minSets).appendTo(row);
-                $("<td>").attr("class", "group-maxsets").html(data[i].maxSets).appendTo(row);
-                $("<td>").attr("class", "group-active").html(data[i].active.toString()).appendTo(row);
-                $("<td>").attr("class", "group-completed").html(data[i].completed.toString()).appendTo(row);
+                // readability
+                currentGroup = data[i];
+
+                row = $("<tr>").attr("id", "group-id-" + currentGroup.id);
+                $("<td>").attr("class", "group-name").html(currentGroup.name).appendTo(row);
+                $("<td>").attr("class", "group-id").html(currentGroup.id).appendTo(row);
+                $("<td>").attr("class", "group-round-id").html(currentGroup.roundId).appendTo(row);
+                $("<td>").attr("class", "group-minsets").html(currentGroup.minSets).appendTo(row);
+                $("<td>").attr("class", "group-maxsets").html(currentGroup.maxSets).appendTo(row);
+                $("<td>").attr("class", "group-active").html(currentGroup.active.toString()).appendTo(row);
+                $("<td>").attr("class", "group-completed").html(currentGroup.completed.toString()).appendTo(row);
+                gameGenerationCell = $("<td>");
+                $("<input>").attr("type", "submit").attr("value", "Generate games").appendTo(gameGenerationCell).attr("onclick", "generateGames(" + currentGroup.id + ");");
+                gameGenerationCell.appendTo(row);
                 deletionCell = $("<td>");
-                $("<input>").attr("type", "submit").attr("value", "Delete group").appendTo(deletionCell).attr("onclick", "deleteGroup(this);");
+                $("<input>").attr("type", "submit").attr("value", "Delete group").appendTo(deletionCell).attr("onclick", "deleteGroup(" + currentGroup.id + ");");
                 deletionCell.appendTo(row);
+
                 row.appendTo(table);
 
                 if (playerGroupSelectOK) {
-                    $("<option>").attr("id", "group-id-" + data[i].id).text(data[i].name).appendTo($(playerGroupSelect));
+                    $("<option>").attr("id", "group-id-" + currentGroup.id).text(currentGroup.name).appendTo($(playerGroupSelect));
                 }
 
                 if (ruleGroupSelectsOK) {
-                    $("<option>").attr("id", "rule-source-group-id-" + data[i].id).text(data[i].name).appendTo($(ruleSrcGroupSelect));
-                    $("<option>").attr("id", "rule-destination-group-id-" + data[i].id).text(data[i].name).appendTo($(ruleDestGroupSelect));
+                    $("<option>").attr("id", "rule-source-group-id-" + currentGroup.id).text(currentGroup.name).appendTo($(ruleSrcGroupSelect));
+                    $("<option>").attr("id", "rule-destination-group-id-" + currentGroup.id).text(currentGroup.name).appendTo($(ruleDestGroupSelect));
                 }
             }
 
             table.appendTo(showGroupsDiv);
-
-        } else {
-            // $(showAllGroupsDiv).html("No or no valid group data available.");
         }
-
     });
 }
 
@@ -136,7 +139,7 @@ function showGames(showGamesDiv, status) {
 
                                     if (status === "unplayed") {
                                         updateCell = $("<td>");
-                                        $("<input>").attr("type", "submit").attr("class", "update-game").attr("value", "Update game").appendTo(updateCell).attr("onclick", "updateGame(this);");
+                                        $("<input>").attr("type", "submit").attr("class", "update-game").attr("value", "Update game").appendTo(updateCell).attr("onclick", "updateGame(this," + gamesData[i].id + "," + gamesData[i].player1Id + "," + gamesData[i].player2Id + ");");
                                         updateCell.appendTo(row);
                                     } else if (status === "played") {
                                         $("<td>").attr("class", "winner").html(gamesData[i].winnerName).appendTo(row);
@@ -157,8 +160,8 @@ function showGames(showGamesDiv, status) {
                                             row = $("<tr>").attr("id", "gameset-id-" + gamesData[i].sets[j].id);
 
                                             if (status === "unplayed") {
-                                                $("<td>").attr("class", "player1-score").append($("<input>").prop("type", "number").attr("min", "0").val(gamesData[i].sets[j].player1Score)).appendTo(row);
-                                                $("<td>").attr("class", "player2-score").append($("<input>").prop("type", "number").attr("min", "0").val(gamesData[i].sets[j].player2Score)).appendTo(row);
+                                                $("<td>").attr("class", "player1-score").append($("<input>").attr("type", "number").attr("min", "0").val(gamesData[i].sets[j].player1Score)).appendTo(row);
+                                                $("<td>").attr("class", "player2-score").append($("<input>").attr("type", "number").attr("min", "0").val(gamesData[i].sets[j].player2Score)).appendTo(row);
                                             } else {
                                                 $("<td>").attr("class", "player1-score").html(gamesData[i].sets[j].player1Score).appendTo(row);
                                                 $("<td>").attr("class", "player2-score").html(gamesData[i].sets[j].player2Score).appendTo(row);
@@ -223,17 +226,13 @@ function showPlayers(showPlayersDiv) {
                                 $("<td>").attr("class", "player-points").html(playersData[i].points).appendTo(row);
                                 $("<td>").attr("class", "player-score-ratio").html(playersData[i].scoreRatio).appendTo(row);
                                 deletionCell = $("<td>");
-                                $("<input>").attr("type", "submit").attr("value", "Delete player").appendTo(deletionCell).attr("onclick", "deletePlayer(this);");
+                                $("<input>").attr("type", "submit").attr("value", "Delete player").appendTo(deletionCell).attr("onclick", "deletePlayer(" + playersData[i].id + ");");
                                 deletionCell.appendTo(row);
                                 row.appendTo(table);
                             }
 
                             table.appendTo(showPlayersDiv);
                             $("<br>").appendTo(showPlayersDiv);
-                        } else {
-                            // $(showPlayersDiv).html("No or no valid data for
-                            // players available for " + group.name + ".<br
-                            // />");
                         }
                     });
                 }(groupsData[k]));
