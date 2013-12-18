@@ -58,8 +58,12 @@ public class ShowdownGameSet implements IGameSet, Serializable {
 
 	@Override
 	public IPlayer getWinner() {
-		return player1Score > player2Score ? game.getPlayer1() : game
-				.getPlayer2();
+		return winner;
+	}
+
+	@Override
+	public boolean hasWinner() {
+		return winner != null;
 	}
 
 	@Override
