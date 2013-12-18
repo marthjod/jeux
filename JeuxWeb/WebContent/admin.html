@@ -12,8 +12,8 @@
         <script>
             $( document ).ready(function() {
                 getRESTApiStatus($( "#rest-api-status" ));
-                showAllGroups($("#show-all-groups"), $("#player-select-group"), $("#rule-source-group"), $("#rule-destination-group"));
-                showAllPlayers($("#show-all-players"));
+                showGroups($("#show-groups"), $("#player-select-group"), $("#rule-source-group"), $("#rule-destination-group"));
+                showPlayers($("#show-players"));
                 showGames($("#show-unplayed-games"), "unplayed");
             });
         </script>
@@ -131,11 +131,11 @@
 	        <br /> 
 	        <br />
 	        <span class="title">Groups</span>
-		    <div id="show-all-groups">
+		    <div id="show-groups">
 		    </div>
 		    <br />
 		    <span class="title">Players</span>
-		    <div id="show-all-players">
+		    <div id="show-players">
 		    </div>
 		    <br />
             <span class="title">Unplayed games</span>

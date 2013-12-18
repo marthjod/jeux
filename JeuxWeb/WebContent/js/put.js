@@ -44,7 +44,7 @@ function createNewGroup(groupSubmit) {
             }, 3000);
 
             // refresh
-            showAllGroups($("#show-all-groups"), $("#player-select-group"), $("#rule-source-group"), $("#rule-destination-group"));
+            showGroups($("#show-groups"), $("#player-select-group"), $("#rule-source-group"), $("#rule-destination-group"));
 
         },
         statusCode : {
@@ -91,7 +91,7 @@ function createNewPlayer(playerSubmit) {
             data : JSON.stringify(sendPlayer),
             contentType : "application/json",
             success : function() {
-                showAllPlayers($("#show-all-players"));
+                showPlayers($("#show-players"));
 
                 $(playerSubmit).attr("value", "Created.");
                 // disable submit button, clear values and success

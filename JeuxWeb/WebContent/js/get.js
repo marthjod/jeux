@@ -6,7 +6,7 @@ function getRESTApiStatus(statusDiv) {
     });
 }
 
-function showAllGroups(showAllGroupsDiv, playerGroupSelect, ruleSrcGroupSelect, ruleDestGroupSelect) {
+function showGroups(showGroupsDiv, playerGroupSelect, ruleSrcGroupSelect, ruleDestGroupSelect) {
     "use strict";
 
     var i = 0, table = null, row = null, deletionCell = null, playerGroupSelectOK = false, ruleGroupSelectsOK = false;
@@ -27,7 +27,7 @@ function showAllGroups(showAllGroupsDiv, playerGroupSelect, ruleSrcGroupSelect, 
             $("<option>").attr("id", "no-destination-group-selected").text("No destination group selected").appendTo($(ruleDestGroupSelect));
         }
 
-        $(showAllGroupsDiv).empty();
+        $(showGroupsDiv).empty();
         table = $("<table>");
         row = $("<tr>");
 
@@ -68,7 +68,7 @@ function showAllGroups(showAllGroupsDiv, playerGroupSelect, ruleSrcGroupSelect, 
                 }
             }
 
-            table.appendTo(showAllGroupsDiv);
+            table.appendTo(showGroupsDiv);
 
         } else {
             // $(showAllGroupsDiv).html("No or no valid group data available.");
@@ -185,7 +185,7 @@ function showGames(showGamesDiv, status) {
     }
 }
 
-function showAllPlayers(showPlayersDiv) {
+function showPlayers(showPlayersDiv) {
     "use strict";
 
     var i = 0, k = 0, table = null, row = null, deletionCell = null;

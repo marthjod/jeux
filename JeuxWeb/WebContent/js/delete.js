@@ -24,8 +24,8 @@ function deleteGroup(deleteSubmit) {
                     $("#rule-source-group").find("#rule-source-group-id-" + groupId).remove();
                     $("#rule-destination-group").find("#rule-destination-group-id-" + groupId).remove();
 
-                    showAllGroups($("#show-all-groups"));
-                    showAllPlayers($("#show-all-players"));
+                    showGroups($("#show-groups"));
+                    showPlayers($("#show-players"));
                     // refresh because deletion cascades for games, too
                     showGames($("#show-unplayed-games"), "unplayed");
                 },
@@ -62,7 +62,7 @@ function deletePlayer(deleteSubmit) {
             url : "rest/admin/player/id/" + playerId,
             type : "DELETE",
             success : function() {
-                showAllPlayers($("#show-all-players"));
+                showPlayers($("#show-players"));
                 // refresh because player deletion cascades for his games, too
                 showGames($("#show-unplayed-games"), "unplayed");
             },
