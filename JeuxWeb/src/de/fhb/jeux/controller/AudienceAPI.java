@@ -44,7 +44,7 @@ public class AudienceAPI {
 	@Path("/status")
 	@Produces(MediaType.TEXT_PLAIN)
 	public String apiStatus() {
-		logger.debug("-> ReST API status");
+		// logger.debug("-> ReST API status");
 		return "OK\n";
 	}
 
@@ -52,7 +52,7 @@ public class AudienceAPI {
 	@Path("/groups")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<GroupDTO> getAllGroupDTOs() {
-		logger.debug("-> All groups");
+		// logger.debug("-> All groups");
 		return groupBean.getAllGroupDTOs();
 	}
 
@@ -60,7 +60,7 @@ public class AudienceAPI {
 	@Path("/roundswitchrules")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<RoundSwitchRuleDTO> getAllRoundSwitchRuleDTOs() {
-		logger.debug("-> All rules");
+		// logger.debug("-> All rules");
 		return roundSwitchRuleBean.getAllRoundSwitchRuleDTOs();
 	}
 
@@ -69,7 +69,7 @@ public class AudienceAPI {
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<PlayerDTO> getPlayerDTOsInGroup(
 			@PathParam("groupId") int groupId) {
-		logger.debug("-> Players in group #" + groupId);
+		// logger.debug("-> Players in group #" + groupId);
 		IGroup group = groupBean.getGroupById(groupId);
 		return groupBean.getPlayerDTOsInGroup(group);
 	}
@@ -79,7 +79,7 @@ public class AudienceAPI {
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<GameDTO> getPlayedGameDTOsInGroup(
 			@PathParam("groupId") int groupId) {
-		logger.debug("-> Played games for group #" + groupId);
+		// logger.debug("-> Played games for group #" + groupId);
 		IGroup group = groupBean.getGroupById(groupId);
 		return gameBean.getPlayedGameDTOsInGroup(group);
 	}
@@ -89,7 +89,7 @@ public class AudienceAPI {
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<GameDTO> getUnplayedGameDTOsInGroup(
 			@PathParam("groupId") int groupId) {
-		logger.debug("-> Unplayed games for group #" + groupId);
+		// logger.debug("-> Unplayed games for group #" + groupId);
 		IGroup group = groupBean.getGroupById(groupId);
 		return gameBean.getUnplayedGameDTOsInGroup(group);
 	}

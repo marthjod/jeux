@@ -90,7 +90,7 @@ public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
 									.getPlayer2Score()) {
 								oldSet.setWinner(oldSet.getGame().getPlayer1());
 
-								logger.debug("Set winner: "
+								logger.info("Set winner: "
 										+ oldSet.getGame().getPlayer1()
 												.getName() + ", "
 										+ oldSet.getPlayer1Score() + ":"
@@ -99,7 +99,7 @@ public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
 									.getPlayer1Score()) {
 								oldSet.setWinner(oldSet.getGame().getPlayer2());
 
-								logger.debug("Determined game set winner: "
+								logger.info("Set winner: "
 										+ oldSet.getGame().getPlayer2()
 												.getName() + ", "
 										+ oldSet.getPlayer2Score() + ":"
@@ -110,6 +110,7 @@ public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
 
 					if (numDTOs > 0) {
 						updated = true;
+						// write back
 						game.setSets(existingSets);
 					}
 
@@ -117,6 +118,7 @@ public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
 					logger.warn("Player ID mismatch");
 				}
 
+				// sets updated, let's see if game over
 				if (updated) {
 					int setsPlayed = 0;
 					int setsWonByPlayer1 = 0;
@@ -135,6 +137,8 @@ public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
 							setsWonByPlayer2++;
 						}
 					}
+
+					// TODO make the following atomic, i.e. use transaction
 
 					// we have a game winner if
 					// - all sets have been played
