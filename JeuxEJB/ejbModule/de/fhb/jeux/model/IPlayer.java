@@ -16,4 +16,6 @@ public interface IPlayer {
 	public boolean equals(IPlayer player);
 
 	public void setPoints(int points);
+
+	public void setScoreRatio(int scoreRatio);
 }

@@ -141,9 +141,13 @@ public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
 					// - one player has won more sets than the other
 					// we'll also calculate and write back
 					// - (bonus) points for won sets
-					// TODO - score ratios for opponents
+					// - score ratios for opponents
 
 					if (setsPlayed == game.getSets().size()) {
+
+						// write score ratios already (no need to know the
+						// winner yet)
+						updateScoreRatios(game);
 
 						if (setsWonByPlayer1 > setsWonByPlayer2) {
 
@@ -229,5 +233,47 @@ public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
 				+ bonusPoints.get("winner") + " = " + winner.getPoints() + ", "
 				+ loser.getName() + " +" + bonusPoints.get("loser") + " = "
 				+ loser.getPoints());
+	}
+
+	// NB: the winner is not necessarily the one who has scored more!
+	private void updateScoreRatios(IGame game) {
+		int totalPlayer1Score = 0;
+		int totalPlayer2Score = 0;
+		int difference = 0;
+
+		IPlayer player1 = game.getPlayer1();
+		IPlayer player2 = game.getPlayer2();
+
+		for (ShowdownGameSet set : game.getSets()) {
+			totalPlayer1Score += set.getPlayer1Score();
+			totalPlayer2Score += set.getPlayer2Score();
+		}
+
+		logger.debug(player1.getName() + " has scored " + totalPlayer1Score
+				+ " in total");
+		logger.debug(player2.getName() + " has scored " + totalPlayer2Score
+				+ " in total");
+
+		difference = Math.abs(totalPlayer1Score - totalPlayer2Score);
+
+		if (totalPlayer1Score > totalPlayer2Score) {
+			player1.setScoreRatio(player1.getScoreRatio() + difference);
+			player2.setScoreRatio(player2.getScoreRatio() - difference);
+
+			logger.info(player1.getName() + " +" + difference + " = "
+					+ player1.getScoreRatio());
+			logger.info(player2.getName() + " -" + difference + " = "
+					+ player2.getScoreRatio());
+		} else if (totalPlayer2Score > totalPlayer1Score) {
+			player2.setScoreRatio(player2.getScoreRatio() + difference);
+			player1.setScoreRatio(player1.getScoreRatio() - difference);
+
+			logger.info(player2.getName() + " +" + difference + " = "
+					+ player2.getScoreRatio());
+			logger.info(player1.getName() + " -" + difference + " = "
+					+ player1.getScoreRatio());
+		} else {
+			// if scores are identical, nothing to do?
+		}
 	}
 }

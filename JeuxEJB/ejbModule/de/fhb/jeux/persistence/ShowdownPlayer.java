@@ -97,6 +97,7 @@ public class ShowdownPlayer implements IPlayer, Serializable {
 		return scoreRatio;
 	}
 
+	@Override
 	public void setScoreRatio(int scoreRatio) {
 		this.scoreRatio = scoreRatio;
 	}
