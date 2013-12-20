@@ -10,6 +10,7 @@ import javax.ejb.Stateless;
 
 import org.jboss.logging.Logger;
 
+import de.fhb.jeux.config.BonusPointsDistribution;
 import de.fhb.jeux.config.BonusPointsDistributor;
 import de.fhb.jeux.dao.GameDAO;
 import de.fhb.jeux.dto.GameDTO;
@@ -34,7 +35,7 @@ public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
 	}
 
 	@Override
-	public boolean updateGame(GameDTO gameDTO, String bonusPointsConfigPath) {
+	public boolean updateGame(GameDTO gameDTO, BonusPointsDistribution config) {
 		boolean success = false;
 		boolean updated = false;
 		int numDTOs = 0;
@@ -51,19 +52,22 @@ public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
 			// same amount of sets required
 			if (existingSets.size() == newSets.size()) {
 
+				IPlayer player1 = game.getPlayer1();
+				IPlayer player2 = game.getPlayer2();
+
 				// copy scores from DTO to Entity
 				// and try to determine set winner
 
 				// pre-align if input is vice versa to save code (DRY)
 
-				if (game.getPlayer1().getId() == gameDTO.getPlayer2Id()
-						&& game.getPlayer2().getId() == gameDTO.getPlayer1Id()) {
+				if (player1.getId() == gameDTO.getPlayer2Id()
+						&& player2.getId() == gameDTO.getPlayer1Id()) {
 					gameDTO = alignPlayers(gameDTO);
 				}
 
-				// scores aligned?
-				if (game.getPlayer1().getId() == gameDTO.getPlayer1Id()
-						&& game.getPlayer2().getId() == gameDTO.getPlayer2Id()) {
+				// scores aligned (now)?
+				if (player1.getId() == gameDTO.getPlayer1Id()
+						&& player2.getId() == gameDTO.getPlayer2Id()) {
 
 					ListIterator<ShowdownGameSet> setsIterator = existingSets
 							.listIterator();
@@ -144,34 +148,32 @@ public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
 						if (setsWonByPlayer1 > setsWonByPlayer2) {
 
 							// set player 1 as winner
-							game.setWinner(game.getPlayer1());
+							game.setWinner(player1);
 
-							logger.debug("Game winner: "
-									+ game.getPlayer1().getName() + ", "
-									+ setsWonByPlayer1 + ":" + setsWonByPlayer2);
+							logger.info("Game winner: " + player1.getName()
+									+ ", " + setsWonByPlayer1 + ":"
+									+ setsWonByPlayer2);
 
 							// add bonus points
 							addBonusPoints(
 									BonusPointsDistributor.getBonusPoints(
-											bonusPointsConfigPath, setsPlayed,
-											setsWonByPlayer1),
-									game.getPlayer1(), game.getPlayer2());
+											config, setsPlayed,
+											setsWonByPlayer1), player1, player2);
 
 						} else if (setsWonByPlayer2 > setsWonByPlayer1) {
 
 							// set player 2 as winner
-							game.setWinner(game.getPlayer2());
+							game.setWinner(player2);
 
-							logger.debug("Game winner: "
-									+ game.getPlayer2().getName() + ", "
-									+ setsWonByPlayer2 + ":" + setsWonByPlayer1);
+							logger.info("Game winner: " + player2.getName()
+									+ ", " + setsWonByPlayer2 + ":"
+									+ setsWonByPlayer1);
 
 							// add bonus points
 							addBonusPoints(
 									BonusPointsDistributor.getBonusPoints(
-											bonusPointsConfigPath, setsPlayed,
-											setsWonByPlayer2),
-									game.getPlayer2(), game.getPlayer1());
+											config, setsPlayed,
+											setsWonByPlayer2), player2, player1);
 						}
 					}
 

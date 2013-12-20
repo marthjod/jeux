@@ -15,6 +15,7 @@ import javax.ws.rs.core.Response;
 
 import org.jboss.logging.Logger;
 
+import de.fhb.jeux.config.BonusPointsDistribution;
 import de.fhb.jeux.dao.GroupDAO;
 import de.fhb.jeux.dto.GameDTO;
 import de.fhb.jeux.dto.GroupDTO;
@@ -63,11 +64,6 @@ public class AdminAPI {
 
 	@EJB
 	private RoundSwitchRuleLocal roundSwitchRuleBean;
-
-	// config file for bonus points rules
-	// deployment assembly:
-	// /config -> config
-	private final String BONUS_POINTS_CONFIG_PATH = "/config/bonuspointsdistribution.json";
 
 	@DELETE
 	@Path("/group/id/{groupId}")
@@ -167,10 +163,11 @@ public class AdminAPI {
 			@Context ServletContext servletContext) {
 		logger.debug("Request for game update");
 
-		String bonusPointsConfigPath = servletContext
-				.getRealPath(BONUS_POINTS_CONFIG_PATH);
+		// fetch already initialized object from servlet context
+		BonusPointsDistribution config = (BonusPointsDistribution) servletContext
+				.getAttribute("bonusPointsConfig");
 
-		if (updateGameBean.updateGame(updatedGame, bonusPointsConfigPath)) {
+		if (updateGameBean.updateGame(updatedGame, config)) {
 			return Response.status(Response.Status.OK).build();
 		} else {
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR)

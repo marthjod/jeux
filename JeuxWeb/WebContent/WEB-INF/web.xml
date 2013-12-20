@@ -2,6 +2,15 @@
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" version="3.0">
   <display-name>JeuxWeb</display-name>
   
+  <listener>
+    <listener-class>de.fhb.jeux.context.ContextListener</listener-class>
+  </listener>
+    
+  <context-param>
+    <param-name>BONUS_POINTS_CONFIG_PATH</param-name>
+    <param-value>/config/bonuspointsdistribution.json</param-value>
+  </context-param>
+  
   <servlet>
     <description>JAX-RS Tools Generated - Do not modify</description>
     <servlet-name>JAX-RS Servlet</servlet-name>
