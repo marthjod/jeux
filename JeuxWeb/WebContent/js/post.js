@@ -40,7 +40,7 @@ function updateGame(updateSubmit, gameId, player1Id, player2Id) {
     }
 
     $.ajax({
-        url : "rest/admin/update-game/id/" + gameId,
+        url : "rest/admin/update-game",
         type : "POST",
         data : JSON.stringify(updatedGame),
         contentType : "application/json",

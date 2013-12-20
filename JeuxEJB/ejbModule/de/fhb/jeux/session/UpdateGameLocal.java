@@ -6,5 +6,5 @@ import de.fhb.jeux.dto.GameDTO;
 
 @Local
 public interface UpdateGameLocal {
-	public boolean updateGame(GameDTO gameDTO);
+	public boolean updateGame(GameDTO gameDTO, String bonusPointsConfigPath);
 }

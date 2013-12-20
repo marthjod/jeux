@@ -14,4 +14,6 @@ public interface IPlayer {
 	public int getRank();
 
 	public boolean equals(IPlayer player);
+
+	public void setPoints(int points);
 }

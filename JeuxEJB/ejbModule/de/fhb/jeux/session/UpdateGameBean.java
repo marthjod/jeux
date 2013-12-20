@@ -1,6 +1,7 @@
 package de.fhb.jeux.session;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -9,11 +10,13 @@ import javax.ejb.Stateless;
 
 import org.jboss.logging.Logger;
 
+import de.fhb.jeux.config.BonusPointsDistributor;
 import de.fhb.jeux.dao.GameDAO;
 import de.fhb.jeux.dto.GameDTO;
 import de.fhb.jeux.dto.GameSetDTO;
 import de.fhb.jeux.model.IGame;
 import de.fhb.jeux.model.IGameSet;
+import de.fhb.jeux.model.IPlayer;
 import de.fhb.jeux.persistence.ShowdownGameSet;
 
 @Stateless
@@ -31,12 +34,13 @@ public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
 	}
 
 	@Override
-	public boolean updateGame(GameDTO gameDTO) {
+	public boolean updateGame(GameDTO gameDTO, String bonusPointsConfigPath) {
 		boolean success = false;
 		boolean updated = false;
 		int numDTOs = 0;
 
 		IGame game = gameDAO.getGameById(gameDTO.getId());
+
 		if (game != null && gameDTO != null) {
 
 			logger.debug("Before: " + game);
@@ -82,7 +86,7 @@ public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
 									.getPlayer2Score()) {
 								oldSet.setWinner(oldSet.getGame().getPlayer1());
 
-								logger.debug("Determined game set winner: "
+								logger.debug("Set winner: "
 										+ oldSet.getGame().getPlayer1()
 												.getName() + ", "
 										+ oldSet.getPlayer1Score() + ":"
@@ -128,23 +132,46 @@ public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
 						}
 					}
 
-					// we have a winner if
+					// we have a game winner if
 					// - all sets have been played
 					// - one player has won more sets than the other
+					// we'll also calculate and write back
+					// - (bonus) points for won sets
+					// TODO - score ratios for opponents
 
 					if (setsPlayed == game.getSets().size()) {
+
 						if (setsWonByPlayer1 > setsWonByPlayer2) {
+
+							// set player 1 as winner
 							game.setWinner(game.getPlayer1());
 
-							logger.debug("Determined game winner: "
+							logger.debug("Game winner: "
 									+ game.getPlayer1().getName() + ", "
 									+ setsWonByPlayer1 + ":" + setsWonByPlayer2);
+
+							// add bonus points
+							addBonusPoints(
+									BonusPointsDistributor.getBonusPoints(
+											bonusPointsConfigPath, setsPlayed,
+											setsWonByPlayer1),
+									game.getPlayer1(), game.getPlayer2());
+
 						} else if (setsWonByPlayer2 > setsWonByPlayer1) {
+
+							// set player 2 as winner
 							game.setWinner(game.getPlayer2());
 
-							logger.debug("Determined game winner: "
+							logger.debug("Game winner: "
 									+ game.getPlayer2().getName() + ", "
 									+ setsWonByPlayer2 + ":" + setsWonByPlayer1);
+
+							// add bonus points
+							addBonusPoints(
+									BonusPointsDistributor.getBonusPoints(
+											bonusPointsConfigPath, setsPlayed,
+											setsWonByPlayer2),
+									game.getPlayer2(), game.getPlayer1());
 						}
 					}
 
@@ -189,5 +216,16 @@ public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
 		logger.info("Aligned DTO: " + alignedDTO);
 
 		return alignedDTO;
+	}
+
+	private void addBonusPoints(HashMap<String, Integer> bonusPoints,
+			IPlayer winner, IPlayer loser) {
+		winner.setPoints(winner.getPoints() + bonusPoints.get("winner"));
+		loser.setPoints(loser.getPoints() + bonusPoints.get("loser"));
+
+		logger.info("Bonus points: " + winner.getName() + " +"
+				+ bonusPoints.get("winner") + " = " + winner.getPoints() + ", "
+				+ loser.getName() + " +" + bonusPoints.get("loser") + " = "
+				+ loser.getPoints());
 	}
 }

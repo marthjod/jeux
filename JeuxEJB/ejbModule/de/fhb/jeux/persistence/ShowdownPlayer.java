@@ -87,6 +87,7 @@ public class ShowdownPlayer implements IPlayer, Serializable {
 		return points;
 	}
 
+	@Override
 	public void setPoints(int points) {
 		this.points = points;
 	}

@@ -2,12 +2,14 @@ package de.fhb.jeux.controller;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -62,6 +64,11 @@ public class AdminAPI {
 	@EJB
 	private RoundSwitchRuleLocal roundSwitchRuleBean;
 
+	// config file for bonus points rules
+	// deployment assembly:
+	// /config -> config
+	private final String BONUS_POINTS_CONFIG_PATH = "/config/bonuspointsdistribution.json";
+
 	@DELETE
 	@Path("/group/id/{groupId}")
 	public Response deleteGroup(@PathParam("groupId") int groupId) {
@@ -106,10 +113,6 @@ public class AdminAPI {
 		if (playerDTO != null) {
 			logger.debug("Deserialized player DTO " + playerDTO);
 
-			// we look for the group object here already, because CDI
-			// implementation sucks.
-			// also, we can decide to reject the player if the group does not
-			// exist yet
 			IGroup group = groupBean.getGroupById(playerDTO.getGroupId());
 			createPlayerBean.createPlayer(playerDTO, group);
 			return Response.status(Response.Status.CREATED).build();
@@ -158,13 +161,16 @@ public class AdminAPI {
 	}
 
 	@POST
-	@Path("/update-game/id/{gameId}")
+	@Path("/update-game")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response updateGame(@PathParam("gameId") int gameId,
-			GameDTO updatedGame) {
+	public Response updateGame(GameDTO updatedGame,
+			@Context ServletContext servletContext) {
 		logger.debug("Request for game update");
 
-		if (updateGameBean.updateGame(updatedGame)) {
+		String bonusPointsConfigPath = servletContext
+				.getRealPath(BONUS_POINTS_CONFIG_PATH);
+
+		if (updateGameBean.updateGame(updatedGame, bonusPointsConfigPath)) {
 			return Response.status(Response.Status.OK).build();
 		} else {
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
