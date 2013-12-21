@@ -3,6 +3,8 @@ function updateGame(updateSubmit, gameId, player1Id, player2Id) {
 
     var inputOK = false, gameSetId = 0, rows = [], i = 0, set = {}, player1Score = 0, player2Score = 0, updatedGame = {};
 
+    $(updateSubmit).attr("value", "Updating...").attr("disabled", "disabled");
+
     updatedGame = {
         "id" : gameId,
         "player1Id" : player1Id,
@@ -45,11 +47,8 @@ function updateGame(updateSubmit, gameId, player1Id, player2Id) {
         data : JSON.stringify(updatedGame),
         contentType : "application/json",
         success : function() {
-            $(updateSubmit).attr("value", "Game updated.").attr("disabled", "disabled");
-            window.setTimeout(function() {
-                // reset text
-                $(updateSubmit).attr("value", "Update game").removeAttr("disabled");
-            }, 3000);
+            $(updateSubmit).attr("value", "Update game").removeAttr("disabled");
+            showGames($("#show-unplayed-games"), "unplayed");
         },
         statusCode : {
             403 : function() {

@@ -34,14 +34,7 @@ function createNewGroup(groupSubmit) {
         contentType : "application/json",
         success : function() {
 
-            $(groupSubmit).attr("value", "Created.");
-            // disable submit button, clear values and success message
-            $(groupSubmit).attr("disabled", "disabled");
             clearForm(groupForm);
-            window.setTimeout(function() {
-                // reset text
-                $(groupSubmit).attr("value", "Create new group");
-            }, 3000);
 
             // refresh
             showGroups($("#show-groups"), $("#player-select-group"), $("#rule-source-group"), $("#rule-destination-group"));
@@ -92,16 +85,7 @@ function createNewPlayer(playerSubmit) {
             contentType : "application/json",
             success : function() {
                 showPlayers($("#show-players"));
-
-                $(playerSubmit).attr("value", "Created.");
-                // disable submit button, clear values and success
-                // message
-                $(playerSubmit).attr("disabled", "disabled");
                 clearForm(playerSubmit);
-                window.setTimeout(function() {
-                    // reset text
-                    $(playerSubmit).attr("value", "Create new player");
-                }, 3000);
             },
             statusCode : {
                 403 : function() {
@@ -151,14 +135,7 @@ function createNewRoundSwitchRule(ruleSubmit) {
                 data : JSON.stringify(sendRule),
                 contentType : "application/json",
                 success : function() {
-                    $(ruleSubmit).attr("value", "Created.");
-                    // disable submit button, clear values and success message
-                    $(ruleSubmit).attr("disabled", "disabled");
                     clearForm(ruleSubmit);
-                    window.setTimeout(function() {
-                        // reset text
-                        $(ruleSubmit).attr("value", "Create new round switch rule");
-                    }, 3000);
                 },
                 statusCode : {
                     403 : function() {
