@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link rel="stylesheet" type="text/css" href="css/jeux.css">
+        <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
         <script type="text/javascript" src="js/jquery-2.0.3.js"></script>
         <script type="text/javascript" src="js/get.js"></script>
         <script type="text/javascript" src="js/put.js"></script>
@@ -18,18 +18,26 @@
         </script>
         <title>JEUX</title>
     </head>
-    <body>       
-        <div id="rest-api-status">
-            REST API status unknown
+    <body>
+        <div class="container" id="container">
+
+	        <h1>Games</h1>
+	        <h2>Played games</h2>
+	        <div id="show-played-games">
+	        </div>
+
+	        <h1>Backend status</h1>
+	        <div id="rest-api-status">
+	            ReST API status unknown
+	        </div>
+
+	        <h1>Administration</h1>
+	        <h2>Backend login</h2>
+            <div id="admin-login">
+                <!-- DIGEST auth by web server -->
+                <a href="login"><button class="btn btn-warning">Go to administrative view</button></a>
+            </div>
+
         </div>
-        <br />
-        <span class="title">Played games</span>
-        <div id="show-played-games">
-        </div>
-        <br /> 
-        <div id="admin-login">
-            <!-- DIGEST auth by web server -->
-            <a href="login">Go to administrative view</a>
-        </div>          
     </body>
 </html>

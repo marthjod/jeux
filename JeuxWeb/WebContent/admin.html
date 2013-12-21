@@ -2,14 +2,13 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link rel="stylesheet" type="text/css" href="css/jeux.css">
+        <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
         <script type="text/javascript" src="js/jquery-2.0.3.js"></script>
         <script type="text/javascript" src="js/get.js"></script>
         <script type="text/javascript" src="js/put.js"></script>
         <script type="text/javascript" src="js/post.js"></script>
         <script type="text/javascript" src="js/delete.js"></script>
         <script type="text/javascript" src="js/input.js"></script>
-
         <script>
             $( document ).ready(function() {
                 getRESTApiStatus($( "#rest-api-status" ));
@@ -21,126 +20,142 @@
         <title>JEUX Administrative View</title>
     </head>
     <body>
-       <div id="rest-api-status">
-           REST API status unknown
-       </div>
-        <br />
+    <div id="container" class="container">
+        <h1>Groups</h1>
+        <h2>Existing groups</h2>
+        <div id="show-groups">
+        </div>
+        <h2>Create group</h2>
         <div id="create-groups">
-            <span class="title">Create new group</span>
-            <form id="create-group" action="#">
-                    Name
-                         <input id="name"
-                             type="text"
-                             onkeyup="checkGroupSubmitReady(this);" />
-                    <br />
-                    Round
-                         <input id="round"
-                            type="number"
-                            size="2"
-                            maxlength="2"
-                            min="1"
-                            onkeyup="checkGroupSubmitReady(this);" />
-                     <br />
-                     Min sets
-                         <input id="min-sets"
-                             type="number"
-                             size="2"
-                             maxlength="2"
-                             min="1"
-                             onkeyup="checkGroupSubmitReady(this);"
-                             oninput="prefillMaxSets(this);" /> Max sets <input id="max-sets"
-                             type="number"
-                             size="2"
-                             maxlength="2"
-                             min="1"
-                             onkeyup="checkGroupSubmitReady(this);" />
-                    <br />         
-                    Active 
-                            <input id="group-active"
-                                type="checkbox"
-                            />
-    
-                    <br />
-                    <input id="submit-create-group"
-                        type="submit"
-                        value="Create new group"
-                        disabled="disabled"
-                        onclick="createNewGroup(this);" />
-    
-                </form>
+            <form id="create-group" action="#" role="form" class="form-horizontal">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text"
+                        class="form-control"
+                        id="name"
+                        placeholder="Group name" />
+                </div>
+                <div class="form-group">
+                    <label for="round">Round</label>
+                    <input id="round"
+                    class="form-control"
+                    placeholder="Round number"
+                    type="number"
+                    size="2"
+                    maxlength="2"
+                    min="1" />
+                </div>
+                <div class="form group">
+                    <label for="min-sets">Minimum set(s) per game</label>
+                    <input id="min-sets"
+                    class="form-control"
+                    placeholder="Min sets"
+                    type="number"
+                    size="2"
+                    maxlength="2"
+                    min="1" />
+                </div>
+                <div class="form group">
+                    <label for="max-sets">Maximum set(s) per game</label>
+                    <input id="max-sets"
+                    class="form-control"
+                    placeholder="Max sets"
+                    type="number"
+                    size="2"
+                    maxlength="2"
+                    min="1" />
+                </div>
+                <div class="form group">
+                    <label for="group-active">
+	                    <input id="group-active"
+	                    type="checkbox" />
+	                        Active?
+	                </label>
+                </div>
+                <input id="submit-create-group"
+                type="submit"
+                value="Create group"
+                onclick="createNewGroup(this);"
+                class="btn btn-success" />
+            </form>
             </div>
-            <br />
+            <h1>Players</h1>
+            <h2>Existing players</h2>
+            <div id="show-players">
+            </div>
+            <h2>Create player</h2>
             <div id="create-players">
-                <span class="title">Create new player</span>
-                <form id="create-player" action="#">
-                    Name
-                         <input id="name"
-                             type="text"
-                             onkeyup="checkPlayerSubmitReady(this);" />
-                    <br />
-                    Group
+                <form id="create-player" action="#" role="form" class="form-horizontal">
+	                <div class="form-group">
+	                    <label for="name">Name</label>
+                        <input id="name"
+                        type="text"
+                        class="form-control"
+                        placeholder="Player name" />
+                    </div>
+                    <div class="form-group">
+                        <label for="player-select-group">Group</label>
                         <select id="player-select-group"
-                            onchange="checkPlayerSubmitReady(this);">
+                        class="form-control">
                             <option id="no-group-selected">No group selected</option>
                         </select>
-                        
-                    <br />
+                    </div>
                     <input id="submit-create-player"
-                        type="submit"
-                        value="Create new player"
-                        disabled="disabled"
-                        onclick="createNewPlayer(this);" />
+                    type="submit"
+                    value="Create player"
+                    onclick="createNewPlayer(this);"
+                    class="btn btn-success" />
                 </form>
             </div>
-            <br />
+            <h1>Tournament course</h1>
             <div id="create-roundswitchrules">
-                <span class="title">Create new round-switch rule</span>
-                <form id="create-roundswitchrule" action="#">
-                    Source group
+                <h2>Create round-switch rule</h2>
+                <form id="create-roundswitchrule" action="#" role="form" class="form-horizontal">
+                    <div class="form-group">
+                        <label for="rule-source-group">Source group</label>
                         <select id="rule-source-group"
-                            onchange="checkRuleSubmitReady(this);">
+                        class="form-control">
                             <option id="no-source-group-selected">No source group selected</option>
                         </select>
-                    <br />
-                    Destination group
+                    </div>
+                    <div class="form-group">
+                        <label for="rule-destination-group">Destination group</label>
                         <select id="rule-destination-group"
-                            onchange="checkRuleSubmitReady(this);">
+                        class="form-control">
                             <option id="no-destination-group-selected">No destination group selected</option>
                         </select>
-                    <br />
-                    Start with rank
+                    </div>
+                    <div class="form-group">
+                        <label for="rule-start-rank">Start with rank</label>
                         <input id="rule-start-rank"
-                            type="number"
-                            size="2"
-                            min="1"
-                            onchange="checkRuleSubmitReady(this);" />
-                    Additional players
+                        type="number"
+                        class="form-control"
+                        size="2"
+                        min="1" />
+                    </div>
+                    <div class="form-group">
+                        <label for="rule-additional-players">Additional players</label>
                         <input id="rule-additional-players"
-                            type="number"
-                            size="2"
-                            min="0"
-                            onchange="checkRuleSubmitReady(this);" />
-                    <br />
+                        type="number"
+                        class="form-control"
+                        size="2"
+                        min="0" />
+                    </div>
                     <input id="submit-create-rule"
-                        type="submit"
-                        value="Create new round-switch rule"
-                        disabled="disabled"
-                        onclick="createNewRoundSwitchRule(this);" />
+                    type="submit"
+                    value="Create round-switch rule"
+                    onclick="createNewRoundSwitchRule(this);"
+                    class="btn btn-success" />
                 </form>
-            </div>  
-           
-	        <br /> 
-	        <br />
-	        <span class="title">Groups</span>
-		    <div id="show-groups">
-		    </div>
-		    <br />
-		    <span class="title">Players</span>
-		    <div id="show-players">
-		    </div>
-		    <br />
-            <span class="title">Unplayed games</span>
+            </div>
+		    <h1>Games</h1>
+		    <h2>Unplayed games</h2>
             <div id="show-unplayed-games">
             </div>
+            <h1>Backend status</h1>
+            <div id="rest-api-status">
+                ReST API status unknown
+            </div>
+    </div>
     </body>
 </html>

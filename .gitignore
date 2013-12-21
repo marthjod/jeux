@@ -1,5 +1,6 @@
 *.jar
 jquery*.js
+bootstrap.css
 *.class
 build/
 *.!sync

@@ -2,7 +2,7 @@ function getRESTApiStatus(statusDiv) {
     "use strict";
 
     $.get("rest/audience/status", function(data) {
-        $(statusDiv).html("REST API status " + data);
+        $(statusDiv).html("ReST API status " + data);
     });
 }
 
@@ -28,11 +28,11 @@ function showGroups(showGroupsDiv, playerGroupSelect, ruleSrcGroupSelect, ruleDe
         }
 
         $(showGroupsDiv).empty();
-        table = $("<table>");
+        table = $("<table>").attr("class", "table table-hover table-bordered table-condensed");
         row = $("<tr>");
 
         $("<th>").html("Name").appendTo(row);
-        $("<th>").html("ID").appendTo(row);
+        $("<th>").html("#").appendTo(row);
         $("<th>").html("Round").appendTo(row);
         $("<th>").html("Min sets").appendTo(row);
         $("<th>").html("Max sets").appendTo(row);
@@ -57,10 +57,10 @@ function showGroups(showGroupsDiv, playerGroupSelect, ruleSrcGroupSelect, ruleDe
                 $("<td>").attr("class", "group-active").html(currentGroup.active.toString()).appendTo(row);
                 $("<td>").attr("class", "group-completed").html(currentGroup.completed.toString()).appendTo(row);
                 gameGenerationCell = $("<td>");
-                $("<input>").attr("type", "submit").attr("value", "Generate games").appendTo(gameGenerationCell).attr("onclick", "generateGames(" + currentGroup.id + ");");
+                $("<input>").attr("type", "submit").attr("class", "btn btn-success").attr("value", "Generate games").appendTo(gameGenerationCell).attr("onclick", "generateGames(" + currentGroup.id + ");");
                 gameGenerationCell.appendTo(row);
                 deletionCell = $("<td>");
-                $("<input>").attr("type", "submit").attr("value", "Delete group").appendTo(deletionCell).attr("onclick", "deleteGroup(" + currentGroup.id + ");");
+                $("<input>").attr("type", "submit").attr("class", "btn btn-danger").attr("value", "Delete group").appendTo(deletionCell).attr("onclick", "deleteGroup(" + currentGroup.id + ");");
                 deletionCell.appendTo(row);
 
                 row.appendTo(table);
@@ -121,7 +121,7 @@ function showGames(showGamesDiv, status) {
 
                                 for (i = 0; i < gamesData.length; i++) {
 
-                                    gameTable = $("<table>");
+                                    gameTable = $("<table>").attr("class", "table table-hover table-bordered table-condensed");
                                     row = $("<tr>");
 
                                     $("<th>").html("Player 1").appendTo(row);
@@ -139,7 +139,7 @@ function showGames(showGamesDiv, status) {
 
                                     if (status === "unplayed") {
                                         updateCell = $("<td>");
-                                        $("<input>").attr("type", "submit").attr("class", "update-game").attr("value", "Update game").appendTo(updateCell).attr("onclick", "updateGame(this," + gamesData[i].id + "," + gamesData[i].player1Id + "," + gamesData[i].player2Id + ");");
+                                        $("<input>").attr("type", "submit").attr("class", "btn btn-primary update-game").attr("value", "Update game").appendTo(updateCell).attr("onclick", "updateGame(this," + gamesData[i].id + "," + gamesData[i].player1Id + "," + gamesData[i].player2Id + ");");
                                         updateCell.appendTo(row);
                                     } else if (status === "played") {
                                         $("<td>").attr("class", "winner").html(gamesData[i].winnerName).appendTo(row);
@@ -149,7 +149,7 @@ function showGames(showGamesDiv, status) {
 
                                     if (gamesData[i].hasOwnProperty("sets")) {
 
-                                        setsTable = $("<table>");
+                                        setsTable = $("<table>").attr("class", "table table-hover table-bordered table-condensed");
 
                                         row = $("<tr>");
                                         $("<th>").attr("class", "gamesets-header").html("Player 1 score").appendTo(row);
@@ -160,8 +160,8 @@ function showGames(showGamesDiv, status) {
                                             row = $("<tr>").attr("id", "gameset-id-" + gamesData[i].sets[j].id);
 
                                             if (status === "unplayed") {
-                                                $("<td>").attr("class", "player1-score").append($("<input>").attr("type", "number").attr("min", "0").val(gamesData[i].sets[j].player1Score)).appendTo(row);
-                                                $("<td>").attr("class", "player2-score").append($("<input>").attr("type", "number").attr("min", "0").val(gamesData[i].sets[j].player2Score)).appendTo(row);
+                                                $("<td>").attr("class", "player1-score").append($("<input>").attr("type", "number").attr("class", "form-control").attr("min", "0").val(gamesData[i].sets[j].player1Score)).appendTo(row);
+                                                $("<td>").attr("class", "player2-score").append($("<input>").attr("type", "number").attr("class", "form-control").attr("min", "0").val(gamesData[i].sets[j].player2Score)).appendTo(row);
                                             } else {
                                                 $("<td>").attr("class", "player1-score").html(gamesData[i].sets[j].player1Score).appendTo(row);
                                                 $("<td>").attr("class", "player2-score").html(gamesData[i].sets[j].player2Score).appendTo(row);
@@ -207,11 +207,11 @@ function showPlayers(showPlayersDiv) {
 
                             $("<span>").attr("class", "title").html(group.name).appendTo(showPlayersDiv);
                             $("<br>").appendTo(showPlayersDiv);
-                            table = $("<table>");
+                            table = $("<table>").attr("class", "table table-hover table-bordered table-condensed");
                             row = $("<tr>");
 
                             $("<th>").html("Name").appendTo(row);
-                            $("<th>").html("ID").appendTo(row);
+                            $("<th>").html("#").appendTo(row);
                             $("<th>").html("Rank").appendTo(row);
                             $("<th>").html("Points").appendTo(row);
                             $("<th>").html("Score ratio").appendTo(row);
@@ -226,13 +226,12 @@ function showPlayers(showPlayersDiv) {
                                 $("<td>").attr("class", "player-points").html(playersData[i].points).appendTo(row);
                                 $("<td>").attr("class", "player-score-ratio").html(playersData[i].scoreRatio).appendTo(row);
                                 deletionCell = $("<td>");
-                                $("<input>").attr("type", "submit").attr("value", "Delete player").appendTo(deletionCell).attr("onclick", "deletePlayer(" + playersData[i].id + ");");
+                                $("<input>").attr("type", "submit").attr("class", "btn btn-danger").attr("value", "Delete player").appendTo(deletionCell).attr("onclick", "deletePlayer(" + playersData[i].id + ");");
                                 deletionCell.appendTo(row);
                                 row.appendTo(table);
                             }
 
                             table.appendTo(showPlayersDiv);
-                            $("<br>").appendTo(showPlayersDiv);
                         }
                     });
                 }(groupsData[k]));
