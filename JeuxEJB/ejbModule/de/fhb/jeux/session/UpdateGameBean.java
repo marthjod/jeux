@@ -162,11 +162,16 @@ public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
 									+ ", " + setsWonByPlayer1 + ":"
 									+ setsWonByPlayer2);
 
-							// add bonus points
-							addBonusPoints(
-									BonusPointsDistributor.getBonusPoints(
-											config, setsPlayed,
-											setsWonByPlayer1), player1, player2);
+							// add bonus points (only) if more than one set has
+							// been played
+							if (game.getSets().size() > 1) {
+
+								addBonusPoints(
+										BonusPointsDistributor.getBonusPoints(
+												config, setsPlayed,
+												setsWonByPlayer1), player1,
+										player2);
+							}
 
 						} else if (setsWonByPlayer2 > setsWonByPlayer1) {
 
