@@ -142,7 +142,7 @@ function createNewRoundSwitchRule(ruleSubmit) {
                         alert("Operation not permitted (unauthenticated request).");
                     },
                     500 : function() {
-                        $(ruleSubmit).attr("value", "Failed to create round switch rule");
+                        alert("Failed to create round-switch rule");
                     }
                 }
             });
