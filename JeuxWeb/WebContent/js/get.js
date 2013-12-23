@@ -120,7 +120,7 @@ function showGames(showGamesDiv, status) {
 
                                 for (i = 0; i < gamesData.length; i++) {
 
-                                    gameTable = $("<table>").attr("class", "table table-bordered table-hover table-condensed");
+                                    gameTable = $("<table>").attr("class", "table table-bordered table-condensed");
 
                                     row = $("<tr>").attr("id", "game-id-" + gamesData[i].id);
                                     player1Header = $("<th>").attr("class", "player1").attr("id", "player-id-" + gamesData[i].player1Id).html(gamesData[i].player1Name).attr("width", "50%");
@@ -128,9 +128,9 @@ function showGames(showGamesDiv, status) {
 
                                     // mark winner name
                                     if (gamesData[i].winnerName === gamesData[i].player1Name) {
-                                        player1Header.html($("<i>").html(gamesData[i].player1Name + " *"));
+                                        player1Header.html($("<em>").html(gamesData[i].player1Name + " *"));
                                     } else if (gamesData[i].winnerName === gamesData[i].player2Name) {
-                                        player2Header.html($("<i>").html(gamesData[i].player2Name));
+                                        player2Header.html($("<em>").html(gamesData[i].player2Name));
                                     }
 
                                     player1Header.appendTo(row);
@@ -143,7 +143,7 @@ function showGames(showGamesDiv, status) {
 
                                     if (gamesData[i].hasOwnProperty("sets")) {
 
-                                        setsTable = $("<table>").attr("class", "table table-bordered table-hover");
+                                        setsTable = $("<table>").attr("class", "table table-bordered table-striped");
 
                                         for (j = 0; j < gamesData[i].sets.length; j++) {
                                             row = $("<tr>").attr("id", "gameset-id-" + gamesData[i].sets[j].id);
