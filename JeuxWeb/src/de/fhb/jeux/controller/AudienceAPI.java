@@ -20,6 +20,7 @@ import de.fhb.jeux.model.IGroup;
 import de.fhb.jeux.session.GameLocal;
 import de.fhb.jeux.session.GameSetLocal;
 import de.fhb.jeux.session.GroupLocal;
+import de.fhb.jeux.session.RankingLocal;
 import de.fhb.jeux.session.RoundSwitchRuleLocal;
 
 @Stateless
@@ -40,6 +41,9 @@ public class AudienceAPI {
 	@EJB
 	private RoundSwitchRuleLocal roundSwitchRuleBean;
 
+	@EJB
+	private RankingLocal playerRankingBean;
+
 	@GET
 	@Path("/status")
 	@Produces(MediaType.TEXT_PLAIN)
@@ -52,7 +56,6 @@ public class AudienceAPI {
 	@Path("/groups")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<GroupDTO> getAllGroupDTOs() {
-		// logger.debug("-> All groups");
 		return groupBean.getAllGroupDTOs();
 	}
 
@@ -60,7 +63,6 @@ public class AudienceAPI {
 	@Path("/roundswitchrules")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<RoundSwitchRuleDTO> getAllRoundSwitchRuleDTOs() {
-		// logger.debug("-> All rules");
 		return roundSwitchRuleBean.getAllRoundSwitchRuleDTOs();
 	}
 
@@ -69,7 +71,6 @@ public class AudienceAPI {
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<PlayerDTO> getPlayerDTOsInGroup(
 			@PathParam("groupId") int groupId) {
-		// logger.debug("-> Players in group #" + groupId);
 		IGroup group = groupBean.getGroupById(groupId);
 		return groupBean.getPlayerDTOsInGroup(group);
 	}
@@ -79,7 +80,6 @@ public class AudienceAPI {
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<GameDTO> getPlayedGameDTOsInGroup(
 			@PathParam("groupId") int groupId) {
-		// logger.debug("-> Played games for group #" + groupId);
 		IGroup group = groupBean.getGroupById(groupId);
 		return gameBean.getPlayedGameDTOsInGroup(group);
 	}
@@ -89,8 +89,15 @@ public class AudienceAPI {
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<GameDTO> getUnplayedGameDTOsInGroup(
 			@PathParam("groupId") int groupId) {
-		// logger.debug("-> Unplayed games for group #" + groupId);
 		IGroup group = groupBean.getGroupById(groupId);
 		return gameBean.getUnplayedGameDTOsInGroup(group);
+	}
+
+	@GET
+	@Path("/rankings/group/id/{groupId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<PlayerDTO> getRankingInGroup(@PathParam("groupId") int groupId) {
+		IGroup group = groupBean.getGroupById(groupId);
+		return playerRankingBean.getRankedPlayers(group);
 	}
 }

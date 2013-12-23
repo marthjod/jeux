@@ -14,12 +14,18 @@
             $( document ).ready(function() {
              getRESTApiStatus($( "#rest-api-status" ));
              showGames($("#show-played-games"), "played");
+             showRankings($("#show-rankings"));
             });
         </script>
         <title>JEUX</title>
     </head>
     <body>
         <div class="container" id="container">
+
+            <h1>Rankings</h1>
+            <h2>Current rankings</h2>
+            <div id="show-rankings">
+            </div>
 
 	        <h1>Games</h1>
 	        <h2>Played games</h2>

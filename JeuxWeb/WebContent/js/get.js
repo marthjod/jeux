@@ -236,3 +236,7 @@ function showPlayers(showPlayersDiv) {
         }
     });
 }
+
+function showRankings(rankingsDiv) {
+    "use strict";
+}
