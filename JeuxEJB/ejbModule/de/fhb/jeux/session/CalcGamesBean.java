@@ -43,6 +43,13 @@ public class CalcGamesBean implements CalcGamesRemote, CalcGamesLocal {
 
 		List<IGame> games = calcGamesForGroup(group, shuffledMode);
 		if (games.size() > 0) {
+			for (IGame game : games) {
+				status = insertGameBean.insertGame(game);
+				if (status != InsertGameBean.INSERT_OK) {
+					// bailing
+					break;
+				}
+			}
 
 		} else {
 			status = CALC_ERR;

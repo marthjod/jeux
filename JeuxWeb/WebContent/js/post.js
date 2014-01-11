@@ -77,10 +77,13 @@ function generateGames(groupId, shuffledMode) {
         },
         statusCode : {
             409 : function() {
-                // conflict; games already exist for group
+                alert("Conflict: games already exist for group.");
             },
             500 : function() {
-                alert("Unknown error");
+                alert("Unknown error.");
+            },
+            501 : function() {
+                alert("Calculation error.");
             }
         }
     });

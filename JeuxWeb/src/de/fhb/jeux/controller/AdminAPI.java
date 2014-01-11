@@ -196,7 +196,7 @@ public class AdminAPI {
 				groupBean.getGroupById(groupId), shuffledMode);
 
 		if (status == InsertGameBean.INSERT_OK) {
-			return Response.status(Response.Status.OK).build();
+			return Response.status(Response.Status.CREATED).build();
 		} else if (status == InsertGameBean.INSERT_CONFLICT) {
 			return Response.status(Response.Status.CONFLICT).build();
 		} else if (status == InsertGameBean.INSERT_ERR) {
