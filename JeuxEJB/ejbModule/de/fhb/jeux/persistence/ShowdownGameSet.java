@@ -33,6 +33,10 @@ public class ShowdownGameSet implements IGameSet, Serializable {
 	public ShowdownGameSet() {
 	}
 
+	public ShowdownGameSet(IGame game) {
+		this.game = (ShowdownGame) game;
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;

@@ -1,6 +1,7 @@
 package de.fhb.jeux.persistence;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -38,6 +39,18 @@ public class ShowdownGame implements IGame, Serializable {
 	protected static Logger logger = Logger.getLogger(ShowdownGame.class);
 
 	public ShowdownGame() {
+	}
+
+	public ShowdownGame(IGroup group, IPlayer player1, IPlayer player2) {
+		this.group = (ShowdownGroup) group;
+		this.player1 = (ShowdownPlayer) player1;
+		this.player2 = (ShowdownPlayer) player2;
+		this.sets = new ArrayList<ShowdownGameSet>();
+
+		// TODO differentiate maxSets / actual sets
+		for (int i = 0; i < group.getMaxSets(); i++) {
+			this.sets.add(new ShowdownGameSet(this));
+		}
 	}
 
 	@Id
