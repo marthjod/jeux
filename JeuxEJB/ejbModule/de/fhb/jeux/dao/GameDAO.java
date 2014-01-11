@@ -29,28 +29,17 @@ public class GameDAO {
 
 	public void addGame(IGame game) {
 		em.persist(game);
-		logger.debug("Persisted game '" + game.getId() + "'");
+		logger.debug("Persisted game " + game);
 	}
 
 	public void deleteGame(IGame game) {
 		em.remove(game);
-		logger.debug("Deleted game '" + game.getId() + "'");
+		logger.debug("Deleted game " + game);
 	}
 
 	public void updateGame(IGame game) {
 		em.merge(game);
 	}
-
-	// public List<IGame> getGamesInGroup(IGroup group) {
-	// List<IGame> games = new ArrayList<IGame>();
-	//
-	// TypedQuery<IGame> query = em.createNamedQuery("Game.findAllInGroup",
-	// IGame.class);
-	// query.setParameter("group", group);
-	// games = query.getResultList();
-	//
-	// return games;
-	// }
 
 	public List<IGame> getPlayedGamesInGroup(IGroup group) {
 		List<IGame> playedGames = new ArrayList<IGame>();

@@ -167,29 +167,25 @@ public class ShowdownGame implements IGame, Serializable {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		int i;
 
-		sb.append("<");
-		sb.append("ID " + id);
-		sb.append(", Player 1: " + player1.getName());
-		sb.append(" (ID " + player1.getId() + ")");
-		sb.append(", Player 2: " + player2.getName());
-		sb.append(" (ID " + player2.getId() + ")");
-		sb.append(", group ID: " + group.getId());
+		sb.append("{ ");
+		sb.append("(" + id + ") ");
+		sb.append(player1.getName());
+		sb.append("--" + player2.getName());
+		sb.append(" (" + group.getName() + ")");
 		if (winner != null) {
-			sb.append(", Winner: " + winner.getName());
-			sb.append(" (ID " + winner.getId() + ")");
+			sb.append(" *" + winner.getName() + "*");
 		}
 
 		// game sets
 		if (sets.size() > 0) {
-			sb.append(" [");
-			for (i = 0; i < sets.size(); i++) {
+			sb.append(" [ ");
+			for (int i = 0; i < sets.size(); i++) {
 				sb.append(sets.get(i) + ", ");
 			}
-			sb.append("]");
+			sb.append(" ]");
 		}
-		sb.append(">");
+		sb.append(" }");
 		return sb.toString();
 	}
 }
