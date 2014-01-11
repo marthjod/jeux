@@ -9,8 +9,8 @@ import de.fhb.jeux.dao.GameDAO;
 import de.fhb.jeux.model.IGame;
 
 @Stateless
-public class InsertGameBean implements InsertGameBeanRemote,
-		InsertGameBeanLocal {
+public class InsertGameBean implements InsertGameRemote,
+		InsertGameLocal {
 
 	protected static Logger logger = Logger.getLogger(InsertGameBean.class);
 

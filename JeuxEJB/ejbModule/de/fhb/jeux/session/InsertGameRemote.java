@@ -1,12 +1,10 @@
 package de.fhb.jeux.session;
 
-import javax.ejb.Local;
+import javax.ejb.Remote;
 
 import de.fhb.jeux.model.IGame;
 
-@Local
-public interface InsertGameBeanLocal {
-
+@Remote
+public interface InsertGameRemote {
 	public int insertGame(IGame game);
-
 }
