@@ -173,8 +173,23 @@ public class ShowdownGame implements IGame, Serializable {
 
 	@Override
 	public boolean equals(IGame game) {
-		// assuming unique IDs
-		return id == game.getId();
+		// cannot assume unique IDs b/c when created (i.e. before being
+		// persisted), IDs are all 0)
+		boolean equal = false;
+		if (id == game.getId() && group.equals(game.getGroup())) {
+
+			// p1 == p1 && p2 == p2
+			// -OR-
+			// p1 == p2 && p2 == p1
+			if ((player1.equals(game.getPlayer1()) && player2.equals(game
+					.getPlayer2()))
+					|| (player1.equals(game.getPlayer2()) && player2
+							.equals(game.getPlayer1()))) {
+				equal = true;
+			}
+		}
+
+		return equal;
 	}
 
 	@Override
