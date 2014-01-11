@@ -57,7 +57,7 @@ function showGroups(showGroupsDiv, playerGroupSelect, ruleSrcGroupSelect, ruleDe
                 $("<td>").attr("class", "group-active").html(currentGroup.active.toString()).appendTo(row);
                 $("<td>").attr("class", "group-completed").html(currentGroup.completed.toString()).appendTo(row);
                 gameGenerationCell = $("<td>");
-                $("<input>").attr("type", "submit").attr("class", "btn btn-success").attr("value", "Generate games").appendTo(gameGenerationCell).attr("onclick", "generateGames(" + currentGroup.id + ", false);");
+                $("<input>").attr("type", "submit").attr("class", "btn btn-success").attr("value", "Generate games").appendTo(gameGenerationCell).attr("onclick", "generateGames(this, " + currentGroup.id + ", false);");
                 gameGenerationCell.appendTo(row);
                 deletionCell = $("<td>");
                 $("<input>").attr("type", "submit").attr("class", "btn btn-danger").attr("value", "Delete group").appendTo(deletionCell).attr("onclick", "deleteGroup(" + currentGroup.id + ");");
@@ -130,7 +130,7 @@ function showGames(showGamesDiv, status) {
                                     if (gamesData[i].winnerName === gamesData[i].player1Name) {
                                         player1Header.html($("<em>").html(gamesData[i].player1Name + " *"));
                                     } else if (gamesData[i].winnerName === gamesData[i].player2Name) {
-                                        player2Header.html($("<em>").html(gamesData[i].player2Name));
+                                        player2Header.html($("<em>").html(gamesData[i].player2Name + " *"));
                                     }
 
                                     player1Header.appendTo(row);

@@ -61,7 +61,7 @@ function updateGame(updateSubmit, gameId, player1Id, player2Id) {
     });
 }
 
-function generateGames(groupId, shuffledMode) {
+function generateGames(generateButton, groupId, shuffledMode) {
     "use strict";
 
     if (typeof shuffledMode === undefined || shuffledMode === null || typeof shuffledMode !== "boolean") {
@@ -72,10 +72,11 @@ function generateGames(groupId, shuffledMode) {
         // access with @MatrixParam
         url : "rest/admin/generate-games/group/id/" + groupId + ";shuffledMode=" + shuffledMode.toString(),
         type : "POST",
-        success : function() {
-
-        },
         statusCode : {
+            201 : function() {
+                $(generateButton).attr("disabled", "disabled").removeClass("btn-success").addClass("btn-default");
+                showGames($("#show-unplayed-games"), "unplayed");
+            },
             409 : function() {
                 alert("Conflict: games already exist for group.");
             },
