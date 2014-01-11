@@ -49,7 +49,7 @@ public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
 			List<ShowdownGameSet> existingSets = game.getSets();
 			List<GameSetDTO> newSets = gameDTO.getSets();
 
-			// same amount of sets required
+			// same amount of overall sets required
 			if (existingSets.size() == newSets.size()) {
 
 				IPlayer player1 = game.getPlayer1();
@@ -123,6 +123,9 @@ public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
 					int setsPlayed = 0;
 					int setsWonByPlayer1 = 0;
 					int setsWonByPlayer2 = 0;
+					boolean gameOver = false;
+					int minSets = game.getGroup().getMinSets();
+					int maxSets = game.getGroup().getMaxSets();
 
 					for (IGameSet set : game.getSets()) {
 						if (set.hasWinner()
@@ -141,13 +144,22 @@ public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
 					// TODO make the following atomic, i.e. use transaction
 
 					// we have a game winner if
-					// - all sets have been played
+					// - all sets have been played OR enough sets have been
+					// played
 					// - one player has won more sets than the other
 					// we'll also calculate and write back
 					// - (bonus) points for won sets
 					// - score ratios for opponents
 
-					if (setsPlayed == game.getSets().size()) {
+					// (only) one of the players has won minimum required sets
+					if (setsPlayed == maxSets
+							|| (setsWonByPlayer1 == minSets && setsWonByPlayer2 != minSets)
+							|| (setsWonByPlayer2 == minSets && setsWonByPlayer1 != minSets)) {
+						gameOver = true;
+						logger.debug("Game over");
+					}
+
+					if (gameOver) {
 
 						// write score ratios already (no need to know the
 						// winner yet)

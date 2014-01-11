@@ -108,10 +108,15 @@ public class ShowdownGameSet implements IGameSet, Serializable {
 	}
 
 	@Override
+	public boolean isUnplayed() {
+		return winner == null; // player1Score == 0 && player2Score == 0;
+	}
+
+	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{ ");
-		sb.append("( " + game.getId() + "/");
+		sb.append("(" + game.getId() + "/");
 		sb.append(id + ") ");
 		sb.append(player1Score);
 		sb.append(":" + player2Score);

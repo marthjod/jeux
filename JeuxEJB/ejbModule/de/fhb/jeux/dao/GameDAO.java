@@ -1,8 +1,10 @@
 package de.fhb.jeux.dao;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
+import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -12,8 +14,10 @@ import javax.persistence.TypedQuery;
 import org.jboss.logging.Logger;
 
 import de.fhb.jeux.model.IGame;
+import de.fhb.jeux.model.IGameSet;
 import de.fhb.jeux.model.IGroup;
 import de.fhb.jeux.persistence.ShowdownGame;
+import de.fhb.jeux.persistence.ShowdownGameSet;
 
 @Stateless
 @LocalBean
@@ -23,6 +27,9 @@ public class GameDAO {
 
 	@PersistenceContext
 	private EntityManager em;
+
+	@EJB
+	private GameSetDAO gameSetDAO;
 
 	public GameDAO() {
 	}
@@ -38,6 +45,19 @@ public class GameDAO {
 	}
 
 	public void updateGame(IGame game) {
+		// remove any extraneous non-played sets first
+		IGameSet set = null;
+		for (Iterator<ShowdownGameSet> setsIter = game.getSets().iterator(); setsIter
+				.hasNext();) {
+			set = (IGameSet) setsIter.next();
+			if (set.isUnplayed()) {
+				// remove from persistence
+				gameSetDAO.deleteGameSet(set);
+				// remove from game to be merged
+				setsIter.remove();
+			}
+		}
+
 		em.merge(game);
 	}
 

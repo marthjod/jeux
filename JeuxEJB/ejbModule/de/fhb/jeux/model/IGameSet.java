@@ -20,4 +20,6 @@ public interface IGameSet {
 	public boolean equals(IGameSet gameSet);
 
 	public boolean hasWinner();
+
+	public boolean isUnplayed();
 }
