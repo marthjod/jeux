@@ -20,11 +20,6 @@ public class GameBean implements GameRemote, GameLocal {
 	public GameBean() {
 	}
 
-	// @Override
-	// public List<IGame> getGamesInGroup(IGroup group) {
-	// return gameDAO.getGamesInGroup(group);
-	// }
-
 	public List<GameDTO> getPlayedGameDTOsInGroup(IGroup group) {
 		List<IGame> playedGames = gameDAO.getPlayedGamesInGroup(group);
 		List<GameDTO> playedGameDTOs = new ArrayList<GameDTO>();

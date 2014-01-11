@@ -5,6 +5,8 @@ import javax.ejb.Stateless;
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.DefaultValue;
+import javax.ws.rs.MatrixParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -22,12 +24,15 @@ import de.fhb.jeux.dto.GroupDTO;
 import de.fhb.jeux.dto.PlayerDTO;
 import de.fhb.jeux.dto.RoundSwitchRuleDTO;
 import de.fhb.jeux.model.IGroup;
+import de.fhb.jeux.session.CalcGamesBean;
+import de.fhb.jeux.session.CalcGamesLocal;
 import de.fhb.jeux.session.CreateGroupLocal;
 import de.fhb.jeux.session.CreatePlayerLocal;
 import de.fhb.jeux.session.CreateRoundSwitchRuleLocal;
 import de.fhb.jeux.session.DeleteGroupLocal;
 import de.fhb.jeux.session.DeletePlayerLocal;
 import de.fhb.jeux.session.GroupLocal;
+import de.fhb.jeux.session.InsertGameBean;
 import de.fhb.jeux.session.PlayerLocal;
 import de.fhb.jeux.session.RoundSwitchRuleLocal;
 import de.fhb.jeux.session.UpdateGameLocal;
@@ -64,6 +69,9 @@ public class AdminAPI {
 
 	@EJB
 	private RoundSwitchRuleLocal roundSwitchRuleBean;
+
+	@EJB
+	private CalcGamesLocal calcGamesBean;
 
 	@DELETE
 	@Path("/group/id/{groupId}")
@@ -169,6 +177,33 @@ public class AdminAPI {
 
 		if (updateGameBean.updateGame(updatedGame, config)) {
 			return Response.status(Response.Status.OK).build();
+		} else {
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+					.build();
+		}
+	}
+
+	@POST
+	@Path("/generate-games/group/id/{groupId}")
+	public Response generateGames(
+			@PathParam("groupId") int groupId,
+			@MatrixParam("shuffledMode") @DefaultValue("false") boolean shuffledMode) {
+
+		logger.debug("Request for game generation (group ID " + groupId
+				+ "); shuffled mode = " + shuffledMode);
+
+		int status = calcGamesBean.writeGamesForGroup(
+				groupBean.getGroupById(groupId), shuffledMode);
+
+		if (status == InsertGameBean.INSERT_OK) {
+			return Response.status(Response.Status.OK).build();
+		} else if (status == InsertGameBean.INSERT_CONFLICT) {
+			return Response.status(Response.Status.CONFLICT).build();
+		} else if (status == InsertGameBean.INSERT_ERR) {
+			return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
+		} else if (status == CalcGamesBean.CALC_ERR) {
+			// "Not Implemented"
+			return Response.status(501).build();
 		} else {
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
 					.build();

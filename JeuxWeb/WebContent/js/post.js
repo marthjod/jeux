@@ -61,8 +61,28 @@ function updateGame(updateSubmit, gameId, player1Id, player2Id) {
     });
 }
 
-function generateGames(groupId) {
+function generateGames(groupId, shuffledMode) {
     "use strict";
 
-    console.log("generate games for group id " + groupId);
+    if (typeof shuffledMode === undefined || shuffledMode === null || typeof shuffledMode !== "boolean") {
+        shuffledMode = false;
+    }
+
+    $.ajax({
+        // access with @MatrixParam
+        url : "rest/admin/generate-games/group/id/" + groupId + ";shuffledMode=" + shuffledMode.toString(),
+        type : "POST",
+        success : function() {
+
+        },
+        statusCode : {
+            409 : function() {
+                // conflict; games already exist for group
+            },
+            500 : function() {
+                alert("Unknown error");
+            }
+        }
+    });
+
 }

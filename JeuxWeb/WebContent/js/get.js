@@ -57,7 +57,7 @@ function showGroups(showGroupsDiv, playerGroupSelect, ruleSrcGroupSelect, ruleDe
                 $("<td>").attr("class", "group-active").html(currentGroup.active.toString()).appendTo(row);
                 $("<td>").attr("class", "group-completed").html(currentGroup.completed.toString()).appendTo(row);
                 gameGenerationCell = $("<td>");
-                $("<input>").attr("type", "submit").attr("class", "btn btn-success").attr("value", "Generate games").appendTo(gameGenerationCell).attr("onclick", "generateGames(" + currentGroup.id + ");");
+                $("<input>").attr("type", "submit").attr("class", "btn btn-success").attr("value", "Generate games").appendTo(gameGenerationCell).attr("onclick", "generateGames(" + currentGroup.id + ", false);");
                 gameGenerationCell.appendTo(row);
                 deletionCell = $("<td>");
                 $("<input>").attr("type", "submit").attr("class", "btn btn-danger").attr("value", "Delete group").appendTo(deletionCell).attr("onclick", "deleteGroup(" + currentGroup.id + ");");
