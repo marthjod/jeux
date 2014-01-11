@@ -3,17 +3,24 @@ package de.fhb.jeux.session;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
+import org.apache.commons.math3.util.ArithmeticUtils;
 import org.jboss.logging.Logger;
 
 import de.fhb.jeux.model.IGame;
 import de.fhb.jeux.model.IGroup;
+import de.fhb.jeux.model.IPlayer;
+import de.fhb.jeux.persistence.ShowdownGame;
 
 @Stateless
 public class CalcGamesBean implements CalcGamesRemote, CalcGamesLocal {
 
 	protected static Logger logger = Logger.getLogger(CalcGamesBean.class);
+
+	@EJB
+	private InsertGameLocal insertGameBean;
 
 	// "not implemented"
 	public static final int CALC_ERR = 501;
@@ -21,17 +28,64 @@ public class CalcGamesBean implements CalcGamesRemote, CalcGamesLocal {
 	public CalcGamesBean() {
 	}
 
+	private long maxGames(int numPlayers) {
+		return ArithmeticUtils.binomialCoefficient(numPlayers, 2);
+	}
+
+	private boolean contains(List<IGame> games, IGame newGame) {
+		boolean contained = false;
+
+		for (IGame existingGame : games) {
+			if (existingGame.equals(newGame)) {
+				contained = true;
+				break;
+			}
+		}
+
+		return contained;
+	}
+
 	private List<IGame> calcGamesForGroup(IGroup group, boolean shuffledMode) {
 		List<IGame> games = new ArrayList<IGame>();
+		IGame newGame = null;
+
+		long maxGames = maxGames(group.getPlayers().size());
 
 		// use "shuffled mode" for fair order of games to be played one after
-		// the
-		// other
+		// the other
 		if (shuffledMode) {
 			// TODO
 		} else {
-			// only calculate games, no specific order
+			// only calculate games, regardless of specific order
+			// faster
+			while ((long) games.size() < maxGames) {
+				for (IPlayer player1 : group.getPlayers()) {
+					for (IPlayer player2 : group.getPlayers()) {
+						if (player1.equals(player2)) {
+							// cannot play against oneself
+							continue;
+						}
 
+						newGame = new ShowdownGame(group, player1, player2);
+						if (!contains(games, newGame)) {
+							games.add(newGame);
+						}
+					}
+				}
+			}
+		}
+
+		String msg = "Calculated " + games.size() + " of projected " + maxGames
+				+ " game(s)";
+		if (games.size() != maxGames) {
+			logger.warn(msg);
+		} else {
+			logger.debug(msg);
+		}
+
+		// DEBUG
+		for (IGame game : games) {
+			logger.debug(game);
 		}
 
 		return games;
