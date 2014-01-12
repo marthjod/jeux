@@ -115,10 +115,7 @@ public class GroupDAO {
 		List<ShowdownPlayer> players = new ArrayList<ShowdownPlayer>();
 		if (group != null) {
 			players = group.getPlayers();
-			logger.debug("Players in group '" + group.getName() + "': "
-					+ players);
 		}
-
 		return players;
 	}
 }

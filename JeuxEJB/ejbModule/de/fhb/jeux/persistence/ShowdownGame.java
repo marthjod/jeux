@@ -102,48 +102,6 @@ public class ShowdownGame implements IGame, Serializable {
 		return player2;
 	}
 
-	// @Override
-	// public IPlayer getWinner() {
-	// int player1WonSets = 0;
-	// int player2WonSets = 0;
-	// IPlayer winner;
-	//
-	// // do this here so we loop only once
-	// for (IGameSet set : sets) {
-	// if (player1.equals(set.getWinner())) {
-	// logger.debug(player1.getName() + " (player 1) has won set "
-	// + set.getPlayer1Score() + ":" + set.getPlayer2Score());
-	// player1WonSets++;
-	// } else if (player2.equals(set.getWinner())) {
-	// logger.debug(player2.getName() + " (player 2) has won set "
-	// + set.getPlayer2Score() + ":" + set.getPlayer1Score());
-	// player2WonSets++;
-	// } else {
-	// logger.warn("Unknown player in set");
-	// }
-	// }
-	//
-	// logger.debug(player1.getName() + " : " + player2.getName() + " "
-	// + player1WonSets + ":" + player2WonSets);
-	//
-	// if (player1WonSets > player2WonSets) {
-	// winner = player1;
-	// } else if (player2WonSets > player1WonSets) {
-	// winner = player2;
-	// } else {
-	// // same amount of won sets
-	// winner = null;
-	// }
-	//
-	// if (winner != null) {
-	// logger.debug("Winner: " + winner.getName());
-	// } else {
-	// logger.warn("Unable to determine a winner");
-	// }
-	//
-	// return winner;
-	// }
-
 	@Override
 	public IPlayer getWinner() {
 		return winner;
@@ -171,16 +129,17 @@ public class ShowdownGame implements IGame, Serializable {
 		this.sets = sets;
 	}
 
+	// in some cases, e.g. before inserting a new game,
+	// an ID is not set yet, meaning equals() would wrongly return false
+	// if we compared IDs as well; thus we cannot consider IDs here
 	@Override
 	public boolean equals(IGame game) {
-		// cannot assume unique IDs b/c when created (i.e. before being
-		// persisted), IDs are all 0)
 		boolean equal = false;
-		if (id == game.getId() && group.equals(game.getGroup())) {
 
-			// p1 == p1 && p2 == p2
+		if (group.equals(game.getGroup())) {
+			// p1 == p1' && p2 == p2'
 			// -OR-
-			// p1 == p2 && p2 == p1
+			// p1 == p2' && p2 == p1'
 			if ((player1.equals(game.getPlayer1()) && player2.equals(game
 					.getPlayer2()))
 					|| (player1.equals(game.getPlayer2()) && player2
@@ -214,6 +173,7 @@ public class ShowdownGame implements IGame, Serializable {
 			sb.append(" ]");
 		}
 		sb.append(" }");
+
 		return sb.toString();
 	}
 }

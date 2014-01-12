@@ -83,6 +83,17 @@ public class GameDAO {
 		return unplayedGames;
 	}
 
+	public List<IGame> getGamesInGroup(IGroup group) {
+		List<IGame> games = new ArrayList<IGame>();
+
+		TypedQuery<IGame> query = em.createNamedQuery("Game.findAllInGroup",
+				IGame.class);
+		query.setParameter("group", group);
+		games = query.getResultList();
+
+		return games;
+	}
+
 	// for deletion and updates
 	public IGame getGameById(int gameId) {
 		IGame game = new ShowdownGame();

@@ -78,7 +78,9 @@ function generateGames(generateButton, groupId, shuffledMode) {
                 showGames($("#show-unplayed-games"), "unplayed");
             },
             409 : function() {
-                alert("Conflict: games already exist for group.");
+                alert("Conflict: one or more game(s) already exist(s) in this group.");
+                // disable button
+                $(generateButton).attr("disabled", "disabled").removeClass("btn-success").addClass("btn-default");
             },
             500 : function() {
                 alert("Unknown error.");

@@ -9,8 +9,7 @@ import de.fhb.jeux.dao.GameDAO;
 import de.fhb.jeux.model.IGame;
 
 @Stateless
-public class InsertGameBean implements InsertGameRemote,
-		InsertGameLocal {
+public class InsertGameBean implements InsertGameRemote, InsertGameLocal {
 
 	protected static Logger logger = Logger.getLogger(InsertGameBean.class);
 
@@ -29,21 +28,36 @@ public class InsertGameBean implements InsertGameRemote,
 	public InsertGameBean() {
 	}
 
+	private boolean gameExists(IGame game) {
+		boolean exists = false;
+
+		for (IGame g : gameDAO.getGamesInGroup(game.getGroup())) {
+			if (g.equals(game)) {
+				exists = true;
+				break;
+			}
+		}
+
+		return exists;
+	}
+
 	@Override
-	// TODO return value ~= HTTP status code
 	public int insertGame(IGame game) {
 		int status = UNKNOWN_ERR;
 
-		// TODO catch different failure cases
-		try {
-			gameDAO.addGame(game);
-			status = INSERT_OK;
-		} catch (Exception e) {
-			logger.error(e.getClass().getName() + ": " + e.getMessage());
-			status = INSERT_ERR;
+		if (!gameExists(game)) {
+			// TODO catch more/addt'l failure cases
+			try {
+				gameDAO.addGame(game);
+				status = INSERT_OK;
+			} catch (Exception e) {
+				logger.error(e.getClass().getName() + ": " + e.getMessage());
+				status = INSERT_ERR;
+			}
+		} else {
+			status = INSERT_CONFLICT;
 		}
 
 		return status;
 	}
-
 }
