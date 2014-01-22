@@ -24,12 +24,12 @@
     <body>
     <div id="container" class="container">
         <h1>Groups</h1>
-        <h2>Existing groups</h2>
+        <!-- <h2>Existing groups</h2> -->
         <div id="show-groups">
         </div>
-        <h2>Create group</h2>
-        <div id="create-groups">
-            <form id="create-group" action="#" role="form" class="form-horizontal">
+        <h2 class="btn btn-info" onclick="$('#create-groups').toggle();">New group</h2>
+        <div id="create-groups" hidden="hidden">
+            <form id="create-group" action="#" role="form">
                 <div class="form-group">
                     <label for="name">Name</label>
                     <input type="text"
@@ -82,12 +82,12 @@
             </form>
             </div>
             <h1>Players</h1>
-            <h2>Existing players</h2>
+            <!-- <h2>Existing players</h2> -->
             <div id="show-players">
             </div>
-            <h2>Create player</h2>
-            <div id="create-players">
-                <form id="create-player" action="#" role="form" class="form-horizontal">
+            <h2 class="btn btn-info" onclick="$('#create-players').toggle();">New player</h2>
+            <div id="create-players" hidden="hidden">
+                <form id="create-player" action="#" role="form">
 	                <div class="form-group">
 	                    <label for="name">Name</label>
                         <input id="name"
@@ -109,10 +109,10 @@
                     class="btn btn-success" />
                 </form>
             </div>
-            <h1>Tournament course</h1>
-            <div id="create-roundswitchrules">
-                <h2>Create round-switch rule</h2>
-                <form id="create-roundswitchrule" action="#" role="form" class="form-horizontal">
+            <h1>Tournament</h1>
+            <h2 class="btn btn-info" onclick="$('#create-roundswitchrules').toggle();">New round-switch rule</h2>
+            <div id="create-roundswitchrules" hidden="hidden">
+                <form id="create-roundswitchrule" action="#" role="form">
                     <div class="form-group">
                         <label for="rule-source-group">Source group</label>
                         <select id="rule-source-group"
@@ -154,7 +154,7 @@
 		    <h2>Unplayed games</h2>
             <div id="show-unplayed-games">
             </div>
-            <h1>Backend status</h1>
+            <br />
             <div id="rest-api-status">
                 ReST API status unknown
             </div>

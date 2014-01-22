@@ -166,7 +166,7 @@ function showGames(showGamesDiv, status) {
 
                                         if (status === "unplayed") {
                                             row = $("<tr>");
-                                            updateCell.appendTo(row)
+                                            updateCell.appendTo(row);
                                             row.appendTo(gameTable);
                                         }
                                     }
