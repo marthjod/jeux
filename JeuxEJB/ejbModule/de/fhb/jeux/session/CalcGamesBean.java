@@ -22,7 +22,9 @@ public class CalcGamesBean implements CalcGamesRemote, CalcGamesLocal {
 	@EJB
 	private InsertGameLocal insertGameBean;
 
-	// "not implemented"
+	// HTTP 428 Precondition Required
+	public static final int TOO_FEW_GROUP_MEMBERS = 428;
+	// HTTP 501 Not Implemented
 	public static final int CALC_ERR = 501;
 
 	public CalcGamesBean() {
@@ -51,8 +53,8 @@ public class CalcGamesBean implements CalcGamesRemote, CalcGamesLocal {
 
 		long maxGames = maxGames(group.getPlayers().size());
 
-		// use "shuffled mode" for fair order of games to be played one after
-		// the other
+		// use "shuffled mode" for fair order of games
+		// to be played one after the other
 		if (shuffledMode) {
 			// TODO
 		} else {
@@ -95,18 +97,23 @@ public class CalcGamesBean implements CalcGamesRemote, CalcGamesLocal {
 	public int writeGamesForGroup(IGroup group, boolean shuffledMode) {
 		int status = InsertGameBean.UNKNOWN_ERR;
 
-		List<IGame> games = calcGamesForGroup(group, shuffledMode);
-		if (games.size() > 0) {
-			for (IGame game : games) {
-				status = insertGameBean.insertGame(game);
-				if (status != InsertGameBean.INSERT_OK) {
-					// bailing
-					break;
+		// we need at least 2 players in a group
+		if (group.getPlayers().size() >= 2) {
+			List<IGame> games = calcGamesForGroup(group, shuffledMode);
+			if (games.size() > 0) {
+				for (IGame game : games) {
+					status = insertGameBean.insertGame(game);
+					if (status != InsertGameBean.INSERT_OK) {
+						// bailing
+						break;
+					}
 				}
-			}
 
+			} else {
+				status = CALC_ERR;
+			}
 		} else {
-			status = CALC_ERR;
+			status = TOO_FEW_GROUP_MEMBERS;
 		}
 
 		return status;

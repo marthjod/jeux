@@ -189,24 +189,43 @@ public class AdminAPI {
 			@PathParam("groupId") int groupId,
 			@MatrixParam("shuffledMode") @DefaultValue("false") boolean shuffledMode) {
 
+		Response response;
+
 		logger.debug("Request for game generation (group ID " + groupId
 				+ "); shuffled mode = " + shuffledMode);
 
 		int status = calcGamesBean.writeGamesForGroup(
 				groupBean.getGroupById(groupId), shuffledMode);
 
-		if (status == InsertGameBean.INSERT_OK) {
-			return Response.status(Response.Status.CREATED).build();
-		} else if (status == InsertGameBean.INSERT_CONFLICT) {
-			return Response.status(Response.Status.CONFLICT).build();
-		} else if (status == InsertGameBean.INSERT_ERR) {
-			return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
-		} else if (status == CalcGamesBean.CALC_ERR) {
-			// "Not Implemented"
-			return Response.status(501).build();
-		} else {
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+		switch (status) {
+		case InsertGameBean.INSERT_OK:
+			response = Response.status(Response.Status.CREATED).build();
+			break;
+
+		case InsertGameBean.INSERT_CONFLICT:
+			response = Response.status(Response.Status.CONFLICT).build();
+			break;
+
+		case InsertGameBean.INSERT_ERR:
+			response = Response.status(Response.Status.SERVICE_UNAVAILABLE)
 					.build();
+			break;
+
+		// "Not Implemented"
+		case CalcGamesBean.CALC_ERR:
+			response = Response.status(501).build();
+			break;
+
+		case CalcGamesBean.TOO_FEW_GROUP_MEMBERS:
+			response = Response.status(428).build();
+			break;
+
+		default:
+			response = Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+					.build();
+			break;
 		}
+
+		return response;
 	}
 }

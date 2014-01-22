@@ -86,7 +86,10 @@ function generateGames(generateButton, groupId, shuffledMode) {
                 alert("Unknown error.");
             },
             501 : function() {
-                alert("Calculation error.");
+                alert("Error during game calculation.");
+            },
+            428 : function() {
+                alert("Cannot calculate games: Too few group members.");
             }
         }
     });

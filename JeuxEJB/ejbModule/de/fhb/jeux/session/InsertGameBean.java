@@ -13,13 +13,13 @@ public class InsertGameBean implements InsertGameRemote, InsertGameLocal {
 
 	protected static Logger logger = Logger.getLogger(InsertGameBean.class);
 
-	// "created"
+	// 201 Created
 	public static final int INSERT_OK = 201;
-	// "conflict"
+	// 409 Cconflict
 	public static final int INSERT_CONFLICT = 409;
-	// "service unavailable"
+	// 503 Service Unavailable
 	public static final int INSERT_ERR = 503;
-	// "internal server error"
+	// 500 Internal Server Error
 	public static final int UNKNOWN_ERR = 500;
 
 	@EJB
