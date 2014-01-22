@@ -13,6 +13,7 @@ import org.jboss.logging.Logger;
 import de.fhb.jeux.config.BonusPointsDistribution;
 import de.fhb.jeux.config.BonusPointsDistributor;
 import de.fhb.jeux.dao.GameDAO;
+import de.fhb.jeux.dao.PlayerDAO;
 import de.fhb.jeux.dto.GameDTO;
 import de.fhb.jeux.dto.GameSetDTO;
 import de.fhb.jeux.model.IGame;
@@ -27,6 +28,9 @@ public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
 
 	@EJB
 	private GameDAO gameDAO;
+
+	@EJB
+	private PlayerDAO playerDAO;
 
 	@EJB
 	private PlayerLocal playerBean;
@@ -169,6 +173,8 @@ public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
 
 							// set player 1 as winner
 							game.setWinner(player1);
+							player1.addWonGame();
+							playerDAO.updatePlayer(player1);
 
 							logger.info("Game winner: " + player1.getName()
 									+ ", " + setsWonByPlayer1 + ":"
@@ -189,6 +195,8 @@ public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
 
 							// set player 2 as winner
 							game.setWinner(player2);
+							player2.addWonGame();
+							playerDAO.updatePlayer(player2);
 
 							logger.info("Game winner: " + player2.getName()
 									+ ", " + setsWonByPlayer2 + ":"
