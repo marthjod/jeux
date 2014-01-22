@@ -32,7 +32,6 @@ function showGroups(showGroupsDiv, playerGroupSelect, ruleSrcGroupSelect, ruleDe
         row = $("<tr>");
 
         $("<th>").html("Name").appendTo(row);
-        $("<th>").html("#").appendTo(row);
         $("<th>").html("Round").appendTo(row);
         $("<th>").html("Min sets").appendTo(row);
         $("<th>").html("Max sets").appendTo(row);
@@ -50,7 +49,6 @@ function showGroups(showGroupsDiv, playerGroupSelect, ruleSrcGroupSelect, ruleDe
 
                 row = $("<tr>").attr("id", "group-id-" + currentGroup.id);
                 $("<td>").attr("class", "group-name").html(currentGroup.name).appendTo(row);
-                $("<td>").attr("class", "group-id").html(currentGroup.id).appendTo(row);
                 $("<td>").attr("class", "group-round-id").html(currentGroup.roundId).appendTo(row);
                 $("<td>").attr("class", "group-minsets").html(currentGroup.minSets).appendTo(row);
                 $("<td>").attr("class", "group-maxsets").html(currentGroup.maxSets).appendTo(row);
@@ -208,7 +206,6 @@ function showPlayers(showPlayersDiv) {
                             row = $("<tr>");
 
                             $("<th>").html("Name").appendTo(row);
-                            $("<th>").html("#").appendTo(row);
                             $("<th>").html("Rank").appendTo(row);
                             $("<th>").html("Points").appendTo(row);
                             $("<th>").html("Score ratio").appendTo(row);
@@ -218,7 +215,6 @@ function showPlayers(showPlayersDiv) {
                             for (i = 0; i < playersData.length; i++) {
                                 row = $("<tr>").attr("id", "player-id-" + playersData[i].id);
                                 $("<td>").attr("class", "player-name").html(playersData[i].name).appendTo(row);
-                                $("<td>").attr("class", "player-id").html(playersData[i].id).appendTo(row);
                                 $("<td>").attr("class", "player-rank").html(playersData[i].rank).appendTo(row);
                                 $("<td>").attr("class", "player-points").html(playersData[i].points).appendTo(row);
                                 $("<td>").attr("class", "player-score-ratio").html(playersData[i].scoreRatio).appendTo(row);
@@ -237,6 +233,80 @@ function showPlayers(showPlayersDiv) {
     });
 }
 
+function rankSorter(firstPlayer, secondPlayer) {
+    "use strict";
+
+    var retval = 0;
+
+    /*
+     * If the return value is less than zero, the index of a is before b, and if
+     * it is greater than zero it's vice-versa. If the return value is zero, the
+     * elements' index is equal.
+     */
+
+    if (typeof firstPlayer !== undefined && firstPlayer !== null && typeof secondPlayer !== undefined && secondPlayer !== null && firstPlayer.hasOwnProperty("rank") && secondPlayer.hasOwnProperty("rank")) {
+        // smaller = better
+        if (firstPlayer.rank < secondPlayer.rank) {
+            retval = -1;
+        } else if (firstPlayer.rank > secondPlayer.rank) {
+            retval = 1;
+        }
+    }
+
+    return retval;
+}
+
 function showRankings(rankingsDiv) {
     "use strict";
+
+    var i = 0, k = 0, table = null, row = null;
+
+    $(rankingsDiv).empty();
+
+    // first, get all groups
+
+    $.get("rest/audience/groups", function(groupsData) {
+        if (typeof groupsData !== undefined && groupsData !== null && typeof groupsData === "object" && groupsData.hasOwnProperty("length") && groupsData.length !== 0) {
+
+            // next, iterate thru groups
+
+            for (k = 0; k < groupsData.length; k++) {
+                (function(group) {
+
+                    // for each group, fetch its rankings data
+
+                    $.get("rest/audience/rankings/group/id/" + group.id, function(rankingsData) {
+                        if (typeof rankingsData !== undefined && rankingsData !== null && typeof rankingsData === "object" && rankingsData.hasOwnProperty("length") && rankingsData.length > 0) {
+
+                            $("<h3>").html(group.name).appendTo(rankingsDiv);
+                            $("<br>").appendTo(rankingsDiv);
+                            table = $("<table>").attr("class", "table table-hover table-bordered table-condensed");
+                            row = $("<tr>");
+
+                            $("<th>").html("Rank").appendTo(row);
+                            $("<th>").html("Name").appendTo(row);
+                            $("<th>").html("Won games").appendTo(row);
+                            $("<th>").html("Points").appendTo(row);
+                            $("<th>").html("Score ratio").appendTo(row);
+                            row.appendTo(table);
+
+                            rankingsData.sort(rankSorter);
+                            // rankings...
+                            for (i = 0; i < rankingsData.length; i++) {
+                                row = $("<tr>").attr("id", "player-id-" + rankingsData[i].id);
+                                $("<td>").attr("class", "player-rank").html(rankingsData[i].rank).appendTo(row);
+                                $("<td>").attr("class", "player-name").html(rankingsData[i].name).appendTo(row);
+                                $("<td>").attr("class", "player-won-games").html(rankingsData[i].wonGames).appendTo(row);
+                                $("<td>").attr("class", "player-points").html(rankingsData[i].points).appendTo(row);
+                                $("<td>").attr("class", "player-score-ratio").html(rankingsData[i].scoreRatio).appendTo(row);
+                                row.appendTo(table);
+                            }
+
+                            table.appendTo(rankingsDiv);
+                        }
+                    });
+                }(groupsData[k]));
+            }
+        }
+    });
 }
