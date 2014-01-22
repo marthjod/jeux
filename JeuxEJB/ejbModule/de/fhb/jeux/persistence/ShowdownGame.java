@@ -32,7 +32,8 @@ import de.fhb.jeux.model.IPlayer;
 		@NamedQuery(name = "Game.findById", query = "SELECT g FROM ShowdownGame g WHERE g.id = :id"),
 		@NamedQuery(name = "Game.findAllInGroup", query = "SELECT g FROM ShowdownGame g WHERE g.group = :group"),
 		@NamedQuery(name = "Game.findUnplayedInGroup", query = "SELECT g FROM ShowdownGame g WHERE g.group = :group AND g.winner = null"),
-		@NamedQuery(name = "Game.findPlayedInGroup", query = "SELECT g FROM ShowdownGame g WHERE g.group = :group AND g.winner <> null") })
+		@NamedQuery(name = "Game.findPlayedInGroup", query = "SELECT g FROM ShowdownGame g WHERE g.group = :group AND g.winner <> null"),
+		@NamedQuery(name = "Game.findByContainedPlayers", query = "SELECT g FROM ShowdownGame g WHERE g.group = :group AND ( (g.player1 = :player1 AND g.player2 = :player2) OR (g.player2 = :player1 AND g.player1 = :player2))") })
 public class ShowdownGame implements IGame, Serializable {
 
 	private static final long serialVersionUID = -8766860086958636981L;

@@ -12,6 +12,7 @@ import javax.persistence.TypedQuery;
 
 import org.jboss.logging.Logger;
 
+import de.fhb.jeux.model.IGame;
 import de.fhb.jeux.model.IPlayer;
 import de.fhb.jeux.persistence.ShowdownPlayer;
 
@@ -69,6 +70,7 @@ public class PlayerDAO {
 		TypedQuery<IPlayer> query = em.createNamedQuery("Player.findById",
 				IPlayer.class);
 		query.setParameter("id", playerId);
+
 		try {
 			player = query.getSingleResult();
 		} catch (NoResultException e) {
@@ -77,5 +79,52 @@ public class PlayerDAO {
 			logger.error("Player ID " + playerId + ": " + e.getMessage());
 		}
 		return player;
+	}
+
+	// use IDs here because called from DTO-using class
+	public IPlayer directComparison(int player1Id, int player2Id) {
+		IPlayer player1 = getPlayerById(player1Id);
+		IPlayer player2 = getPlayerById(player2Id);
+
+		IGame game = null;
+		IPlayer winner = null;
+		TypedQuery<IGame> query = em.createNamedQuery(
+				"Game.findByContainedPlayers", IGame.class);
+
+		// group should be provided as identical
+		query.setParameter("group", player1.getGroup());
+		query.setParameter("player1", player1);
+		query.setParameter("player2", player2);
+
+		try {
+			game = query.getSingleResult();
+		} catch (Exception e) {
+			logger.error(e.getClass().getName() + ": " + e.getMessage());
+		}
+
+		if (game != null) {
+			logger.debug("Found corresponding game");
+
+			if (game.hasWinner()) {
+				logger.debug("Game has a winner already");
+
+				if (game.getWinner().equals(player1)) {
+					winner = player1;
+				} else if (game.getWinner().equals(player2)) {
+					winner = player2;
+				} else {
+					logger.warn("Game winner does not equal any of the 2 players provided...?!");
+				}
+			} else {
+				logger.warn("Game has not got a winner yet");
+			}
+		}
+
+		if (winner != null) {
+			logger.debug("Winner: " + winner.getName());
+		}
+
+		// caller must check for null
+		return winner;
 	}
 }

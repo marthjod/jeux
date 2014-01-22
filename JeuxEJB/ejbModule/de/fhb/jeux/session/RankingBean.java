@@ -5,12 +5,14 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.PriorityQueue;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 import org.jboss.logging.Logger;
 
 import de.fhb.jeux.comparator.BonuspointsComparator;
-import de.fhb.jeux.comparator.ScoreratioComparator;
+import de.fhb.jeux.comparator.WonGamesComparator;
+import de.fhb.jeux.dao.PlayerDAO;
 import de.fhb.jeux.dto.PlayerDTO;
 import de.fhb.jeux.model.IGroup;
 import de.fhb.jeux.model.IPlayer;
@@ -24,6 +26,9 @@ public class RankingBean implements RankingRemote, RankingLocal {
 	public RankingBean() {
 	}
 
+	@EJB
+	private PlayerDAO playerDAO;
+
 	@Override
 	public List<PlayerDTO> getRankedPlayers(IGroup group) {
 
@@ -36,10 +41,10 @@ public class RankingBean implements RankingRemote, RankingLocal {
 			Comparator<PlayerDTO> comparator;
 			// more than 1 set per game means we sort by bonus points first
 			if (group.getMaxSets() > 1) {
-				comparator = new BonuspointsComparator();
+				comparator = new BonuspointsComparator(playerDAO);
 			} else {
-				// 1 set per game: sort by score ratio first
-				comparator = new ScoreratioComparator();
+				// 1 set per game: sort by won games, then score ratio
+				comparator = new WonGamesComparator(playerDAO);
 			}
 
 			// used for sorting
