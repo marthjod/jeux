@@ -11,6 +11,7 @@ public class PlayerDTO {
 	private int id;
 	private int points;
 	private int scoreRatio;
+	private int wonGames;
 	private int rank;
 	private String name;
 	private int groupId;
@@ -27,6 +28,7 @@ public class PlayerDTO {
 		this.points = playerEntity.getPoints();
 		this.scoreRatio = playerEntity.getScoreRatio();
 		this.rank = playerEntity.getRank();
+		this.wonGames = playerEntity.getWonGames();
 		this.name = playerEntity.getName();
 		this.groupId = playerEntity.getGroup().getId();
 		this.groupName = playerEntity.getGroup().getName();
@@ -46,6 +48,10 @@ public class PlayerDTO {
 
 	public int getRank() {
 		return rank;
+	}
+
+	public int getWonGames() {
+		return wonGames;
 	}
 
 	public void setRank(int rank) {

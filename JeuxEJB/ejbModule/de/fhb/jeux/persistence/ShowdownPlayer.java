@@ -43,6 +43,9 @@ public class ShowdownPlayer implements IPlayer, Serializable {
 	private int rank;
 
 	@Column
+	private int wonGames;
+
+	@Column
 	private String name;
 
 	@ManyToOne
@@ -100,6 +103,22 @@ public class ShowdownPlayer implements IPlayer, Serializable {
 	@Override
 	public void setScoreRatio(int scoreRatio) {
 		this.scoreRatio = scoreRatio;
+	}
+
+	@Override
+	public int getWonGames() {
+		return wonGames;
+	}
+
+	// TODO when switching rounds, reset won games to 0
+	@Override
+	public void setWonGames(int wonGames) {
+		this.wonGames = wonGames;
+	}
+
+	@Override
+	public void addWonGame() {
+		wonGames++;
 	}
 
 	@Override

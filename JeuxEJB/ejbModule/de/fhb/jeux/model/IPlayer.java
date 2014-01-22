@@ -18,4 +18,10 @@ public interface IPlayer {
 	public void setPoints(int points);
 
 	public void setScoreRatio(int scoreRatio);
+
+	public int getWonGames();
+
+	public void setWonGames(int wonGames);
+
+	public void addWonGame();
 }
