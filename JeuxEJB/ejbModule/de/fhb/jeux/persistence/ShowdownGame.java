@@ -19,8 +19,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import org.jboss.logging.Logger;
-
 import de.fhb.jeux.model.IGame;
 import de.fhb.jeux.model.IGroup;
 import de.fhb.jeux.model.IPlayer;
@@ -37,7 +35,6 @@ import de.fhb.jeux.model.IPlayer;
 public class ShowdownGame implements IGame, Serializable {
 
 	private static final long serialVersionUID = -8766860086958636981L;
-	protected static Logger logger = Logger.getLogger(ShowdownGame.class);
 
 	public ShowdownGame() {
 	}

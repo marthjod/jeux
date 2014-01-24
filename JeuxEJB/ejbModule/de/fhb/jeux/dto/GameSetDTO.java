@@ -51,10 +51,6 @@ public class GameSetDTO {
 		return winnerId;
 	}
 
-	public boolean hasWinner() {
-		return winnerId != 0;
-	}
-
 	public String getWinnerName() {
 		return winnerName;
 	}

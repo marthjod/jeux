@@ -13,8 +13,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import org.jboss.logging.Logger;
-
 import de.fhb.jeux.dto.RoundSwitchRuleDTO;
 import de.fhb.jeux.model.IGroup;
 import de.fhb.jeux.model.IRoundSwitchRule;
@@ -27,8 +25,6 @@ import de.fhb.jeux.model.IRoundSwitchRule;
 public class ShowdownRoundSwitchRule implements IRoundSwitchRule, Serializable {
 
 	private static final long serialVersionUID = -1174601853867495185L;
-	protected static Logger logger = Logger
-			.getLogger(ShowdownRoundSwitchRule.class);
 
 	public ShowdownRoundSwitchRule() {
 	}

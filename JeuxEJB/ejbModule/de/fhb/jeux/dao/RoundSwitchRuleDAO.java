@@ -12,7 +12,6 @@ import javax.persistence.TypedQuery;
 import org.jboss.logging.Logger;
 
 import de.fhb.jeux.model.IRoundSwitchRule;
-import de.fhb.jeux.persistence.ShowdownRoundSwitchRule;
 
 @Stateless
 @LocalBean
@@ -38,15 +37,6 @@ public class RoundSwitchRuleDAO {
 		return success;
 	}
 
-	public void deleteRoundSwitchRule(IRoundSwitchRule rule) {
-		em.remove(rule);
-		logger.debug("Deleted RoundSwitchRule " + rule);
-	}
-
-	public void updateRoundSwitchRule(IRoundSwitchRule rule) {
-		em.merge(rule);
-	}
-
 	public List<IRoundSwitchRule> getAllRoundSwitchRules() {
 		List<IRoundSwitchRule> rules = new ArrayList<IRoundSwitchRule>();
 
@@ -55,14 +45,5 @@ public class RoundSwitchRuleDAO {
 		rules = query.getResultList();
 
 		return rules;
-	}
-
-	public IRoundSwitchRule getRoundSwitchRuleById(int roundSwitchRuleId) {
-		IRoundSwitchRule rule = new ShowdownRoundSwitchRule();
-		TypedQuery<IRoundSwitchRule> query = em.createNamedQuery(
-				"RoundSwitchRule.findById", IRoundSwitchRule.class);
-		query.setParameter("id", roundSwitchRuleId);
-		rule = query.getSingleResult();
-		return rule;
 	}
 }

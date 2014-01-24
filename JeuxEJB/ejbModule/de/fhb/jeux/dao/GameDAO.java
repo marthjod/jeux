@@ -39,11 +39,6 @@ public class GameDAO {
 		logger.debug("Persisted game " + game);
 	}
 
-	public void deleteGame(IGame game) {
-		em.remove(game);
-		logger.debug("Deleted game " + game);
-	}
-
 	public void updateGame(IGame game) {
 		// remove any extraneous non-played sets first
 		IGameSet set = null;

@@ -18,7 +18,6 @@ import de.fhb.jeux.dto.PlayerDTO;
 import de.fhb.jeux.dto.RoundSwitchRuleDTO;
 import de.fhb.jeux.model.IGroup;
 import de.fhb.jeux.session.GameLocal;
-import de.fhb.jeux.session.GameSetLocal;
 import de.fhb.jeux.session.GroupLocal;
 import de.fhb.jeux.session.RankingLocal;
 import de.fhb.jeux.session.RoundSwitchRuleLocal;
@@ -34,9 +33,6 @@ public class AudienceAPI {
 
 	@EJB
 	private GameLocal gameBean;
-
-	@EJB
-	private GameSetLocal gameSetBean;
 
 	@EJB
 	private RoundSwitchRuleLocal roundSwitchRuleBean;

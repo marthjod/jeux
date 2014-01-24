@@ -1,7 +1,5 @@
 package de.fhb.jeux.session;
 
-import java.util.List;
-
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
@@ -15,11 +13,6 @@ public class PlayerBean implements PlayerRemote, PlayerLocal {
 	private PlayerDAO playerDAO;
 
 	public PlayerBean() {
-	}
-
-	@Override
-	public List<IPlayer> getAllPlayers() {
-		return playerDAO.getAllPlayers();
 	}
 
 	@Override

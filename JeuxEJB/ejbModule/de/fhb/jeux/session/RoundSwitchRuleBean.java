@@ -45,9 +45,4 @@ public class RoundSwitchRuleBean implements RoundSwitchRuleRemote,
 		return ruleSetsDTO;
 	}
 
-	@Override
-	public IRoundSwitchRule getRoundSwitchRuleById(int roundSwitchRuleId) {
-		return roundSwitchRuleDAO.getRoundSwitchRuleById(roundSwitchRuleId);
-	}
-
 }

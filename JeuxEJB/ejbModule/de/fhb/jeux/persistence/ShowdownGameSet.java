@@ -14,8 +14,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import org.jboss.logging.Logger;
-
 import de.fhb.jeux.model.IGame;
 import de.fhb.jeux.model.IGameSet;
 import de.fhb.jeux.model.IPlayer;
@@ -28,7 +26,6 @@ import de.fhb.jeux.model.IPlayer;
 public class ShowdownGameSet implements IGameSet, Serializable {
 
 	private static final long serialVersionUID = 6276609884514398233L;
-	protected static Logger logger = Logger.getLogger(ShowdownGameSet.class);
 
 	public ShowdownGameSet() {
 	}

@@ -68,10 +68,6 @@ public class GroupDAO {
 		return result;
 	}
 
-	public void updateGroup(IGroup group) {
-		em.merge(group);
-	}
-
 	public IGroup getGroupById(int groupId) {
 		IGroup group = new ShowdownGroup();
 		TypedQuery<IGroup> query = em.createNamedQuery("Group.findById",

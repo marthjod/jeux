@@ -23,39 +23,20 @@ public class GameSetDAO {
 	@PersistenceContext
 	private EntityManager em;
 
-		public void addGameSet(IGameSet gameSet) {
-			em.persist(gameSet);
-			logger.debug("Persisted gameSet '" + gameSet.getId() + "'");
-		}
-
-		public void deleteGameSet(IGameSet gameSet) {
-			em.remove(gameSet);
-			logger.debug("Deleted gameSet '" + gameSet.getId() + "'");
-		}
-
-		public void updateGameSet(IGameSet gameSet) {
-			em.merge(gameSet);
-		}
-
-		public List<IGameSet> getAllGameSets() {
-			List<IGameSet> gameSets = new ArrayList<IGameSet>();
-
-			TypedQuery<IGameSet> query = em.createNamedQuery("GameSet.findAll",
-					IGameSet.class);
-			gameSets = query.getResultList();
-
-			return gameSets;
-		}
-
-		public IGameSet getGameSetById(int gameSetId) {
-			IGameSet gameSet = new ShowdownGameSet();
-			TypedQuery<IGameSet> query = em.createNamedQuery("GameSet.findById",
-					IGameSet.class);
-			query.setParameter("id", gameSetId);
-			gameSet = query.getSingleResult();
-			return gameSet;
-		}
+	// package visibility sufficient
+	void deleteGameSet(IGameSet gameSet) {
+		em.remove(gameSet);
+		logger.debug("Deleted gameSet '" + gameSet.getId() + "'");
 	}
 
+	public List<IGameSet> getAllGameSets() {
+		List<IGameSet> gameSets = new ArrayList<IGameSet>();
 
+		TypedQuery<IGameSet> query = em.createNamedQuery("GameSet.findAll",
+				IGameSet.class);
+		gameSets = query.getResultList();
 
+		return gameSets;
+	}
+
+}

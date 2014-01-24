@@ -13,8 +13,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
-import org.jboss.logging.Logger;
-
 import de.fhb.jeux.dto.PlayerDTO;
 import de.fhb.jeux.model.IGroup;
 import de.fhb.jeux.model.IPlayer;
@@ -27,7 +25,6 @@ import de.fhb.jeux.model.IPlayer;
 public class ShowdownPlayer implements IPlayer, Serializable {
 
 	private static final long serialVersionUID = 6766620457612373074L;
-	protected static Logger logger = Logger.getLogger(ShowdownPlayer.class);
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

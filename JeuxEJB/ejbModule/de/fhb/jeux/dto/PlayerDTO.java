@@ -1,12 +1,8 @@
 package de.fhb.jeux.dto;
 
-import org.jboss.logging.Logger;
-
 import de.fhb.jeux.model.IPlayer;
 
 public class PlayerDTO {
-
-	protected static Logger logger = Logger.getLogger(PlayerDTO.class);
 
 	private int id;
 	private int points;

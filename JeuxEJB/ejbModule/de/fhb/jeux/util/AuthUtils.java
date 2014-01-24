@@ -1,11 +1,8 @@
 package de.fhb.jeux.util;
 
 import org.apache.commons.codec.digest.DigestUtils;
-import org.jboss.logging.Logger;
 
 public class AuthUtils {
-
-	protected static Logger logger = Logger.getLogger(AuthUtils.class);
 
 	public static final String generateAuthToken(String str, String salt) {
 		// should not become null (NPE)

@@ -122,10 +122,6 @@ public class GameDTO {
 		return winnerId;
 	}
 
-	public boolean hasWinner() {
-		return winnerId != 0;
-	}
-
 	public String getPlayer1Name() {
 		return player1Name;
 	}
