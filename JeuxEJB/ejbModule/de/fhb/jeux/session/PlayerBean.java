@@ -7,6 +7,7 @@ import de.fhb.jeux.dao.PlayerDAO;
 import de.fhb.jeux.model.IPlayer;
 
 @Stateless
+@SuppressWarnings("ucd")
 public class PlayerBean implements PlayerRemote, PlayerLocal {
 
 	@EJB

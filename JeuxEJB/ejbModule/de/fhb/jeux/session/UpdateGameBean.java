@@ -22,6 +22,7 @@ import de.fhb.jeux.model.IPlayer;
 import de.fhb.jeux.persistence.ShowdownGameSet;
 
 @Stateless
+@SuppressWarnings("ucd")
 public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
 
 	protected static Logger logger = Logger.getLogger(UpdateGameBean.class);

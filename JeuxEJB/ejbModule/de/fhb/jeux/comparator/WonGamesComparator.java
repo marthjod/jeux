@@ -10,7 +10,7 @@ import de.fhb.jeux.model.IPlayer;
 
 public class WonGamesComparator implements Comparator<PlayerDTO> {
 
-	protected static Logger logger = Logger.getLogger(WonGamesComparator.class);
+	private static Logger logger = Logger.getLogger(WonGamesComparator.class);
 
 	private PlayerDAO playerDAO;
 

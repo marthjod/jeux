@@ -12,6 +12,7 @@ import de.fhb.jeux.model.IGame;
 import de.fhb.jeux.model.IGroup;
 
 @Stateless
+@SuppressWarnings("ucd")
 public class GameBean implements GameRemote, GameLocal {
 
 	@EJB

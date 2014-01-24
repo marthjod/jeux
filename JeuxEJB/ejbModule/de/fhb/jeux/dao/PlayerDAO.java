@@ -20,7 +20,7 @@ import de.fhb.jeux.persistence.ShowdownPlayer;
 @LocalBean
 public class PlayerDAO {
 
-	protected static Logger logger = Logger.getLogger(PlayerDAO.class);
+	private static Logger logger = Logger.getLogger(PlayerDAO.class);
 
 	@PersistenceContext
 	private EntityManager em;

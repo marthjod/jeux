@@ -8,6 +8,8 @@ import de.fhb.jeux.dto.PlayerDTO;
 import de.fhb.jeux.model.IGroup;
 
 @Remote
+@SuppressWarnings("ucd")
 public interface RankingRemote {
+	@SuppressWarnings("ucd")
 	public List<PlayerDTO> getRankedPlayers(IGroup group);
 }

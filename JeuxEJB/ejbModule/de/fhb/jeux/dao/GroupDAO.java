@@ -21,7 +21,7 @@ import de.fhb.jeux.persistence.ShowdownPlayer;
 @LocalBean
 public class GroupDAO {
 
-	protected static Logger logger = Logger.getLogger(GroupDAO.class);
+	private static Logger logger = Logger.getLogger(GroupDAO.class);
 
 	@PersistenceContext
 	private EntityManager em;
@@ -30,7 +30,7 @@ public class GroupDAO {
 	// 409 = violated constraints
 	public static final int DELETION_CONFLICT = 409;
 	public static final int DELETION_OK = 200;
-	public static final int DELETION_UNKNOWN_ERR = 500;
+	private static final int DELETION_UNKNOWN_ERR = 500;
 
 	public GroupDAO() {
 	}

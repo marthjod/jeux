@@ -17,7 +17,7 @@ import de.fhb.jeux.model.IRoundSwitchRule;
 @LocalBean
 public class RoundSwitchRuleDAO {
 
-	protected static Logger logger = Logger.getLogger(RoundSwitchRuleDAO.class);
+	private static Logger logger = Logger.getLogger(RoundSwitchRuleDAO.class);
 
 	@PersistenceContext
 	private EntityManager em;

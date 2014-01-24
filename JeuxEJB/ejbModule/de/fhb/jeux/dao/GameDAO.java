@@ -23,7 +23,7 @@ import de.fhb.jeux.persistence.ShowdownGameSet;
 @LocalBean
 public class GameDAO {
 
-	protected static Logger logger = Logger.getLogger(GameDAO.class);
+	private static Logger logger = Logger.getLogger(GameDAO.class);
 
 	@PersistenceContext
 	private EntityManager em;

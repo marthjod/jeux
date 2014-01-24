@@ -11,6 +11,7 @@ import de.fhb.jeux.model.IGroup;
 import de.fhb.jeux.persistence.ShowdownGroup;
 
 @Stateless
+@SuppressWarnings("ucd")
 public class CreateGroupBean implements CreateGroupRemote, CreateGroupLocal {
 
 	protected static Logger logger = Logger.getLogger(CreateGroupBean.class);

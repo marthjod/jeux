@@ -15,6 +15,7 @@ import de.fhb.jeux.model.IRoundSwitchRule;
 
 @Stateless
 @LocalBean
+@SuppressWarnings("ucd")
 public class RoundSwitchRuleBean implements RoundSwitchRuleRemote,
 		RoundSwitchRuleLocal {
 

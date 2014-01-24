@@ -19,6 +19,7 @@ import de.fhb.jeux.model.IPlayer;
 import de.fhb.jeux.persistence.ShowdownPlayer;
 
 @Stateless
+@SuppressWarnings("ucd")
 public class RankingBean implements RankingRemote, RankingLocal {
 
 	protected static Logger logger = Logger.getLogger(RankingBean.class);

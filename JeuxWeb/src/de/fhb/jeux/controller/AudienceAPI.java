@@ -24,6 +24,7 @@ import de.fhb.jeux.session.RoundSwitchRuleLocal;
 
 @Stateless
 @Path("/rest/audience")
+@SuppressWarnings("ucd")
 public class AudienceAPI {
 
 	protected static Logger logger = Logger.getLogger(AudienceAPI.class);

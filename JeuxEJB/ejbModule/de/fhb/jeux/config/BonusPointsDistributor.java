@@ -7,7 +7,7 @@ import org.jboss.logging.Logger;
 // reads/converts bonus points rules and provides convenient access
 public class BonusPointsDistributor {
 
-	protected static Logger logger = Logger
+	private static Logger logger = Logger
 			.getLogger(BonusPointsDistributor.class);
 
 	public static HashMap<String, Integer> getBonusPoints(

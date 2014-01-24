@@ -8,6 +8,7 @@ import de.fhb.jeux.dto.RoundSwitchRuleDTO;
 import de.fhb.jeux.model.IRoundSwitchRule;
 
 @Remote
+@SuppressWarnings("ucd")
 public interface RoundSwitchRuleRemote {
 
 	public List<IRoundSwitchRule> getAllRoundSwitchRule();

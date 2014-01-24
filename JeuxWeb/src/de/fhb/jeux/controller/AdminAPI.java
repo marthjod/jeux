@@ -39,6 +39,7 @@ import de.fhb.jeux.session.UpdateGameLocal;
 
 @Stateless
 @Path("/rest/admin")
+@SuppressWarnings("ucd")
 public class AdminAPI {
 
 	protected static Logger logger = Logger.getLogger(AdminAPI.class);

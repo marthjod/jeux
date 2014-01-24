@@ -7,7 +7,7 @@ import org.jboss.logging.Logger;
 // holds multiple single bonus points distribution rules in a list
 public class BonusPointsDistribution {
 
-	protected static Logger logger = Logger
+	private static Logger logger = Logger
 			.getLogger(BonusPointsDistribution.class);
 
 	private List<BonusPointsRule> ruleList;

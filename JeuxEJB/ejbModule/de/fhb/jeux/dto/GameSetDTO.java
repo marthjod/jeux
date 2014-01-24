@@ -14,7 +14,8 @@ public class GameSetDTO {
 	private int player2Score;
 	private String winnerName;
 
-	public GameSetDTO(IGameSet gameSetEntity) {
+	// package visibility only
+	GameSetDTO(IGameSet gameSetEntity) {
 		id = gameSetEntity.getId();
 		gameId = gameSetEntity.getGame().getId();
 		player1Score = gameSetEntity.getPlayer1Score();

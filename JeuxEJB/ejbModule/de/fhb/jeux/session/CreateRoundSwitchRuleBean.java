@@ -12,6 +12,7 @@ import de.fhb.jeux.model.IRoundSwitchRule;
 import de.fhb.jeux.persistence.ShowdownRoundSwitchRule;
 
 @Stateless
+@SuppressWarnings("ucd")
 public class CreateRoundSwitchRuleBean implements CreateRoundSwitchRuleRemote,
 		CreateRoundSwitchRuleLocal {
 

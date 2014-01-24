@@ -17,7 +17,7 @@ import de.fhb.jeux.persistence.ShowdownGame;
 @Stateless
 public class CalcGamesBean implements CalcGamesRemote, CalcGamesLocal {
 
-	protected static Logger logger = Logger.getLogger(CalcGamesBean.class);
+	private static Logger logger = Logger.getLogger(CalcGamesBean.class);
 
 	@EJB
 	private InsertGameLocal insertGameBean;

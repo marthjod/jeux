@@ -30,7 +30,8 @@ public class ShowdownGameSet implements IGameSet, Serializable {
 	public ShowdownGameSet() {
 	}
 
-	public ShowdownGameSet(IGame game) {
+	// package visibility only
+	ShowdownGameSet(IGame game) {
 		this.game = (ShowdownGame) game;
 	}
 

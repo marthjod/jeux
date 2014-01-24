@@ -11,7 +11,7 @@ import de.fhb.jeux.model.IGame;
 @Stateless
 public class InsertGameBean implements InsertGameRemote, InsertGameLocal {
 
-	protected static Logger logger = Logger.getLogger(InsertGameBean.class);
+	private static Logger logger = Logger.getLogger(InsertGameBean.class);
 
 	// 201 Created
 	public static final int INSERT_OK = 201;
@@ -20,7 +20,8 @@ public class InsertGameBean implements InsertGameRemote, InsertGameLocal {
 	// 503 Service Unavailable
 	public static final int INSERT_ERR = 503;
 	// 500 Internal Server Error
-	public static final int UNKNOWN_ERR = 500;
+	// package visibility only
+	static final int UNKNOWN_ERR = 500;
 
 	@EJB
 	private GameDAO gameDAO;

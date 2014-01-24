@@ -12,6 +12,7 @@ import de.fhb.jeux.model.IPlayer;
 import de.fhb.jeux.persistence.ShowdownPlayer;
 
 @Stateless
+@SuppressWarnings("ucd")
 public class CreatePlayerBean implements CreatePlayerRemote, CreatePlayerLocal {
 
 	protected static Logger logger = Logger.getLogger(CreatePlayerBean.class);

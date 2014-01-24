@@ -12,14 +12,15 @@ import javax.persistence.TypedQuery;
 import org.jboss.logging.Logger;
 
 import de.fhb.jeux.model.IGameSet;
-import de.fhb.jeux.persistence.ShowdownGameSet;
 
 @Stateless
 @LocalBean
+@SuppressWarnings("ucd")
+// Bean visibility must be public
 public class GameSetDAO {
 
-	protected static Logger logger = Logger.getLogger(GameSetDAO.class);
-	
+	private static Logger logger = Logger.getLogger(GameSetDAO.class);
+
 	@PersistenceContext
 	private EntityManager em;
 
