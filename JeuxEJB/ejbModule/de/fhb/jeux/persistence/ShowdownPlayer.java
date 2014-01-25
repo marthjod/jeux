@@ -107,7 +107,7 @@ public class ShowdownPlayer implements IPlayer, Serializable {
 		return wonGames;
 	}
 
-	// TODO when switching rounds, reset won games to 0
+	// TODO when switching rounds, reset won games to 0 #business-logic
 	@Override
 	public void setWonGames(int wonGames) {
 		this.wonGames = wonGames;

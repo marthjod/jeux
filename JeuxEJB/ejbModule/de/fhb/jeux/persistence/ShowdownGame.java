@@ -45,7 +45,7 @@ public class ShowdownGame implements IGame, Serializable {
 		this.player2 = (ShowdownPlayer) player2;
 		this.sets = new ArrayList<ShowdownGameSet>();
 
-		// TODO differentiate maxSets / actual sets
+		// TODO differentiate maxSets and actual sets #business-logic
 		for (int i = 0; i < group.getMaxSets(); i++) {
 			this.sets.add(new ShowdownGameSet(this));
 		}

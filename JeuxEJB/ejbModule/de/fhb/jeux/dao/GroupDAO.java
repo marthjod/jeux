@@ -52,7 +52,6 @@ public class GroupDAO {
 				result = DELETION_OK;
 				logger.debug("Deleted group '" + groupName + "'");
 			} catch (RuntimeException e) {
-				// TODO
 				// PersistenceException, MySQLConstraintViolatedEx thrown only
 				// *after* em.remove() ?!!
 				result = DELETION_CONFLICT;

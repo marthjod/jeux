@@ -146,7 +146,7 @@ public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
 						}
 					}
 
-					// TODO make the following atomic, i.e. use transaction
+					// TODO make the following transactional #app-design
 
 					// we have a game winner if
 					// - all sets have been played OR enough sets have been

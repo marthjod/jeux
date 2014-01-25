@@ -57,7 +57,7 @@ public class AdminViewFilter implements Filter {
 			if (cookies != null) {
 				for (Cookie cookie : cookies) {
 
-					// TODO naming
+					// TODO naming #app-design
 					if ("admin-auth".equals(cookie.getName())) {
 						authCookie = cookie;
 						// we got what we came for
@@ -65,7 +65,7 @@ public class AdminViewFilter implements Filter {
 					}
 				}
 
-				// TODO see AdminLoginServlet
+				// TODO see AdminLoginServlet #app-design
 				if (authCookie != null
 						&& AuthUtils.checkAuthTokens("admin", serverSecret,
 								authCookie.getValue())) {

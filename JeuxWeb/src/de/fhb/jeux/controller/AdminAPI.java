@@ -212,7 +212,6 @@ public class AdminAPI {
 					.build();
 			break;
 
-		// "Not Implemented"
 		case CalcGamesBean.CALC_ERR:
 			response = Response.status(501).build();
 			break;

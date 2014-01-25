@@ -27,22 +27,22 @@ public class AdminLoginServlet extends HttpServlet {
 
 		String nextView = response.encodeRedirectURL(request.getContextPath());
 
-		// TODO add some real security
+		// TODO add some real #security
 
 		String serverSecret = getServletConfig().getInitParameter(
 				"SERVER_SECRET");
 
-		// TODO different user names
-		// TODO different cookies for different users/access times!
+		// TODO different user names #security
+		// TODO different cookies for different users/access times #security
 		String authToken = AuthUtils.generateAuthToken("admin", serverSecret);
 
 		if (authToken.length() > 0) {
-			// TODO naming
+			// TODO no hardcoded naming #app-design
 			Cookie authCookie = new Cookie("admin-auth", authToken);
 			logger.debug("Returning cookie " + authCookie.getName() + "="
 					+ authCookie.getValue());
 			response.addCookie(authCookie);
-			// TODO naming
+			// TODO no hardcoded naming #app-design
 			nextView = response.encodeRedirectURL(request.getContextPath()
 					+ "/admin.html");
 		} else {

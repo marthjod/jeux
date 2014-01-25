@@ -47,7 +47,6 @@ public class InsertGameBean implements InsertGameRemote, InsertGameLocal {
 		int status = UNKNOWN_ERR;
 
 		if (!gameExists(game)) {
-			// TODO catch more/addt'l failure cases
 			try {
 				gameDAO.addGame(game);
 				status = INSERT_OK;

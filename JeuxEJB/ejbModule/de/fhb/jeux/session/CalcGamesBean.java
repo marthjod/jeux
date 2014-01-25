@@ -56,7 +56,7 @@ public class CalcGamesBean implements CalcGamesRemote, CalcGamesLocal {
 		// use "shuffled mode" for fair order of games
 		// to be played one after the other
 		if (shuffledMode) {
-			// TODO
+			// TODO implement shuffled mode #business-logic
 		} else {
 			// only calculate games, regardless of specific order
 			// faster
