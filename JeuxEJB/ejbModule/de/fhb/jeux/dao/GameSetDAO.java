@@ -24,8 +24,8 @@ public class GameSetDAO {
 	@PersistenceContext
 	private EntityManager em;
 
-	// package visibility sufficient
-	void deleteGameSet(IGameSet gameSet) {
+	// EJB business method must be public
+	public void deleteGameSet(IGameSet gameSet) {
 		em.remove(gameSet);
 		logger.debug("Deleted gameSet '" + gameSet.getId() + "'");
 	}
