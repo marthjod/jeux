@@ -46,6 +46,9 @@ function createNewGroup(groupSubmit) {
             },
             500 : function() {
                 $(groupSubmit).attr("value", "Failed to create group!");
+            },
+            400 : function() {
+                alert("Bad request (wrong data format?).");
             }
         }
     });
