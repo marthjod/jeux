@@ -7,5 +7,5 @@ import de.fhb.jeux.model.IGroup;
 
 @Local
 public interface CreatePlayerLocal {
-	public void createPlayer(PlayerDTO playerDTO, IGroup group);
+	public boolean createPlayer(PlayerDTO playerDTO, IGroup group);
 }

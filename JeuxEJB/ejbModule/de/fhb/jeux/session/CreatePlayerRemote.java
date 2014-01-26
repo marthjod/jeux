@@ -10,5 +10,5 @@ import de.fhb.jeux.model.IGroup;
 public interface CreatePlayerRemote {
 
 	@SuppressWarnings("ucd")
-	public void createPlayer(PlayerDTO playerDTO, IGroup group);
+	public boolean createPlayer(PlayerDTO playerDTO, IGroup group);
 }

@@ -24,19 +24,30 @@ public class CreatePlayerBean implements CreatePlayerRemote, CreatePlayerLocal {
 	}
 
 	@Override
-	public void createPlayer(PlayerDTO playerDTO, IGroup group) {
+	public boolean createPlayer(PlayerDTO playerDTO, IGroup group) {
 
 		boolean checkOK = false;
-		// TODO (MORE) SANITY-CHECKING HERE BEFORE PERSISTING
+		boolean created = false;
 
-		// TODO TESTING, REMOVE BEFORE FLIGHT
-		checkOK = true;
+		// rank, points, score ratio, won games must be 0 initially
+		if (playerDTO != null && playerDTO.getRank() == 0
+				&& playerDTO.getScoreRatio() == 0 && playerDTO.getPoints() == 0
+				&& playerDTO.getWonGames() == 0) {
+			checkOK = true;
+		}
+
+		// TODO how to handle same names? #business-logic
+
+		// TODO check if group exists #business-logic
 
 		if (checkOK) {
 			// persist after converting
 			IPlayer newPlayer = new ShowdownPlayer(playerDTO, group);
 			playerDAO.addPlayer(newPlayer);
+			created = true;
 			logger.debug("Added player '" + newPlayer.getName() + "'");
 		}
+
+		return created;
 	}
 }

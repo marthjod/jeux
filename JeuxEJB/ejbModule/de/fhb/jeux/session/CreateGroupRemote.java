@@ -9,5 +9,5 @@ import de.fhb.jeux.dto.GroupDTO;
 public interface CreateGroupRemote {
 
 	@SuppressWarnings("ucd")
-	public void createGroup(GroupDTO groupDTO);
+	public boolean createGroup(GroupDTO groupDTO);
 }
