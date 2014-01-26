@@ -40,16 +40,18 @@ public class GameDAO {
 	}
 
 	public void updateGame(IGame game) {
-		// remove any extraneous non-played sets first
-		IGameSet set = null;
-		for (Iterator<ShowdownGameSet> setsIter = game.getSets().iterator(); setsIter
-				.hasNext();) {
-			set = (IGameSet) setsIter.next();
-			if (set.isUnplayed()) {
-				// remove from persistence
-				gameSetDAO.deleteGameSet(set);
-				// remove from game to be merged
-				setsIter.remove();
+		// remove any extraneous non-played sets first (only) if game over
+		if (game.hasWinner()) {
+			IGameSet set = null;
+			for (Iterator<ShowdownGameSet> setsIter = game.getSets().iterator(); setsIter
+					.hasNext();) {
+				set = (IGameSet) setsIter.next();
+				if (set.isUnplayed()) {
+					// remove from persistence
+					gameSetDAO.deleteGameSet(set);
+					// remove from game to be merged
+					setsIter.remove();
+				}
 			}
 		}
 
