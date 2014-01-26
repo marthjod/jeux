@@ -77,18 +77,20 @@ public class AdminAPI {
 	@DELETE
 	@Path("/group/id/{groupId}")
 	public Response deleteGroup(@PathParam("groupId") int groupId) {
+		Response response = Response.status(
+				Response.Status.INTERNAL_SERVER_ERROR).build();
+
 		logger.debug("Request for group deletion");
 
 		int result = deleteGroupBean.deleteGroup(groupBean
 				.getGroupById(groupId));
 		if (GroupDAO.DELETION_OK == result) {
-			return Response.status(Response.Status.OK).build();
+			response = Response.status(Response.Status.OK).build();
 		} else if (GroupDAO.DELETION_CONFLICT == result) {
-			return Response.status(Response.Status.FORBIDDEN).build();
-		} else {
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-					.build();
+			response = Response.status(Response.Status.FORBIDDEN).build();
 		}
+
+		return response;
 	}
 
 	@PUT
@@ -98,54 +100,64 @@ public class AdminAPI {
 	// see de.fhb.jeux.exception for ExceptionMappers as described in
 	// http://docs.jboss.org/resteasy/docs/1.2.GA/userguide/html/ExceptionHandling.html
 	public Response createGroup(GroupDTO groupDTO) {
+		Response response = Response.status(
+				Response.Status.INTERNAL_SERVER_ERROR).build();
+
 		logger.debug("Request for group creation");
+
 		if (groupDTO != null) {
 			logger.debug("Deserialized group DTO " + groupDTO);
-			createGroupBean.createGroup(groupDTO);
-			return Response.status(Response.Status.CREATED).build();
-		} else {
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-					.build();
+			if (createGroupBean.createGroup(groupDTO)) {
+				response = Response.status(Response.Status.CREATED).build();
+			}
 		}
+
+		return response;
 	}
 
 	@PUT
 	@Path("/create-player")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response createPlayer(PlayerDTO playerDTO) {
+		Response response = Response.status(
+				Response.Status.INTERNAL_SERVER_ERROR).build();
+
 		logger.debug("Request for player creation");
 
 		if (playerDTO != null) {
 			logger.debug("Deserialized player DTO " + playerDTO);
 
 			IGroup group = groupBean.getGroupById(playerDTO.getGroupId());
-			createPlayerBean.createPlayer(playerDTO, group);
-			return Response.status(Response.Status.CREATED).build();
-		} else {
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-					.build();
+			if (createPlayerBean.createPlayer(playerDTO, group)) {
+				response = Response.status(Response.Status.CREATED).build();
+			}
 		}
+
+		return response;
 	}
 
 	@DELETE
 	@Path("/player/id/{playerId}")
 	public Response deletePlayer(@PathParam("playerId") int playerId) {
+		Response response = Response.status(
+				Response.Status.INTERNAL_SERVER_ERROR).build();
+
 		logger.debug("Request for player deletion");
 		if (deletePlayerBean.deletePlayer(playerBean.getPlayerById(playerId))) {
-			return Response.status(Response.Status.OK).build();
-		} else {
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-					.build();
+			response = Response.status(Response.Status.OK).build();
 		}
+
+		return response;
 	}
 
 	@PUT
 	@Path("/create-roundswitchrule")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response createRoundSwitchRule(RoundSwitchRuleDTO rule) {
-		logger.debug("Request for rule creation");
+		Response response = Response.status(
+				Response.Status.INTERNAL_SERVER_ERROR).build();
 
-		boolean createdSuccessfully = false;
+		logger.debug("Request for rule creation");
 
 		if (rule != null) {
 			logger.debug("Deserialized round switch rule DTO " + rule);
@@ -153,16 +165,11 @@ public class AdminAPI {
 			IGroup destGroup = groupBean.getGroupById(rule.getDestGroupId());
 			if (createRoundSwitchRuleBean.createRoundSwitchRule(rule, srcGroup,
 					destGroup)) {
-				createdSuccessfully = true;
+				response = Response.status(Response.Status.CREATED).build();
 			}
 		}
 
-		if (createdSuccessfully) {
-			return Response.status(Response.Status.CREATED).build();
-		} else {
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-					.build();
-		}
+		return response;
 	}
 
 	@POST
@@ -170,6 +177,8 @@ public class AdminAPI {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response updateGame(GameDTO updatedGame,
 			@Context ServletContext servletContext) {
+		Response response = Response.status(
+				Response.Status.INTERNAL_SERVER_ERROR).build();
 		logger.debug("Request for game update");
 
 		// fetch already initialized object from servlet context
@@ -177,11 +186,10 @@ public class AdminAPI {
 				.getAttribute("bonusPointsConfig");
 
 		if (updateGameBean.updateGame(updatedGame, config)) {
-			return Response.status(Response.Status.OK).build();
-		} else {
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-					.build();
+			response = Response.status(Response.Status.OK).build();
 		}
+
+		return response;
 	}
 
 	@POST
@@ -190,7 +198,8 @@ public class AdminAPI {
 			@PathParam("groupId") int groupId,
 			@MatrixParam("shuffledMode") @DefaultValue("false") boolean shuffledMode) {
 
-		Response response;
+		Response response = Response.status(
+				Response.Status.INTERNAL_SERVER_ERROR).build();
 
 		logger.debug("Request for game generation (group ID " + groupId
 				+ "); shuffled mode = " + shuffledMode);
@@ -198,6 +207,7 @@ public class AdminAPI {
 		int status = calcGamesBean.writeGamesForGroup(
 				groupBean.getGroupById(groupId), shuffledMode);
 
+		// for status code meaning, see appr. bean
 		switch (status) {
 		case InsertGameBean.INSERT_OK:
 			response = Response.status(Response.Status.CREATED).build();
