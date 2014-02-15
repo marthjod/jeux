@@ -76,7 +76,8 @@ public class PlayerDAO {
 		} catch (NoResultException e) {
 			// reset because callers should test for null
 			player = null;
-			logger.error("Player ID " + playerId + ": " + e.getMessage());
+			logger.error("Player ID " + playerId + ": " + e.getMessage() + " ("
+					+ e.getClass().getName() + ")");
 		}
 		return player;
 	}
@@ -99,15 +100,14 @@ public class PlayerDAO {
 		try {
 			game = query.getSingleResult();
 		} catch (Exception e) {
-			logger.error(e.getClass().getName() + ": " + e.getMessage());
+			logger.error("No game found for " + player1.getName() + " vs. "
+					+ player2.getName() + ": " + e.getMessage() + " ("
+					+ e.getClass().getName() + ")");
 		}
 
 		if (game != null) {
-			logger.debug("Found corresponding game");
 
 			if (game.hasWinner()) {
-				logger.debug("Game has a winner already");
-
 				if (game.getWinner().equals(player1)) {
 					winner = player1;
 				} else if (game.getWinner().equals(player2)) {
@@ -116,13 +116,13 @@ public class PlayerDAO {
 					logger.warn("Game winner does not equal any of the 2 players provided...?!");
 				}
 			} else {
-				logger.warn("Game has not got a winner yet");
+				logger.warn("Game not won yet.");
 			}
 		}
 
-		if (winner != null) {
-			logger.debug("Winner: " + winner.getName());
-		}
+		// if (winner != null) {
+		// logger.debug("Winner: " + winner.getName());
+		// }
 
 		// caller must check for null
 		return winner;

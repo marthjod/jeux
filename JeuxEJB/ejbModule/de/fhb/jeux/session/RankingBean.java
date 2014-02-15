@@ -61,10 +61,11 @@ public class RankingBean implements RankingRemote, RankingLocal {
 			// and in what manner
 			int rank = 0;
 			IPlayer temp = null;
+			logger.debug("Ranking " + group.getName() + ":");
 			while (sortedPlayers.peek() != null) {
 				temp = sortedPlayers.poll();
 				temp.setRank(++rank);
-				logger.debug(temp.getName() + " gets rank " + temp.getRank());
+				logger.debug(temp.getRank() + ". " + temp.getName());
 				rankedPlayers.add(temp);
 			}
 		}

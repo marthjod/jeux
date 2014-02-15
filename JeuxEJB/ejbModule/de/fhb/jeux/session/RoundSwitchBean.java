@@ -35,6 +35,10 @@ public class RoundSwitchBean implements RoundSwitchRemote, RoundSwitchLocal {
 		boolean success = false;
 
 		for (IGroup group : groupDAO.getGroupsInRound(roundId, true)) {
+
+			// rankings done once before players get moved
+			List<IPlayer> rankedPlayers = rankingBean.getRankedPlayers(group);
+
 			// find appropriate round-switch rules (RSRs)
 			for (IRoundSwitchRule rule : ruleDAO.getRulesForSrcGroup(group)) {
 				// does the destination group exist?
@@ -42,14 +46,12 @@ public class RoundSwitchBean implements RoundSwitchRemote, RoundSwitchLocal {
 					// TODO dest group should be incomplete, without games or
 					// players etc.
 
-					List<IPlayer> rankedPlayers = rankingBean
-							.getRankedPlayers(group);
-
 					// list index starts at 0 (= rank 1)
 					// move players according to ranking
-					logger.info("Moving " + (1 + rule.getAdditionalPlayers())
-							+ " players according to RSR " + rule);
+					logger.info("Applying RSR " + rule);
 
+					// TODO moving players fails if higher-ranked player cannot
+					// be determined definitively
 					for (int rank = rule.getStartWithRank() - 1; rank < (rule
 							.getStartWithRank() + rule.getAdditionalPlayers()); rank++) {
 
@@ -69,12 +71,15 @@ public class RoundSwitchBean implements RoundSwitchRemote, RoundSwitchLocal {
 								+ ") --> " + rule.getDestGroup().getName());
 					}
 
+					// TODO set destination groups active
+
 				} else {
 					// TODO destination group does not exist
 				}
 			}
 		}
 
+		logger.info("--- Round-switch finished. ---");
 		return success;
 	}
 }
