@@ -5,10 +5,9 @@ import java.util.Comparator;
 import org.jboss.logging.Logger;
 
 import de.fhb.jeux.dao.PlayerDAO;
-import de.fhb.jeux.dto.PlayerDTO;
 import de.fhb.jeux.model.IPlayer;
 
-public class BonuspointsComparator implements Comparator<PlayerDTO> {
+public class BonuspointsComparator implements Comparator<IPlayer> {
 
 	private static Logger logger = Logger
 			.getLogger(BonuspointsComparator.class);
@@ -21,8 +20,8 @@ public class BonuspointsComparator implements Comparator<PlayerDTO> {
 	}
 
 	@Override
-	public int compare(PlayerDTO p1, PlayerDTO p2) {
-		PlayerDTO higherRankedPlayer = null;
+	public int compare(IPlayer p1, IPlayer p2) {
+		IPlayer higherRankedPlayer = null;
 
 		if (p1.getPoints() > p2.getPoints()) {
 			higherRankedPlayer = p1;
@@ -59,14 +58,19 @@ public class BonuspointsComparator implements Comparator<PlayerDTO> {
 			}
 		}
 
-		if (p1.equals(higherRankedPlayer)) {
-			logger.info(p1.getName() + " > " + p2.getName());
-			return -1;
-		} else if (p2.equals(higherRankedPlayer)) {
-			logger.info(p2.getName() + " > " + p1.getName());
-			return 1;
+		if (higherRankedPlayer != null) {
+			if (p1.equals(higherRankedPlayer)) {
+				logger.info(p1.getName() + " > " + p2.getName());
+				return -1;
+			} else if (p2.equals(higherRankedPlayer)) {
+				logger.info(p2.getName() + " > " + p1.getName());
+				return 1;
+			} else {
+				logger.error("Could not determine winner");
+				return 0;
+			}
 		} else {
-			logger.warn("Could not determine winner");
+			logger.warn("Cannot determine higher-ranked player.");
 			return 0;
 		}
 	}

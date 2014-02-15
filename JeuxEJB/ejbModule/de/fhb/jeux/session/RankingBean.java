@@ -31,15 +31,13 @@ public class RankingBean implements RankingRemote, RankingLocal {
 	private PlayerDAO playerDAO;
 
 	@Override
-	public List<PlayerDTO> getRankedPlayers(IGroup group) {
-
-		// return at least an empty, but initialized list
-		List<PlayerDTO> rankedPlayerDTOs = new ArrayList<PlayerDTO>();
+	public List<IPlayer> getRankedPlayers(IGroup group) {
+		List<IPlayer> rankedPlayers = new ArrayList<IPlayer>();
 		// player entities
 		List<ShowdownPlayer> players = group.getPlayers();
 
-		if (players.size() > 0) {
-			Comparator<PlayerDTO> comparator;
+		if (!players.isEmpty()) {
+			Comparator<IPlayer> comparator;
 			// more than 1 set per game means we sort by bonus points first
 			if (group.getMaxSets() > 1) {
 				comparator = new BonuspointsComparator(playerDAO);
@@ -49,29 +47,42 @@ public class RankingBean implements RankingRemote, RankingLocal {
 			}
 
 			// used for sorting
-			PriorityQueue<PlayerDTO> sortedPlayerDTOs = new PriorityQueue<PlayerDTO>(
+			PriorityQueue<IPlayer> sortedPlayers = new PriorityQueue<IPlayer>(
 					5, comparator);
 
 			// go thru player entities, convert them and add to queue
 			// which maintains order defined by comparator
 			for (IPlayer player : players) {
-				sortedPlayerDTOs.add(new PlayerDTO(player));
+				sortedPlayers.add(player);
 			}
 
 			// use "rank" field for (ephemeral) ranking info
 			// so no one has to guess whether returned list is sorted or not
 			// and in what manner
 			int rank = 0;
-			PlayerDTO temp = null;
-			while (sortedPlayerDTOs.peek() != null) {
-				temp = sortedPlayerDTOs.poll();
+			IPlayer temp = null;
+			while (sortedPlayers.peek() != null) {
+				temp = sortedPlayers.poll();
 				temp.setRank(++rank);
 				logger.debug(temp.getName() + " gets rank " + temp.getRank());
-				rankedPlayerDTOs.add(temp);
+				rankedPlayers.add(temp);
 			}
 		}
 
-		// logger.debug(rankedPlayerDTOs.toString());
+		return rankedPlayers;
+	}
+
+	// DRY
+	@Override
+	public List<PlayerDTO> getRankedPlayerDTOs(IGroup group) {
+
+		// return at least an empty, but initialized list
+		List<PlayerDTO> rankedPlayerDTOs = new ArrayList<PlayerDTO>();
+
+		for (IPlayer player : getRankedPlayers(group)) {
+			rankedPlayerDTOs.add(new PlayerDTO(player));
+		}
+
 		return rankedPlayerDTOs;
 	}
 }
