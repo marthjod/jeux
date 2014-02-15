@@ -49,6 +49,9 @@ function updateGame(updateSubmit, gameId, player1Id, player2Id) {
         success : function() {
             $(updateSubmit).attr("value", "Update game").removeAttr("disabled");
             showGames($("#show-unplayed-games"), "unplayed");
+            // also update group view in case one has been set to
+            // completed/inactive
+            showGroups($("#show-groups"));
         },
         statusCode : {
             403 : function() {

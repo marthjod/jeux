@@ -15,6 +15,7 @@ public class GameSetDTO {
 	private String winnerName;
 
 	// EJB business method must be public
+	@SuppressWarnings("ucd")
 	public GameSetDTO(IGameSet gameSetEntity) {
 		id = gameSetEntity.getId();
 		gameId = gameSetEntity.getGame().getId();

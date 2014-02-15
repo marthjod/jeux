@@ -21,7 +21,11 @@ public interface IGroup {
 
 	public boolean isActive();
 
+	public void setActive(boolean active);
+
 	public boolean isCompleted();
+
+	public void setCompleted(boolean completed);
 
 	public boolean equals(IGroup group);
 }

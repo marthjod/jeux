@@ -74,8 +74,9 @@ public class AdminViewFilter implements Filter {
 			}
 
 			if (userAuthenticated) {
-				logger.debug("OK: " + req + " (cookie '" + authCookie.getName()
-						+ "=" + authCookie.getValue() + "')");
+				// logger.debug("OK: " + req + " (cookie '" +
+				// authCookie.getName()
+				// + "=" + authCookie.getValue() + "')");
 				// OK, move along
 				chain.doFilter(request, response);
 			} else {

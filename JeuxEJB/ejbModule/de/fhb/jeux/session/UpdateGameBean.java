@@ -13,11 +13,13 @@ import org.jboss.logging.Logger;
 import de.fhb.jeux.config.BonusPointsDistribution;
 import de.fhb.jeux.config.BonusPointsDistributor;
 import de.fhb.jeux.dao.GameDAO;
+import de.fhb.jeux.dao.GroupDAO;
 import de.fhb.jeux.dao.PlayerDAO;
 import de.fhb.jeux.dto.GameDTO;
 import de.fhb.jeux.dto.GameSetDTO;
 import de.fhb.jeux.model.IGame;
 import de.fhb.jeux.model.IGameSet;
+import de.fhb.jeux.model.IGroup;
 import de.fhb.jeux.model.IPlayer;
 import de.fhb.jeux.persistence.ShowdownGameSet;
 
@@ -32,6 +34,9 @@ public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
 
 	@EJB
 	private PlayerDAO playerDAO;
+
+	@EJB
+	private GroupDAO groupDAO;
 
 	@EJB
 	private PlayerLocal playerBean;
@@ -218,7 +223,34 @@ public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
 					logger.debug("After: " + game);
 					// write back
 					gameDAO.updateGame(game);
-					success = true;
+
+					IGroup group = game.getGroup();
+					// set group = completed if this was its last game
+					if (gameDAO.getUnplayedGamesInGroup(group).isEmpty()) {
+						group.setCompleted(true);
+						group.setActive(false);
+
+						logger.info("Group " + group.getName()
+								+ " completed and set inactive.");
+
+						// if this was also the _round's_ last game
+						if (groupDAO.roundFinished(group.getRoundId())) {
+
+							logger.info("Round " + group.getRoundId()
+									+ " is finished.");
+
+							// TODO round-switch
+
+							// TODO
+							success = true;
+						} else {
+							// !
+							success = true;
+						}
+					} else {
+						// !
+						success = true;
+					}
 				}
 			}
 		}

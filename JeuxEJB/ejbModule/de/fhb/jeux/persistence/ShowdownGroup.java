@@ -25,7 +25,8 @@ import de.fhb.jeux.model.IGroup;
 @Table(name = "Group_")
 @NamedQueries({
 		@NamedQuery(name = "Group.findAll", query = "SELECT g FROM ShowdownGroup g"),
-		@NamedQuery(name = "Group.findById", query = "SELECT g FROM ShowdownGroup g WHERE g.id = :id") })
+		@NamedQuery(name = "Group.findById", query = "SELECT g FROM ShowdownGroup g WHERE g.id = :id"),
+		@NamedQuery(name = "Group.findIncompleteInRound", query = "SELECT g FROM ShowdownGroup g WHERE g.roundId = :roundId AND g.completed = false") })
 public class ShowdownGroup implements IGroup, Serializable {
 
 	private static final long serialVersionUID = 4301340014397931722L;
@@ -105,6 +106,7 @@ public class ShowdownGroup implements IGroup, Serializable {
 		return active;
 	}
 
+	@Override
 	public void setActive(boolean active) {
 		this.active = active;
 	}
@@ -114,6 +116,7 @@ public class ShowdownGroup implements IGroup, Serializable {
 		return completed;
 	}
 
+	@Override
 	public void setCompleted(boolean completed) {
 		this.completed = completed;
 	}

@@ -71,7 +71,7 @@ public class RankingBean implements RankingRemote, RankingLocal {
 			}
 		}
 
-		logger.debug(rankedPlayerDTOs.toString());
+		// logger.debug(rankedPlayerDTOs.toString());
 		return rankedPlayerDTOs;
 	}
 }

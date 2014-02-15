@@ -113,4 +113,22 @@ public class GroupDAO {
 		}
 		return players;
 	}
+
+	private List<IGroup> getIncompleteGroupsInRound(int roundId) {
+		List<IGroup> incompleteGroups = new ArrayList<IGroup>();
+		TypedQuery<IGroup> query = em.createNamedQuery(
+				"Group.findIncompleteInRound", IGroup.class);
+		query.setParameter("roundId", roundId);
+		incompleteGroups = query.getResultList();
+
+		logger.debug(incompleteGroups.size() + " groups incomplete in round "
+				+ roundId + ".");
+
+		return incompleteGroups;
+	}
+
+	// check if round which this group is in is over
+	public boolean roundFinished(int roundId) {
+		return getIncompleteGroupsInRound(roundId).isEmpty();
+	}
 }
