@@ -5,6 +5,8 @@ public interface IPlayer {
 
 	public IGroup getGroup();
 
+	public void setGroup(IGroup group);
+
 	public String getName();
 
 	public int getPoints();
@@ -12,6 +14,8 @@ public interface IPlayer {
 	public int getScoreRatio();
 
 	public int getRank();
+
+	public void setRank(int rank);
 
 	public boolean equals(IPlayer player);
 

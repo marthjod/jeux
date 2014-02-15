@@ -95,6 +95,6 @@ public class AudienceAPI {
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<PlayerDTO> getRankingInGroup(@PathParam("groupId") int groupId) {
 		IGroup group = groupBean.getGroupById(groupId);
-		return playerRankingBean.getRankedPlayers(group);
+		return playerRankingBean.getRankedPlayerDTOs(group);
 	}
 }

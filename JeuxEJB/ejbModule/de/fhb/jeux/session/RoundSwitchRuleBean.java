@@ -30,7 +30,7 @@ public class RoundSwitchRuleBean implements RoundSwitchRuleRemote,
 
 	@Override
 	public List<IRoundSwitchRule> getAllRoundSwitchRule() {
-		return roundSwitchRuleDAO.getAllRoundSwitchRules();
+		return roundSwitchRuleDAO.getAllRules();
 	}
 
 	@Override

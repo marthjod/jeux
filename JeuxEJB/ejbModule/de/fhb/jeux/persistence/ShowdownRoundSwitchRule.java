@@ -21,7 +21,9 @@ import de.fhb.jeux.model.IRoundSwitchRule;
 @Table(name = "RoundSwitchRule")
 @NamedQueries({
 		@NamedQuery(name = "RoundSwitchRule.findAll", query = "SELECT r FROM ShowdownRoundSwitchRule r"),
-		@NamedQuery(name = "RoundSwitchRule.findById", query = "SELECT r FROM ShowdownRoundSwitchRule r WHERE r.id = :id") })
+		@NamedQuery(name = "RoundSwitchRule.findById", query = "SELECT r FROM ShowdownRoundSwitchRule r WHERE r.id = :id"),
+		@NamedQuery(name = "RoundSwitchRule.findBySrcGroup", query = "SELECT r FROM ShowdownRoundSwitchRule r WHERE r.srcGroup = :srcGroup"),
+		@NamedQuery(name = "RoundSwitchRule.findByDestGroup", query = "SELECT r FROM ShowdownRoundSwitchRule r WHERE r.destGroup = :destGroup") })
 public class ShowdownRoundSwitchRule implements IRoundSwitchRule, Serializable {
 
 	private static final long serialVersionUID = -1174601853867495185L;
@@ -61,7 +63,7 @@ public class ShowdownRoundSwitchRule implements IRoundSwitchRule, Serializable {
 
 	@Override
 	public IGroup getSrcGroup() {
-		return this.srcGroup;
+		return srcGroup;
 	}
 
 	@Override
@@ -76,7 +78,7 @@ public class ShowdownRoundSwitchRule implements IRoundSwitchRule, Serializable {
 
 	@Override
 	public IGroup getDestGroup() {
-		return this.destGroup;
+		return destGroup;
 	}
 
 	@Override
@@ -98,16 +100,15 @@ public class ShowdownRoundSwitchRule implements IRoundSwitchRule, Serializable {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("<");
-		sb.append("Previous round: ");
-		sb.append(this.previousRoundId);
-		sb.append(", starting with rank: ");
-		sb.append(this.startWithRank);
-		sb.append(", additional players: ");
-		sb.append(this.additionalPlayers);
-		sb.append(", source group: ");
-		sb.append(this.srcGroup.getName());
-		sb.append(", destination group: ");
-		sb.append(this.destGroup.getName());
+		sb.append(srcGroup.getName());
+		sb.append(" #");
+		sb.append(startWithRank);
+		sb.append("-#");
+		sb.append(startWithRank + additionalPlayers);
+		sb.append(" (");
+		sb.append(additionalPlayers + 1);
+		sb.append(") --> ");
+		sb.append(destGroup.getName());
 		sb.append(">");
 
 		return sb.toString();

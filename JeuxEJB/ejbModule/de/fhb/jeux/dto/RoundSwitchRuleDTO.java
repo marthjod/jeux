@@ -9,15 +9,19 @@ public class RoundSwitchRuleDTO {
 	}
 
 	public RoundSwitchRuleDTO(IRoundSwitchRule roundSwitchRuleEntity) {
-		this.srcGroupId = roundSwitchRuleEntity.getSrcGroup().getId();
-		this.destGroupId = roundSwitchRuleEntity.getDestGroup().getId();
-		this.previousRoundId = roundSwitchRuleEntity.getPreviousRoundId();
-		this.startWithRank = roundSwitchRuleEntity.getStartWithRank();
-		this.additionalPlayers = roundSwitchRuleEntity.getAdditionalPlayers();
+		srcGroupId = roundSwitchRuleEntity.getSrcGroup().getId();
+		srcGroupName = roundSwitchRuleEntity.getSrcGroup().getName();
+		destGroupId = roundSwitchRuleEntity.getDestGroup().getId();
+		destGroupName = roundSwitchRuleEntity.getDestGroup().getName();
+		previousRoundId = roundSwitchRuleEntity.getPreviousRoundId();
+		startWithRank = roundSwitchRuleEntity.getStartWithRank();
+		additionalPlayers = roundSwitchRuleEntity.getAdditionalPlayers();
 	}
 
 	private int srcGroupId;
 	private int destGroupId;
+	private String srcGroupName;
+	private String destGroupName;
 	private int previousRoundId;
 	private int startWithRank;
 	private int additionalPlayers;
@@ -42,20 +46,27 @@ public class RoundSwitchRuleDTO {
 		return additionalPlayers;
 	}
 
+	public String getSrcGroupName() {
+		return srcGroupName;
+	}
+
+	public String getDestGroupName() {
+		return destGroupName;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("<");
-		sb.append("Previous round: ");
-		sb.append(this.previousRoundId);
-		sb.append(", starting with rank: ");
-		sb.append(this.startWithRank);
-		sb.append(", additional players: ");
-		sb.append(this.additionalPlayers);
-		sb.append(", source group: ");
-		sb.append(this.srcGroupId);
-		sb.append(", destination group: ");
-		sb.append(this.destGroupId);
+		sb.append(srcGroupName);
+		sb.append(" #");
+		sb.append(startWithRank);
+		sb.append("-#");
+		sb.append(startWithRank + additionalPlayers);
+		sb.append(" (");
+		sb.append(additionalPlayers + 1);
+		sb.append(") --> ");
+		sb.append(destGroupName);
 		sb.append(">");
 
 		return sb.toString();

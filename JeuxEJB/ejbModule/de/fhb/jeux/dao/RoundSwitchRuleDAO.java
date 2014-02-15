@@ -11,6 +11,7 @@ import javax.persistence.TypedQuery;
 
 import org.jboss.logging.Logger;
 
+import de.fhb.jeux.model.IGroup;
 import de.fhb.jeux.model.IRoundSwitchRule;
 
 @Stateless
@@ -25,24 +26,39 @@ public class RoundSwitchRuleDAO {
 	public RoundSwitchRuleDAO() {
 	}
 
-	public boolean addRoundSwitchRule(IRoundSwitchRule rule) {
+	public boolean addRule(IRoundSwitchRule rule) {
 		boolean success = false;
 		try {
 			em.persist(rule);
 			success = true;
-			logger.debug("Persisted RoundSwitchRule " + rule);
+			// logger.debug("Persisted round-switch-rule " + rule);
 		} catch (Exception e) {
-			logger.error(rule + ": " + e.getMessage());
+			logger.error(rule + ": " + e.getClass().getName() + " "
+					+ e.getMessage());
 		}
 		return success;
 	}
 
-	public List<IRoundSwitchRule> getAllRoundSwitchRules() {
-		List<IRoundSwitchRule> rules = new ArrayList<IRoundSwitchRule>();
+	public List<IRoundSwitchRule> getAllRules() {
+		return runQuery("RoundSwitchRule.findAll", null, null);
+	}
 
-		TypedQuery<IRoundSwitchRule> query = em.createNamedQuery(
-				"RoundSwitchRule.findAll", IRoundSwitchRule.class);
-		rules = query.getResultList();
+	public List<IRoundSwitchRule> getRulesForSrcGroup(IGroup group) {
+		return runQuery("RoundSwitchRule.findBySrcGroup", "srcGroup", group);
+	}
+
+	// if paramName = null, paramName and paramGroup are ignored
+	private List<IRoundSwitchRule> runQuery(String queryName, String paramName,
+			IGroup groupParam) {
+		List<IRoundSwitchRule> rules = new ArrayList<IRoundSwitchRule>();
+		if (queryName != null) {
+			TypedQuery<IRoundSwitchRule> query = em.createNamedQuery(queryName,
+					IRoundSwitchRule.class);
+			if (paramName != null && groupParam != null) {
+				query.setParameter(paramName, groupParam);
+			}
+			rules = query.getResultList();
+		}
 
 		return rules;
 	}

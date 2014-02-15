@@ -41,6 +41,9 @@ public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
 	@EJB
 	private PlayerLocal playerBean;
 
+	@EJB
+	private RoundSwitchLocal roundSwitchBean;
+
 	public UpdateGameBean() {
 	}
 
@@ -54,7 +57,7 @@ public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
 
 		if (game != null && gameDTO != null) {
 
-			logger.debug("Before: " + game);
+			// logger.debug("Before: " + game);
 
 			List<ShowdownGameSet> existingSets = game.getSets();
 			List<GameSetDTO> newSets = gameDTO.getSets();
@@ -220,7 +223,7 @@ public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
 						}
 					}
 
-					logger.debug("After: " + game);
+					// logger.debug("After: " + game);
 					// write back
 					gameDAO.updateGame(game);
 
@@ -239,7 +242,7 @@ public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
 							logger.info("Round " + group.getRoundId()
 									+ " is finished.");
 
-							// TODO round-switch
+							roundSwitchBean.switchRound(group.getRoundId());
 
 							// TODO
 							success = true;

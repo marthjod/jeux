@@ -74,6 +74,11 @@ public class ShowdownPlayer implements IPlayer, Serializable {
 	}
 
 	@Override
+	public void setGroup(IGroup group) {
+		this.group = (ShowdownGroup) group;
+	}
+
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -123,6 +128,7 @@ public class ShowdownPlayer implements IPlayer, Serializable {
 		return rank;
 	}
 
+	@Override
 	public void setRank(int rank) {
 		this.rank = rank;
 	}
