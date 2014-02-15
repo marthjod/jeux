@@ -144,8 +144,23 @@ function createNewRoundSwitchRule(ruleSubmit) {
                     403 : function() {
                         alert("Operation not permitted (unauthenticated request).");
                     },
+                    406 : function() {
+                        alert("Rank too low: must start at least at rank 1.");
+                    },
+                    409 : function() {
+                        alert("Source group must not equal destination group.");
+                    },
+                    412 : function() {
+                        alert("Source and/or destination group do(es) not exist.");
+                    },
+                    413 : function() {
+                        alert("Too many players to be moved from source group.");
+                    },
+                    416 : function() {
+                        alert("A rank exceeds the group's size.");
+                    },
                     500 : function() {
-                        alert("Failed to create round-switch rule");
+                        alert("Failed to create round-switch rule (unknown error).");
                     }
                 }
             });

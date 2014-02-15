@@ -28,6 +28,7 @@ import de.fhb.jeux.session.CalcGamesBean;
 import de.fhb.jeux.session.CalcGamesLocal;
 import de.fhb.jeux.session.CreateGroupLocal;
 import de.fhb.jeux.session.CreatePlayerLocal;
+import de.fhb.jeux.session.CreateRoundSwitchRuleBean;
 import de.fhb.jeux.session.CreateRoundSwitchRuleLocal;
 import de.fhb.jeux.session.DeleteGroupLocal;
 import de.fhb.jeux.session.DeletePlayerLocal;
@@ -157,16 +158,41 @@ public class AdminAPI {
 		Response response = Response.status(
 				Response.Status.INTERNAL_SERVER_ERROR).build();
 
-		logger.debug("Request for rule creation");
-
 		if (rule != null) {
-			logger.debug("Deserialized round switch rule DTO " + rule);
+			// logger.debug("Deserialized round switch rule DTO " + rule);
 			IGroup srcGroup = groupBean.getGroupById(rule.getSrcGroupId());
 			IGroup destGroup = groupBean.getGroupById(rule.getDestGroupId());
-			if (createRoundSwitchRuleBean.createRoundSwitchRule(rule, srcGroup,
-					destGroup)) {
+			int status = createRoundSwitchRuleBean.createRoundSwitchRule(rule,
+					srcGroup, destGroup);
+
+			switch (status) {
+			case CreateRoundSwitchRuleBean.STATUS_OK:
 				response = Response.status(Response.Status.CREATED).build();
+				break;
+
+			case CreateRoundSwitchRuleBean.RANK_EXCEEDS_GROUP_SIZE:
+				response = Response.status(416).build();
+				break;
+
+			case CreateRoundSwitchRuleBean.RANK_TOO_LOW:
+				response = Response.status(Response.Status.NOT_ACCEPTABLE)
+						.build();
+				break;
+
+			case CreateRoundSwitchRuleBean.SRC_GROUP_EQUALS_DEST_GROUP:
+				response = Response.status(Response.Status.CONFLICT).build();
+				break;
+
+			case CreateRoundSwitchRuleBean.SRC_OR_DEST_GROUP_NONEXISTANT:
+				response = Response.status(Response.Status.PRECONDITION_FAILED)
+						.build();
+				break;
+
+			case CreateRoundSwitchRuleBean.TOO_MANY_PLAYERS_TO_BE_MOVED:
+				response = Response.status(413).build();
+				break;
 			}
+
 		}
 
 		return response;
@@ -228,11 +254,6 @@ public class AdminAPI {
 
 		case CalcGamesBean.TOO_FEW_GROUP_MEMBERS:
 			response = Response.status(428).build();
-			break;
-
-		default:
-			response = Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-					.build();
 			break;
 		}
 

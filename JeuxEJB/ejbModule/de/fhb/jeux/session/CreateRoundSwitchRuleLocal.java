@@ -8,6 +8,6 @@ import de.fhb.jeux.model.IGroup;
 @Local
 public interface CreateRoundSwitchRuleLocal {
 
-	public boolean createRoundSwitchRule(RoundSwitchRuleDTO ruleDTO,
+	public int createRoundSwitchRule(RoundSwitchRuleDTO ruleDTO,
 			IGroup srcGroup, IGroup destGroup);
 }
