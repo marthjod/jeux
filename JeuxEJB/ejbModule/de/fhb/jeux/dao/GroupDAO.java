@@ -14,7 +14,6 @@ import org.jboss.logging.Logger;
 
 import de.fhb.jeux.dto.GroupDTO;
 import de.fhb.jeux.model.IGroup;
-import de.fhb.jeux.persistence.ShowdownGroup;
 import de.fhb.jeux.persistence.ShowdownPlayer;
 
 @Stateless
@@ -67,17 +66,20 @@ public class GroupDAO {
 		return result;
 	}
 
+	// returns null if non-existant or failure
 	public IGroup getGroupById(int groupId) {
-		IGroup group = new ShowdownGroup();
+		IGroup group = null;
 		TypedQuery<IGroup> query = em.createNamedQuery("Group.findById",
 				IGroup.class);
 		query.setParameter("id", groupId);
+
 		try {
 			group = query.getSingleResult();
 		} catch (NoResultException e) {
 			// reset because callers should test for null
 			group = null;
-			logger.error("Group ID " + groupId + ": " + e.getMessage());
+			logger.error("Group ID " + groupId + ": " + e.getClass().getName()
+					+ " " + e.getMessage());
 		}
 		return group;
 	}
@@ -114,21 +116,40 @@ public class GroupDAO {
 		return players;
 	}
 
-	private List<IGroup> getIncompleteGroupsInRound(int roundId) {
-		List<IGroup> incompleteGroups = new ArrayList<IGroup>();
-		TypedQuery<IGroup> query = em.createNamedQuery(
-				"Group.findIncompleteInRound", IGroup.class);
-		query.setParameter("roundId", roundId);
-		incompleteGroups = query.getResultList();
+	public List<IGroup> getGroupsInRound(int roundId, boolean completed) {
+		List<IGroup> groups = new ArrayList<IGroup>();
+		TypedQuery<IGroup> query = null;
 
-		logger.debug(incompleteGroups.size() + " groups incomplete in round "
-				+ roundId + ".");
+		StringBuilder sb = new StringBuilder();
 
-		return incompleteGroups;
+		if (completed) {
+			query = em.createNamedQuery("Group.findCompleteInRound",
+					IGroup.class);
+			sb.append("Completed");
+		} else {
+			query = em.createNamedQuery("Group.findIncompleteInRound",
+					IGroup.class);
+			sb.append("Incomplete");
+		}
+
+		if (query != null) {
+			query.setParameter("roundId", roundId);
+			groups = query.getResultList();
+		}
+
+		sb.append(" groups in round ");
+		sb.append(roundId);
+		sb.append(": ");
+		sb.append(groups.size());
+		sb.append(".");
+		logger.debug(sb.toString());
+
+		return groups;
 	}
 
 	// check if round which this group is in is over
 	public boolean roundFinished(int roundId) {
-		return getIncompleteGroupsInRound(roundId).isEmpty();
+		return getGroupsInRound(roundId, false).isEmpty();
 	}
+
 }
