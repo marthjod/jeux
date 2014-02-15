@@ -1,7 +1,12 @@
-function deleteGroup(groupId) {
+function deleteGroup(groupId, deleteButton) {
     "use strict";
 
     if (window.confirm("Warning: Removing this group\nwill also delete all players\nand games belonging to this group!")) {
+
+        if (deleteButton && deleteButton !== null) {
+            $(deleteButton).hide();
+        }
+
         $.ajax({
             url : "rest/admin/group/id/" + groupId,
             type : "DELETE",
@@ -19,6 +24,7 @@ function deleteGroup(groupId) {
                 showGames($("#show-unplayed-games"), "unplayed");
                 showRules($("#show-rules"));
             },
+            // errors
             statusCode : {
                 409 : function() {
                     alert("Conflict trying to delete group (violated constraint).");

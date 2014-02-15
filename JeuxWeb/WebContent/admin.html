@@ -78,7 +78,7 @@
                 <input id="submit-create-group"
                 type="submit"
                 value="Create group"
-                onclick="createNewGroup(this);"
+                onclick="createNewGroup(this); $('#create-groups').toggle();"
                 class="btn btn-success" />
             </form>
             </div>
@@ -106,7 +106,7 @@
                     <input id="submit-create-player"
                     type="submit"
                     value="Create player"
-                    onclick="createNewPlayer(this);"
+                    onclick="createNewPlayer(this); $('#create-players').toggle();"
                     class="btn btn-success" />
                 </form>
             </div>
@@ -149,7 +149,7 @@
                     <input id="submit-create-rule"
                     type="submit"
                     value="Create round-switch rule"
-                    onclick="createNewRoundSwitchRule(this, '#show-rules');"
+                    onclick="createNewRoundSwitchRule(this, '#show-rules'); $('#create-roundswitchrules').toggle();"
                     class="btn btn-success" />
                 </form>
             </div>

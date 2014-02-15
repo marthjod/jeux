@@ -3,7 +3,9 @@ function updateGame(updateSubmit, gameId, player1Id, player2Id) {
 
     var inputOK = false, gameSetId = 0, rows = [], i = 0, set = {}, player1Score = 0, player2Score = 0, updatedGame = {};
 
-    $(updateSubmit).attr("value", "Updating...").attr("disabled", "disabled");
+    if (updateSubmit && updateSubmit !== null) {
+        $(updateSubmit).attr("value", "Updating...").attr("disabled", "disabled");
+    }
 
     updatedGame = {
         "id" : gameId,
@@ -67,8 +69,12 @@ function updateGame(updateSubmit, gameId, player1Id, player2Id) {
 function generateGames(generateButton, groupId, shuffledMode) {
     "use strict";
 
-    if (typeof shuffledMode === undefined || shuffledMode === null || typeof shuffledMode !== "boolean") {
+    if (!shuffledMode || typeof shuffledMode !== "boolean") {
         shuffledMode = false;
+    }
+
+    if (generateButton && generateButton !== null) {
+        $(generateButton).attr("disabled", "disabled").attr("value", "Generating...");
     }
 
     $.ajax({
@@ -77,13 +83,13 @@ function generateGames(generateButton, groupId, shuffledMode) {
         type : "POST",
         statusCode : {
             201 : function() {
-                $(generateButton).attr("disabled", "disabled").removeClass("btn-success").addClass("btn-default");
+                $(generateButton).remove();
                 showGames($("#show-unplayed-games"), "unplayed");
             },
             409 : function() {
                 alert("Conflict: one or more game(s) already exist(s) in this group.");
                 // disable button
-                $(generateButton).attr("disabled", "disabled").removeClass("btn-success").addClass("btn-default");
+                $(generateButton).remove();
             },
             500 : function() {
                 alert("Unknown error.");
@@ -93,6 +99,7 @@ function generateGames(generateButton, groupId, shuffledMode) {
             },
             428 : function() {
                 alert("Cannot calculate games: Too few group members.");
+                $(generateButton).removeAttr("disabled").attr("value", "Generate games");
             }
         }
     });
