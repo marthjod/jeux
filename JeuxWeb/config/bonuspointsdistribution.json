@@ -1,11 +1,5 @@
 [
     {
-       "setsWonByWinner":1,
-       "totalSets":1,
-       "bonusPointsWinner":1,
-       "bonusPointsLoser":0
-    },
-    {
        "setsWonByWinner":2,
        "totalSets":2,
        "bonusPointsWinner":4,
