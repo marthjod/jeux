@@ -17,6 +17,7 @@ function deleteGroup(groupId) {
                 showPlayers($("#show-players"));
                 // refresh because deletion cascades for games, too
                 showGames($("#show-unplayed-games"), "unplayed");
+                showRules($("#show-rules"));
             },
             statusCode : {
                 409 : function() {

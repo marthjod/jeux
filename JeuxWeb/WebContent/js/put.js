@@ -102,7 +102,7 @@ function createNewPlayer(playerSubmit) {
     }
 }
 
-function createNewRoundSwitchRule(ruleSubmit) {
+function createNewRoundSwitchRule(ruleSubmit, rulesDiv) {
     "use strict";
 
     var ruleForm = null, srcGroupId = 0, destGroupId = 0, startWithRank = 0, additionalPlayers = 0, inputOK = false, sendRule = {};
@@ -139,6 +139,7 @@ function createNewRoundSwitchRule(ruleSubmit) {
                 contentType : "application/json",
                 success : function() {
                     clearForm(ruleSubmit);
+                    showRules($(rulesDiv));
                 },
                 statusCode : {
                     403 : function() {

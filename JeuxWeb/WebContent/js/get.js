@@ -1,25 +1,25 @@
-function getRESTApiStatus(statusDiv) {
+var getRESTApiStatus = function(statusDiv) {
     "use strict";
 
     $.get("rest/audience/status", function(data) {
         $(statusDiv).html("ReST API status " + data);
     });
-}
+};
 
-function showGroups(showGroupsDiv, playerGroupSelect, ruleSrcGroupSelect, ruleDestGroupSelect) {
+var showGroups = function(showGroupsDiv, playerGroupSelect, ruleSrcGroupSelect, ruleDestGroupSelect) {
     "use strict";
 
     var i = 0, table = null, currentGroup = null, row = null, gameGenerationCell = null, deletionCell = null, playerGroupSelectOK = false, ruleGroupSelectsOK = false, gameGenerationCell = null;
 
     $.get("rest/audience/groups", function(data) {
 
-        if (playerGroupSelect !== undefined && playerGroupSelect !== null) {
+        if (playerGroupSelect && playerGroupSelect !== null) {
             playerGroupSelectOK = true;
             $(playerGroupSelect).find("option").remove();
             $("<option>").attr("id", "no-group-selected").text("No group selected").appendTo($(playerGroupSelect));
         }
 
-        if (ruleSrcGroupSelect !== undefined && ruleSrcGroupSelect !== null && ruleDestGroupSelect !== undefined && ruleDestGroupSelect !== null) {
+        if (ruleSrcGroupSelect && ruleSrcGroupSelect !== null && ruleDestGroupSelect && ruleDestGroupSelect !== null) {
             ruleGroupSelectsOK = true;
             $(ruleSrcGroupSelect).find("option").remove();
             $(ruleDestGroupSelect).find("option").remove();
@@ -58,7 +58,7 @@ function showGroups(showGroupsDiv, playerGroupSelect, ruleSrcGroupSelect, ruleDe
                 $("<input>").attr("type", "submit").attr("class", "btn btn-success").attr("value", "Generate games").appendTo(gameGenerationCell).attr("onclick", "generateGames(this, " + currentGroup.id + ", false);");
                 gameGenerationCell.appendTo(row);
                 deletionCell = $("<td>");
-                $("<input>").attr("type", "submit").attr("class", "btn btn-danger").attr("value", "Delete group").appendTo(deletionCell).attr("onclick", "deleteGroup(" + currentGroup.id + ");");
+                $("<input>").attr("type", "submit").attr("class", "btn btn-danger").attr("value", "Delete group").appendTo(deletionCell).attr("onclick", "deleteGroup(" + currentGroup.id + ", this);");
                 deletionCell.appendTo(row);
 
                 row.appendTo(table);
@@ -76,14 +76,14 @@ function showGroups(showGroupsDiv, playerGroupSelect, ruleSrcGroupSelect, ruleDe
             table.appendTo(showGroupsDiv);
         }
     });
-}
+};
 
-function showGames(showGamesDiv, status) {
+var showGames = function(showGamesDiv, status) {
     "use strict";
 
     var i = 0, j = 0, k = 0, gameTable = null, player1Header = null, player2Header = null, setsTable = null, setsCell = null, row = null, urlPrefix = "", updateCell = null, statusKnown = false;
 
-    if (typeof status !== undefined && status !== null && typeof status === "string") {
+    if (status && status !== null && typeof status === "string") {
         if (status === "played") {
             urlPrefix = "rest/audience/games/played/group/id/";
             statusKnown = true;
@@ -181,9 +181,9 @@ function showGames(showGamesDiv, status) {
             }
         });
     }
-}
+};
 
-function showPlayers(showPlayersDiv) {
+var showPlayers = function(showPlayersDiv) {
     "use strict";
 
     var i = 0, k = 0, table = null, row = null, deletionCell = null;
@@ -231,9 +231,9 @@ function showPlayers(showPlayersDiv) {
             }
         }
     });
-}
+};
 
-function rankSorter(firstPlayer, secondPlayer) {
+var rankSorter = function(firstPlayer, secondPlayer) {
     "use strict";
 
     var retval = 0;
@@ -244,7 +244,7 @@ function rankSorter(firstPlayer, secondPlayer) {
      * elements' index is equal.
      */
 
-    if (typeof firstPlayer !== undefined && firstPlayer !== null && typeof secondPlayer !== undefined && secondPlayer !== null && firstPlayer.hasOwnProperty("rank") && secondPlayer.hasOwnProperty("rank")) {
+    if (firstPlayer && firstPlayer !== null && secondPlayer && secondPlayer !== null && firstPlayer.hasOwnProperty("rank") && secondPlayer.hasOwnProperty("rank")) {
         // smaller = better
         if (firstPlayer.rank < secondPlayer.rank) {
             retval = -1;
@@ -254,9 +254,9 @@ function rankSorter(firstPlayer, secondPlayer) {
     }
 
     return retval;
-}
+};
 
-function showRankings(rankingsDiv) {
+var showRankings = function(rankingsDiv) {
     "use strict";
 
     var i = 0, k = 0, table = null, row = null;
@@ -309,4 +309,47 @@ function showRankings(rankingsDiv) {
             }
         }
     });
-}
+};
+
+var showRules = function(showRulesDiv) {
+    "use strict";
+
+    var i = 0, table = null, row = null, startWithRank = 0, additionalPlayers = 0, lastRank = 0;
+
+    if (showRulesDiv && showRulesDiv != null) {
+        $(showRulesDiv).empty();
+
+        $.get("rest/audience/roundswitchrules", function(rulesData) {
+            if (rulesData && rulesData !== null && typeof rulesData === "object" && rulesData.hasOwnProperty("length") && rulesData.length > 0) {
+
+                table = $("<table>").attr("class", "table table-hover table-bordered table-condensed");
+                row = $("<tr>");
+                $("<th>").html("Source group").appendTo(row);
+                $("<th>").html("Destination group").appendTo(row);
+                $("<th>").html("Ranks").appendTo(row);
+                $("<th>").html("&Sigma;").appendTo(row);
+                // $("<th>").html("Start with rank").appendTo(row);
+                // $("<th>").html("Additional players").appendTo(row);
+                row.appendTo(table);
+
+                for (i = 0; i < rulesData.length; i++) {
+
+                    startWithRank = parseInt(rulesData[i].startWithRank, 10);
+                    additionalPlayers = parseInt(rulesData[i].additionalPlayers, 10);
+                    lastRank = startWithRank + additionalPlayers;
+
+                    row = $("<tr>");
+                    $("<td>").html(rulesData[i].srcGroupName).appendTo(row);
+                    $("<td>").html(rulesData[i].destGroupName).appendTo(row);
+                    $("<td>").html(startWithRank + "-" + lastRank).appendTo(row);
+                    $("<td>").html(additionalPlayers + 1).appendTo(row);
+                    // $("<td>").html(startWithRank).appendTo(row);
+                    // $("<td>").html(additionalPlayers).appendTo(row);
+                    row.appendTo(table);
+                }
+
+                table.appendTo(showRulesDiv);
+            }
+        });
+    }
+};

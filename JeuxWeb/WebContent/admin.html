@@ -17,6 +17,7 @@
                 showGroups($("#show-groups"), $("#player-select-group"), $("#rule-source-group"), $("#rule-destination-group"));
                 showPlayers($("#show-players"));
                 showGames($("#show-unplayed-games"), "unplayed");
+                showRules($("#show-rules"));
             });
         </script>
         <title>JEUX Administrative View</title>
@@ -110,6 +111,8 @@
                 </form>
             </div>
             <h1>Tournament</h1>
+	        <div id="show-rules">
+	        </div>
             <h2 class="btn btn-info" onclick="$('#create-roundswitchrules').toggle();">New round-switch rule</h2>
             <div id="create-roundswitchrules" hidden="hidden">
                 <form id="create-roundswitchrule" action="#" role="form">
@@ -146,7 +149,7 @@
                     <input id="submit-create-rule"
                     type="submit"
                     value="Create round-switch rule"
-                    onclick="createNewRoundSwitchRule(this);"
+                    onclick="createNewRoundSwitchRule(this, '#show-rules');"
                     class="btn btn-success" />
                 </form>
             </div>
