@@ -10,7 +10,7 @@
 
 ### Deployment configuration after Eclipse import
 
-Modify the following entries in _JeuxEJB/.classpath_ and _JeuxWeb/.classpath_ to reflect your local situation:
+- If needed, modify the following entries in _JeuxEJB/.classpath_ and _JeuxWeb/.classpath_ to reflect your local situation:
 
 ```xml
 <classpathentry kind="con" 
@@ -23,6 +23,7 @@ Modify the following entries in _JeuxEJB/.classpath_ and _JeuxWeb/.classpath_ to
 ### Persistence
 
 #### Eclipse
+
 
 - _Project facets_ should include _JPA_
 - _ejbModule/META-INF/persistence.xml_ should exist and contain an entry for each used persistence entity, e.g.:
@@ -38,7 +39,11 @@ Modify the following entries in _JeuxEJB/.classpath_ and _JeuxWeb/.classpath_ to
 ```
 
 
-#### MySQL: Add user
+#### MySQL
+
+- Create DB _jeuxdb_
+- Import _jeuxdb-empty.sql_
+- Add user:
 
 ```sql
 CREATE USER 'jeuxdb_user'@'localhost' 
@@ -50,13 +55,19 @@ TO 'jeuxdb_user'@'localhost';
 ```
 
 
-#### JBoss: Add data source
+### JBoss
 
-- Copy driver JAR ([mysql-connector-java-5.1.27-bin.jar](http://dev.mysql.com/downloads/connector/j/)) to  _.../jboss-as-7.1.1.Final/standalone/deployment_ first
+- Eclipse: install [JBoss Application Server Adapters](http://download.jboss.org/jbosstools/updates/webtools/kepler/)
+    - Create new runtime environment _JBoss AS 7.1_ (local server)
+    - _Listen on all interfaces..._
+    - Add as _Targeted Runtime_ to projects
+
+#### Add data source
+- Copy driver JAR ([mysql-connector-java-VERSION-bin.jar](http://dev.mysql.com/downloads/connector/j/)) to  _.../jboss-as-7.1.1.Final/standalone/deployments_ first
 
 ##### JBoss Management Console (http://localhost:9999 if working)
 - Connection URL: `jdbc:mysql://localhost:3306/<database name>`
-- Driver: `mysql-connector-java-<ver>-bin.jar`
+- Driver: `mysql-connector-java-VERSION-bin.jar`
 - JNDI: `java:jboss/datasources/JeuxDS`
 - User, password: see <a href="#mysql-add-user">MySQL</a>
 
@@ -64,10 +75,11 @@ TO 'jeuxdb_user'@'localhost';
 ##### -OR- manually
 
 ```xml
+<!-- jboss-as-7.1.1.Final/standalone/configuration/standalone.xml -->
 <datasource jta="false" jndi-name="java:jboss/datasources/JeuxDS" pool-name="JeuxDS" enabled="true" use-ccm="false">
     <connection-url>jdbc:mysql://localhost:3306/jeuxdb</connection-url>
     <driver-class>com.mysql.jdbc.Driver</driver-class>
-    <driver>mysql-connector-java-5.1.27-bin.jar</driver>
+    <driver>mysql-connector-java-VERSION-bin.jar</driver>
     <security>
         <user-name>jeuxdb_user</user-name>
         <password>***</password>
@@ -113,7 +125,14 @@ TO 'jeuxdb_user'@'localhost';
 
 - Cf. [https://community.jboss.org/message/744521?_sscc=t](https://community.jboss.org/message/744521?_sscc=t)
 - Appropriate _users.properties_ and _roles.properties_ must be in class path (OR put under _properties/_ and configure deployment assembly accordingly, i.e. _properties/_ -> _WEB-INF/classes_)
-
+- Add new administrative user: 
+```bash
+# By default the properties realm expects the entries to be in the format: -
+# username=HEX( MD5( username ':' realm ':' password))
+hash=`python -c "import hashlib; print hashlib.md5('newuser' + ':' + 'JEUX Administrative view' + ':' + '***').hexdigest()"`
+```
+    - _roles.properties_: `newuser=jeux-admin`
+    - _users.properties_: `newuser=$hash`
 
 ### Logging
 
@@ -124,9 +143,38 @@ TO 'jeuxdb_user'@'localhost';
     <profile>
         <subsystem xmlns="urn:jboss:domain:logging:1.1">
             <console-handler name="CONSOLE">
-                <level name="DEBUG"/>
+                <level name="DEBUG"/>            
 ...
             <logger category="de.fhb.jeux">
                 <level name="DEBUG"/>
             </logger>
 ```
+
+### JBoss: public access (USE AT YOUR OWN RISK)
+
+- _.../jboss-as-7.1.1.Final/standalone/configuration/standalone.xml_: 
+```xml
+<virtual-server name="default-host" enable-welcome-root="false">
+```
+
+- _.../jboss-as-7.1.1.Final/standalone/configuration/standalone.xml_:
+```xml
+<management>
+    <!--
+    <security-realms>
+        <security-realm name="ManagementRealm">
+            <authentication>
+                <properties path="mgmt-users.properties" relative-to="jboss.server.config.dir"/>
+            </authentication>
+        </security-realm>
+        <security-realm name="ApplicationRealm">
+            <authentication>
+                <properties path="application-users.properties" relative-to="jboss.server.config.dir"/>
+            </authentication>
+        </security-realm>
+    </security-realms>
+    -->
+</management>
+```
+
+
