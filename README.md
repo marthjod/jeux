@@ -157,24 +157,5 @@ hash=`python -c "import hashlib; print hashlib.md5('newuser' + ':' + 'JEUX Admin
 <virtual-server name="default-host" enable-welcome-root="false">
 ```
 
-- _.../jboss-as-7.1.1.Final/standalone/configuration/standalone.xml_:
-```xml
-<management>
-    <!--
-    <security-realms>
-        <security-realm name="ManagementRealm">
-            <authentication>
-                <properties path="mgmt-users.properties" relative-to="jboss.server.config.dir"/>
-            </authentication>
-        </security-realm>
-        <security-realm name="ApplicationRealm">
-            <authentication>
-                <properties path="application-users.properties" relative-to="jboss.server.config.dir"/>
-            </authentication>
-        </security-realm>
-    </security-realms>
-    -->
-</management>
-```
 
 
