@@ -62,7 +62,7 @@ function createNewPlayer(playerSubmit) {
     playerForm = $(playerSubmit).parent();
 
     groupOptionId = $(playerForm).find("option:selected").attr("id");
-    if (groupOptionId !== undefined && groupOptionId !== null && typeof groupOptionId === "string" && groupOptionId.startsWith("group-id-")) {
+    if (groupOptionId !== undefined && groupOptionId !== null && typeof groupOptionId === "string" && /^group-id-.*$/.test(groupOptionId)) {
         try {
             groupId = parseInt(groupOptionId.replace("group-id-", ""), 10);
             // parseInt did not fail

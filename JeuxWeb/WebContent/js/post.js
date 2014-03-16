@@ -17,7 +17,7 @@ function updateGame(updateSubmit, gameId, player1Id, player2Id) {
     // input > td > tr > tbody > table
     rows = $(updateSubmit).parent().parent().parent().parent().find("tr");
     for (i = 0; i < rows.length; i++) {
-        if (rows[i].id.startsWith("gameset-id-")) {
+        if (/^gameset-id-.*$/.test(rows[i].id)) {
 
             try {
                 gameSetId = parseInt(rows[i].id.replace("gameset-id-", ""), 10);
