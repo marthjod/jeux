@@ -6,6 +6,7 @@ import java.util.List;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
@@ -13,6 +14,7 @@ import org.jboss.logging.Logger;
 
 import de.fhb.jeux.model.IGroup;
 import de.fhb.jeux.model.IRoundSwitchRule;
+import de.fhb.jeux.persistence.ShowdownRoundSwitchRule;
 
 @Stateless
 @LocalBean
@@ -39,6 +41,24 @@ public class RoundSwitchRuleDAO {
 		return success;
 	}
 
+	public boolean deleteRule(IRoundSwitchRule rule) {
+		boolean success = false;
+
+		if (rule != null) {
+			IRoundSwitchRule tempRule = rule;
+			try {
+				em.remove(rule);
+				success = true;
+				logger.debug("Deleted rule " + tempRule);
+			} catch (Exception e) {
+				logger.error("Failed to delete round-switch rule " + tempRule);
+				logger.error(e.getClass().getCanonicalName() + " "
+						+ e.getMessage());
+			}
+		}
+		return success;
+	}
+
 	public List<IRoundSwitchRule> getAllRules() {
 		return runQuery("RoundSwitchRule.findAll", null, null);
 	}
@@ -61,5 +81,22 @@ public class RoundSwitchRuleDAO {
 		}
 
 		return rules;
+	}
+
+	public IRoundSwitchRule getRuleById(int id) {
+		IRoundSwitchRule rule = new ShowdownRoundSwitchRule();
+		TypedQuery<IRoundSwitchRule> query = em.createNamedQuery(
+				"RoundSwitchRule.findById", IRoundSwitchRule.class);
+		query.setParameter("id", id);
+
+		try {
+			rule = query.getSingleResult();
+		} catch (NoResultException e) {
+			// reset because callers should test for null
+			rule = null;
+			logger.error("RSR ID " + id + ": " + e.getMessage() + " ("
+					+ e.getClass().getName() + ")");
+		}
+		return rule;
 	}
 }

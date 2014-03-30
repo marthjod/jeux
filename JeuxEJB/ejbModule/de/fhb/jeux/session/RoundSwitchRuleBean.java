@@ -29,13 +29,13 @@ public class RoundSwitchRuleBean implements RoundSwitchRuleRemote,
 	}
 
 	@Override
-	public List<IRoundSwitchRule> getAllRoundSwitchRule() {
+	public List<IRoundSwitchRule> getAllRoundSwitchRules() {
 		return roundSwitchRuleDAO.getAllRules();
 	}
 
 	@Override
 	public List<RoundSwitchRuleDTO> getAllRoundSwitchRuleDTOs() {
-		List<IRoundSwitchRule> rules = getAllRoundSwitchRule();
+		List<IRoundSwitchRule> rules = getAllRoundSwitchRules();
 		List<RoundSwitchRuleDTO> ruleSetsDTO = new ArrayList<RoundSwitchRuleDTO>();
 
 		for (IRoundSwitchRule rule : rules) {
@@ -44,6 +44,11 @@ public class RoundSwitchRuleBean implements RoundSwitchRuleRemote,
 			ruleSetsDTO.add(newRoundSwitchRuleDTO);
 		}
 		return ruleSetsDTO;
+	}
+
+	@Override
+	public IRoundSwitchRule getRoundSwitchRuleById(int id) {
+		return roundSwitchRuleDAO.getRuleById(id);
 	}
 
 }

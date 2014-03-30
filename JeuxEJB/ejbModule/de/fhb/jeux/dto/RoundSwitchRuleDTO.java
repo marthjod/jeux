@@ -9,6 +9,7 @@ public class RoundSwitchRuleDTO {
 	}
 
 	public RoundSwitchRuleDTO(IRoundSwitchRule roundSwitchRuleEntity) {
+		id = roundSwitchRuleEntity.getId();
 		srcGroupId = roundSwitchRuleEntity.getSrcGroup().getId();
 		srcGroupName = roundSwitchRuleEntity.getSrcGroup().getName();
 		destGroupId = roundSwitchRuleEntity.getDestGroup().getId();
@@ -18,6 +19,7 @@ public class RoundSwitchRuleDTO {
 		additionalPlayers = roundSwitchRuleEntity.getAdditionalPlayers();
 	}
 
+	private int id;
 	private int srcGroupId;
 	private int destGroupId;
 	private String srcGroupName;
@@ -25,6 +27,10 @@ public class RoundSwitchRuleDTO {
 	private int previousRoundId;
 	private int startWithRank;
 	private int additionalPlayers;
+
+	public int getId() {
+		return id;
+	}
 
 	public int getSrcGroupId() {
 		return srcGroupId;
@@ -57,7 +63,9 @@ public class RoundSwitchRuleDTO {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("<");
+		sb.append("<[");
+		sb.append(id);
+		sb.append("] ");
 		sb.append(srcGroupName);
 		sb.append(" #");
 		sb.append(startWithRank);

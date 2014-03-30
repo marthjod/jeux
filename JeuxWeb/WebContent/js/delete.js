@@ -1,4 +1,4 @@
-function deleteGroup(groupId, deleteButton) {
+var deleteGroup = function(groupId, deleteButton) {
     "use strict";
 
     if (window.confirm("Warning: Removing this group\nwill also delete all players\nand games belonging to this group!")) {
@@ -40,7 +40,7 @@ function deleteGroup(groupId, deleteButton) {
     }
 }
 
-function deletePlayer(playerId) {
+var deletePlayer = function(playerId) {
     "use strict";
 
     $.ajax({
@@ -57,6 +57,26 @@ function deletePlayer(playerId) {
             },
             500 : function() {
                 alert("Server error while trying to delete player.");
+            }
+        }
+    });
+}
+
+var deleteRule = function(ruleId, deleteButton) {
+    "use strict";
+
+    $.ajax({
+        url : "rest/admin/roundswitchrule/id/" + ruleId,
+        type : "DELETE",
+        success : function() {
+            showRules($("#show-rules"));
+        },
+        statusCode : {
+            403 : function() {
+                alert("Operation not permitted (unauthenticated request).");
+            },
+            500 : function() {
+                alert("Server error while trying to delete rule.");
             }
         }
     });

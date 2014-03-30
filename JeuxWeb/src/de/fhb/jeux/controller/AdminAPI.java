@@ -32,6 +32,7 @@ import de.fhb.jeux.session.CreateRoundSwitchRuleBean;
 import de.fhb.jeux.session.CreateRoundSwitchRuleLocal;
 import de.fhb.jeux.session.DeleteGroupLocal;
 import de.fhb.jeux.session.DeletePlayerLocal;
+import de.fhb.jeux.session.DeleteRuleLocal;
 import de.fhb.jeux.session.GroupLocal;
 import de.fhb.jeux.session.InsertGameBean;
 import de.fhb.jeux.session.PlayerLocal;
@@ -75,13 +76,14 @@ public class AdminAPI {
 	@EJB
 	private CalcGamesLocal calcGamesBean;
 
+	@EJB
+	private DeleteRuleLocal deleteRuleBean;
+
 	@DELETE
 	@Path("/group/id/{groupId}")
 	public Response deleteGroup(@PathParam("groupId") int groupId) {
 		Response response = Response.status(
 				Response.Status.INTERNAL_SERVER_ERROR).build();
-
-		logger.debug("Request for group deletion");
 
 		int result = deleteGroupBean.deleteGroup(groupBean
 				.getGroupById(groupId));
@@ -143,7 +145,6 @@ public class AdminAPI {
 		Response response = Response.status(
 				Response.Status.INTERNAL_SERVER_ERROR).build();
 
-		logger.debug("Request for player deletion");
 		if (deletePlayerBean.deletePlayer(playerBean.getPlayerById(playerId))) {
 			response = Response.status(Response.Status.OK).build();
 		}
@@ -193,6 +194,20 @@ public class AdminAPI {
 				break;
 			}
 
+		}
+
+		return response;
+	}
+
+	@DELETE
+	@Path("/roundswitchrule/id/{ruleId}")
+	public Response deleteRule(@PathParam("ruleId") int ruleId) {
+		Response response = Response.status(
+				Response.Status.INTERNAL_SERVER_ERROR).build();
+
+		if (deleteRuleBean.deleteRule(roundSwitchRuleBean
+				.getRoundSwitchRuleById(ruleId))) {
+			response = Response.status(Response.Status.OK).build();
 		}
 
 		return response;

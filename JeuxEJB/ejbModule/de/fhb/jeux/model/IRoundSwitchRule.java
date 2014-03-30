@@ -1,6 +1,9 @@
 package de.fhb.jeux.model;
 
 public interface IRoundSwitchRule {
+
+	public int getId();
+
 	public IGroup getSrcGroup();
 
 	public void setSrcGroup(IGroup srcGroup);

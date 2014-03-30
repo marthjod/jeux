@@ -62,6 +62,11 @@ public class ShowdownRoundSwitchRule implements IRoundSwitchRule, Serializable {
 	private ShowdownGroup destGroup;
 
 	@Override
+	public int getId() {
+		return id;
+	}
+
+	@Override
 	public IGroup getSrcGroup() {
 		return srcGroup;
 	}

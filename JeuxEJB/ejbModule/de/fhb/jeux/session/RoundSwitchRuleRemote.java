@@ -11,8 +11,10 @@ import de.fhb.jeux.model.IRoundSwitchRule;
 @SuppressWarnings("ucd")
 public interface RoundSwitchRuleRemote {
 
-	public List<IRoundSwitchRule> getAllRoundSwitchRule();
+	public List<IRoundSwitchRule> getAllRoundSwitchRules();
 
 	public List<RoundSwitchRuleDTO> getAllRoundSwitchRuleDTOs();
+
+	public IRoundSwitchRule getRoundSwitchRuleById(int id);
 
 }

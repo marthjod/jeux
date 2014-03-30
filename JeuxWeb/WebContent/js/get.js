@@ -314,7 +314,7 @@ var showRankings = function(rankingsDiv) {
 var showRules = function(showRulesDiv) {
     "use strict";
 
-    var i = 0, table = null, row = null, startWithRank = 0, additionalPlayers = 0, lastRank = 0;
+    var i = 0, table = null, row = null, startWithRank = 0, additionalPlayers = 0, lastRank = 0, ruleId = 0, deletionCell = null;
 
     if (showRulesDiv && showRulesDiv != null) {
         $(showRulesDiv).empty();
@@ -330,10 +330,12 @@ var showRules = function(showRulesDiv) {
                 $("<th>").html("&Sigma;").appendTo(row);
                 // $("<th>").html("Start with rank").appendTo(row);
                 // $("<th>").html("Additional players").appendTo(row);
+                $("<th>").appendTo(row);
                 row.appendTo(table);
 
                 for (i = 0; i < rulesData.length; i++) {
 
+                    ruleId = rulesData[i].id;
                     startWithRank = parseInt(rulesData[i].startWithRank, 10);
                     additionalPlayers = parseInt(rulesData[i].additionalPlayers, 10);
                     lastRank = startWithRank + additionalPlayers;
@@ -345,6 +347,9 @@ var showRules = function(showRulesDiv) {
                     $("<td>").html(additionalPlayers + 1).appendTo(row);
                     // $("<td>").html(startWithRank).appendTo(row);
                     // $("<td>").html(additionalPlayers).appendTo(row);
+                    deletionCell = $("<td>");
+                    $("<input>").attr("type", "submit").attr("class", "btn btn-danger").attr("value", "Delete rule").appendTo(deletionCell).attr("onclick", "deleteRule(" + ruleId + ", this);");
+                    deletionCell.appendTo(row);
                     row.appendTo(table);
                 }
 
