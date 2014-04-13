@@ -62,12 +62,12 @@ function createNewPlayer(playerSubmit) {
     playerForm = $(playerSubmit).parent();
 
     groupOptionId = $(playerForm).find("option:selected").attr("id");
-    if (groupOptionId !== undefined && groupOptionId !== null && typeof groupOptionId === "string" && /^group-id-.*$/.test(groupOptionId)) {
+    if (groupOptionId && typeof groupOptionId === "string" && /^group-id-.*$/.test(groupOptionId)) {
         try {
             groupId = parseInt(groupOptionId.replace("group-id-", ""), 10);
             // parseInt did not fail
             playerName = $(playerForm).find("input:text[id='name']").val();
-            if (playerName !== undefined && playerName !== null && typeof playerName === "string" && playerName.length > 0) {
+            if (playerName && typeof playerName === "string" && playerName.length > 0) {
                 inputOK = true;
             }
         } catch (e) {
@@ -88,7 +88,7 @@ function createNewPlayer(playerSubmit) {
             contentType : "application/json",
             success : function() {
                 showPlayers($("#show-players"));
-                clearForm(playerSubmit);
+                clearForm($(playerSubmit).parent());
             },
             statusCode : {
                 403 : function() {
