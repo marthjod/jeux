@@ -131,8 +131,8 @@ TO 'jeuxdb_user'@'localhost';
 # username=HEX( MD5( username ':' realm ':' password))
 hash=`python -c "import hashlib; print hashlib.md5('newuser' + ':' + 'JEUX Administrative view' + ':' + '***').hexdigest()"`
 ```
-    - _roles.properties_: `newuser=jeux-admin`
-    - _users.properties_: `newuser=$hash`
+- _roles.properties_: `newuser=jeux-admin`
+- _users.properties_: `newuser=$hash`
 
 ### Logging
 
