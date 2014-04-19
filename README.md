@@ -65,7 +65,7 @@ TO 'jeuxdb_user'@'localhost';
 #### Add data source
 - Copy driver JAR ([mysql-connector-java-VERSION-bin.jar](http://dev.mysql.com/downloads/connector/j/)) to  _.../jboss-as-7.1.1.Final/standalone/deployments_ first
 
-##### JBoss Management Console (http://localhost:9999 if working)
+##### JBoss Management Console (http://localhost:9990/console/)
 - Connection URL: `jdbc:mysql://localhost:3306/<database name>`
 - Driver: `mysql-connector-java-VERSION-bin.jar`
 - JNDI: `java:jboss/datasources/JeuxDS`
