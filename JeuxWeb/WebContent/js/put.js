@@ -1,57 +1,72 @@
 function createNewGroup(groupSubmit) {
     "use strict";
 
-    var minSets = 0, maxSets = 0, name = "", round = 0, active = false, sendGroup = {}, groupForm = null;
+    var minSets = 0, maxSets = 0, name = "", round = 0, active = false, sendGroup = {}, groupForm = null, inputOK = false;
 
     groupForm = $(groupSubmit).parent();
 
-    minSets = $(groupForm).find("#min-sets").val();
-    maxSets = $(groupForm).find("#max-sets").val();
     try {
-        round = parseInt($(groupForm).find("#round").val(), 10);
+    	minSets = parseInt($(groupForm).find("#min-sets").val(), 10);
+    	maxSets = parseInt($(groupForm).find("#max-sets").val(), 10);
+    	round = parseInt($(groupForm).find("#round").val(), 10);
     } catch (e) {
         alert(e);
     }
+    
     name = $(groupForm).find("#name").val();
     active = $(groupForm).find("#group-active")[0].checked;
-
-    sendGroup = {
-        "minSets" : minSets,
-        "maxSets" : maxSets,
-        "name" : name,
-        "roundId" : round,
-        // newly-created cannot be completed
-        "completed" : false,
-        "active" : active
-    };
-
-    // assumption: all input values present
-    // see checkSubmitReady()
-    $.ajax({
-        url : "rest/admin/create-group",
-        type : "PUT",
-        data : JSON.stringify(sendGroup),
-        contentType : "application/json",
-        success : function() {
-
-            clearForm(groupForm);
-
-            // refresh
-            showGroups($("#show-groups"), $("#player-select-group"), $("#rule-source-group"), $("#rule-destination-group"));
-
-        },
-        statusCode : {
-            403 : function() {
-                alert("Operation not permitted (unauthenticated request).");
-            },
-            500 : function() {
-                $(groupSubmit).attr("value", "Failed to create group!");
-            },
-            400 : function() {
-                alert("Bad request (wrong data format?).");
-            }
-        }
-    });
+    
+    // rudimentary sanity check
+    if (minSets && typeof minSets === "number" && minSets !== NaN &&
+    		maxSets && typeof maxSets == "number" && maxSets !== NaN &&
+    		round && typeof round === "number" && round !== NaN &&
+    		name && typeof name === "string" &&
+    		name.length > 0 &&
+    		typeof active !== undefined && active !== null && typeof active === "boolean" &&
+    		minSets <= maxSets) {
+    	inputOK = true;
+    }
+    
+    if (inputOK) {
+	    	
+	    sendGroup = {
+	        "minSets" : minSets,
+	        "maxSets" : maxSets,
+	        "name" : name,
+	        "roundId" : round,
+	        // newly-created cannot be completed
+	        "completed" : false,
+	        "active" : active
+	    };
+	
+	    // assumption: all input values present
+	    // see checkSubmitReady()
+	    $.ajax({
+	        url : "rest/admin/create-group",
+	        type : "PUT",
+	        data : JSON.stringify(sendGroup),
+	        contentType : "application/json",
+	        success : function() {
+	
+	            clearForm(groupForm);
+	
+	            // refresh
+	            showGroups($("#show-groups"), $("#player-select-group"), $("#rule-source-group"), $("#rule-destination-group"));
+	
+	        },
+	        statusCode : {
+	            403 : function() {
+	                alert("Operation not permitted (unauthenticated request).");
+	            },
+	            500 : function() {
+	                $(groupSubmit).attr("value", "Failed to create group!");
+	            },
+	            400 : function() {
+	                alert("Bad request (wrong data format?).");
+	            }
+	        }
+	    });
+    }
 }
 
 function createNewPlayer(playerSubmit) {
