@@ -1,43 +1,41 @@
 var deleteGroup = function(groupId, deleteButton) {
     "use strict";
 
-    if (window.confirm("Warning: Removing this group\nwill also delete all players\nand games belonging to this group!")) {
-
-        if (deleteButton && deleteButton !== null) {
-            $(deleteButton).hide();
-        }
-
-        $.ajax({
-            url : "rest/admin/group/id/" + groupId,
-            type : "DELETE",
-            success : function() {
-                // alert("Group deleted");
-
-                // remove as selectable option
-                $("#player-select-group").find("#group-id-" + groupId).remove();
-                $("#rule-source-group").find("#rule-source-group-id-" + groupId).remove();
-                $("#rule-destination-group").find("#rule-destination-group-id-" + groupId).remove();
-
-                showGroups($("#show-groups"));
-                showPlayers($("#show-players"));
-                // refresh because deletion cascades for games, too
-                showGames($("#show-unplayed-games"), "unplayed");
-                showRules($("#show-rules"));
-            },
-            // errors
-            statusCode : {
-                409 : function() {
-                    alert("Conflict trying to delete group (violated constraint).");
-                },
-                403 : function() {
-                    alert("Operation not permitted (unauthenticated request).");
-                },
-                500 : function() {
-                    alert("Server error while trying to delete group.");
-                }
-            }
-        });
+    if (deleteButton && deleteButton !== null) {
+        $(deleteButton).hide();
     }
+
+    $.ajax({
+        url : "rest/admin/group/id/" + groupId,
+        type : "DELETE",
+        success : function() {
+            // alert("Group deleted");
+
+            // remove as selectable option
+            $("#player-select-group").find("#group-id-" + groupId).remove();
+            $("#rule-source-group").find("#rule-source-group-id-" + groupId).remove();
+            $("#rule-destination-group").find("#rule-destination-group-id-" + groupId).remove();
+
+            showGroups($("#show-groups"));
+            showPlayers($("#show-players"));
+            // refresh because deletion cascades for games, too
+            showGames($("#show-unplayed-games"), "unplayed");
+            showRules($("#show-rules"));
+        },
+        // errors
+        statusCode : {
+            409 : function() {
+                alert("Conflict trying to delete group (violated constraint).");
+            },
+            403 : function() {
+                alert("Operation not permitted (unauthenticated request).");
+            },
+            500 : function() {
+                alert("Server error while trying to delete group.");
+            }
+        }
+    });
+    
 }
 
 var deletePlayer = function(playerId) {
