@@ -1,6 +1,8 @@
 package de.fhb.jeux.session;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -55,8 +57,55 @@ public class CalcGamesBean implements CalcGamesRemote, CalcGamesLocal {
 
 		// use "shuffled mode" for fair order of games
 		// to be played one after the other
+		// TODO this is the current best-effort algorithm
+		// with known weaknesses
 		if (shuffledMode) {
-			// TODO implement shuffled mode #business-logic
+			Deque<IPlayer> breakroom = new ArrayDeque<IPlayer>();
+
+			while ((long) games.size() < maxGames) {
+				for (IPlayer player1 : group.getPlayers()) {
+					for (IPlayer player2 : group.getPlayers()) {
+						if (player1.equals(player2)) {
+							// cannot play against oneself
+							continue;
+						}
+
+						newGame = new ShowdownGame(group, player1, player2);
+
+						if (!contains(games, newGame)) {
+							if (!breakroom.contains(player1)
+									&& !breakroom.contains(player2)) {
+
+								// in this case, add them immediately to a game,
+								// then to the breakroom
+								games.add(newGame);
+								breakroom.add(player1);
+								breakroom.add(player2);
+
+								// logger.debug("Added ["
+								// + newGame.getPlayer1().getName() + ", "
+								// + newGame.getPlayer2().getName() + "]");
+
+							} else if (breakroom.contains(player1)
+									&& !breakroom.contains(player2)) {
+								// don't use current player2 for
+								// this loop anymore
+								break;
+							} else {
+								// if (breakroom.peekFirst() != null) {
+								// logger.debug("Break over for "
+								// + breakroom.peekFirst().getName());
+								// }
+								// "FIFO" a breakroom player:
+								// the first one who came in becomes
+								// available again now
+								breakroom.pollFirst();
+							}
+						}
+					}
+				}
+			}
+
 		} else {
 			// only calculate games, regardless of specific order
 			// faster
@@ -86,9 +135,9 @@ public class CalcGamesBean implements CalcGamesRemote, CalcGamesLocal {
 		}
 
 		// DEBUG
-		for (IGame game : games) {
-			logger.debug(game);
-		}
+		// for (IGame game : games) {
+		// // logger.debug(game);
+		// }
 
 		return games;
 	}
@@ -117,6 +166,31 @@ public class CalcGamesBean implements CalcGamesRemote, CalcGamesLocal {
 		}
 
 		return status;
+	}
+
+	@Override
+	public String getShuffledGamesList(IGroup group) {
+		StringBuilder sb = new StringBuilder();
+
+		if (group != null) {
+			List<IGame> games = calcGamesForGroup(group, true);
+
+			sb.append("-- Calculated ");
+			sb.append(games.size());
+			sb.append(" of projected ");
+			sb.append(maxGames(group.getPlayers().size()));
+			sb.append(" games in shuffled mode.");
+			sb.append("\r\n\r\n");
+
+			for (IGame game : games) {
+				sb.append(game.getPlayer1().getName());
+				sb.append(" vs. ");
+				sb.append(game.getPlayer2().getName());
+				sb.append("\r\n");
+			}
+		}
+
+		return sb.toString();
 	}
 
 }

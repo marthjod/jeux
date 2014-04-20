@@ -9,7 +9,7 @@ var getRESTApiStatus = function(statusDiv) {
 var showGroups = function(showGroupsDiv, playerGroupSelect, ruleSrcGroupSelect, ruleDestGroupSelect) {
     "use strict";
 
-    var i = 0, table = null, currentGroup = null, row = null, gameGenerationCell = null, deletionCell = null, playerGroupSelectOK = false, ruleGroupSelectsOK = false, gameGenerationCell = null;
+    var i = 0, table = null, currentGroup = null, row = null, gameGenerationCell = null, shuffledGameListCell = null, deletionCell = null, playerGroupSelectOK = false, ruleGroupSelectsOK = false, gameGenerationCell = null;
 
     $.get("rest/audience/groups", function(data) {
 
@@ -38,9 +38,10 @@ var showGroups = function(showGroupsDiv, playerGroupSelect, ruleSrcGroupSelect, 
         $("<th>").html("Active").appendTo(row);
         $("<th>").html("Completed").appendTo(row);
         $("<th>").appendTo(row);
+        $("<th>").appendTo(row);
         row.appendTo(table);
 
-        if (typeof data !== undefined && data !== null && typeof data === "object" && data.hasOwnProperty("length") && data.length > 0) {
+        if (data && typeof data === "object" && data.hasOwnProperty("length") && data.length > 0) {
 
             for (i = 0; i < data.length; i++) {
 
@@ -54,9 +55,15 @@ var showGroups = function(showGroupsDiv, playerGroupSelect, ruleSrcGroupSelect, 
                 $("<td>").attr("class", "group-maxsets").html(currentGroup.maxSets).appendTo(row);
                 $("<td>").attr("class", "group-active").html(currentGroup.active.toString()).appendTo(row);
                 $("<td>").attr("class", "group-completed").html(currentGroup.completed.toString()).appendTo(row);
+                
                 gameGenerationCell = $("<td>");
                 $("<input>").attr("type", "submit").attr("class", "btn btn-success").attr("value", "Generate games").appendTo(gameGenerationCell).attr("onclick", "generateGames(this, " + currentGroup.id + ", false);");
                 gameGenerationCell.appendTo(row);
+                
+                shuffledGameListCell = $("<td>");
+                $("<input>").attr("type", "submit").attr("class", "btn btn-warning").attr("value", "Shuffled games list (BETA)").appendTo(shuffledGameListCell).attr("onclick", "getShuffledGames("+currentGroup.id+");");
+                shuffledGameListCell.appendTo(row);
+                
                 deletionCell = $("<td>");
                 $("<input>").attr("type", "submit").attr("class", "btn btn-danger").attr("value", "Delete group").appendTo(deletionCell).attr("onclick", "deleteGroup(" + currentGroup.id + ", this);");
                 deletionCell.appendTo(row);
@@ -373,3 +380,8 @@ var showRules = function(showRulesDiv) {
     }
 };
 
+var getShuffledGames = function (groupId) {
+    "use strict";
+    
+    window.open("rest/admin/shuffled-games/group/id/" + groupId);
+};

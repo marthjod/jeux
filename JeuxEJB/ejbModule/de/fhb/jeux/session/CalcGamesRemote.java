@@ -10,4 +10,6 @@ public interface CalcGamesRemote {
 
 	@SuppressWarnings("ucd")
 	public int writeGamesForGroup(IGroup group, boolean shuffledMode);
+
+	public String getShuffledGamesList(IGroup group);
 }
