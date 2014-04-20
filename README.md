@@ -2,9 +2,9 @@
 
 ### Import 3rd-party sources
 
-1. Import ("Import/File system...") [`commons-math3-3.2.jar`](http://commons.apache.org/proper/commons-math) into _Jeux/EarContent_
-2. Import [`commons-codec-1.8.jar`](http://commons.apache.org/proper/commons-codec) into _Jeux/EarContent_
-3. Import [`gson-2.2.4.jar`](http://code.google.com/p/google-gson/) into _Jeux/EarContent_
+1. Import ("Import/File system...") [`commons-math3-3.2.jar`](http://commons.apache.org/proper/commons-math) as `commons-math3.jar` into _Jeux/EarContent_
+2. Import [`commons-codec-1.8.jar`](http://commons.apache.org/proper/commons-codec) as `commons-codec.jar` into _Jeux/EarContent_
+3. Import [`gson-2.2.4.jar`](http://code.google.com/p/google-gson/) as `gson.jar` into _Jeux/EarContent_
 4. Import [`jquery-VERSION.js`](http://jquery.com/) as `jquery.js` into _JeuxWeb/WebContent/js_
 5. Import [`bootstrap.css`](http://getbootstrap.com/) into _JeuxWeb/WebContent/css_
 
