@@ -170,16 +170,21 @@ public class CalcGamesBean implements CalcGamesRemote, CalcGamesLocal {
 
 	@Override
 	public String getShuffledGamesList(IGroup group) {
+		long maxGames = 0L;
 		StringBuilder sb = new StringBuilder();
+		
+		if (group.getPlayers().size() >= 2) {
+			maxGames = maxGames(group.getPlayers().size());
+		}
 
-		if (group != null) {
+		if (group != null && maxGames > 0) {
 			List<IGame> games = calcGamesForGroup(group, true);
 
 			sb.append("-- Calculated ");
 			sb.append(games.size());
 			sb.append(" of projected ");
-			sb.append(maxGames(group.getPlayers().size()));
-			sb.append(" games in shuffled mode.");
+			sb.append(maxGames);
+			sb.append(" game(s) in shuffled mode.");
 			sb.append("\r\n\r\n");
 
 			for (IGame game : games) {
@@ -188,6 +193,8 @@ public class CalcGamesBean implements CalcGamesRemote, CalcGamesLocal {
 				sb.append(game.getPlayer2().getName());
 				sb.append("\r\n");
 			}
+		} else {
+			sb.append("Cannot calculate games, group does not exist or has less than 2 players.");
 		}
 
 		return sb.toString();
