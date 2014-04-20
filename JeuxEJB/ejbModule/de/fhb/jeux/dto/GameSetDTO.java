@@ -13,6 +13,7 @@ public class GameSetDTO {
 	private int player1Score;
 	private int player2Score;
 	private String winnerName;
+	private int number;
 
 	// EJB business method must be public
 	@SuppressWarnings("ucd")
@@ -21,6 +22,7 @@ public class GameSetDTO {
 		gameId = gameSetEntity.getGame().getId();
 		player1Score = gameSetEntity.getPlayer1Score();
 		player2Score = gameSetEntity.getPlayer2Score();
+		number = gameSetEntity.getNumber();
 
 		if (gameSetEntity.getWinner() != null) {
 			winnerId = gameSetEntity.getWinner().getId();
@@ -32,13 +34,14 @@ public class GameSetDTO {
 	}
 
 	public GameSetDTO(int id, int gameId, int winnerId, int player1Score,
-			int player2Score, String winnerName) {
+			int player2Score, String winnerName, int number) {
 		this.id = id;
 		this.gameId = gameId;
 		this.winnerId = winnerId;
 		this.player1Score = player1Score;
 		this.player2Score = player2Score;
 		this.winnerName = winnerName;
+		this.number = number;
 	}
 
 	public int getId() {
@@ -64,6 +67,10 @@ public class GameSetDTO {
 	public int getPlayer2Score() {
 		return player2Score;
 	}
+	
+	public int getNumber() {
+		return number;
+	}
 
 	@Override
 	public String toString() {
@@ -74,7 +81,7 @@ public class GameSetDTO {
 		sb.append(", player 1 score: " + player1Score);
 		sb.append(", player 2 score: " + player2Score);
 		sb.append(", winner: " + winnerName);
-		sb.append(" (ID " + winnerId + ")");
+		sb.append(", set # " + number);
 		sb.append(">");
 		return sb.toString();
 	}

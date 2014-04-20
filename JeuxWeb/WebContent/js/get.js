@@ -81,7 +81,7 @@ var showGroups = function(showGroupsDiv, playerGroupSelect, ruleSrcGroupSelect, 
 var showGames = function(showGamesDiv, status) {
     "use strict";
 
-    var i = 0, j = 0, k = 0, gameTable = null, player1Header = null, player2Header = null, setsTable = null, setsCell = null, row = null, urlPrefix = "", updateCell = null, statusKnown = false;
+    var i = 0, j = 0, k = 0, gameTable = null, player1Header = null, player2Header = null, setNumberHeader = null, setsTable = null, setsCell = null, row = null, urlPrefix = "", updateCell = null, statusKnown = false, sets = [];
 
     if (status && status !== null && typeof status === "string") {
         if (status === "played") {
@@ -100,7 +100,7 @@ var showGames = function(showGamesDiv, status) {
         // first, get all groups
 
         $.get("rest/audience/groups", function(groupsData) {
-            if (typeof groupsData !== undefined && groupsData !== null && typeof groupsData === "object" && groupsData.hasOwnProperty("length") && groupsData.length !== 0) {
+            if (groupsData && typeof groupsData === "object" && groupsData.hasOwnProperty("length") && groupsData.length > 0) {
 
                 // next, iterate thru groups
 
@@ -121,8 +121,9 @@ var showGames = function(showGamesDiv, status) {
                                     gameTable = $("<table>").attr("class", "table table-bordered table-condensed");
 
                                     row = $("<tr>").attr("id", "game-id-" + gamesData[i].id);
-                                    player1Header = $("<th>").attr("class", "player1").attr("id", "player-id-" + gamesData[i].player1Id).html(gamesData[i].player1Name).attr("width", "50%");
-                                    player2Header = $("<th>").attr("class", "player2").attr("id", "player-id-" + gamesData[i].player2Id).html(gamesData[i].player2Name).attr("width", "50%");
+                                    setNumberHeader = $("<th>").html("Set #").attr("width", "20%");
+                                    player1Header = $("<th>").attr("class", "player1").attr("id", "player-id-" + gamesData[i].player1Id).html(gamesData[i].player1Name).attr("width", "40%");
+                                    player2Header = $("<th>").attr("class", "player2").attr("id", "player-id-" + gamesData[i].player2Id).html(gamesData[i].player2Name).attr("width", "40%");
 
                                     // mark winner name
                                     if (gamesData[i].winnerName === gamesData[i].player1Name) {
@@ -131,6 +132,7 @@ var showGames = function(showGamesDiv, status) {
                                         player2Header.html($("<em>").html(gamesData[i].player2Name + " *"));
                                     }
 
+                                    setNumberHeader.appendTo(row);
                                     player1Header.appendTo(row);
                                     player2Header.appendTo(row);
 
@@ -140,29 +142,41 @@ var showGames = function(showGamesDiv, status) {
                                     row.appendTo(gameTable);
 
                                     if (gamesData[i].hasOwnProperty("sets")) {
+                                    	
+                                    	sets = gamesData[i].sets;
+                                    	// make array.sort() work with numbers
+                                    	sets.sort(function (a, b) {
+                                    		return a.number - b.number;
+                                    	});
 
                                         setsTable = $("<table>").attr("class", "table table-bordered table-striped");
 
-                                        for (j = 0; j < gamesData[i].sets.length; j++) {
-                                            row = $("<tr>").attr("id", "gameset-id-" + gamesData[i].sets[j].id);
+                                        for (j = 0; j < sets.length; j++) {
+                                            row = $("<tr>").attr("id", "gameset-id-" + sets[j].id);
 
+                                            // set number
+                                            $("<td>").html($("<em>").html(sets[j].number)).attr("width", "20%").appendTo(row);
+                                            
                                             if (status === "unplayed") {
-                                                $("<td>").attr("class", "player1-score").append($("<input>").attr("type", "number").attr("class", "form-control").attr("min", "0").val(gamesData[i].sets[j].player1Score)).appendTo(row);
-                                                $("<td>").attr("class", "player2-score").append($("<input>").attr("type", "number").attr("class", "form-control").attr("min", "0").val(gamesData[i].sets[j].player2Score)).appendTo(row);
+                                            	// make input fields if unplayed
+                                                $("<td>").attr("class", "player1-score").append($("<input>").attr("type", "number").attr("class", "form-control").attr("min", "0").val(sets[j].player1Score)).appendTo(row);
+                                                $("<td>").attr("class", "player2-score").append($("<input>").attr("type", "number").attr("class", "form-control").attr("min", "0").val(sets[j].player2Score)).appendTo(row);
                                             } else {
-                                                $("<td>").attr("class", "player1-score").html(gamesData[i].sets[j].player1Score).attr("width", "50%").appendTo(row);
-                                                $("<td>").attr("class", "player2-score").html(gamesData[i].sets[j].player2Score).attr("width", "50%").appendTo(row);
+                                            	// show text if played
+                                                $("<td>").attr("class", "player1-score").html(sets[j].player1Score).attr("width", "40%").appendTo(row);
+                                                $("<td>").attr("class", "player2-score").html(sets[j].player2Score).attr("width", "40%").appendTo(row);
                                             }
 
                                             row.appendTo(setsTable);
                                         }
 
                                         row = $("<tr>");
-                                        setsCell = $("<td>").attr("colspan", "2").appendTo(row);
+                                        setsCell = $("<td>").attr("colspan", "3").appendTo(row);
                                         setsTable.appendTo(setsCell);
                                         row.appendTo(gameTable);
 
                                         if (status === "unplayed") {
+                                        	// show update button if unplayed
                                             row = $("<tr>");
                                             updateCell.appendTo(row);
                                             row.appendTo(gameTable);
@@ -244,7 +258,7 @@ var rankSorter = function(firstPlayer, secondPlayer) {
      * elements' index is equal.
      */
 
-    if (firstPlayer && firstPlayer !== null && secondPlayer && secondPlayer !== null && firstPlayer.hasOwnProperty("rank") && secondPlayer.hasOwnProperty("rank")) {
+    if (firstPlayer && secondPlayer && firstPlayer.hasOwnProperty("rank") && secondPlayer.hasOwnProperty("rank")) {
         // smaller = better
         if (firstPlayer.rank < secondPlayer.rank) {
             retval = -1;
@@ -266,7 +280,7 @@ var showRankings = function(rankingsDiv) {
     // first, get all groups
 
     $.get("rest/audience/groups", function(groupsData) {
-        if (typeof groupsData !== undefined && groupsData !== null && typeof groupsData === "object" && groupsData.hasOwnProperty("length") && groupsData.length !== 0) {
+        if (groupsData && typeof groupsData === "object" && groupsData.hasOwnProperty("length") && groupsData.length > 0) {
 
             // next, iterate thru groups
 
@@ -320,7 +334,7 @@ var showRules = function(showRulesDiv) {
         $(showRulesDiv).empty();
 
         $.get("rest/audience/roundswitchrules", function(rulesData) {
-            if (rulesData && rulesData !== null && typeof rulesData === "object" && rulesData.hasOwnProperty("length") && rulesData.length > 0) {
+            if (rulesData && typeof rulesData === "object" && rulesData.hasOwnProperty("length") && rulesData.length > 0) {
 
                 table = $("<table>").attr("class", "table table-hover table-bordered table-condensed");
                 row = $("<tr>");
@@ -358,3 +372,4 @@ var showRules = function(showRulesDiv) {
         });
     }
 };
+

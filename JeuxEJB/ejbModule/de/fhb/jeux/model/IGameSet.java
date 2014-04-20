@@ -22,4 +22,7 @@ public interface IGameSet {
 	public boolean hasWinner();
 
 	public boolean isUnplayed();
+	
+	public int getNumber();
+
 }

@@ -35,7 +35,7 @@ import de.fhb.jeux.model.IPlayer;
 public class ShowdownGame implements IGame, Serializable {
 
 	private static final long serialVersionUID = -8766860086958636981L;
-
+	
 	public ShowdownGame() {
 	}
 
@@ -47,7 +47,7 @@ public class ShowdownGame implements IGame, Serializable {
 
 		// TODO differentiate maxSets and actual sets #business-logic
 		for (int i = 0; i < group.getMaxSets(); i++) {
-			this.sets.add(new ShowdownGameSet(this));
+			this.sets.add(new ShowdownGameSet(this, (i+1)));
 		}
 	}
 

@@ -281,7 +281,7 @@ public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
 			// we have to set any winner to null
 			GameSetDTO alignedSet = new GameSetDTO(set.getId(),
 					set.getGameId(), 0, set.getPlayer2Score(),
-					set.getPlayer1Score(), null);
+					set.getPlayer1Score(), null, set.getNumber());
 			logger.info("Aligned set: " + alignedSet);
 
 			alignedSets.add(alignedSet);

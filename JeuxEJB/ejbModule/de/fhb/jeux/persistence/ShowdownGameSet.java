@@ -31,8 +31,9 @@ public class ShowdownGameSet implements IGameSet, Serializable {
 	}
 
 	// package visibility only
-	ShowdownGameSet(IGame game) {
+	ShowdownGameSet(IGame game, int number) {
 		this.game = (ShowdownGame) game;
+		this.number = number;
 	}
 
 	@Id
@@ -52,6 +53,9 @@ public class ShowdownGameSet implements IGameSet, Serializable {
 	@OneToOne
 	@JoinColumn(name = "winnerId")
 	private ShowdownPlayer winner;
+	
+	@Column
+	private int number;
 
 	@Override
 	public int getId() {
@@ -82,6 +86,11 @@ public class ShowdownGameSet implements IGameSet, Serializable {
 	public IGame getGame() {
 		return game;
 	}
+	
+	@Override
+	public int getNumber() {
+		return number;
+	}
 
 	@Override
 	public boolean equals(IGameSet gameSet) {
@@ -109,7 +118,7 @@ public class ShowdownGameSet implements IGameSet, Serializable {
 	public boolean isUnplayed() {
 		return winner == null; // player1Score == 0 && player2Score == 0;
 	}
-
+	
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
