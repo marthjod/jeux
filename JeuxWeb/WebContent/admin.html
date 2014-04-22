@@ -16,7 +16,8 @@
                 getRESTApiStatus($( "#rest-api-status" ));
                 showGroups($("#show-groups"), $("#player-select-group"), $("#rule-source-group"), $("#rule-destination-group"));
                 showPlayers($("#show-players"));
-                showGames($("#show-unplayed-games"), "unplayed");
+                showGames($("#show-unplayed-games"), "unplayed", true);
+                showGames($("#show-played-games"), "played", true);
                 showRules($("#show-rules"));
             });
         </script>
@@ -156,6 +157,10 @@
 		    <h1>Games</h1>
 		    <h2>Unplayed games</h2>
             <div id="show-unplayed-games">
+            </div>
+            <br />
+            <h2>Played games</h2>
+            <div id="show-played-games">
             </div>
             <br />
             <div id="rest-api-status">

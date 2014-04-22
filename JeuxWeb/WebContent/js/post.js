@@ -1,10 +1,19 @@
-function updateGame(updateSubmit, gameId, player1Id, player2Id) {
+function updateGame(updateSubmit, gameId, player1Id, player2Id, action) {
     "use strict";
 
     var inputOK = false, gameSetId = 0, rows = [], i = 0, set = {}, player1Score = 0, player2Score = 0, updatedGame = {};
 
     if (updateSubmit && updateSubmit !== null) {
-        $(updateSubmit).attr("value", "Updating...").attr("disabled", "disabled");
+        $(updateSubmit).attr("disabled", "disabled");
+        if (action && typeof action === "string") {
+            if (action === "save") {
+                $(updateSubmit).attr("value", "Saving...");
+            } else if (action === "update") {
+                $(updateSubmit).attr("value", "Updating...");
+            }
+        } else {
+            $(updateSubmit).attr("value", "...");
+        }
     }
 
     updatedGame = {
@@ -15,6 +24,7 @@ function updateGame(updateSubmit, gameId, player1Id, player2Id) {
     };
 
     // input > td > tr > tbody > table
+    // yikes!
     rows = $(updateSubmit).parent().parent().parent().parent().find("tr");
     for (i = 0; i < rows.length; i++) {
         if (/^gameset-id-.*$/.test(rows[i].id)) {
@@ -50,7 +60,8 @@ function updateGame(updateSubmit, gameId, player1Id, player2Id) {
         contentType : "application/json",
         success : function() {
             $(updateSubmit).attr("value", "Update game").removeAttr("disabled");
-            showGames($("#show-unplayed-games"), "unplayed");
+            showGames($("#show-unplayed-games"), "unplayed", true);
+            showGames($("#show-played-games"), "played", true);
             // also update group view in case one has been set to
             // completed/inactive
             showGroups($("#show-groups"));
@@ -84,7 +95,7 @@ function generateGames(generateButton, groupId, shuffledMode) {
         statusCode : {
             201 : function() {
                 $(generateButton).remove();
-                showGames($("#show-unplayed-games"), "unplayed");
+                showGames($("#show-unplayed-games"), "unplayed", true);
             },
             409 : function() {
                 alert("Conflict: one or more game(s) already exist(s) in this group.");

@@ -55,15 +55,15 @@ var showGroups = function(showGroupsDiv, playerGroupSelect, ruleSrcGroupSelect, 
                 $("<td>").attr("class", "group-maxsets").html(currentGroup.maxSets).appendTo(row);
                 $("<td>").attr("class", "group-active").html(currentGroup.active.toString()).appendTo(row);
                 $("<td>").attr("class", "group-completed").html(currentGroup.completed.toString()).appendTo(row);
-                
+
                 gameGenerationCell = $("<td>");
                 $("<input>").attr("type", "submit").attr("class", "btn btn-success").attr("value", "Generate games").appendTo(gameGenerationCell).attr("onclick", "generateGames(this, " + currentGroup.id + ", false);");
                 gameGenerationCell.appendTo(row);
-                
+
                 shuffledGameListCell = $("<td>");
-                $("<input>").attr("type", "submit").attr("class", "btn btn-warning").attr("value", "Shuffled games list (BETA)").appendTo(shuffledGameListCell).attr("onclick", "getShuffledGames("+currentGroup.id+");");
+                $("<input>").attr("type", "submit").attr("class", "btn btn-warning").attr("value", "Shuffled games list (BETA)").appendTo(shuffledGameListCell).attr("onclick", "getShuffledGames(" + currentGroup.id + ");");
                 shuffledGameListCell.appendTo(row);
-                
+
                 deletionCell = $("<td>");
                 $("<input>").attr("type", "submit").attr("class", "btn btn-danger").attr("value", "Delete group").appendTo(deletionCell).attr("onclick", "deleteGroup(" + currentGroup.id + ", this);");
                 deletionCell.appendTo(row);
@@ -85,122 +85,124 @@ var showGroups = function(showGroupsDiv, playerGroupSelect, ruleSrcGroupSelect, 
     });
 };
 
-var showGames = function(showGamesDiv, status) {
+var showGames = function(showGamesDiv, status, editable) {
     "use strict";
 
-    var i = 0, j = 0, k = 0, gameTable = null, player1Header = null, player2Header = null, setNumberHeader = null, setsTable = null, setsCell = null, row = null, urlPrefix = "", updateCell = null, statusKnown = false, sets = [];
+    var urlPrefixes = {
+        "played" : "rest/audience/games/played/group/id/",
+        "unplayed" : "rest/audience/games/unplayed/group/id/"
+    }, k = 0;
 
-    if (status && status !== null && typeof status === "string") {
-        if (status === "played") {
-            urlPrefix = "rest/audience/games/played/group/id/";
-            statusKnown = true;
-        } else if (status === "unplayed") {
-            urlPrefix = "rest/audience/games/unplayed/group/id/";
-            statusKnown = true;
-        }
-    }
+    $(showGamesDiv).empty();
 
-    if (statusKnown) {
+    $.get("rest/audience/groups", function(groupsData) {
+        if (groupsData && typeof groupsData === "object" && groupsData.hasOwnProperty("length") && groupsData.length > 0) {
 
-        $(showGamesDiv).empty();
+            // iterate thru groups
 
-        // first, get all groups
+            for (k = 0; k < groupsData.length; k++) {
 
-        $.get("rest/audience/groups", function(groupsData) {
-            if (groupsData && typeof groupsData === "object" && groupsData.hasOwnProperty("length") && groupsData.length > 0) {
+                // iterate thru individual group's data
 
-                // next, iterate thru groups
+                (function(group, status) {
 
-                for (k = 0; k < groupsData.length; k++) {
-
-                    // iterate thru individual group's data
-
-                    (function(group, status) {
-
-                        $.get(urlPrefix + group.id, function(gamesData) {
-
-                            if (typeof gamesData !== undefined && gamesData !== null && typeof gamesData === "object" && gamesData.hasOwnProperty("length") && gamesData.length > 0) {
-
-                                $("<h3>").html(group.name).appendTo(showGamesDiv);
-
-                                for (i = 0; i < gamesData.length; i++) {
-
-                                    gameTable = $("<table>").attr("class", "table table-bordered table-condensed");
-
-                                    row = $("<tr>").attr("id", "game-id-" + gamesData[i].id);
-                                    setNumberHeader = $("<th>").html("Set #").attr("width", "20%");
-                                    player1Header = $("<th>").attr("class", "player1").attr("id", "player-id-" + gamesData[i].player1Id).html(gamesData[i].player1Name).attr("width", "40%");
-                                    player2Header = $("<th>").attr("class", "player2").attr("id", "player-id-" + gamesData[i].player2Id).html(gamesData[i].player2Name).attr("width", "40%");
-
-                                    // mark winner name
-                                    if (gamesData[i].winnerName === gamesData[i].player1Name) {
-                                        player1Header.html($("<em>").html(gamesData[i].player1Name + " *"));
-                                    } else if (gamesData[i].winnerName === gamesData[i].player2Name) {
-                                        player2Header.html($("<em>").html(gamesData[i].player2Name + " *"));
-                                    }
-
-                                    setNumberHeader.appendTo(row);
-                                    player1Header.appendTo(row);
-                                    player2Header.appendTo(row);
-
-                                    updateCell = $("<td>");
-                                    $("<input>").attr("type", "submit").attr("class", "btn btn-primary update-game").attr("value", "Update game").appendTo(updateCell).attr("onclick", "updateGame(this," + gamesData[i].id + "," + gamesData[i].player1Id + "," + gamesData[i].player2Id + ");");
-
-                                    row.appendTo(gameTable);
-
-                                    if (gamesData[i].hasOwnProperty("sets")) {
-                                    	
-                                    	sets = gamesData[i].sets;
-                                    	// make array.sort() work with numbers
-                                    	sets.sort(function (a, b) {
-                                    		return a.number - b.number;
-                                    	});
-
-                                        setsTable = $("<table>").attr("class", "table table-bordered table-striped");
-
-                                        for (j = 0; j < sets.length; j++) {
-                                            row = $("<tr>").attr("id", "gameset-id-" + sets[j].id);
-
-                                            // set number
-                                            $("<td>").html($("<em>").html(sets[j].number)).attr("width", "20%").appendTo(row);
-                                            
-                                            if (status === "unplayed") {
-                                            	// make input fields if unplayed
-                                                $("<td>").attr("class", "player1-score").append($("<input>").attr("type", "number").attr("class", "form-control").attr("min", "0").val(sets[j].player1Score)).appendTo(row);
-                                                $("<td>").attr("class", "player2-score").append($("<input>").attr("type", "number").attr("class", "form-control").attr("min", "0").val(sets[j].player2Score)).appendTo(row);
-                                            } else {
-                                            	// show text if played
-                                                $("<td>").attr("class", "player1-score").html(sets[j].player1Score).attr("width", "40%").appendTo(row);
-                                                $("<td>").attr("class", "player2-score").html(sets[j].player2Score).attr("width", "40%").appendTo(row);
-                                            }
-
-                                            row.appendTo(setsTable);
-                                        }
-
-                                        row = $("<tr>");
-                                        setsCell = $("<td>").attr("colspan", "3").appendTo(row);
-                                        setsTable.appendTo(setsCell);
-                                        row.appendTo(gameTable);
-
-                                        if (status === "unplayed") {
-                                        	// show update button if unplayed
-                                            row = $("<tr>");
-                                            updateCell.appendTo(row);
-                                            row.appendTo(gameTable);
-                                        }
-                                    }
-
-                                    gameTable.appendTo(showGamesDiv);
-                                }
-
-                            }
-                        });
-                    }(groupsData[k], status));
-
-                }
+                    $.get(urlPrefixes[status] + group.id, function(gamesData) {
+                        $("<h3>").html(group.name).appendTo(showGamesDiv);
+                        showGamesData(gamesData, showGamesDiv, status, editable);
+                    });
+                }(groupsData[k], status));
 
             }
-        });
+
+        }
+    });
+
+};
+
+var showGamesData = function(gamesData, showGamesDiv, status, editable) {
+    "use strict";
+
+    var i = 0, j = 0, k = 0, gameTable = null, player1Header = null, player2Header = null, setNumberHeader = null, setsTable = null, setsCell = null, row = null, updateCell = null, updateButton = null, sets = [];
+
+    if (gamesData && typeof gamesData === "object" && gamesData.hasOwnProperty("length") && gamesData.length > 0) {
+
+        for (i = 0; i < gamesData.length; i++) {
+
+            gameTable = $("<table>").attr("class", "table table-bordered table-condensed");
+
+            row = $("<tr>").attr("id", "game-id-" + gamesData[i].id);
+            setNumberHeader = $("<th>").html("Set #").attr("width", "20%");
+            player1Header = $("<th>").attr("class", "player1").attr("id", "player-id-" + gamesData[i].player1Id).html(gamesData[i].player1Name).attr("width", "40%");
+            player2Header = $("<th>").attr("class", "player2").attr("id", "player-id-" + gamesData[i].player2Id).html(gamesData[i].player2Name).attr("width", "40%");
+
+            // mark winner name
+            if (gamesData[i].winnerName === gamesData[i].player1Name) {
+                player1Header.html($("<em>").html(gamesData[i].player1Name + " *"));
+            } else if (gamesData[i].winnerName === gamesData[i].player2Name) {
+                player2Header.html($("<em>").html(gamesData[i].player2Name + " *"));
+            }
+
+            setNumberHeader.appendTo(row);
+            player1Header.appendTo(row);
+            player2Header.appendTo(row);
+
+            updateCell = $("<td>");
+            updateButton = $("<input>").attr("type", "submit").attr("class", "btn btn-primary update-game").appendTo(updateCell);
+
+            if (status === "played") {
+                updateButton.attr("value", "Update game").attr("onclick", "updateGame(this," + gamesData[i].id + "," + gamesData[i].player1Id + "," + gamesData[i].player2Id + ", \"update\");");
+            } else if (status === "unplayed") {
+                updateButton.attr("value", "Save game").attr("onclick", "updateGame(this," + gamesData[i].id + "," + gamesData[i].player1Id + "," + gamesData[i].player2Id + ", \"save\");");
+            }
+
+            row.appendTo(gameTable);
+
+            if (gamesData[i].hasOwnProperty("sets")) {
+
+                sets = gamesData[i].sets;
+                // make array.sort() work with numbers
+                sets.sort(function(a, b) {
+                    return a.number - b.number;
+                });
+
+                setsTable = $("<table>").attr("class", "table table-bordered table-striped");
+
+                for (j = 0; j < sets.length; j++) {
+                    row = $("<tr>").attr("id", "gameset-id-" + sets[j].id);
+
+                    if (typeof editable === "boolean" && editable === true) {
+                        // set number
+                        $("<td>").html($("<em>").html(sets[j].number)).attr("width", "20%").appendTo(row);
+                        $("<td>").attr("class", "player1-score").append($("<input>").attr("type", "number").attr("class", "form-control").attr("min", "0").val(sets[j].player1Score)).appendTo(row);
+                        $("<td>").attr("class", "player2-score").append($("<input>").attr("type", "number").attr("class", "form-control").attr("min", "0").val(sets[j].player2Score)).appendTo(row);
+                    } else {
+                        if (status === "played" && !(sets[j].player1Score === 0 && sets[j].player2Score === 0)) {
+                            // set number
+                            $("<td>").html($("<em>").html(sets[j].number)).attr("width", "20%").appendTo(row);
+                            $("<td>").attr("class", "player1-score").html(sets[j].player1Score).attr("width", "40%").appendTo(row);
+                            $("<td>").attr("class", "player2-score").html(sets[j].player2Score).attr("width", "40%").appendTo(row);
+                        }
+                    }
+
+                    row.appendTo(setsTable);
+                }
+
+                row = $("<tr>");
+                setsCell = $("<td>").attr("colspan", "3").appendTo(row);
+                setsTable.appendTo(setsCell);
+                row.appendTo(gameTable);
+
+                // always show update button
+                if (typeof editable === "boolean" && editable === true) {
+                    row = $("<tr>");
+                    updateCell.appendTo(row);
+                    row.appendTo(gameTable);
+                }
+            }
+
+            gameTable.appendTo(showGamesDiv);
+        }
+
     }
 };
 
@@ -380,8 +382,8 @@ var showRules = function(showRulesDiv) {
     }
 };
 
-var getShuffledGames = function (groupId) {
+var getShuffledGames = function(groupId) {
     "use strict";
-    
+
     window.open("rest/admin/shuffled-games/group/id/" + groupId);
 };

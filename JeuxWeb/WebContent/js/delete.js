@@ -19,7 +19,8 @@ var deleteGroup = function(groupId, deleteButton) {
             showGroups($("#show-groups"));
             showPlayers($("#show-players"));
             // refresh because deletion cascades for games, too
-            showGames($("#show-unplayed-games"), "unplayed");
+            showGames($("#show-unplayed-games"), "unplayed", true);
+            showGames($("#show-played-games"), "played", true);
             showRules($("#show-rules"));
         },
         // errors
@@ -35,7 +36,7 @@ var deleteGroup = function(groupId, deleteButton) {
             }
         }
     });
-    
+
 }
 
 var deletePlayer = function(playerId) {
@@ -47,7 +48,7 @@ var deletePlayer = function(playerId) {
         success : function() {
             showPlayers($("#show-players"));
             // refresh because player deletion cascades for his games, too
-            showGames($("#show-unplayed-games"), "unplayed");
+            showGames($("#show-unplayed-games"), "unplayed", true);
         },
         statusCode : {
             403 : function() {
