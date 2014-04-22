@@ -35,7 +35,7 @@ import de.fhb.jeux.model.IPlayer;
 public class ShowdownGame implements IGame, Serializable {
 
 	private static final long serialVersionUID = -8766860086958636981L;
-	
+
 	public ShowdownGame() {
 	}
 
@@ -47,7 +47,7 @@ public class ShowdownGame implements IGame, Serializable {
 
 		// TODO differentiate maxSets and actual sets #business-logic
 		for (int i = 0; i < group.getMaxSets(); i++) {
-			this.sets.add(new ShowdownGameSet(this, (i+1)));
+			this.sets.add(new ShowdownGameSet(this, (i + 1)));
 		}
 	}
 
@@ -103,6 +103,20 @@ public class ShowdownGame implements IGame, Serializable {
 	@Override
 	public IPlayer getWinner() {
 		return winner;
+	}
+
+	@Override
+	public IPlayer getLoser() {
+		IPlayer loser = null;
+		if (winner != null) {
+			if (winner.equals(player1)) {
+				loser = player2;
+			} else if (winner.equals(player2)) {
+				loser = player1;
+			}
+		}
+
+		return loser;
 	}
 
 	@Override
@@ -173,5 +187,46 @@ public class ShowdownGame implements IGame, Serializable {
 		sb.append(" }");
 
 		return sb.toString();
+	}
+
+	@Override
+	public int getSetsWonByPlayer1() {
+		return getSetsWonByPlayer(this.player1);
+	}
+
+	@Override
+	public int getSetsWonByPlayer2() {
+		return getSetsWonByPlayer(this.player2);
+	}
+
+	@Override
+	public int getSetsPlayed() {
+		return getSetsWonByPlayer1() + getSetsWonByPlayer2();
+	}
+
+	@Override
+	public int getSetsPlayedByWinner() {
+		int sets = 0;
+		if (winner != null) {
+			if (winner.equals(player1)) {
+				sets = getSetsWonByPlayer1();
+			} else if (winner.equals(player2)) {
+				sets = getSetsWonByPlayer2();
+			}
+		}
+
+		return sets;
+	}
+
+	private int getSetsWonByPlayer(IPlayer player) {
+		int setsWon = 0;
+		if (player != null) {
+			for (ShowdownGameSet set : sets) {
+				if (set.hasWinner() && player.equals(set.getWinner())) {
+					setsWon++;
+				}
+			}
+		}
+		return setsWon;
 	}
 }

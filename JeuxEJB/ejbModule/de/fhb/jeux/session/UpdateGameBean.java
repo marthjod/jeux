@@ -57,7 +57,11 @@ public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
 
 		if (game != null && gameDTO != null) {
 
-			// logger.debug("Before: " + game);
+			if (game.hasWinner()) {
+				clearGame(game, config);
+			}
+
+			logger.debug("Before: " + game);
 
 			List<ShowdownGameSet> existingSets = game.getSets();
 			List<GameSetDTO> newSets = gameDTO.getSets();
@@ -133,26 +137,12 @@ public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
 
 				// sets updated, let's see if game over
 				if (updated) {
-					int setsPlayed = 0;
-					int setsWonByPlayer1 = 0;
-					int setsWonByPlayer2 = 0;
+					int setsPlayed = game.getSetsPlayed();
+					int setsWonByPlayer1 = game.getSetsWonByPlayer1();
+					int setsWonByPlayer2 = game.getSetsWonByPlayer2();
 					boolean gameOver = false;
 					int minSets = game.getGroup().getMinSets();
 					int maxSets = game.getGroup().getMaxSets();
-
-					for (IGameSet set : game.getSets()) {
-						if (set.hasWinner()
-								&& set.getGame().getPlayer1()
-										.equals(set.getWinner())) {
-							setsPlayed++;
-							setsWonByPlayer1++;
-						} else if (set.hasWinner()
-								&& set.getGame().getPlayer2()
-										.equals(set.getWinner())) {
-							setsPlayed++;
-							setsWonByPlayer2++;
-						}
-					}
 
 					// TODO make the following transactional #app-design
 
@@ -176,7 +166,7 @@ public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
 
 						// write score ratios already (no need to know the
 						// winner yet)
-						updateScoreRatios(game);
+						updateScoreRatios(game, true);
 
 						if (setsWonByPlayer1 > setsWonByPlayer2) {
 
@@ -296,6 +286,35 @@ public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
 		return alignedDTO;
 	}
 
+	private void clearGame(IGame game, BonusPointsDistribution config) {
+		logger.debug("Before (already played): " + game);
+		// game has already been played, so user wants to edit it
+		// that means we have to (in this order!):
+
+		// - subtract 1 won game for the winner
+		game.getWinner().subtractWonGame();
+
+		// - subtract/add points ratio for existing game result
+		updateScoreRatios(game, false);
+
+		// - clear any bonus points awarded before for this game
+		subtractBonusPoints(
+				BonusPointsDistributor.getBonusPoints(config,
+						game.getSetsPlayed(), game.getSetsPlayedByWinner()),
+				game.getWinner(), game.getLoser());
+
+		// - clear sets
+		for (ShowdownGameSet set : game.getSets()) {
+			set.setPlayer1Score(0);
+			set.setPlayer2Score(0);
+			set.setWinner(null);
+		}
+
+		// - clear the winner
+		game.setWinner(null);
+
+	}
+
 	private void addBonusPoints(HashMap<String, Integer> bonusPoints,
 			IPlayer winner, IPlayer loser) {
 		winner.setPoints(winner.getPoints() + bonusPoints.get("winner"));
@@ -307,43 +326,76 @@ public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
 				+ loser.getPoints());
 	}
 
+	private void subtractBonusPoints(HashMap<String, Integer> bonusPoints,
+			IPlayer winner, IPlayer loser) {
+		winner.setPoints(winner.getPoints() - bonusPoints.get("winner"));
+		loser.setPoints(loser.getPoints() - bonusPoints.get("loser"));
+
+		logger.info("Bonus points: " + winner.getName() + " -"
+				+ bonusPoints.get("winner") + " = " + winner.getPoints() + ", "
+				+ loser.getName() + " -" + bonusPoints.get("loser") + " = "
+				+ loser.getPoints());
+	}
+
 	// NB: the winner is not necessarily the one who has scored more!
-	private void updateScoreRatios(IGame game) {
-		int totalPlayer1Score = 0;
-		int totalPlayer2Score = 0;
+	private void updateScoreRatios(IGame game, boolean addToTotal) {
+		int resultPlayer1Score = 0;
+		int resultPlayer2Score = 0;
 		int difference = 0;
 
 		IPlayer player1 = game.getPlayer1();
 		IPlayer player2 = game.getPlayer2();
 
 		for (ShowdownGameSet set : game.getSets()) {
-			totalPlayer1Score += set.getPlayer1Score();
-			totalPlayer2Score += set.getPlayer2Score();
+			resultPlayer1Score += set.getPlayer1Score();
+			resultPlayer2Score += set.getPlayer2Score();
 		}
 
-		logger.debug(player1.getName() + " has scored " + totalPlayer1Score
+		logger.debug(player1.getName() + " has scored " + resultPlayer1Score
 				+ " in total");
-		logger.debug(player2.getName() + " has scored " + totalPlayer2Score
+		logger.debug(player2.getName() + " has scored " + resultPlayer2Score
 				+ " in total");
 
-		difference = Math.abs(totalPlayer1Score - totalPlayer2Score);
+		difference = Math.abs(resultPlayer1Score - resultPlayer2Score);
 
-		if (totalPlayer1Score > totalPlayer2Score) {
-			player1.setScoreRatio(player1.getScoreRatio() + difference);
-			player2.setScoreRatio(player2.getScoreRatio() - difference);
+		if (resultPlayer1Score > resultPlayer2Score) {
 
-			logger.info(player1.getName() + " +" + difference + " = "
-					+ player1.getScoreRatio());
-			logger.info(player2.getName() + " -" + difference + " = "
-					+ player2.getScoreRatio());
-		} else if (totalPlayer2Score > totalPlayer1Score) {
-			player2.setScoreRatio(player2.getScoreRatio() + difference);
-			player1.setScoreRatio(player1.getScoreRatio() - difference);
+			if (addToTotal) {
+				player1.setScoreRatio(player1.getScoreRatio() + difference);
+				player2.setScoreRatio(player2.getScoreRatio() - difference);
+				logger.info(player1.getName() + " +" + difference + " = "
+						+ player1.getScoreRatio());
+				logger.info(player2.getName() + " -" + difference + " = "
+						+ player2.getScoreRatio());
+			} else {
+				logger.debug("Resetting scores");
+				player2.setScoreRatio(player2.getScoreRatio() + difference);
+				player1.setScoreRatio(player1.getScoreRatio() - difference);
 
-			logger.info(player2.getName() + " +" + difference + " = "
-					+ player2.getScoreRatio());
-			logger.info(player1.getName() + " -" + difference + " = "
-					+ player1.getScoreRatio());
+				logger.info(player2.getName() + " +" + difference + " = "
+						+ player2.getScoreRatio());
+				logger.info(player1.getName() + " -" + difference + " = "
+						+ player1.getScoreRatio());
+			}
+
+		} else if (resultPlayer2Score > resultPlayer1Score) {
+			if (addToTotal) {
+				player2.setScoreRatio(player2.getScoreRatio() + difference);
+				player1.setScoreRatio(player1.getScoreRatio() - difference);
+
+				logger.info(player2.getName() + " +" + difference + " = "
+						+ player2.getScoreRatio());
+				logger.info(player1.getName() + " -" + difference + " = "
+						+ player1.getScoreRatio());
+			} else {
+				logger.debug("Resetting scores");
+				player1.setScoreRatio(player1.getScoreRatio() + difference);
+				player2.setScoreRatio(player2.getScoreRatio() - difference);
+				logger.info(player1.getName() + " +" + difference + " = "
+						+ player1.getScoreRatio());
+				logger.info(player2.getName() + " -" + difference + " = "
+						+ player2.getScoreRatio());
+			}
 		} else {
 			// if scores are identical, nothing to do?
 		}

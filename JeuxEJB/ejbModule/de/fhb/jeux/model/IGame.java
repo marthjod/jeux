@@ -15,6 +15,8 @@ public interface IGame {
 
 	public IPlayer getWinner();
 
+	public IPlayer getLoser();
+
 	public List<ShowdownGameSet> getSets();
 
 	public boolean equals(IGame game);
@@ -24,4 +26,12 @@ public interface IGame {
 	public void setWinner(IPlayer winner);
 
 	public boolean hasWinner();
+
+	public int getSetsWonByPlayer1();
+
+	public int getSetsWonByPlayer2();
+
+	public int getSetsPlayed();
+
+	public int getSetsPlayedByWinner();
 }

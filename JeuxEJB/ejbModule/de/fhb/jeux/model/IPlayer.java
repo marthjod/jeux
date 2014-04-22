@@ -28,4 +28,6 @@ public interface IPlayer {
 	public void setWonGames(int wonGames);
 
 	public void addWonGame();
+
+	public void subtractWonGame();
 }

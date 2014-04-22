@@ -124,6 +124,11 @@ public class ShowdownPlayer implements IPlayer, Serializable {
 	}
 
 	@Override
+	public void subtractWonGame() {
+		wonGames--;
+	}
+
+	@Override
 	public int getRank() {
 		return rank;
 	}
