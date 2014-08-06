@@ -32,12 +32,6 @@ RUN chown -R wildfly:wildfly /opt/wildfly*
 # Expose the ports we're interested in
 EXPOSE 8080 9990
 
-# JEUX app
-RUN git clone https://github.com/marthjod/jeux.git /jeux
-# TODO this wont work with only the source at hand
-# has to be compiled from source here
-ADD app/Jeux.ear /opt/wildfly/standalone/deployments/
-
 # mysql driver
 ADD app/mysql-module.xml /opt/wildfly/modules/system/layers/base/com/mysql/main/module.xml
 # /tmp does not persist between image build steps
@@ -47,6 +41,14 @@ RUN tar xfz mysql-connector-java-5.1.31.tar.gz mysql-connector-java-5.1.31/mysql
 RUN mv mysql-connector-java-5.1.31-bin.jar /opt/wildfly/modules/system/layers/base/com/mysql/main/
 RUN rm /jeux/tmp/*
 
+# JEUX app
+RUN git clone https://github.com/marthjod/jeux.git /jeux
+# TODO this wont work with only the source at hand
+# has to be compiled from source here
+ADD app/Jeux.ear /opt/wildfly/standalone/deployments/
+
+# set later to container's public IP
+ENV APPSERVER_IP unknown
 # appl. sever
 ADD app/standalone-wildfly.xml /opt/wildfly/standalone/configuration/standalone.xml
 

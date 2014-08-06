@@ -23,6 +23,7 @@ if [ -z "$MYSQL_ROOT_PASSWORD" ] || [ -z "$JEUX_DB_USER" ] || [ -z "$JEUX_DB_PAS
 	handle_err 2
 fi
 
+export APPSERVER_IP=`hostname --ip-address`
 wildfly_conf=/opt/wildfly/standalone/configuration/standalone.xml
 tmp_sql=/tmp/db_setup.sql
 
@@ -49,10 +50,15 @@ echo "Adjusting $wildfly_conf"
 perl -i -pe "s#JEUX_DB_CONN_URL#$JEUX_DB_CONN_URL#" $wildfly_conf
 perl -i -pe "s#JEUX_DB_USER#$JEUX_DB_USER#" $wildfly_conf
 perl -i -pe "s#JEUX_DB_PASS#$JEUX_DB_PASS#" $wildfly_conf
+echo "Using $APPSERVER_IP for public interface"
+perl -i -pe "s#PUBLIC_IP#$APPSERVER_IP#" $wildfly_conf
 
 echo "Starting /opt/wildfly/bin/standalone.sh"
 /opt/wildfly/bin/standalone.sh &
 
+echo "When WildFly has completed start-up, go to Docker host's http://localhost:8080/JeuxWeb/"
+
+# keep container running
 while ( true )
     do
     echo "Detach with Ctrl-p Ctrl-q. Dropping to shell"
