@@ -1,3 +1,5 @@
 <jboss-web>
- <security-domain>JeuxWeb</security-domain>
-</jboss-web> 
+<!-- TEMPORARILY DISABLED
+    <security-domain>JeuxWeb</security-domain>
+-->
+</jboss-web>

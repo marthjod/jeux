@@ -304,6 +304,7 @@
         <subsystem xmlns="urn:jboss:domain:sar:1.0"/>
         <subsystem xmlns="urn:jboss:domain:security:1.2">
             <security-domains>
+<!-- TEMPORARILY DISABLED
                 <security-domain name="JeuxWeb" cache-type="default">
                     <authentication>
                         <login-module code="UsersRoles" flag="required">
@@ -319,6 +320,7 @@
                         </login-module>
                     </authentication>
                 </security-domain>
+-->
                 <security-domain name="other" cache-type="default">
                     <authentication>
                         <login-module code="Remoting" flag="optional">
