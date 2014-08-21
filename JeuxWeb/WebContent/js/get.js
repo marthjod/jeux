@@ -209,7 +209,7 @@ var showGamesData = function(gamesData, showGamesDiv, status, editable) {
 var showPlayers = function(showPlayersDiv) {
     "use strict";
 
-    var i = 0, k = 0, table = null, row = null, deletionCell = null;
+    var i = 0, k = 0, table = null, row = null, deletionCell = null, groupPlayersDiv = null;
 
     $(showPlayersDiv).empty();
 
@@ -223,8 +223,10 @@ var showPlayers = function(showPlayersDiv) {
                     $.get("rest/audience/players/group/id/" + group.id, function(playersData) {
                         if (typeof playersData !== undefined && playersData !== null && typeof playersData === "object" && playersData.hasOwnProperty("length") && playersData.length > 0) {
 
-                            $("<h3>").html(group.name).appendTo(showPlayersDiv);
-                            $("<br>").appendTo(showPlayersDiv);
+                            groupPlayersDiv = $("<div>").attr("class", "group-players");
+                            groupPlayersDiv.appendTo(showPlayersDiv);
+                            $("<h3>").html(group.name).appendTo(groupPlayersDiv);
+                            $("<br>").appendTo(groupPlayersDiv);
                             table = $("<table>").attr("class", "table table-hover table-bordered table-condensed");
                             row = $("<tr>");
 
@@ -247,7 +249,7 @@ var showPlayers = function(showPlayersDiv) {
                                 row.appendTo(table);
                             }
 
-                            table.appendTo(showPlayersDiv);
+                            table.appendTo(groupPlayersDiv);
                         }
                     });
                 }(groupsData[k]));
