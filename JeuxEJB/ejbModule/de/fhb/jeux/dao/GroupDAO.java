@@ -13,6 +13,7 @@ import javax.persistence.TypedQuery;
 import org.jboss.logging.Logger;
 
 import de.fhb.jeux.dto.GroupDTO;
+import de.fhb.jeux.model.IGame;
 import de.fhb.jeux.model.IGroup;
 import de.fhb.jeux.persistence.ShowdownPlayer;
 
@@ -150,6 +151,17 @@ public class GroupDAO {
 	// check if round which this group is in is over
 	public boolean roundFinished(int roundId) {
 		return getGroupsInRound(roundId, false).isEmpty();
+	}
+
+	public boolean hasGames(IGroup group) {
+		boolean hasGames = false;
+
+		TypedQuery<IGame> query = em.createNamedQuery("Game.findAllInGroup",
+				IGame.class);
+		query.setParameter("group", group);
+		hasGames = query.getResultList().size() > 0;
+
+		return hasGames;
 	}
 
 }

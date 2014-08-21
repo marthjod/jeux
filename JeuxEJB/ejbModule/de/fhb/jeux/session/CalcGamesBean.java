@@ -11,6 +11,7 @@ import javax.ejb.Stateless;
 import org.apache.commons.math3.util.ArithmeticUtils;
 import org.jboss.logging.Logger;
 
+import de.fhb.jeux.dao.GroupDAO;
 import de.fhb.jeux.model.IGame;
 import de.fhb.jeux.model.IGroup;
 import de.fhb.jeux.model.IPlayer;
@@ -24,6 +25,11 @@ public class CalcGamesBean implements CalcGamesRemote, CalcGamesLocal {
 	@EJB
 	private InsertGameLocal insertGameBean;
 
+	@EJB
+	private GroupDAO groupDAO;
+
+	// HTTP 409 Conflict
+	public static final int GROUP_ALREADY_CONTAINS_GAMES = 409;
 	// HTTP 428 Precondition Required
 	public static final int TOO_FEW_GROUP_MEMBERS = 428;
 	// HTTP 501 Not Implemented
@@ -147,7 +153,15 @@ public class CalcGamesBean implements CalcGamesRemote, CalcGamesLocal {
 		int status = InsertGameBean.UNKNOWN_ERR;
 
 		// we need at least 2 players in a group
-		if (group.getPlayers().size() >= 2) {
+		if (group.getPlayers().size() < 2) {
+			logger.debug("Not calculating, too few group members");
+			status = TOO_FEW_GROUP_MEMBERS;
+		} else if (groupDAO.hasGames(group)) {
+			// do not calculate if group has games already
+			logger.debug("Not calculating, games already exist in group");
+			status = GROUP_ALREADY_CONTAINS_GAMES;
+		} else {
+			// calculate
 			List<IGame> games = calcGamesForGroup(group, shuffledMode);
 			if (games.size() > 0) {
 				for (IGame game : games) {
@@ -157,12 +171,10 @@ public class CalcGamesBean implements CalcGamesRemote, CalcGamesLocal {
 						break;
 					}
 				}
-
 			} else {
+				// something went wrong during calculation
 				status = CALC_ERR;
 			}
-		} else {
-			status = TOO_FEW_GROUP_MEMBERS;
 		}
 
 		return status;
@@ -172,7 +184,7 @@ public class CalcGamesBean implements CalcGamesRemote, CalcGamesLocal {
 	public String getShuffledGamesList(IGroup group) {
 		long maxGames = 0L;
 		StringBuilder sb = new StringBuilder();
-		
+
 		if (group.getPlayers().size() >= 2) {
 			maxGames = maxGames(group.getPlayers().size());
 		}
