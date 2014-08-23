@@ -91,7 +91,7 @@ var showGames = function(showGamesDiv, status, editable) {
     var urlPrefixes = {
         "played" : "rest/audience/games/played/group/id/",
         "unplayed" : "rest/audience/games/unplayed/group/id/"
-    }, k = 0;
+    }, k = 0, groupDiv = null;
 
     $(showGamesDiv).empty();
 
@@ -107,8 +107,10 @@ var showGames = function(showGamesDiv, status, editable) {
                 (function(group, status) {
 
                     $.get(urlPrefixes[status] + group.id, function(gamesData) {
-                        $("<h3>").html(group.name).appendTo(showGamesDiv);
-                        showGamesData(gamesData, showGamesDiv, status, editable);
+                        groupDiv = $("<div>").attr("class", "games-in-group").attr("id", group.name);
+                        $("<h3>").html(group.name).appendTo(groupDiv);
+                        showGamesData(gamesData, groupDiv, status, editable);
+                        $(groupDiv).appendTo(showGamesDiv);
                     });
                 }(groupsData[k], status));
 
@@ -119,7 +121,7 @@ var showGames = function(showGamesDiv, status, editable) {
 
 };
 
-var showGamesData = function(gamesData, showGamesDiv, status, editable) {
+var showGamesData = function(gamesData, groupDiv, status, editable) {
     "use strict";
 
     var i = 0, j = 0, k = 0, gameTable = null, player1Header = null, player2Header = null, setNumberHeader = null, setsTable = null, setsCell = null, row = null, updateCell = null, updateButton = null, sets = [];
@@ -200,7 +202,7 @@ var showGamesData = function(gamesData, showGamesDiv, status, editable) {
                 }
             }
 
-            gameTable.appendTo(showGamesDiv);
+            gameTable.appendTo(groupDiv);
         }
 
     }
