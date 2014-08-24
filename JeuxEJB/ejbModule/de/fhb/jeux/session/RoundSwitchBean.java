@@ -34,6 +34,8 @@ public class RoundSwitchBean implements RoundSwitchRemote, RoundSwitchLocal {
 	public boolean switchRound(int roundId) {
 		boolean success = false;
 
+		logger.info("--- Switching round... ---");
+
 		for (IGroup group : groupDAO.getGroupsInRound(roundId, true)) {
 
 			// rankings done once before players get moved
@@ -41,10 +43,29 @@ public class RoundSwitchBean implements RoundSwitchRemote, RoundSwitchLocal {
 
 			// find appropriate round-switch rules (RSRs)
 			for (IRoundSwitchRule rule : ruleDAO.getRulesForSrcGroup(group)) {
+				IGroup destGroup = rule.getDestGroup();
+				// dest group should be incomplete, without games or
+				// players etc.
+				if (groupDAO.hasGames(destGroup)) {
+					logger.warn("Destination group " + destGroup
+							+ " already contains games");
+					// break;
+				} else if (destGroup.isCompleted()) {
+					logger.warn("Destination group " + destGroup
+							+ " is completed already");
+					// break;
+				} else if (destGroup.isActive()) {
+					// logger.info("Destination group " + destGroup
+					// + " is active already");
+				} else if (destGroup.getPlayers().size() > 0) {
+					// logger.info("Destination group " + destGroup
+					// + " already has players");
+					// break;
+				}
 				// does the destination group exist?
-				if (groupDAO.getGroupById(rule.getDestGroup().getId()) != null) {
-					// TODO dest group should be incomplete, without games or
-					// players etc.
+				if (groupDAO.getGroupById(destGroup.getId()) != null) {
+
+					destGroup.setActive(true);
 
 					// list index starts at 0 (= rank 1)
 					// move players according to ranking
@@ -71,10 +92,9 @@ public class RoundSwitchBean implements RoundSwitchRemote, RoundSwitchLocal {
 								+ ") --> " + rule.getDestGroup().getName());
 					}
 
-					// TODO set destination groups active
-
 				} else {
-					// TODO destination group does not exist
+					logger.error("Destination group " + destGroup
+							+ " does not exist");
 				}
 			}
 		}
