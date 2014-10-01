@@ -1,3 +1,3 @@
 <jboss-web>
-<!--  <security-domain>JeuxWeb</security-domain> -->
+    <security-domain>jeux-admin</security-domain>
 </jboss-web>
