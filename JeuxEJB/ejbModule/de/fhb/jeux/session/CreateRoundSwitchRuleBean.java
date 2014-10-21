@@ -51,37 +51,40 @@ public class CreateRoundSwitchRuleBean implements CreateRoundSwitchRuleRemote,
 			if (!srcGroup.equals(destGroup)) {
 				IRoundSwitchRule newRule = new ShowdownRoundSwitchRule(ruleDTO,
 						srcGroup, destGroup);
-				int srcGroupSize = srcGroup.getSize();
+				// int srcGroupSize = srcGroup.getSize();
+
+				// NOTE: some checks have been removed to allow adding rules for
+				// groups which do not yet have players, i.e. empty second-round
+				// groups with destination in the third round
 
 				if (ruleDTO.getStartWithRank() > 0) {
-					if (ruleDTO.getStartWithRank() <= srcGroupSize) {
+					// if (ruleDTO.getStartWithRank() <= srcGroupSize) {
 
-						if (ruleDTO.getStartWithRank()
-								+ ruleDTO.getAdditionalPlayers() <= srcGroupSize) {
+					// if (ruleDTO.getStartWithRank()
+					// + ruleDTO.getAdditionalPlayers() <= srcGroupSize) {
 
-							newRule.setSrcGroup(srcGroup);
-							newRule.setDestGroup(destGroup);
-							if (ruleDAO.addRule(newRule)) {
-								status = STATUS_OK;
-								logger.info("Added round switch rule "
-										+ newRule + ".");
-							} else {
-								logger.warn("Adding round switch rule "
-										+ newRule + " failed.");
-							}
-						} else {
-							status = TOO_MANY_PLAYERS_TO_BE_MOVED;
-							logger.warn("Too many players to be moved (last considered rank "
-									+ (ruleDTO.getStartWithRank() + ruleDTO
-											.getAdditionalPlayers())
-									+ " > source group size of "
-									+ srcGroupSize
-									+ ").");
-						}
+					newRule.setSrcGroup(srcGroup);
+					newRule.setDestGroup(destGroup);
+					if (ruleDAO.addRule(newRule)) {
+						status = STATUS_OK;
+						logger.info("Added round switch rule " + newRule + ".");
 					} else {
-						status = RANK_EXCEEDS_GROUP_SIZE;
-						logger.warn("A rank exceeds the group's size.");
+						logger.warn("Adding round switch rule " + newRule
+								+ " failed.");
 					}
+					// } else {
+					// status = TOO_MANY_PLAYERS_TO_BE_MOVED;
+					// logger.warn("Too many players to be moved (last considered rank "
+					// + (ruleDTO.getStartWithRank() + ruleDTO
+					// .getAdditionalPlayers())
+					// + " > source group size of "
+					// + srcGroupSize
+					// + ").");
+					// }
+					// } else {
+					// status = RANK_EXCEEDS_GROUP_SIZE;
+					// logger.warn("A rank exceeds the group's size.");
+					// }
 				} else {
 					status = RANK_TOO_LOW;
 					logger.warn("Must start at least at rank 1.");
