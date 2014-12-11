@@ -1,8 +1,6 @@
 ## Example usage
 
 ```bash
-git clone https://github.com/marthjod/showdown.git
-cd showdown
 python calc_games.py ../group-1.txt --latex
 for sheet in scoresheet_*.tex
 do 
