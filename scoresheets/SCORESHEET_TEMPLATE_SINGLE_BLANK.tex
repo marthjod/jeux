@@ -1,0 +1,76 @@
+% scoresheet_template.tex
+
+% Template for Showdown scoresheets.
+% The PLAYERXNAME placeholders should be substituted (external script)
+% or left blank.
+%
+% marthjod@gmail.com lastmod 2013-08-17
+
+\documentclass[36pt]{scrartcl}
+
+\usepackage[a4paper,landscape,left=1cm,right=1cm,top=2cm,bottom=2cm]{geometry}
+
+% XeLaTeX
+\usepackage{xltxtra}
+
+% comment out or change
+\setromanfont{Source Code Pro}
+% \vrule
+\usepackage{array}
+
+\thispagestyle{empty}
+\begin{document}
+
+% horizontal cell padding
+\renewcommand\arraystretch{1.25}
+% vertical
+\renewcommand\tabcolsep{6pt}
+
+\begin{table}
+
+% name and end result
+\begin{tabular}{|p{15cm}!{\vrule width 3pt}p{2cm}!{\vrule width 3pt}}
+\hline
+ & \\
+\hline
+\end{tabular}
+
+% scores
+\begin{tabular}{|c|c|c|c|c|c!{\vrule width 2pt}c|c|c|c|c|c|c|c|c|c|}
+\hline
+\bfseries \large 1 & \bfseries \large 2 & \bfseries \large 3 & \bfseries \large 4 & \bfseries \large 5 & \bfseries \large 6 & \bfseries \large 7 & \bfseries \large 8 & \bfseries \large 9 & \bfseries \large 10 & \bfseries \large 11 & \bfseries \large 12 & \bfseries \large 13 & \bfseries \large 14 & \bfseries \large 15 & \bfseries \large 16 \\
+\hline
+\end{tabular}
+
+% services
+\begin{tabular}{|c|c!{\vrule width 2pt}c|c!{\vrule width 2pt}c|c!{\vrule width 2pt}c|c!{\vrule width 2pt}c|c!{\vrule width 2pt}c|c!{\vrule width 2pt}c|c!{\vrule width 2pt}c|c!{\vrule width 2pt}c|c!{\vrule width 2pt}c|c!{\vrule width 2pt}c|c!{\vrule width 2pt}c|c!{\vrule width 2pt}c|c!{\vrule width 2pt}c|c!{\vrule width 2pt}}
+
+
+\hline
+\footnotesize 1 & \footnotesize 2 & \footnotesize 1 & \footnotesize 2 & \footnotesize 1 & \footnotesize 2 & \footnotesize 1 & \footnotesize 2 & \footnotesize 1 & \footnotesize 2 & \footnotesize 1 & \footnotesize 2 & \footnotesize 1 & \footnotesize 2 & \footnotesize 1 & \footnotesize 2 & \footnotesize 1 & \footnotesize 2 & \footnotesize 1 & \footnotesize 2 & \footnotesize 1 & \footnotesize 2 & \footnotesize 1 & \footnotesize 2 & \footnotesize 1 & \footnotesize 2 \\
+\hline
+
+\hline
+\footnotesize 1 & \footnotesize 2 & \footnotesize 1 & \footnotesize 2 & \footnotesize 1 & \footnotesize 2 & \footnotesize 1 & \footnotesize 2 & \footnotesize 1 & \footnotesize 2 & \footnotesize 1 & \footnotesize 2 & \footnotesize 1 & \footnotesize 2 & \footnotesize 1 & \footnotesize 2 & \footnotesize 1 & \footnotesize 2 & \footnotesize 1 & \footnotesize 2 & \footnotesize 1 & \footnotesize 2 & \footnotesize 1 & \footnotesize 2 & \footnotesize 1 & \footnotesize 2 \\
+\hline
+
+\end{tabular}
+
+% scores again
+\begin{tabular}{|c|c|c|c|c|c!{\vrule width 2pt}c|c|c|c|c|c|c|c|c|c|}
+\hline
+\bfseries \large 1 & \bfseries \large 2 & \bfseries \large 3 & \bfseries \large 4 & \bfseries \large 5 & \bfseries \large 6 & \bfseries \large 7 & \bfseries \large 8 & \bfseries \large 9 & \bfseries \large 10 & \bfseries \large 11 & \bfseries \large 12 & \bfseries \large 13 & \bfseries \large 14 & \bfseries \large 15 & \bfseries \large 16 \\
+\hline
+\end{tabular}
+
+
+% name and end result
+\begin{tabular}{|p{15cm}!{\vrule width 3pt}p{2cm}!{\vrule width 3pt}}
+\hline
+ & \\
+\hline
+\end{tabular}
+
+\end{table}
+
+\end{document}
