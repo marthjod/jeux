@@ -7,3 +7,8 @@ build/
 *.swp*
 docs/
 EarContent/LICENSE
+scoresheet_*
+*.pdf
+*~
+*.log
+*.aux
