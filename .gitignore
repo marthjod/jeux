@@ -12,3 +12,4 @@ scoresheet_*
 *~
 *.log
 *.aux
+target/
