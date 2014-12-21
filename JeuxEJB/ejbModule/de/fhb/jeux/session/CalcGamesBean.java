@@ -8,7 +8,7 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
-import org.apache.commons.math3.util.ArithmeticUtils;
+import org.apache.commons.math3.util.CombinatoricsUtils;
 import org.jboss.logging.Logger;
 
 import de.fhb.jeux.dao.GroupDAO;
@@ -39,7 +39,7 @@ public class CalcGamesBean implements CalcGamesRemote, CalcGamesLocal {
 	}
 
 	private long maxGames(int numPlayers) {
-		return ArithmeticUtils.binomialCoefficient(numPlayers, 2);
+		return CombinatoricsUtils.binomialCoefficient(numPlayers, 2);
 	}
 
 	private boolean contains(List<IGame> games, IGame newGame) {
