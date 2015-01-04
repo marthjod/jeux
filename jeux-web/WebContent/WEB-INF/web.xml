@@ -52,6 +52,7 @@
   <security-role>
     <role-name>jeux-admin</role-name>
   </security-role>
+  
   <security-constraint>
     <web-resource-collection>
       <web-resource-name>JEUX Administrative view</web-resource-name>
@@ -62,7 +63,7 @@
     </auth-constraint>
   </security-constraint>
   <login-config>
-    <auth-method>DIGEST</auth-method>
+    <auth-method>BASIC</auth-method>
     <realm-name>JEUX Administrative view</realm-name>
   </login-config>
   
