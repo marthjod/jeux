@@ -1,8 +1,6 @@
 package de.fhb.jeux.context;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +9,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+import org.apache.commons.io.FileUtils;
 import org.jboss.logging.Logger;
 
 import com.google.gson.Gson;
@@ -35,8 +34,10 @@ public class ContextListener implements ServletContextListener {
 	public void contextInitialized(ServletContextEvent event) {
 
 		logger.info("Context initialized");
-
 		ServletContext sc = event.getServletContext();
+		String scoresheetsLaTeXPreamble = null;
+		String scoresheetsLaTeXBody = null;
+		String scoresheetsLaTeXFooter = null;
 
 		// get infos from web.xml and save object to servlet context
 		// to be accessed by other servlets later
@@ -45,42 +46,35 @@ public class ContextListener implements ServletContextListener {
 		BonusPointsDistribution config = getBonusPointsConfig(sc.getRealPath(sc
 				.getInitParameter("BONUS_POINTS_CONFIG_PATH")));
 
+		try {
+			scoresheetsLaTeXPreamble = FileUtils.readFileToString(new File(sc
+					.getRealPath(sc
+							.getInitParameter("SCORESHEETS_LATEX_PREAMBLE"))));
+			scoresheetsLaTeXBody = FileUtils
+					.readFileToString(new File(sc.getRealPath(sc
+							.getInitParameter("SCORESHEETS_LATEX_BODY"))));
+			scoresheetsLaTeXFooter = FileUtils.readFileToString(new File(sc
+					.getRealPath(sc
+							.getInitParameter("SCORESHEETS_LATEX_FOOTER"))));
+		} catch (IOException e) {
+			logger.error(e.getMessage());
+		}
+
 		sc.setAttribute("bonusPointsConfig", config);
+		sc.setAttribute("scoresheetsLaTeXPreamble", scoresheetsLaTeXPreamble);
+		sc.setAttribute("scoresheetsLaTeXBody", scoresheetsLaTeXBody);
+		sc.setAttribute("scoresheetsLaTeXFooter", scoresheetsLaTeXFooter);
+
 	}
 
 	private BonusPointsDistribution getBonusPointsConfig(String configPath) {
-		BufferedReader br = null;
 		String json = null;
 		BonusPointsDistribution config = null;
 
 		try {
-			br = new BufferedReader(new FileReader(configPath));
-			logger.info("Will read from config file " + configPath);
-		} catch (FileNotFoundException e) {
-			logger.error(e.getClass().getName() + ": " + e.getMessage());
-		}
-
-		if (br != null) {
-			try {
-				StringBuilder sb = new StringBuilder();
-				String line = br.readLine();
-
-				while (line != null) {
-					sb.append(line);
-					sb.append('\n');
-					line = br.readLine();
-				}
-				json = sb.toString();
-			} catch (IOException e) {
-				logger.error("Error reading from config file " + configPath
-						+ ": " + e.getMessage());
-			} finally {
-				try {
-					br.close();
-				} catch (IOException e) {
-					logger.error(e.getClass().getName() + ": " + e.getMessage());
-				}
-			}
+			json = FileUtils.readFileToString(new File(configPath));
+		} catch (IOException e) {
+			logger.error(e.getMessage());
 		}
 
 		if (json != null) {
