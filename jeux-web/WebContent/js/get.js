@@ -9,37 +9,38 @@ var getRESTApiStatus = function(statusDiv) {
 var showGroups = function(showGroupsDiv, playerGroupSelect, ruleSrcGroupSelect, ruleDestGroupSelect) {
     "use strict";
 
-    var i = 0, table = null, currentGroup = null, row = null, gameGenerationCell = null, shuffledGameListCell = null, deletionCell = null, playerGroupSelectOK = false, ruleGroupSelectsOK = false, gameGenerationCell = null;
+    var i = 0, table = null, currentGroup = null, row = null, gameGenerationCell = null, shuffledGamesDefaultCell = null, shuffledGamesLaTeXCell = null, deletionCell = null, playerGroupSelectOK = false, ruleGroupSelectsOK = false, gameGenerationCell = null;
 
     $.get("rest/audience/groups", function(data) {
 
         if (playerGroupSelect && playerGroupSelect !== null) {
             playerGroupSelectOK = true;
             $(playerGroupSelect).find("option").remove();
-            $("<option>").attr("id", "no-group-selected").text("No group selected").appendTo($(playerGroupSelect));
+            $(playerGroupSelect).append($("<option>").attr("id", "no-group-selected").text("No group selected"));
         }
 
         if (ruleSrcGroupSelect && ruleSrcGroupSelect !== null && ruleDestGroupSelect && ruleDestGroupSelect !== null) {
             ruleGroupSelectsOK = true;
             $(ruleSrcGroupSelect).find("option").remove();
             $(ruleDestGroupSelect).find("option").remove();
-            $("<option>").attr("id", "no-source-group-selected").text("No source group selected").appendTo($(ruleSrcGroupSelect));
-            $("<option>").attr("id", "no-destination-group-selected").text("No destination group selected").appendTo($(ruleDestGroupSelect));
+            $(ruleSrcGroupSelect).append($("<option>").attr("id", "no-source-group-selected").text("No source group selected"));
+            $(ruleDestGroupSelect).append($("<option>").attr("id", "no-destination-group-selected").text("No destination group selected"));
         }
 
         $(showGroupsDiv).empty();
         table = $("<table>").attr("class", "table table-hover table-bordered table-condensed");
         row = $("<tr>");
 
-        $("<th>").html("Name").appendTo(row);
-        $("<th>").html("Round").appendTo(row);
-        $("<th>").html("Min sets").appendTo(row);
-        $("<th>").html("Max sets").appendTo(row);
-        $("<th>").html("Active").appendTo(row);
-        $("<th>").html("Completed").appendTo(row);
-        $("<th>").appendTo(row);
-        $("<th>").appendTo(row);
-        row.appendTo(table);
+        row.append($("<th>").html("Name"));
+        row.append($("<th>").html("Round"));
+        row.append($("<th>").html("Min sets"));
+        row.append($("<th>").html("Max sets"));
+        row.append($("<th>").html("Active"));
+        row.append($("<th>").html("Completed"));
+        row.append($("<th>"));
+        row.append($("<th>"));
+        row.append($("<th>"));
+        table.append(row);
 
         if (data && typeof data === "object" && data.hasOwnProperty("length") && data.length > 0) {
 
@@ -49,26 +50,30 @@ var showGroups = function(showGroupsDiv, playerGroupSelect, ruleSrcGroupSelect, 
                 currentGroup = data[i];
 
                 row = $("<tr>").attr("id", "group-id-" + currentGroup.id);
-                $("<td>").attr("class", "group-name").html(currentGroup.name).appendTo(row);
-                $("<td>").attr("class", "group-round-id").html(currentGroup.roundId).appendTo(row);
-                $("<td>").attr("class", "group-minsets").html(currentGroup.minSets).appendTo(row);
-                $("<td>").attr("class", "group-maxsets").html(currentGroup.maxSets).appendTo(row);
-                $("<td>").attr("class", "group-active").html(currentGroup.active.toString()).appendTo(row);
-                $("<td>").attr("class", "group-completed").html(currentGroup.completed.toString()).appendTo(row);
+                row.append($("<td>").attr("class", "group-name").html(currentGroup.name));
+                row.append($("<td>").attr("class", "group-round-id").html(currentGroup.roundId));
+                row.append($("<td>").attr("class", "group-minsets").html(currentGroup.minSets));
+                row.append($("<td>").attr("class", "group-maxsets").html(currentGroup.maxSets));
+                row.append($("<td>").attr("class", "group-active").html(currentGroup.active.toString()));
+                row.append($("<td>").attr("class", "group-completed").html(currentGroup.completed.toString()));
 
                 gameGenerationCell = $("<td>");
-                $("<input>").attr("type", "submit").attr("class", "btn btn-success").attr("value", "Generate games").appendTo(gameGenerationCell).attr("onclick", "generateGames(this, " + currentGroup.id + ", false);");
-                gameGenerationCell.appendTo(row);
+                gameGenerationCell.append($("<input>").attr("type", "submit").attr("class", "btn btn-success").attr("value", "Generate games").attr("onclick", "generateGames(this, " + currentGroup.id + ", false);"));
 
-                shuffledGameListCell = $("<td>");
-                $("<input>").attr("type", "submit").attr("class", "btn btn-warning").attr("value", "Shuffled games list (BETA)").appendTo(shuffledGameListCell).attr("onclick", "getShuffledGames(" + currentGroup.id + ");");
-                shuffledGameListCell.appendTo(row);
+                shuffledGamesDefaultCell = $("<td>");
+                shuffledGamesDefaultCell.append($("<input>").attr("type", "submit").attr("class", "btn btn-warning").attr("value", "Games list").attr("onclick", "getShuffledGames(" + currentGroup.id + ");"));
+
+                shuffledGamesLaTeXCell = $("<td>");
+                shuffledGamesLaTeXCell.append($("<input>").attr("type", "submit").attr("class", "btn btn-warning").attr("value", "Scoresheets (LaTeX)").attr("onclick", "getShuffledGames(" + currentGroup.id + ", 'latex');"));
 
                 deletionCell = $("<td>");
-                $("<input>").attr("type", "submit").attr("class", "btn btn-danger").attr("value", "Delete group").appendTo(deletionCell).attr("onclick", "deleteGroup(" + currentGroup.id + ", this);");
-                deletionCell.appendTo(row);
+                deletionCell.append($("<input>").attr("type", "submit").attr("class", "btn btn-danger").attr("value", "Delete group").attr("onclick", "deleteGroup(" + currentGroup.id + ", this);"));
 
-                row.appendTo(table);
+                row.append(gameGenerationCell);
+                row.append(shuffledGamesDefaultCell);
+                row.append(shuffledGamesLaTeXCell);
+                row.append(deletionCell);
+                table.append(row);
 
                 if (playerGroupSelectOK) {
                     $("<option>").attr("id", "group-id-" + currentGroup.id).text(currentGroup.name).appendTo($(playerGroupSelect));
@@ -80,7 +85,7 @@ var showGroups = function(showGroupsDiv, playerGroupSelect, ruleSrcGroupSelect, 
                 }
             }
 
-            table.appendTo(showGroupsDiv);
+            showGroupsDiv.append(table);
         }
     });
 };
@@ -386,8 +391,14 @@ var showRules = function(showRulesDiv) {
     }
 };
 
-var getShuffledGames = function(groupId) {
+var getShuffledGames = function(groupId, format) {
     "use strict";
 
-    window.open("rest/admin/shuffled-games/group/id/" + groupId);
+    var url = "rest/admin/shuffled-games/group/id/" + groupId;
+
+    if (format && format !== null && typeof format === 'string') {
+        url += ";format=" + format;
+    }
+
+    window.open(url);
 };
