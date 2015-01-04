@@ -1,6 +1,10 @@
 var deleteGroup = function(groupId, deleteButton) {
     "use strict";
 
+    if (!window.confirm("Really delete group?")) {
+        return false;
+    }
+
     if (deleteButton && deleteButton !== null) {
         $(deleteButton).hide();
     }
@@ -37,7 +41,7 @@ var deleteGroup = function(groupId, deleteButton) {
         }
     });
 
-}
+};
 
 var deletePlayer = function(playerId) {
     "use strict";
@@ -59,7 +63,7 @@ var deletePlayer = function(playerId) {
             }
         }
     });
-}
+};
 
 var deleteRule = function(ruleId, deleteButton) {
     "use strict";
@@ -79,4 +83,4 @@ var deleteRule = function(ruleId, deleteButton) {
             }
         }
     });
-}
+};
