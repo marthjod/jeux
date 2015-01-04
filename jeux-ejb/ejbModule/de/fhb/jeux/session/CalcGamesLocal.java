@@ -9,6 +9,6 @@ public interface CalcGamesLocal {
 
 	public int writeGamesForGroup(IGroup group, boolean shuffledMode);
 
-	public String getShuffledGamesList(IGroup group);
+	public String getShuffledGamesList(IGroup group, String format);
 
 }

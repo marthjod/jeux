@@ -2,6 +2,7 @@ package de.fhb.jeux.session;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Deque;
 import java.util.List;
 
@@ -21,6 +22,12 @@ import de.fhb.jeux.persistence.ShowdownGame;
 public class CalcGamesBean implements CalcGamesRemote, CalcGamesLocal {
 
 	private static Logger logger = Logger.getLogger(CalcGamesBean.class);
+
+	private static final String FORMAT_TEXT = "text";
+	private static final String FORMAT_LATEX = "latex";
+	private static final String FORMAT_DEFAULT = FORMAT_TEXT;
+	private static final List<String> FORMATS = new ArrayList<String>(
+			Arrays.asList(FORMAT_TEXT, FORMAT_LATEX));
 
 	@EJB
 	private InsertGameLocal insertGameBean;
@@ -68,7 +75,7 @@ public class CalcGamesBean implements CalcGamesRemote, CalcGamesLocal {
 		if (shuffledMode) {
 			Deque<IPlayer> breakroom = new ArrayDeque<IPlayer>();
 
-			while ((long) games.size() < maxGames) {
+			while (games.size() < maxGames) {
 				for (IPlayer player1 : group.getPlayers()) {
 					for (IPlayer player2 : group.getPlayers()) {
 						if (player1.equals(player2)) {
@@ -115,7 +122,7 @@ public class CalcGamesBean implements CalcGamesRemote, CalcGamesLocal {
 		} else {
 			// only calculate games, regardless of specific order
 			// faster
-			while ((long) games.size() < maxGames) {
+			while (games.size() < maxGames) {
 				for (IPlayer player1 : group.getPlayers()) {
 					for (IPlayer player2 : group.getPlayers()) {
 						if (player1.equals(player2)) {
@@ -181,35 +188,46 @@ public class CalcGamesBean implements CalcGamesRemote, CalcGamesLocal {
 	}
 
 	@Override
-	public String getShuffledGamesList(IGroup group) {
+	public String getShuffledGamesList(IGroup group, String format) {
 		long maxGames = 0L;
+		String formatToUse = FORMAT_DEFAULT;
 		StringBuilder sb = new StringBuilder();
 
-		if (group.getPlayers().size() >= 2) {
+		if (group != null && group.getPlayers().size() >= 2) {
 			maxGames = maxGames(group.getPlayers().size());
-		}
 
-		if (group != null && maxGames > 0) {
 			List<IGame> games = calcGamesForGroup(group, true);
 
-			sb.append("-- Calculated ");
-			sb.append(games.size());
-			sb.append(" of projected ");
-			sb.append(maxGames);
-			sb.append(" game(s) in shuffled mode.");
-			sb.append("\r\n\r\n");
-
-			for (IGame game : games) {
-				sb.append(game.getPlayer1().getName());
-				sb.append(" vs. ");
-				sb.append(game.getPlayer2().getName());
-				sb.append("\r\n");
+			// do not allow arbitrary user input
+			for (String f : FORMATS) {
+				if (f.equals(format)) {
+					formatToUse = f;
+				}
 			}
+
+			if (FORMAT_TEXT.equals(formatToUse)) {
+				sb.append("-- Calculated ");
+				sb.append(games.size());
+				sb.append(" of projected ");
+				sb.append(maxGames);
+				sb.append(" game(s) in shuffled mode.");
+				sb.append("\r\n\r\n");
+
+				for (IGame game : games) {
+					sb.append(game.getPlayer1().getName());
+					sb.append(" vs. ");
+					sb.append(game.getPlayer2().getName());
+					sb.append("\r\n");
+				}
+
+			} else if (FORMAT_LATEX.equals(formatToUse)) {
+
+			}
+
 		} else {
 			sb.append("Cannot calculate games, group does not exist or has less than 2 players.");
 		}
 
 		return sb.toString();
 	}
-
 }

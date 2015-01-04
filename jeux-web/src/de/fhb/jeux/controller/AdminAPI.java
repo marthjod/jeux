@@ -280,12 +280,13 @@ public class AdminAPI {
 	@GET
 	@Path("/shuffled-games/group/id/{groupId}")
 	@Produces(MediaType.TEXT_PLAIN)
-	public String getShuffledGamesList(@PathParam("groupId") int groupId) {
+	public String getShuffledGamesList(@PathParam("groupId") int groupId,
+			@MatrixParam("format") @DefaultValue("text") String format) {
 		IGroup group = groupBean.getGroupById(groupId);
 
 		// logger.debug("Request for shuffled games list, group "
 		// + group.getName());
 
-		return calcGamesBean.getShuffledGamesList(group);
+		return calcGamesBean.getShuffledGamesList(group, format);
 	}
 }

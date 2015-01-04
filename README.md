@@ -7,7 +7,7 @@
 4. Copy [`jquery-VERSION.js`](http://jquery.com/) as `jquery.js` into _jeux-web/src/resources/js_
 5. Copy [`bootstrap.css`](http://getbootstrap.com/) into _jeux-web/src/resources/css_
 
-### Maven:
+### Maven
 
 - Run `mvn clean install` to build the EAR file to be deployed on the application server (e.g. in _.../jbossas/app-root/runtime/dependencies/jbossas/deployments_)
 
