@@ -7,7 +7,7 @@
   <name>JEUX parent POM</name>
 
   <modules>
-    <module>jeux-ejb</module>
+    <!--<module>jeux-ejb</module>-->
     <module>jeux-web</module>
     <module>jeux-ear</module>
   </modules>
