@@ -1,6 +1,7 @@
 package de.fhb.jeux.session;
 
 import javax.ejb.Remote;
+import javax.servlet.ServletContext;
 
 import de.fhb.jeux.model.IGroup;
 
@@ -11,5 +12,6 @@ public interface CalcGamesRemote {
 	@SuppressWarnings("ucd")
 	public int writeGamesForGroup(IGroup group, boolean shuffledMode);
 
-	public String getShuffledGamesList(IGroup group, String format);
+	public String getShuffledGamesList(IGroup group, String format,
+			ServletContext sc);
 }

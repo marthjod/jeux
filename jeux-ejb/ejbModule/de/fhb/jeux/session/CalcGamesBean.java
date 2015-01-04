@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.servlet.ServletContext;
 
 import org.apache.commons.math3.util.CombinatoricsUtils;
 import org.jboss.logging.Logger;
@@ -188,7 +189,8 @@ public class CalcGamesBean implements CalcGamesRemote, CalcGamesLocal {
 	}
 
 	@Override
-	public String getShuffledGamesList(IGroup group, String format) {
+	public String getShuffledGamesList(IGroup group, String format,
+			ServletContext sc) {
 		long maxGames = 0L;
 		String formatToUse = FORMAT_DEFAULT;
 		StringBuilder sb = new StringBuilder();
@@ -221,6 +223,39 @@ public class CalcGamesBean implements CalcGamesRemote, CalcGamesLocal {
 				}
 
 			} else if (FORMAT_LATEX.equals(formatToUse)) {
+
+				// TODO correct some of the "HERE BE DRAGONS" magic below
+
+				String scoresheetsLaTeXPreamble = null;
+				String scoresheetsLaTeXBody = null;
+				String scoresheetsLaTeXFooter = null;
+
+				scoresheetsLaTeXPreamble = (String) sc
+						.getAttribute("scoresheetsLaTeXPreamble");
+				scoresheetsLaTeXBody = (String) sc
+						.getAttribute("scoresheetsLaTeXBody");
+				scoresheetsLaTeXFooter = (String) sc
+						.getAttribute("scoresheetsLaTeXFooter");
+
+				if (scoresheetsLaTeXPreamble != null
+						&& scoresheetsLaTeXBody != null
+						&& scoresheetsLaTeXFooter != null) {
+
+					sb.append(scoresheetsLaTeXPreamble);
+					sb.append("\n");
+					for (IGame game : games) {
+						sb.append(scoresheetsLaTeXBody.replaceAll(
+								"PLAYER1NAME", game.getPlayer1().getName())
+								.replaceAll("PLAYER2NAME",
+										game.getPlayer2().getName()));
+						sb.append("\n\\newpage\n\n");
+					}
+					sb.append("\n");
+					sb.append(scoresheetsLaTeXFooter);
+
+				} else {
+					sb.append("Cannot read one or more LaTeX template input files");
+				}
 
 			}
 

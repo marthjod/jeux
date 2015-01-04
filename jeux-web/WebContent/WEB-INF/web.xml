@@ -10,7 +10,20 @@
     <param-name>BONUS_POINTS_CONFIG_PATH</param-name>
     <param-value>/config/bonuspointsdistribution.json</param-value>
   </context-param>
-  
+
+  <context-param>
+    <param-name>SCORESHEETS_LATEX_PREAMBLE</param-name>
+    <param-value>/scoresheets/preamble.tex</param-value>
+  </context-param>
+  <context-param>
+    <param-name>SCORESHEETS_LATEX_BODY</param-name>
+    <param-value>/scoresheets/body.tex</param-value>
+  </context-param>
+  <context-param>
+    <param-name>SCORESHEETS_LATEX_FOOTER</param-name>
+    <param-value>/scoresheets/footer.tex</param-value>
+  </context-param>
+    
   <servlet>
     <description>JAX-RS Tools Generated - Do not modify</description>
     <servlet-name>JAX-RS Servlet</servlet-name>
