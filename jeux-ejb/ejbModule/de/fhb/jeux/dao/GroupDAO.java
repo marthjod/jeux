@@ -23,7 +23,7 @@ public class GroupDAO {
 
 	private static Logger logger = Logger.getLogger(GroupDAO.class);
 
-	@PersistenceContext
+	@PersistenceContext(unitName = "JeuxEJB")
 	private EntityManager em;
 
 	// mimick HTTP statuses

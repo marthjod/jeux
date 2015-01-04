@@ -22,7 +22,7 @@ public class GameDAO {
 
 	private static Logger logger = Logger.getLogger(GameDAO.class);
 
-	@PersistenceContext
+	@PersistenceContext(unitName = "JeuxEJB")
 	private EntityManager em;
 
 	@EJB

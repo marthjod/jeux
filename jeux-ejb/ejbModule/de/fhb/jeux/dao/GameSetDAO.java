@@ -21,7 +21,7 @@ public class GameSetDAO {
 
 	private static Logger logger = Logger.getLogger(GameSetDAO.class);
 
-	@PersistenceContext
+	@PersistenceContext(unitName = "JeuxEJB")
 	private EntityManager em;
 
 	// EJB business method must be public

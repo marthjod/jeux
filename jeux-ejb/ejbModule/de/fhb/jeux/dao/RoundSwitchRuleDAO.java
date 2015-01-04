@@ -22,7 +22,7 @@ public class RoundSwitchRuleDAO {
 
 	private static Logger logger = Logger.getLogger(RoundSwitchRuleDAO.class);
 
-	@PersistenceContext
+	@PersistenceContext(unitName = "JeuxEJB")
 	private EntityManager em;
 
 	public RoundSwitchRuleDAO() {
