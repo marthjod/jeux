@@ -48,7 +48,7 @@
               <outputDirectory>${basedir}/WebContent/js</outputDirectory>
               <resources>
                 <resource>
-                  <directory>src/resources/js</directory>
+                  <directory>resources/js</directory>
                 </resource>
               </resources>
             </configuration>
@@ -70,7 +70,7 @@
               <outputDirectory>${basedir}/WebContent/css</outputDirectory>
               <resources>
                 <resource>
-                  <directory>src/resources/css</directory>
+                  <directory>resources/css</directory>
                 </resource>
               </resources>
             </configuration>
@@ -92,7 +92,7 @@
               <outputDirectory>${basedir}/WebContent/config</outputDirectory>
               <resources>
                 <resource>
-                  <directory>src/resources/config</directory>
+                  <directory>resources/config</directory>
                 </resource>
               </resources>
             </configuration>
@@ -114,7 +114,7 @@
               <outputDirectory>${basedir}/WebContent/scoresheets</outputDirectory>
               <resources>
                 <resource>
-                  <directory>src/resources/scoresheets</directory>
+                  <directory>resources/scoresheets</directory>
                 </resource>
               </resources>
             </configuration>

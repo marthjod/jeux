@@ -4,8 +4,8 @@
 
 ### Add 3rd-party sources
 
-4. Copy [`jquery-VERSION.js`](http://jquery.com/) as `jquery.js` into _jeux-web/src/resources/js_
-5. Copy [`bootstrap.css`](http://getbootstrap.com/) into _jeux-web/src/resources/css_
+4. Copy [`jquery-VERSION.js`](http://jquery.com/) as `jquery.js` into _jeux-web/resources/js_
+5. Copy [`bootstrap.css`](http://getbootstrap.com/) into _jeux-web/resources/css_
 
 ### Maven
 
