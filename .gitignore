@@ -1,16 +1,22 @@
+# build artifacts
 *.jar
-jquery*.js
-bootstrap.css
 *.class
 build/
-*.!sync
-*.swp*
-docs/
-EarContent/LICENSE
-scoresheet_*
-*.pdf
-*~
-*.log
-*.aux
 target/
+
+# 3rd party
+jquery*.js
+bootstrap.css
+
+# backup files
+*~
 *.old/
+
+# IntelliJ
+*.iml
+.idea/
+
+# Eclipse
+.settings/
+.project
+.classpath
