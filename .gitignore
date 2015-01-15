@@ -20,3 +20,7 @@ bootstrap.css
 .settings/
 .project
 .classpath
+
+# NetBeans
+nbactions.xml
+nb-configuration.xml
