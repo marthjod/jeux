@@ -1,19 +1,12 @@
+<?xml version="1.0"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <parent>
-    <groupId>de.fhb</groupId>
-    <artifactId>jeux-all</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <relativePath>../pom.xml</relativePath>
-  </parent>
-
+  <groupId>de.fhb</groupId>
+  <version>0.0.1-SNAPSHOT</version>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>jeux-web</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
   <packaging>war</packaging>
   <name>JEUX WAR package - ${project.groupId}.${project.artifactId}-${project.version}</name>
-
   <build>
-    <sourceDirectory>src</sourceDirectory>
     <plugins>
       <plugin>
         <artifactId>maven-war-plugin</artifactId>
@@ -31,45 +24,12 @@
           <target>1.6</target>
         </configuration>
       </plugin>
-
       <plugin>
         <artifactId>maven-resources-plugin</artifactId>
         <version>2.7</version>
         <executions>
           <execution>
-            <id>copy-resources</id>
-            <phase>validate</phase>
-            <goals>
-              <goal>copy-resources</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${basedir}/WebContent/js</outputDirectory>
-              <resources>
-                <resource>
-                  <directory>resources/js</directory>
-                </resource>
-              </resources>
-            </configuration>
-          </execution>
-
-          <execution>
-            <id>copy-resources</id>
-            <phase>validate</phase>
-            <goals>
-              <goal>copy-resources</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${basedir}/WebContent/css</outputDirectory>
-              <resources>
-                <resource>
-                  <directory>resources/css</directory>
-                </resource>
-              </resources>
-            </configuration>
-          </execution>
-
-          <execution>
-            <id>copy-resources</id>
+            <id>copy-configs</id>
             <phase>validate</phase>
             <goals>
               <goal>copy-resources</goal>
@@ -83,9 +43,8 @@
               </resources>
             </configuration>
           </execution>
-
           <execution>
-            <id>copy-resources</id>
+            <id>copy-scoresheets</id>
             <phase>validate</phase>
             <goals>
               <goal>copy-resources</goal>
@@ -103,27 +62,30 @@
       </plugin>
     </plugins>
   </build>
-
-
-
   <dependencies>
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>javax.servlet-api</artifactId>
+      <version>3.0.1</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>javax.ejb</groupId>
       <artifactId>ejb-api</artifactId>
+      <version>3.0</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.jboss.logging</groupId>
       <artifactId>jboss-logging</artifactId>
+      <version>3.2.0.Final</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
+      <version>2.4</version>
     </dependency>
-
     <dependency>
       <groupId>javax.ws.rs</groupId>
       <artifactId>javax.ws.rs-api</artifactId>

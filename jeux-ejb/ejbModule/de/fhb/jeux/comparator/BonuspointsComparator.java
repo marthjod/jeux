@@ -7,14 +7,15 @@ import org.jboss.logging.Logger;
 import de.fhb.jeux.dao.PlayerDAO;
 import de.fhb.jeux.model.IPlayer;
 
-public class WonGamesComparator implements Comparator<IPlayer> {
+public class BonuspointsComparator implements Comparator<IPlayer> {
 
-	private static Logger logger = Logger.getLogger(WonGamesComparator.class);
+	private static Logger logger = Logger
+			.getLogger(BonuspointsComparator.class);
 
 	private PlayerDAO playerDAO;
 
 	// poor man's injection
-	public WonGamesComparator(PlayerDAO playerDAO) {
+	public BonuspointsComparator(PlayerDAO playerDAO) {
 		this.playerDAO = playerDAO;
 	}
 
@@ -22,15 +23,13 @@ public class WonGamesComparator implements Comparator<IPlayer> {
 	public int compare(IPlayer p1, IPlayer p2) {
 		IPlayer higherRankedPlayer = null;
 
-		// winner := either won more games OR
-		// if same amount of games, better score ratio;
-		// still equal? look who won when they played against each other
-		if (p1.getWonGames() > p2.getWonGames()) {
+		if (p1.getPoints() > p2.getPoints()) {
 			higherRankedPlayer = p1;
-		} else if (p1.getWonGames() < p2.getWonGames()) {
+		} else if (p1.getPoints() < p2.getPoints()) {
 			higherRankedPlayer = p2;
 		} else {
-
+			// points are equal;
+			// next up: score ratio
 			if (p1.getScoreRatio() > p2.getScoreRatio()) {
 				higherRankedPlayer = p1;
 			} else if (p1.getScoreRatio() < p2.getScoreRatio()) {
@@ -53,25 +52,25 @@ public class WonGamesComparator implements Comparator<IPlayer> {
 								+ higherRankedPlayer.getName());
 					}
 				} else {
-					logger.warn("No direct comparison possible for "
-							+ p1.getName() + " and " + p2.getName());
+//					logger.warn("No direct comparison possible for "
+//							+ p1.getName() + " and " + p2.getName());
 				}
 			}
 		}
 
 		if (higherRankedPlayer != null) {
 			if (p1.equals(higherRankedPlayer)) {
-				logger.info(p1.getName() + " > " + p2.getName());
+//				logger.info(p1.getName() + " > " + p2.getName());
 				return -1;
 			} else if (p2.equals(higherRankedPlayer)) {
-				logger.info(p2.getName() + " > " + p1.getName());
+//				logger.info(p2.getName() + " > " + p1.getName());
 				return 1;
 			} else {
-				logger.error("Could not determine winner.");
+//				logger.error("Could not determine winner");
 				return 0;
 			}
 		} else {
-			logger.warn("Cannot determine higher-ranked player.");
+//			logger.warn("Cannot determine higher-ranked player.");
 			return 0;
 		}
 	}
