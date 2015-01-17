@@ -1,7 +1,13 @@
-function updateGame(updateSubmit, gameId, player1Id, player2Id, action) {
+var updateGame = function (updateSubmit, gameId, player1Id, player2Id, action) {
     "use strict";
 
-    var inputOK = false, gameSetId = 0, rows = [], i = 0, set = {}, player1Score = 0, player2Score = 0, updatedGame = {};
+    var inputOK = false,
+            gameSetId = 0,
+            rows = [],
+            set = {},
+            player1Score = 0,
+            player2Score = 0,
+            updatedGame = {};
 
     if (updateSubmit && updateSubmit !== null) {
         $(updateSubmit).attr("disabled", "disabled");
@@ -23,22 +29,24 @@ function updateGame(updateSubmit, gameId, player1Id, player2Id, action) {
         "sets": []
     };
 
-    // input > td > tr > tbody > table
+    // input > tr > tbody
     // yikes!
-    rows = $(updateSubmit).parent().parent().parent().parent().find("tr");
-    for (i = 0; i < rows.length; i++) {
-        if (/^gameset-id-.*$/.test(rows[i].id)) {
+    rows = $(updateSubmit).parent().parent().find("tr");
+
+    $.each(rows, function (id, row) {
+        if (/^gameset-id-.*$/.test(row.id)) {
 
             try {
-                gameSetId = parseInt(rows[i].id.replace("gameset-id-", ""), 10);
-                player1Score = parseInt($(rows[i]).find("td.player1-score").find("input").val(), 10);
-                player2Score = parseInt($(rows[i]).find("td.player2-score").find("input").val(), 10);
+                gameSetId = parseInt(row.id.replace("gameset-id-", ""), 10);
+                player1Score = parseInt($(row).find("td.player1-score").find("input").val(), 10);
+                player2Score = parseInt($(row).find("td.player2-score").find("input").val(), 10);
                 inputOK = true;
             } catch (e) {
                 alert(e);
             }
 
             if (inputOK) {
+                // reset
                 inputOK = false;
                 set = {
                     "id": gameSetId,
@@ -48,10 +56,10 @@ function updateGame(updateSubmit, gameId, player1Id, player2Id, action) {
                 };
 
                 // add to array
-                updatedGame.sets[updatedGame.sets.length] = set;
+                updatedGame.sets.push(set);
             }
         }
-    }
+    });
 
     $.ajax({
         url: "rest/admin/update-game",
@@ -75,9 +83,9 @@ function updateGame(updateSubmit, gameId, player1Id, player2Id, action) {
             }
         }
     });
-}
+};
 
-function generateGames(generateButton, groupId, shuffledMode) {
+var generateGames = function (generateButton, groupId, shuffledMode) {
     "use strict";
 
     if (!shuffledMode || typeof shuffledMode !== "boolean") {
@@ -114,5 +122,4 @@ function generateGames(generateButton, groupId, shuffledMode) {
             }
         }
     });
-
-}
+};

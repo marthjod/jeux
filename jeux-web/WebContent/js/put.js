@@ -1,7 +1,14 @@
-function createNewGroup(groupSubmit) {
+var createNewGroup = function (groupSubmit) {
     "use strict";
 
-    var minSets = 0, maxSets = 0, name = "", round = 0, active = false, sendGroup = {}, groupForm = null, inputOK = false;
+    var minSets = 0,
+            maxSets = 0,
+            name = "",
+            round = 0,
+            active = false,
+            sendGroup = {},
+            groupForm = null,
+            inputOK = false;
 
     groupForm = $(groupSubmit).parent();
 
@@ -18,7 +25,7 @@ function createNewGroup(groupSubmit) {
 
     // rudimentary sanity check
     if (minSets && typeof minSets === "number" && minSets !== NaN &&
-            maxSets && typeof maxSets == "number" && maxSets !== NaN &&
+            maxSets && typeof maxSets === "number" && maxSets !== NaN &&
             round && typeof round === "number" && round !== NaN &&
             name && typeof name === "string" &&
             name.length > 0 &&
@@ -52,7 +59,7 @@ function createNewGroup(groupSubmit) {
 
                 // refresh
                 showGroups($("#show-groups"), $("#player-select-group"), $("#rule-source-group"), $("#rule-destination-group"));
-
+                window.scrollTo(0, 0);
             },
             statusCode: {
                 403: function () {
@@ -67,12 +74,17 @@ function createNewGroup(groupSubmit) {
             }
         });
     }
-}
+};
 
-function createNewPlayer(playerSubmit) {
+var createNewPlayer = function (playerSubmit) {
     "use strict";
 
-    var playerForm = null, playerName = "", sendPlayer = {}, groupOptionId = "", groupId = -1, inputOK = false;
+    var playerForm = null,
+            playerName = "",
+            sendPlayer = {},
+            groupOptionId = "",
+            groupId = -1,
+            inputOK = false;
 
     playerForm = $(playerSubmit).parent();
 
@@ -104,6 +116,7 @@ function createNewPlayer(playerSubmit) {
             success: function () {
                 showPlayers($("#show-players"));
                 clearForm($(playerSubmit).parent());
+                window.scrollTo(0, 0);
             },
             statusCode: {
                 403: function () {
@@ -115,12 +128,18 @@ function createNewPlayer(playerSubmit) {
             }
         });
     }
-}
+};
 
-function createNewRoundSwitchRule(ruleSubmit, rulesDiv) {
+var createNewRoundSwitchRule = function (ruleSubmit, rulesDiv) {
     "use strict";
 
-    var ruleForm = null, srcGroupId = 0, destGroupId = 0, startWithRank = 0, additionalPlayers = 0, inputOK = false, sendRule = {};
+    var ruleForm = null,
+            srcGroupId = 0,
+            destGroupId = 0,
+            startWithRank = 0,
+            additionalPlayers = 0,
+            inputOK = false,
+            sendRule = {};
 
     ruleForm = $(ruleSubmit).parent();
 
@@ -155,6 +174,7 @@ function createNewRoundSwitchRule(ruleSubmit, rulesDiv) {
                 success: function () {
                     clearForm(ruleSubmit);
                     showRules($(rulesDiv));
+                    window.scrollTo(0, 0);
                 },
                 statusCode: {
                     403: function () {
@@ -182,4 +202,4 @@ function createNewRoundSwitchRule(ruleSubmit, rulesDiv) {
             });
         }
     }
-}
+};

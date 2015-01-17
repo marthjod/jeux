@@ -15,155 +15,173 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script>
             $(document).ready(function () {
+                "use strict;"
                 getRESTApiStatus($("#rest-api-status"));
-                showGroups($("#show-groups"), $("#player-select-group"), $("#rule-source-group"), $("#rule-destination-group"));
-                showPlayers($("#show-players"));
-                showGames($("#show-unplayed-games"), "unplayed", true);
-                showGames($("#show-played-games"), "played", true);
-                showRules($("#show-rules"));
+                showGames($('#show-unplayed-games'), 'unplayed', true);
             });
         </script>
         <title>Jeux Administrative View</title>
     </head>
     <body>
         <div id="container" class="container">
-            <h1>Groups</h1>
-            <div id="show-groups">
-            </div>
-            <h2 class="btn btn-info" onclick="$('#create-groups').toggle();">New group</h2>
+            <h1 class="btn btn-default btn-lg" onclick="$('#show-groups').toggle();
+                    if ($('#show-groups').is(':visible')) {
+                        showGroups($('#show-groups'), $('#player-select-group'), $('#rule-source-group'), $('#rule-destination-group'));
+                    }">
+                Groups
+            </h1>
+            <br />
+            <h2 class="btn btn-info" onclick="$('#create-groups').toggle();">
+                New group
+            </h2>
+
             <div id="create-groups" hidden="hidden">
                 <form id="create-group" action="#" role="form">
                     <div class="form-group">
-                        <label for="name">Name</label>
-                        <input type="text"
-                               class="form-control"
-                               id="name"
-                               placeholder="Group name" />
+                        <label for="name">
+                            Name
+                        </label>
+                        <input type="text" class="form-control" id="name" placeholder="Group name" />
                     </div>
                     <div class="form-group">
-                        <label for="round">Round</label>
-                        <input id="round"
-                               class="form-control"
-                               placeholder="Round number"
-                               type="number"
-                               size="2"
-                               maxlength="2"
-                               min="1" />
+                        <label for="round">
+                            Round
+                        </label>
+                        <input id="round" class="form-control" placeholder="Round number" type="number" min="1" />
                     </div>
                     <div class="form group">
-                        <label for="min-sets">Minimum set(s) per game</label>
-                        <input id="min-sets"
-                               class="form-control"
-                               placeholder="Min sets"
-                               type="number"
-                               min="1" />
+                        <label for="min-sets">
+                            Minimum set(s) per game
+                        </label>
+                        <input id="min-sets" class="form-control" placeholder="Min sets" type="number" min="1" />
                     </div>
                     <div class="form group">
-                        <label for="max-sets">Maximum set(s) per game</label>
-                        <input id="max-sets"
-                               class="form-control"
-                               placeholder="Max sets"
-                               type="number"
-                               min="1" />
+                        <label for="max-sets">
+                            Maximum set(s) per game
+                        </label>
+                        <input id="max-sets" class="form-control" placeholder="Max sets" type="number" min="1" />
                     </div>
                     <div class="form group">
                         <label for="group-active">
-                            <input id="group-active"
-                                   type="checkbox" />
+                            <input id="group-active" type="checkbox" />
                             Active?
                         </label>
                     </div>
-                    <input id="submit-create-group"
-                           type="submit"
-                           value="Create group"
-                           onclick="createNewGroup(this);
-                                   $('#create-groups').toggle();"
-                           class="btn btn-success" />
+                    <input id="submit-create-group" type="submit" value="Create group" onclick="createNewGroup(this);
+                            $('#create-groups').toggle();" class="btn btn-success" />
                 </form>
             </div>
-            <h1>Players</h1>
-            <!-- <h2>Existing players</h2> -->
-            <div id="show-players">
+            <br />
+            <div id="show-groups" hidden="hidden">
             </div>
-            <h2 class="btn btn-info" onclick="$('#create-players').toggle();">New player</h2>
+            <br />
+            <h1 class="btn btn-default btn-lg" onclick="$('#show-players').toggle();
+                    if ($('#show-players').is(':visible')) {
+                        showPlayers($('#show-players'));
+                    }">
+                Players
+            </h1>
+            <br />
+            <h2 class="btn btn-info" onclick="$('#create-players').toggle();">
+                New player
+            </h2>
             <div id="create-players" hidden="hidden">
                 <form id="create-player" action="#" role="form">
                     <div class="form-group">
                         <label for="name">Name</label>
-                        <input id="name"
-                               type="text"
-                               class="form-control"
-                               placeholder="Player name" />
+                        <input id="name" type="text" class="form-control" placeholder="Player name" />
                     </div>
                     <div class="form-group">
-                        <label for="player-select-group">Group</label>
-                        <select id="player-select-group"
-                                class="form-control">
-                            <option id="no-group-selected">No group selected</option>
+                        <label for="player-select-group">
+                            Group
+                        </label>
+                        <select id="player-select-group" class="form-control">
+                            <option id="no-group-selected">
+                                No group selected
+                            </option>
                         </select>
                     </div>
-                    <input id="submit-create-player"
-                           type="submit"
-                           value="Create player"
-                           onclick="createNewPlayer(this);
-                                   $('#create-players').toggle();"
-                           class="btn btn-success" />
+                    <input id="submit-create-player" type="submit" value="Create player" onclick="createNewPlayer(this);
+                            $('#create-players').toggle();" class="btn btn-success" />
                 </form>
             </div>
-            <h1>Tournament (rules)</h1>
-            <div id="show-rules">
+            <br />
+            <div id="show-players" hidden="hidden">
             </div>
-            <h2 class="btn btn-info" onclick="$('#create-roundswitchrules').toggle();">New round-switch rule</h2>
+            <br />
+            <h1 class="btn btn-default btn-lg" onclick="$('#show-rules').toggle();
+                    if ($('#show-rules').is(':visible')) {
+                        showRules($('#show-rules'));
+                    }">
+                Tournament rules
+            </h1>
+            <br />
+            <h2 class="btn btn-info" onclick="$('#create-roundswitchrules').toggle();">
+                New round-switch rule
+            </h2>
+            <br />
             <div id="create-roundswitchrules" hidden="hidden">
                 <form id="create-roundswitchrule" action="#" role="form">
                     <div class="form-group">
-                        <label for="rule-source-group">Source group</label>
-                        <select id="rule-source-group"
-                                class="form-control">
-                            <option id="no-source-group-selected">No source group selected</option>
+                        <label for="rule-source-group">
+                            Source group
+                        </label>
+                        <select id="rule-source-group" class="form-control">
+                            <option id="no-source-group-selected">
+                                No source group selected
+                            </option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="rule-destination-group">Destination group</label>
-                        <select id="rule-destination-group"
-                                class="form-control">
-                            <option id="no-destination-group-selected">No destination group selected</option>
+                        <label for="rule-destination-group">
+                            Destination group
+                        </label>
+                        <select id="rule-destination-group" class="form-control">
+                            <option id="no-destination-group-selected">
+                                No destination group selected
+                            </option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="rule-start-rank">Start with rank</label>
-                        <input id="rule-start-rank"
-                               type="number"
-                               class="form-control"
-                               size="2"
-                               min="1" />
+                        <label for="rule-start-rank">
+                            Start with rank
+                        </label>
+                        <input id="rule-start-rank" type="number" class="form-control" min="1" />
                     </div>
                     <div class="form-group">
-                        <label for="rule-additional-players">Additional players</label>
-                        <input id="rule-additional-players"
-                               type="number"
-                               class="form-control"
-                               min="0" />
+                        <label for="rule-additional-players">
+                            Additional players
+                        </label>
+                        <input id="rule-additional-players" type="number" class="form-control" min="0" />
                     </div>
-                    <input id="submit-create-rule"
-                           type="submit"
-                           value="Create round-switch rule"
-                           onclick="createNewRoundSwitchRule(this, '#show-rules');
-                                   $('#create-roundswitchrules').toggle();"
-                           class="btn btn-success" /> 
+                    <input id="submit-create-rule" type="submit" value="Create round-switch rule" onclick="createNewRoundSwitchRule(this, '#show-rules');
+                            $('#create-roundswitchrules').toggle();" class="btn btn-success" />
                 </form>
             </div>
-            <h1>Games</h1>
-            <h2>Unplayed games</h2>
+            <br />
+            <div id="show-rules" hidden="hidden">
+            </div>
+            <br />
+            <h1 class="btn btn-default btn-lg" onclick="$('#show-unplayed-games').toggle();
+                    if ($('#show-unplayed-games').is(':visible')) {
+                        showGames($('#show-unplayed-games'), 'unplayed', true);
+                    }">
+                Unplayed games
+            </h1>
+            <br />
             <div id="show-unplayed-games">
             </div>
             <br />
-            <h2>Played games</h2>
-            <div id="show-played-games">
+            <h1 class="btn btn-default btn-lg" onclick="$('#show-played-games').toggle();
+                    if ($('#show-played-games').is(':visible')) {
+                        showGames($('#show-played-games'), 'played', true);
+                    }">
+                Played games
+            </h1>
+            <div id="show-played-games" hidden="hidden">
             </div>
             <br />
             <div id="rest-api-status">
-                REST API status unknown
             </div>
         </div>
     </body>
