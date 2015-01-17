@@ -6,66 +6,66 @@ function createNewGroup(groupSubmit) {
     groupForm = $(groupSubmit).parent();
 
     try {
-    	minSets = parseInt($(groupForm).find("#min-sets").val(), 10);
-    	maxSets = parseInt($(groupForm).find("#max-sets").val(), 10);
-    	round = parseInt($(groupForm).find("#round").val(), 10);
+        minSets = parseInt($(groupForm).find("#min-sets").val(), 10);
+        maxSets = parseInt($(groupForm).find("#max-sets").val(), 10);
+        round = parseInt($(groupForm).find("#round").val(), 10);
     } catch (e) {
         alert(e);
     }
-    
+
     name = $(groupForm).find("#name").val();
     active = $(groupForm).find("#group-active")[0].checked;
-    
+
     // rudimentary sanity check
     if (minSets && typeof minSets === "number" && minSets !== NaN &&
-    		maxSets && typeof maxSets == "number" && maxSets !== NaN &&
-    		round && typeof round === "number" && round !== NaN &&
-    		name && typeof name === "string" &&
-    		name.length > 0 &&
-    		typeof active !== undefined && active !== null && typeof active === "boolean" &&
-    		minSets <= maxSets) {
-    	inputOK = true;
+            maxSets && typeof maxSets == "number" && maxSets !== NaN &&
+            round && typeof round === "number" && round !== NaN &&
+            name && typeof name === "string" &&
+            name.length > 0 &&
+            typeof active !== undefined && active !== null && typeof active === "boolean" &&
+            minSets <= maxSets) {
+        inputOK = true;
     }
-    
+
     if (inputOK) {
-	    	
-	    sendGroup = {
-	        "minSets" : minSets,
-	        "maxSets" : maxSets,
-	        "name" : name,
-	        "roundId" : round,
-	        // newly-created cannot be completed
-	        "completed" : false,
-	        "active" : active
-	    };
-	
-	    // assumption: all input values present
-	    // see checkSubmitReady()
-	    $.ajax({
-	        url : "rest/admin/create-group",
-	        type : "PUT",
-	        data : JSON.stringify(sendGroup),
-	        contentType : "application/json",
-	        success : function() {
-	
-	            clearForm(groupForm);
-	
-	            // refresh
-	            showGroups($("#show-groups"), $("#player-select-group"), $("#rule-source-group"), $("#rule-destination-group"));
-	
-	        },
-	        statusCode : {
-	            403 : function() {
-	                alert("Operation not permitted (unauthenticated request).");
-	            },
-	            500 : function() {
-	                $(groupSubmit).attr("value", "Failed to create group!");
-	            },
-	            400 : function() {
-	                alert("Bad request (wrong data format?).");
-	            }
-	        }
-	    });
+
+        sendGroup = {
+            "minSets": minSets,
+            "maxSets": maxSets,
+            "name": name,
+            "roundId": round,
+            // newly-created cannot be completed
+            "completed": false,
+            "active": active
+        };
+
+        // assumption: all input values present
+        // see checkSubmitReady()
+        $.ajax({
+            url: "rest/admin/create-group",
+            type: "PUT",
+            data: JSON.stringify(sendGroup),
+            contentType: "application/json",
+            success: function () {
+
+                clearForm(groupForm);
+
+                // refresh
+                showGroups($("#show-groups"), $("#player-select-group"), $("#rule-source-group"), $("#rule-destination-group"));
+
+            },
+            statusCode: {
+                403: function () {
+                    alert("Operation not permitted (unauthenticated request).");
+                },
+                500: function () {
+                    $(groupSubmit).attr("value", "Failed to create group!");
+                },
+                400: function () {
+                    alert("Bad request (wrong data format?).");
+                }
+            }
+        });
     }
 }
 
@@ -92,24 +92,24 @@ function createNewPlayer(playerSubmit) {
 
     if (inputOK) {
         sendPlayer = {
-            "name" : playerName,
-            "groupId" : groupId
+            "name": playerName,
+            "groupId": groupId
         };
 
         $.ajax({
-            url : "rest/admin/create-player",
-            type : "PUT",
-            data : JSON.stringify(sendPlayer),
-            contentType : "application/json",
-            success : function() {
+            url: "rest/admin/create-player",
+            type: "PUT",
+            data: JSON.stringify(sendPlayer),
+            contentType: "application/json",
+            success: function () {
                 showPlayers($("#show-players"));
                 clearForm($(playerSubmit).parent());
             },
-            statusCode : {
-                403 : function() {
+            statusCode: {
+                403: function () {
                     alert("Operation not permitted (unauthenticated request).");
                 },
-                500 : function() {
+                500: function () {
                     $(playerSubmit).attr("value", "Failed to create player");
                 }
             }
@@ -141,41 +141,41 @@ function createNewRoundSwitchRule(ruleSubmit, rulesDiv) {
 
         if (inputOK) {
             sendRule = {
-                "srcGroupId" : srcGroupId,
-                "destGroupId" : destGroupId,
-                "startWithRank" : startWithRank,
-                "additionalPlayers" : additionalPlayers
+                "srcGroupId": srcGroupId,
+                "destGroupId": destGroupId,
+                "startWithRank": startWithRank,
+                "additionalPlayers": additionalPlayers
             };
 
             $.ajax({
-                url : "rest/admin/create-roundswitchrule",
-                type : "PUT",
-                data : JSON.stringify(sendRule),
-                contentType : "application/json",
-                success : function() {
+                url: "rest/admin/create-roundswitchrule",
+                type: "PUT",
+                data: JSON.stringify(sendRule),
+                contentType: "application/json",
+                success: function () {
                     clearForm(ruleSubmit);
                     showRules($(rulesDiv));
                 },
-                statusCode : {
-                    403 : function() {
+                statusCode: {
+                    403: function () {
                         alert("Operation not permitted (unauthenticated request).");
                     },
-                    406 : function() {
+                    406: function () {
                         alert("Rank too low: must start at least at rank 1.");
                     },
-                    409 : function() {
+                    409: function () {
                         alert("Source group must not equal destination group.");
                     },
-                    412 : function() {
+                    412: function () {
                         alert("Source and/or destination group do(es) not exist.");
                     },
-                    413 : function() {
+                    413: function () {
                         alert("Too many players to be moved from source group.");
                     },
-                    416 : function() {
+                    416: function () {
                         alert("A rank exceeds the group's size.");
                     },
-                    500 : function() {
+                    500: function () {
                         alert("Failed to create round-switch rule (unknown error).");
                     }
                 }

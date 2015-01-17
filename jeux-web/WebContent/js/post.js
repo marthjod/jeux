@@ -17,10 +17,10 @@ function updateGame(updateSubmit, gameId, player1Id, player2Id, action) {
     }
 
     updatedGame = {
-        "id" : gameId,
-        "player1Id" : player1Id,
-        "player2Id" : player2Id,
-        "sets" : []
+        "id": gameId,
+        "player1Id": player1Id,
+        "player2Id": player2Id,
+        "sets": []
     };
 
     // input > td > tr > tbody > table
@@ -41,10 +41,10 @@ function updateGame(updateSubmit, gameId, player1Id, player2Id, action) {
             if (inputOK) {
                 inputOK = false;
                 set = {
-                    "id" : gameSetId,
-                    "gameId" : gameId,
-                    "player1Score" : player1Score,
-                    "player2Score" : player2Score
+                    "id": gameSetId,
+                    "gameId": gameId,
+                    "player1Score": player1Score,
+                    "player2Score": player2Score
                 };
 
                 // add to array
@@ -54,11 +54,11 @@ function updateGame(updateSubmit, gameId, player1Id, player2Id, action) {
     }
 
     $.ajax({
-        url : "rest/admin/update-game",
-        type : "POST",
-        data : JSON.stringify(updatedGame),
-        contentType : "application/json",
-        success : function() {
+        url: "rest/admin/update-game",
+        type: "POST",
+        data: JSON.stringify(updatedGame),
+        contentType: "application/json",
+        success: function () {
             $(updateSubmit).attr("value", "Update game").removeAttr("disabled");
             showGames($("#show-unplayed-games"), "unplayed", true);
             showGames($("#show-played-games"), "played", true);
@@ -66,11 +66,11 @@ function updateGame(updateSubmit, gameId, player1Id, player2Id, action) {
             // completed/inactive
             showGroups($("#show-groups"));
         },
-        statusCode : {
-            403 : function() {
+        statusCode: {
+            403: function () {
                 alert("Operation not permitted (unauthenticated request).");
             },
-            500 : function() {
+            500: function () {
                 alert("Failed to update game");
             }
         }
@@ -90,25 +90,25 @@ function generateGames(generateButton, groupId, shuffledMode) {
 
     $.ajax({
         // access with @MatrixParam
-        url : "rest/admin/generate-games/group/id/" + groupId + ";shuffledMode=" + shuffledMode.toString(),
-        type : "POST",
-        statusCode : {
-            201 : function() {
+        url: "rest/admin/generate-games/group/id/" + groupId + ";shuffledMode=" + shuffledMode.toString(),
+        type: "POST",
+        statusCode: {
+            201: function () {
                 $(generateButton).remove();
                 showGames($("#show-unplayed-games"), "unplayed", true);
             },
-            409 : function() {
+            409: function () {
                 alert("Conflict: one or more game(s) already exist(s) in this group.");
                 // disable button
                 $(generateButton).remove();
             },
-            500 : function() {
+            500: function () {
                 alert("Unknown error.");
             },
-            501 : function() {
+            501: function () {
                 alert("Error during game calculation.");
             },
-            428 : function() {
+            428: function () {
                 alert("Cannot calculate games: Too few group members.");
                 $(generateButton).removeAttr("disabled").attr("value", "Generate games");
             }

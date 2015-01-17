@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
         <link rel='stylesheet' type='text/css' href='http://fonts.googleapis.com/css?family=Fira+Sans'>
         <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
         <link rel="stylesheet" type="text/css" href="css/jeux.css">
@@ -12,43 +12,45 @@
         <script type="text/javascript" src="js/delete.js"></script>
         <script type="text/javascript" src="js/input.js"></script>
         <!--  mobile first -->
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script>
-            $( document ).ready(function() {
-             getRESTApiStatus($( "#rest-api-status" ));
-             showGames($("#show-played-games"), "played", false);
-             showRankings($("#show-rankings"));
+            $(document).ready(function () {
+                getRESTApiStatus($("#rest-api-status"));
+                showGames($("#show-played-games"), "played", false);
+                showRankings($("#show-rankings"));
             });
         </script>
-        <title>JEUX</title>
+        <title>Jeux</title>
     </head>
     <body>
         <div class="container" id="container">
 
             <h1>Rankings</h1>
-            <!-- <h2>Current rankings</h2> -->
             <div id="show-rankings">
             </div>
 
-	        <h1>Games</h1>
-	        <div class="btn btn-info"
-	            onclick="$('#show-played-games').toggle(); if (this.innerHTML === 'Hide') {this.innerHTML = 'Show';} else {this.innerHTML = 'Hide';}">
-	            Show
-	        </div>
-	        <br />
-	        <!-- <h2>Played games</h2> -->
-	        <div id="show-played-games" hidden="hidden">
-	        </div>
-	        
+            <h1>Games</h1>
+            <div class="btn btn-info"
+                 onclick="$('#show-played-games').toggle();
+                         if (this.innerHTML === 'Hide') {
+                             this.innerHTML = 'Show';
+                         } else {
+                             this.innerHTML = 'Hide';
+                         }">
+                Show
+            </div>
+            <br />
+            <div id="show-played-games" hidden="hidden">
+            </div>
+
             <br />
             <div id="admin-login">
-                <!-- DIGEST auth by web server -->
                 <a href="login" target="_blank"><button class="btn btn-warning">Go to administrative view</button></a>
             </div>
             <br />
-	        <div id="rest-api-status">
-	            ReST API status unknown
-	        </div>
+            <div id="rest-api-status">
+                REST API status unknown
+            </div>
         </div>
     </body>
 </html>

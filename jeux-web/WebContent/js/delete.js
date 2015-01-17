@@ -1,4 +1,4 @@
-var deleteGroup = function(groupId, deleteButton) {
+var deleteGroup = function (groupId, deleteButton) {
     "use strict";
 
     if (!window.confirm("Really delete group?")) {
@@ -10,9 +10,9 @@ var deleteGroup = function(groupId, deleteButton) {
     }
 
     $.ajax({
-        url : "rest/admin/group/id/" + groupId,
-        type : "DELETE",
-        success : function() {
+        url: "rest/admin/group/id/" + groupId,
+        type: "DELETE",
+        success: function () {
             // alert("Group deleted");
 
             // remove as selectable option
@@ -28,14 +28,14 @@ var deleteGroup = function(groupId, deleteButton) {
             showRules($("#show-rules"));
         },
         // errors
-        statusCode : {
-            409 : function() {
+        statusCode: {
+            409: function () {
                 alert("Conflict trying to delete group (violated constraint).");
             },
-            403 : function() {
+            403: function () {
                 alert("Operation not permitted (unauthenticated request).");
             },
-            500 : function() {
+            500: function () {
                 alert("Server error while trying to delete group.");
             }
         }
@@ -43,42 +43,42 @@ var deleteGroup = function(groupId, deleteButton) {
 
 };
 
-var deletePlayer = function(playerId) {
+var deletePlayer = function (playerId) {
     "use strict";
 
     $.ajax({
-        url : "rest/admin/player/id/" + playerId,
-        type : "DELETE",
-        success : function() {
+        url: "rest/admin/player/id/" + playerId,
+        type: "DELETE",
+        success: function () {
             showPlayers($("#show-players"));
             // refresh because player deletion cascades for his games, too
             showGames($("#show-unplayed-games"), "unplayed", true);
         },
-        statusCode : {
-            403 : function() {
+        statusCode: {
+            403: function () {
                 alert("Operation not permitted (unauthenticated request).");
             },
-            500 : function() {
+            500: function () {
                 alert("Server error while trying to delete player.");
             }
         }
     });
 };
 
-var deleteRule = function(ruleId, deleteButton) {
+var deleteRule = function (ruleId, deleteButton) {
     "use strict";
 
     $.ajax({
-        url : "rest/admin/roundswitchrule/id/" + ruleId,
-        type : "DELETE",
-        success : function() {
+        url: "rest/admin/roundswitchrule/id/" + ruleId,
+        type: "DELETE",
+        success: function () {
             showRules($("#show-rules"));
         },
-        statusCode : {
-            403 : function() {
+        statusCode: {
+            403: function () {
                 alert("Operation not permitted (unauthenticated request).");
             },
-            500 : function() {
+            500: function () {
                 alert("Server error while trying to delete rule.");
             }
         }

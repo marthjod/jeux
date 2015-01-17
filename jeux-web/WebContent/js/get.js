@@ -1,17 +1,17 @@
-var getRESTApiStatus = function(statusDiv) {
+var getRESTApiStatus = function (statusDiv) {
     "use strict";
 
-    $.get("rest/audience/status", function(data) {
-        $(statusDiv).html("ReST API status " + data);
+    $.get("rest/audience/status", function (data) {
+        $(statusDiv).html("REST API status " + data);
     });
 };
 
-var showGroups = function(showGroupsDiv, playerGroupSelect, ruleSrcGroupSelect, ruleDestGroupSelect) {
+var showGroups = function (showGroupsDiv, playerGroupSelect, ruleSrcGroupSelect, ruleDestGroupSelect) {
     "use strict";
 
     var i = 0, table = null, currentGroup = null, row = null, gameGenerationCell = null, shuffledGamesDefaultCell = null, shuffledGamesLaTeXCell = null, deletionCell = null, playerGroupSelectOK = false, ruleGroupSelectsOK = false, gameGenerationCell = null;
 
-    $.get("rest/audience/groups", function(data) {
+    $.get("rest/audience/groups", function (data) {
 
         if (playerGroupSelect && playerGroupSelect !== null) {
             playerGroupSelectOK = true;
@@ -90,17 +90,17 @@ var showGroups = function(showGroupsDiv, playerGroupSelect, ruleSrcGroupSelect, 
     });
 };
 
-var showGames = function(showGamesDiv, status, editable) {
+var showGames = function (showGamesDiv, status, editable) {
     "use strict";
 
     var urlPrefixes = {
-        "played" : "rest/audience/games/played/group/id/",
-        "unplayed" : "rest/audience/games/unplayed/group/id/"
+        "played": "rest/audience/games/played/group/id/",
+        "unplayed": "rest/audience/games/unplayed/group/id/"
     }, k = 0, groupDiv = null;
 
     $(showGamesDiv).empty();
 
-    $.get("rest/audience/groups", function(groupsData) {
+    $.get("rest/audience/groups", function (groupsData) {
         if (groupsData && typeof groupsData === "object" && groupsData.hasOwnProperty("length") && groupsData.length > 0) {
 
             // iterate thru groups
@@ -109,9 +109,9 @@ var showGames = function(showGamesDiv, status, editable) {
 
                 // iterate thru individual group's data
 
-                (function(group, status) {
+                (function (group, status) {
 
-                    $.get(urlPrefixes[status] + group.id, function(gamesData) {
+                    $.get(urlPrefixes[status] + group.id, function (gamesData) {
                         groupDiv = $("<div>").attr("class", "games-in-group").attr("id", group.name);
                         $("<h3>").html(group.name).appendTo(groupDiv);
                         showGamesData(gamesData, groupDiv, status, editable);
@@ -126,7 +126,7 @@ var showGames = function(showGamesDiv, status, editable) {
 
 };
 
-var showGamesData = function(gamesData, groupDiv, status, editable) {
+var showGamesData = function (gamesData, groupDiv, status, editable) {
     "use strict";
 
     var i = 0, j = 0, k = 0, gameTable = null, player1Header = null, player2Header = null, setNumberHeader = null, setsTable = null, setsCell = null, row = null, updateCell = null, updateButton = null, sets = [];
@@ -168,7 +168,7 @@ var showGamesData = function(gamesData, groupDiv, status, editable) {
 
                 sets = gamesData[i].sets;
                 // make array.sort() work with numbers
-                sets.sort(function(a, b) {
+                sets.sort(function (a, b) {
                     return a.number - b.number;
                 });
 
@@ -213,7 +213,7 @@ var showGamesData = function(gamesData, groupDiv, status, editable) {
     }
 };
 
-var showPlayers = function(showPlayersDiv) {
+var showPlayers = function (showPlayersDiv) {
     "use strict";
 
     var i = 0, k = 0, table = null, row = null, deletionCell = null, groupPlayersDiv = null;
@@ -222,12 +222,12 @@ var showPlayers = function(showPlayersDiv) {
 
     // first, get all groups
 
-    $.get("rest/audience/groups", function(groupsData) {
+    $.get("rest/audience/groups", function (groupsData) {
         if (typeof groupsData !== undefined && groupsData !== null && typeof groupsData === "object" && groupsData.hasOwnProperty("length") && groupsData.length !== 0) {
 
             for (k = 0; k < groupsData.length; k++) {
-                (function(group) {
-                    $.get("rest/audience/players/group/id/" + group.id, function(playersData) {
+                (function (group) {
+                    $.get("rest/audience/players/group/id/" + group.id, function (playersData) {
                         if (typeof playersData !== undefined && playersData !== null && typeof playersData === "object" && playersData.hasOwnProperty("length") && playersData.length > 0) {
 
                             groupPlayersDiv = $("<div>").attr("class", "group-players");
@@ -265,7 +265,7 @@ var showPlayers = function(showPlayersDiv) {
     });
 };
 
-var rankSorter = function(firstPlayer, secondPlayer) {
+var rankSorter = function (firstPlayer, secondPlayer) {
     "use strict";
 
     var retval = 0;
@@ -288,7 +288,7 @@ var rankSorter = function(firstPlayer, secondPlayer) {
     return retval;
 };
 
-var showRankings = function(rankingsDiv) {
+var showRankings = function (rankingsDiv) {
     "use strict";
 
     var i = 0, k = 0, table = null, row = null;
@@ -297,17 +297,17 @@ var showRankings = function(rankingsDiv) {
 
     // first, get all groups
 
-    $.get("rest/audience/groups", function(groupsData) {
+    $.get("rest/audience/groups", function (groupsData) {
         if (groupsData && typeof groupsData === "object" && groupsData.hasOwnProperty("length") && groupsData.length > 0) {
 
             // next, iterate thru groups
 
             for (k = 0; k < groupsData.length; k++) {
-                (function(group) {
+                (function (group) {
 
                     // for each group, fetch its rankings data
 
-                    $.get("rest/audience/rankings/group/id/" + group.id, function(rankingsData) {
+                    $.get("rest/audience/rankings/group/id/" + group.id, function (rankingsData) {
                         if (typeof rankingsData !== undefined && rankingsData !== null && typeof rankingsData === "object" && rankingsData.hasOwnProperty("length") && rankingsData.length > 0) {
 
                             $("<h3>").html(group.name).appendTo(rankingsDiv);
@@ -343,7 +343,7 @@ var showRankings = function(rankingsDiv) {
     });
 };
 
-var showRules = function(showRulesDiv) {
+var showRules = function (showRulesDiv) {
     "use strict";
 
     var i = 0, table = null, row = null, startWithRank = 0, additionalPlayers = 0, lastRank = 0, ruleId = 0, deletionCell = null;
@@ -351,7 +351,7 @@ var showRules = function(showRulesDiv) {
     if (showRulesDiv && showRulesDiv != null) {
         $(showRulesDiv).empty();
 
-        $.get("rest/audience/roundswitchrules", function(rulesData) {
+        $.get("rest/audience/roundswitchrules", function (rulesData) {
             if (rulesData && typeof rulesData === "object" && rulesData.hasOwnProperty("length") && rulesData.length > 0) {
 
                 table = $("<table>").attr("class", "table table-hover table-bordered table-condensed");
@@ -391,7 +391,7 @@ var showRules = function(showRulesDiv) {
     }
 };
 
-var getShuffledGames = function(groupId, format) {
+var getShuffledGames = function (groupId, format) {
     "use strict";
 
     var url = "rest/admin/shuffled-games/group/id/" + groupId;
