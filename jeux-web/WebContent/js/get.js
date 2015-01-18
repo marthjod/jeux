@@ -418,11 +418,11 @@ var showRules = function (showRulesDiv) {
                             .append($("<td>").html(rule.destGroupName))
                             .append($("<td>").html(startWithRank + "-" + lastRank))
                             .append($("<td>").html(additionalPlayers + 1))
-                            .append($("<input>")
+                            .append($("<td>").append($("<input>")
                                     .attr("type", "submit")
                                     .attr("class", "btn btn-danger")
                                     .attr("value", "Delete rule")
-                                    .attr("onclick", "deleteRule(" + rule.id + ", this);")));
+                                    .attr("onclick", "deleteRule(" + rule.id + ", this);"))));
                 });
                 showRulesDiv.append(table);
             }
