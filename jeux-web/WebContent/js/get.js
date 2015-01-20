@@ -122,8 +122,6 @@ var showGames = function (showGamesDiv, status, editable) {
     $.get("rest/audience/groups", function (groupsData) {
         if ($.isArray(groupsData) && groupsData.length > 0) {
 
-            // TODO this does not guarantee array order == display order, however!
-            groupsData = sortGroupsByName(groupsData);
             $.each(groupsData, function (id, group) {
 
                 (function (group, status, editable) {
@@ -309,85 +307,47 @@ var showPlayers = function (showPlayersDiv) {
         }
     });
 };
-var rankSorter = function (firstPlayer, secondPlayer) {
+
+
+
+var getRankings = function (callback) {
     "use strict";
-    var retval = 0;
-    /*
-     * If the return value is less than zero, the index of a is before b, and if
-     * it is greater than zero it's vice-versa. If the return value is zero, the
-     * elements' index is equal.
-     */
 
-    if (firstPlayer && secondPlayer && firstPlayer.hasOwnProperty("rank") && secondPlayer.hasOwnProperty("rank")) {
-        // smaller = better
-        if (firstPlayer.rank < secondPlayer.rank) {
-            retval = -1;
-        } else if (firstPlayer.rank > secondPlayer.rank) {
-            retval = 1;
-        }
-    }
-
-    return retval;
-};
-var showRankings = function (rankingsDiv) {
-    "use strict";
-    var i = 0,
-            table = null,
-            row = null;
-
-    $(rankingsDiv).empty();
+    var rankings = [];
 
     $.get("rest/audience/groups", function (groupsData) {
         if ($.isArray(groupsData) && groupsData.length > 0) {
-
             $.each(groupsData, function (id, group) {
-                (function (group) {
-
-                    // for each group, fetch its rankings data
-
-                    $.get("rest/audience/rankings/group/id/" + group.id, function (rankingsData) {
-                        if ($.isArray(rankingsData) && rankingsData.length > 0) {
-
-                            rankingsDiv.append($("<h3>").html(group.name)).append("<br>");
-
-                            table = $("<table>").attr("class", "table table-hover table-bordered table-condensed");
-                            row = $("<tr>");
-                            row.append($("<th>").html("Rank"))
-                                    .append($("<th>").html("Name"))
-                                    .append($("<th>").html("Won games"))
-                                    .append($("<th>").html("Points"))
-                                    .append($("<th>").html("Score ratio"));
-                            table.append(row);
-
-                            rankingsData.sort(rankSorter);
-                            // rankings...
-                            $.each(rankingsData, function (id, ranking) {
-                                row = $("<tr>").attr("id", "player-id-" + ranking.id);
-                                row.append($("<td>")
-                                        .attr("class", "player-rank")
-                                        .html(ranking.rank))
-                                        .append($("<td>")
-                                                .attr("class", "player-name")
-                                                .html(ranking.name))
-                                        .append($("<td>")
-                                                .attr("class", "player-won-games")
-                                                .html(ranking.wonGames))
-                                        .append($("<td>")
-                                                .attr("class", "player-points")
-                                                .html(ranking.points))
-                                        .append($("<td>")
-                                                .attr("class", "player-score-ratio")
-                                                .html(ranking.scoreRatio));
-                                table.append(row);
-                            });
-
-                            rankingsDiv.append(table);
-                        }
+                $.get("rest/audience/rankings/group/id/" + group.id, function (rankingsData) {
+                    rankings.push({
+                        "groupName": group.name,
+                        "rankings": rankingsData
                     });
-                }(group));
+                    // hacky
+                    if (rankings.length === groupsData.length) {
+                        if (callback && typeof callback === 'function') {
+                            callback(rankings);
+                        }
+                    }
+                });
             });
         }
     });
+};
+
+// fetch rankings data, sort it, and display
+var showRankings = function (rankingsDiv) {
+    "use strict";
+
+    getRankings(function (rankings) {
+        rankings = sortArrayByKeyName(rankings, "groupName");
+        $(rankingsDiv).empty();
+        $.each(rankings, function (id, ranking) {
+            rankingsDiv.append($("<h3>").html(ranking.groupName));
+            rankingsDiv.append(buildRankingsTable(ranking.rankings));
+        });
+    });
+
 };
 var showRules = function (showRulesDiv) {
     "use strict";
@@ -438,26 +398,28 @@ var getShuffledGames = function (groupId, format) {
 
     window.open(url);
 };
-var sortGroupsByName = function (groups) {
-    "use strict;"
+var sortArrayByKeyName = function (array, name) {
+    "use strict";
 
-    if ($.isArray(groups)) {
-        groups.sort(function (a, b) {
-            if (a.name < b.name) {
-                return -1;
-            } else if (a.name > b.name) {
-                return 1;
-            } else {
-                return 0;
+    if ($.isArray(array)) {
+        array.sort(function (a, b) {
+            var retval = 0;
+
+            if (a[name] < b[name]) {
+                retval = -1;
+            } else if (a[name] > b[name]) {
+                retval = 1;
             }
+
+            return retval;
         });
     }
 
     // unaltered if no array
-    return groups;
+    return array;
 };
 var sortGamesByTime = function (games) {
-    "use strict;"
+    "use strict";
 
     if ($.isArray(games) && games.length > 0) {
         // TODO
@@ -465,4 +427,25 @@ var sortGamesByTime = function (games) {
 
     // unaltered if no array
     return games;
+};
+
+var rankSorter = function (firstPlayer, secondPlayer) {
+    "use strict";
+    var retval = 0;
+    /*
+     * If the return value is less than zero, the index of a is before b, and if
+     * it is greater than zero it's vice-versa. If the return value is zero, the
+     * elements' index is equal.
+     */
+
+    if (firstPlayer && secondPlayer && firstPlayer.hasOwnProperty("rank") && secondPlayer.hasOwnProperty("rank")) {
+        // smaller = better
+        if (firstPlayer.rank < secondPlayer.rank) {
+            retval = -1;
+        } else if (firstPlayer.rank > secondPlayer.rank) {
+            retval = 1;
+        }
+    }
+
+    return retval;
 };
