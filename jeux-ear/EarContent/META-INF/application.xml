@@ -6,7 +6,7 @@
   </module>
   <module>
     <web>
-      <web-uri>jeux-web-0.0.2-SNAPSHOT.war</web-uri>
+      <web-uri>jeux-web-0.0.3-SNAPSHOT.war</web-uri>
       <context-root>JeuxWeb</context-root>
     </web>
   </module>
