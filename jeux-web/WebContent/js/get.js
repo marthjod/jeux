@@ -8,6 +8,96 @@ var getRESTApiStatus = function (statusDiv) {
         }
     });
 };
+
+
+var getRankings = function (callback) {
+    "use strict";
+
+    var rankings = [];
+
+    $.get("rest/audience/groups", function (groupsData) {
+        if ($.isArray(groupsData) && groupsData.length > 0) {
+            $.each(groupsData, function (id, group) {
+                $.get("rest/audience/rankings/group/id/" + group.id, function (rankingsData) {
+                    rankings.push({
+                        "groupName": group.name,
+                        "rankings": rankingsData
+                    });
+                    // hacky
+                    if (rankings.length === groupsData.length) {
+                        if (callback && typeof callback === 'function') {
+                            callback(rankings);
+                        }
+                    }
+                });
+            });
+        }
+    });
+};
+
+var getGames = function (status, editable, callback) {
+    "use strict";
+
+    var games = [],
+            urlPrefixes = {
+                "played": "rest/audience/games/played/group/id/",
+                "unplayed": "rest/audience/games/unplayed/group/id/"
+            };
+
+    $.get("rest/audience/groups", function (groupsData) {
+        if ($.isArray(groupsData) && groupsData.length > 0) {
+            $.each(groupsData, function (id, group) {
+                $.get(urlPrefixes[status] + group.id, function (gamesData) {
+                    games.push({
+                        "groupName": group.name,
+                        "games": gamesData
+                    });
+                    // hacky
+                    if (games.length === groupsData.length) {
+                        if (callback && typeof callback === 'function') {
+                            callback(games);
+                        }
+                    }
+                });
+            });
+        }
+    });
+};
+
+// fetch rankings data, sort it, and display
+var showRankings = function (rankingsDiv) {
+    "use strict";
+
+    getRankings(function (rankings) {
+        rankings = sortArrayByKeyName(rankings, "groupName");
+        rankingsDiv.empty();
+        $.each(rankings, function (id, ranking) {
+            rankingsDiv
+                    .append($("<h3>").html(ranking.groupName))
+                    .append(buildRankingsTable(ranking.rankings));
+        });
+    });
+
+};
+
+
+var showGames = function (gamesDiv, status, editable) {
+    "use strict";
+
+    gamesDiv.removeAttr("hidden");
+
+    getGames(status, editable, function (games) {
+        games = sortArrayByKeyName(games, "groupName");
+        gamesDiv.empty();
+        $.each(games, function (id, game) {
+            gamesDiv.append($("<h3>").html(game.groupName));
+            $.each(buildGamesTables(game.games, status, editable), function (id, table) {
+                gamesDiv.append(table);
+            });
+        });
+    });
+};
+
 var showGroups = function (showGroupsDiv, playerGroupSelect, ruleSrcGroupSelect, ruleDestGroupSelect) {
     "use strict";
     var table = null,
@@ -111,136 +201,10 @@ var showGroups = function (showGroupsDiv, playerGroupSelect, ruleSrcGroupSelect,
         }
     });
 };
-var showGames = function (showGamesDiv, status, editable) {
-    "use strict";
-    var urlPrefixes = {
-        "played": "rest/audience/games/played/group/id/",
-        "unplayed": "rest/audience/games/unplayed/group/id/"
-    },
-    groupDiv = null;
-    $(showGamesDiv).empty();
-    $.get("rest/audience/groups", function (groupsData) {
-        if ($.isArray(groupsData) && groupsData.length > 0) {
 
-            $.each(groupsData, function (id, group) {
 
-                (function (group, status, editable) {
 
-                    $.get(urlPrefixes[status] + group.id, function (gamesData) {
-                        // only show if games available
-                        if ($.isArray(gamesData) && gamesData.length > 0) {
-                            groupDiv = $("<div>").attr("class", "games-in-group").attr("id", group.name);
-                            groupDiv.append($("<h3>").html(group.name));
-                            showGamesDiv.append($(groupDiv));
-                            showGamesData(gamesData, groupDiv, status, editable);
-                        }
-                    });
-                }(group, status, editable));
-            });
-        }
-    });
-};
-var showGamesData = function (gamesData, groupDiv, status, editable) {
-    "use strict";
 
-    var gameTable = null,
-            row = null,
-            updateButton = null,
-            player1Out = null,
-            player2Out = null;
-
-    if ($.isArray(gamesData) && gamesData.length > 0) {
-
-        $.each(gamesData, function (id, game) {
-
-            if ($.isArray(game.sets) && game.sets.length > 0) {
-
-                // overall game info (1 row)
-
-                gameTable = $("<table>").attr("class", "table table-bordered table-condensed");
-                row = $("<tr>").attr("id", "game-id-" + game.id);
-                row.append($("<th>").html("Set #"));
-
-                // mark winner
-                player1Out = game.player1Name;
-                player2Out = game.player2Name;
-                if (game.winnerId === game.player1Id) {
-                    player1Out = $("<em>").html(game.player1Name + " *");
-                }
-                else if (game.winnerId === game.player2Id) {
-                    player2Out = $("<em>").html(game.player2Name + " * ");
-                }
-
-                row.append($("<th>")
-                        .attr("class", "player1")
-                        .attr("id", "player-id-" + game.player1Id)
-                        .html(player1Out));
-                row.append($("<th>")
-                        .attr("class", "player2")
-                        .attr("id", "player-id-" + game.player2Id)
-                        .html(player2Out));
-                gameTable.append(row);
-                // more detailed game sets info (1-n row(s))
-
-                game.sets.sort(function (a, b) {
-                    return a.number - b.number;
-                });
-
-                $.each(game.sets, function (id, set) {
-
-                    row = $("<tr>").attr("id", "gameset-id-" + set.id);
-                    if (typeof editable === "boolean" && editable === true) {
-
-                        row.append($("<td>").html(set.number));
-                        row.append($("<td>").attr("class", "player1-score")
-                                .append($("<input>")
-                                        .attr("type", "number")
-                                        .attr("class", "form-control")
-                                        .attr("min", "0")
-                                        .val(set.player1Score)));
-                        row.append($("<td>").attr("class", "player2-score")
-                                .append($("<input>")
-                                        .attr("type", "number")
-                                        .attr("class", "form-control")
-                                        .attr("min", "0")
-                                        .val(set.player2Score)));
-                    } else {
-                        if (status === "played" && !(set.player1Score === 0 &&
-                                set.player2Score === 0)) {
-                            row.append($("<td>")
-                                    .html(set.number));
-                            row.append($("<td>").attr("class", "player1-score")
-                                    .html(set.player1Score));
-                            row.append($("<td>").attr("class", "player2-score")
-                                    .html(set.player2Score));
-                        }
-                    }
-                    gameTable.append(row);
-                });
-                // append save/update button
-                if (typeof editable === "boolean" && editable === true &&
-                        (status === "played" || status === "unplayed")) {
-
-                    updateButton = $("<input>").attr("type", "submit");
-                    if (status === "played") {
-                        updateButton
-                                .attr("value", "Update game")
-                                .attr("class", "btn btn-warning update-game")
-                                .attr("onclick", "updateGame(this," + game.id + "," + game.player1Id + "," + game.player2Id + ", \"update\");");
-                    } else {
-                        updateButton
-                                .attr("value", "Save game")
-                                .attr("class", "btn btn-primary update-game")
-                                .attr("onclick", "updateGame(this," + game.id + "," + game.player1Id + "," + game.player2Id + ", \"save\");");
-                    }
-                    gameTable.append($("<tr>").append(updateButton));
-                }
-
-                groupDiv.append(gameTable);
-            }
-        });
-    }
-};
 
 var showPlayers = function (showPlayersDiv) {
     "use strict";
@@ -310,45 +274,8 @@ var showPlayers = function (showPlayersDiv) {
 
 
 
-var getRankings = function (callback) {
-    "use strict";
 
-    var rankings = [];
 
-    $.get("rest/audience/groups", function (groupsData) {
-        if ($.isArray(groupsData) && groupsData.length > 0) {
-            $.each(groupsData, function (id, group) {
-                $.get("rest/audience/rankings/group/id/" + group.id, function (rankingsData) {
-                    rankings.push({
-                        "groupName": group.name,
-                        "rankings": rankingsData
-                    });
-                    // hacky
-                    if (rankings.length === groupsData.length) {
-                        if (callback && typeof callback === 'function') {
-                            callback(rankings);
-                        }
-                    }
-                });
-            });
-        }
-    });
-};
-
-// fetch rankings data, sort it, and display
-var showRankings = function (rankingsDiv) {
-    "use strict";
-
-    getRankings(function (rankings) {
-        rankings = sortArrayByKeyName(rankings, "groupName");
-        $(rankingsDiv).empty();
-        $.each(rankings, function (id, ranking) {
-            rankingsDiv.append($("<h3>").html(ranking.groupName));
-            rankingsDiv.append(buildRankingsTable(ranking.rankings));
-        });
-    });
-
-};
 var showRules = function (showRulesDiv) {
     "use strict";
     var table = null,
@@ -389,6 +316,7 @@ var showRules = function (showRulesDiv) {
         });
     }
 };
+
 var getShuffledGames = function (groupId, format) {
     "use strict";
     var url = "rest/admin/shuffled-games/group/id/" + groupId;
@@ -398,6 +326,7 @@ var getShuffledGames = function (groupId, format) {
 
     window.open(url);
 };
+
 var sortArrayByKeyName = function (array, name) {
     "use strict";
 
