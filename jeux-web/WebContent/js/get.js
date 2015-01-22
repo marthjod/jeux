@@ -335,10 +335,13 @@ var sortArrayByKeyName = function (array, name) {
         array.sort(function (a, b) {
             var retval = 0;
 
-            if (a[name] < b[name]) {
-                retval = -1;
-            } else if (a[name] > b[name]) {
-                retval = 1;
+            if (a.hasOwnProperty(name) && b.hasOwnProperty(name)) {
+
+                if (a[name] < b[name]) {
+                    retval = -1;
+                } else if (a[name] > b[name]) {
+                    retval = 1;
+                }
             }
 
             return retval;
@@ -352,39 +355,18 @@ var sortGamesByTime = function (games) {
     "use strict";
 
     if ($.isArray(games) && games.length > 0) {
-        games.sort(function (a, b){
-            if (typeof a.playedAt !== 'number') {
+        games.sort(function (a, b) {
+            if (a.hasOwnProperty("playedAt") && typeof a.playedAt !== 'number') {
                 a.playedAt = 0;
             }
-            if (typeof b.playedAt !== 'number') {
+            if (b.hasOwnProperty("playedAt") && typeof b.playedAt !== 'number') {
                 b.playedAt = 0;
             }
-            
+
             return a.playedAt - b.playedAt;
         });
     }
 
     // unaltered if no array
     return games;
-};
-
-var rankSorter = function (firstPlayer, secondPlayer) {
-    "use strict";
-    var retval = 0;
-    /*
-     * If the return value is less than zero, the index of a is before b, and if
-     * it is greater than zero it's vice-versa. If the return value is zero, the
-     * elements' index is equal.
-     */
-
-    if (firstPlayer && secondPlayer && firstPlayer.hasOwnProperty("rank") && secondPlayer.hasOwnProperty("rank")) {
-        // smaller = better
-        if (firstPlayer.rank < secondPlayer.rank) {
-            retval = -1;
-        } else if (firstPlayer.rank > secondPlayer.rank) {
-            retval = 1;
-        }
-    }
-
-    return retval;
 };

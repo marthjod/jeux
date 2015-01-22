@@ -120,7 +120,7 @@ var buildRankingsTable = function (rankingsData) {
                 .append($("<th>").html("Score ratio"));
         table.append(row);
 
-        rankingsData.sort(rankSorter);
+        rankingsData = sortArrayByKeyName(rankingsData, "rank");
         // rankings...
         $.each(rankingsData, function (id, ranking) {
             row = $("<tr>").attr("id", "player-id-" + ranking.id);
