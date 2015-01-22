@@ -20,84 +20,66 @@ import de.fhb.jeux.persistence.ShowdownGame;
 @LocalBean
 public class GameDAO {
 
-	private static Logger logger = Logger.getLogger(GameDAO.class);
+    private static Logger logger = Logger.getLogger(GameDAO.class);
 
-	@PersistenceContext(unitName = "JeuxEJB")
-	private EntityManager em;
+    @PersistenceContext(unitName = "JeuxEJB")
+    private EntityManager em;
 
-	@EJB
-	private GameSetDAO gameSetDAO;
+    @EJB
+    private GameSetDAO gameSetDAO;
 
-	public GameDAO() {
-	}
+    public GameDAO() {
+    }
 
-	public void addGame(IGame game) {
-		em.persist(game);
-		logger.debug("Persisted game " + game);
-	}
+    public void addGame(IGame game) {
+        em.persist(game);
+        logger.debug("Persisted game " + game);
+    }
 
-	public void updateGame(IGame game) {
-		// DO NOT remove any extraneous non-played sets first (only) if game
-		// over because it may be necessary when editing existing games
+    public void updateGame(IGame game) {
+        em.merge(game);
+    }
 
-		// if (game.hasWinner()) {
-		// IGameSet set = null;
-		// for (Iterator<ShowdownGameSet> setsIter = game.getSets().iterator();
-		// setsIter
-		// .hasNext();) {
-		// set = (IGameSet) setsIter.next();
-		// if (set.isUnplayed()) {
-		// // remove from persistence
-		// gameSetDAO.deleteGameSet(set);
-		// // remove from game to be merged
-		// setsIter.remove();
-		// }
-		// }
-		// }
+    public List<IGame> getPlayedGamesInGroup(IGroup group) {
+        List<IGame> playedGames = new ArrayList<IGame>();
 
-		em.merge(game);
-	}
+        TypedQuery<IGame> query = em.createNamedQuery("Game.findPlayedInGroup",
+                IGame.class);
+        query.setParameter("group", group);
+        playedGames = query.getResultList();
 
-	public List<IGame> getPlayedGamesInGroup(IGroup group) {
-		List<IGame> playedGames = new ArrayList<IGame>();
+        return playedGames;
+    }
 
-		TypedQuery<IGame> query = em.createNamedQuery("Game.findPlayedInGroup",
-				IGame.class);
-		query.setParameter("group", group);
-		playedGames = query.getResultList();
+    public List<IGame> getUnplayedGamesInGroup(IGroup group) {
+        List<IGame> unplayedGames = new ArrayList<IGame>();
 
-		return playedGames;
-	}
+        TypedQuery<IGame> query = em.createNamedQuery(
+                "Game.findUnplayedInGroup", IGame.class);
+        query.setParameter("group", group);
+        unplayedGames = query.getResultList();
 
-	public List<IGame> getUnplayedGamesInGroup(IGroup group) {
-		List<IGame> unplayedGames = new ArrayList<IGame>();
+        return unplayedGames;
+    }
 
-		TypedQuery<IGame> query = em.createNamedQuery(
-				"Game.findUnplayedInGroup", IGame.class);
-		query.setParameter("group", group);
-		unplayedGames = query.getResultList();
+    public List<IGame> getGamesInGroup(IGroup group) {
+        List<IGame> games = new ArrayList<IGame>();
 
-		return unplayedGames;
-	}
+        TypedQuery<IGame> query = em.createNamedQuery("Game.findAllInGroup",
+                IGame.class);
+        query.setParameter("group", group);
+        games = query.getResultList();
 
-	public List<IGame> getGamesInGroup(IGroup group) {
-		List<IGame> games = new ArrayList<IGame>();
+        return games;
+    }
 
-		TypedQuery<IGame> query = em.createNamedQuery("Game.findAllInGroup",
-				IGame.class);
-		query.setParameter("group", group);
-		games = query.getResultList();
-
-		return games;
-	}
-
-	// for deletion and updates
-	public IGame getGameById(int gameId) {
-		IGame game = new ShowdownGame();
-		TypedQuery<IGame> query = em.createNamedQuery("Game.findById",
-				IGame.class);
-		query.setParameter("id", gameId);
-		game = query.getSingleResult();
-		return game;
-	}
+    // for deletion and updates
+    public IGame getGameById(int gameId) {
+        IGame game = new ShowdownGame();
+        TypedQuery<IGame> query = em.createNamedQuery("Game.findById",
+                IGame.class);
+        query.setParameter("id", gameId);
+        game = query.getSingleResult();
+        return game;
+    }
 }

@@ -3,35 +3,41 @@ package de.fhb.jeux.model;
 import java.util.List;
 
 import de.fhb.jeux.persistence.ShowdownGameSet;
+import java.util.Date;
 
 public interface IGame {
-	public int getId();
 
-	public IGroup getGroup();
+    public int getId();
 
-	public IPlayer getPlayer1();
+    public IGroup getGroup();
 
-	public IPlayer getPlayer2();
+    public IPlayer getPlayer1();
 
-	public IPlayer getWinner();
+    public IPlayer getPlayer2();
 
-	public IPlayer getLoser();
+    public IPlayer getWinner();
 
-	public List<ShowdownGameSet> getSets();
+    public IPlayer getLoser();
 
-	public boolean equals(IGame game);
+    public List<ShowdownGameSet> getSets();
 
-	public void setSets(List<ShowdownGameSet> sets);
+    public Date getPlayedAt();
 
-	public void setWinner(IPlayer winner);
+    public boolean equals(IGame game);
 
-	public boolean hasWinner();
+    public void setSets(List<ShowdownGameSet> sets);
 
-	public int getSetsWonByPlayer1();
+    public void setWinner(IPlayer winner);
 
-	public int getSetsWonByPlayer2();
+    public void setPlayedAt(Date playedAt);
 
-	public int getSetsPlayed();
+    public boolean hasWinner();
 
-	public int getSetsPlayedByWinner();
+    public int getSetsWonByPlayer1();
+
+    public int getSetsWonByPlayer2();
+
+    public int getSetsPlayed();
+
+    public int getSetsPlayedByWinner();
 }

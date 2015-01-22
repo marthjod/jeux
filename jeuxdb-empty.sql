@@ -32,6 +32,7 @@ CREATE TABLE IF NOT EXISTS `Game` (
   `winnerId` int(11) DEFAULT NULL COMMENT 'Player who won the entire game, i.e. all its sets',
   `player1Id` int(11) NOT NULL,
   `player2Id` int(11) NOT NULL,
+  `playedAt` timestamp NULL DEFAULT NULL COMMENT 'Point in time game has been finished. NULL if game unplayed yet',
   PRIMARY KEY (`id`),
   KEY `fk_Game_Player_idx` (`winnerId`),
   KEY `fk_Game_Group1_idx` (`groupId`),

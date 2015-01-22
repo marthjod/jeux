@@ -15,33 +15,34 @@ import de.fhb.jeux.model.IGroup;
 @SuppressWarnings("ucd")
 public class GameBean implements GameRemote, GameLocal {
 
-	@EJB
-	private GameDAO gameDAO;
+    @EJB
+    private GameDAO gameDAO;
 
-	public GameBean() {
-	}
+    public GameBean() {
+    }
 
-	public List<GameDTO> getPlayedGameDTOsInGroup(IGroup group) {
-		List<IGame> playedGames = gameDAO.getPlayedGamesInGroup(group);
-		List<GameDTO> playedGameDTOs = new ArrayList<GameDTO>();
+    @Override
+    public List<GameDTO> getPlayedGameDTOsInGroup(IGroup group) {
+        List<IGame> playedGames = gameDAO.getPlayedGamesInGroup(group);
+        List<GameDTO> playedGameDTOs = new ArrayList<GameDTO>();
 
-		for (IGame playedGame : playedGames) {
-			playedGameDTOs.add(new GameDTO(playedGame));
-		}
+        for (IGame playedGame : playedGames) {
+            playedGameDTOs.add(new GameDTO(playedGame));
+        }
 
-		return playedGameDTOs;
-	}
+        return playedGameDTOs;
+    }
 
-	@Override
-	public List<GameDTO> getUnplayedGameDTOsInGroup(IGroup group) {
-		List<IGame> unplayedGames = gameDAO.getUnplayedGamesInGroup(group);
-		List<GameDTO> unplayedGameDTOs = new ArrayList<GameDTO>();
+    @Override
+    public List<GameDTO> getUnplayedGameDTOsInGroup(IGroup group) {
+        List<IGame> unplayedGames = gameDAO.getUnplayedGamesInGroup(group);
+        List<GameDTO> unplayedGameDTOs = new ArrayList<GameDTO>();
 
-		for (IGame unplayedGame : unplayedGames) {
-			unplayedGameDTOs.add(new GameDTO(unplayedGame));
-		}
+        for (IGame unplayedGame : unplayedGames) {
+            unplayedGameDTOs.add(new GameDTO(unplayedGame));
+        }
 
-		return unplayedGameDTOs;
-	}
+        return unplayedGameDTOs;
+    }
 
 }

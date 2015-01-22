@@ -91,6 +91,7 @@ var showGames = function (gamesDiv, status, editable) {
         gamesDiv.empty();
         $.each(games, function (id, game) {
             gamesDiv.append($("<h3>").html(game.groupName));
+            game.games = sortGamesByTime(game.games);
             $.each(buildGamesTables(game.games, status, editable), function (id, table) {
                 gamesDiv.append(table);
             });
@@ -351,7 +352,16 @@ var sortGamesByTime = function (games) {
     "use strict";
 
     if ($.isArray(games) && games.length > 0) {
-        // TODO
+        games.sort(function (a, b){
+            if (typeof a.playedAt !== 'number') {
+                a.playedAt = 0;
+            }
+            if (typeof b.playedAt !== 'number') {
+                b.playedAt = 0;
+            }
+            
+            return a.playedAt - b.playedAt;
+        });
     }
 
     // unaltered if no array
