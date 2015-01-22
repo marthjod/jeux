@@ -6,6 +6,10 @@
     <artifactId>jeux-web</artifactId>
     <packaging>war</packaging>
     <name>JEUX WAR package - ${project.groupId}.${project.artifactId}-${project.version}</name>
+    <properties>
+        <timestamp>${maven.build.timestamp}</timestamp>
+        <maven.build.timestamp.format>yyyyMMddHHmm</maven.build.timestamp.format>
+    </properties>
     <build>
         <plugins>
             <plugin>
@@ -14,6 +18,12 @@
                 <configuration>
                     <warSourceDirectory>WebContent</warSourceDirectory>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
+                    <webResources>
+                        <resource>
+                            <directory>WebContent</directory>
+                            <filtering>true</filtering>
+                        </resource>
+                    </webResources>
                 </configuration>
             </plugin>
             <plugin>
