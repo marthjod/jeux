@@ -13,7 +13,8 @@ var buildGamesTables = function (gamesData, status, editable) {
             if ($.isArray(game.sets) && game.sets.length > 0) {
                 table = $("<table>")
                         .attr("class", "table table-bordered table-condensed");
-                row = $("<tr>").attr("id", "game-id-" + game.id);
+                row = $("<tr>")
+                        .attr("id", "game-id-" + game.id);
                 row.append($("<th>").html("Set #"));
 
                 // mark winner
@@ -34,6 +35,7 @@ var buildGamesTables = function (gamesData, status, editable) {
                         .attr("class", "player2")
                         .attr("id", "player-id-" + game.player2Id)
                         .html(player2Out));
+
                 table.append(row);
                 // more detailed game sets info (1-n row(s))
 
@@ -82,13 +84,23 @@ var buildGamesTables = function (gamesData, status, editable) {
                                 .attr("value", "Update game")
                                 .attr("class", "btn btn-warning update-game")
                                 .attr("onclick", "updateGame(this," + game.id + "," + game.player1Id + "," + game.player2Id + ", \"update\");");
+                        table
+                                .append($("<tr>")
+                                        .append($("<td>")
+                                                .append(updateButton))
+                                        .append($("<td>")
+                                                .append(new Date(game.playedAt))));
                     } else {
                         updateButton
                                 .attr("value", "Save game")
                                 .attr("class", "btn btn-primary update-game")
                                 .attr("onclick", "updateGame(this," + game.id + "," + game.player1Id + "," + game.player2Id + ", \"save\");");
+                        table
+                                .append($("<tr>")
+                                        .append($("<td>")
+                                                .append(updateButton)));
                     }
-                    table.append($("<tr>").append(updateButton));
+
                 }
                 tables.push(table);
             } else {

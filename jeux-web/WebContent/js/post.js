@@ -29,9 +29,9 @@ var updateGame = function (updateSubmit, gameId, player1Id, player2Id, action) {
         "sets": []
     };
 
-    // input > tr > tbody
+    // input > td > tr > tbody
     // yikes!
-    rows = $(updateSubmit).parent().parent().find("tr");
+    rows = $(updateSubmit).parent().parent().parent().find("tr");
 
     $.each(rows, function (id, row) {
         if (/^gameset-id-.*$/.test(row.id)) {
