@@ -9,22 +9,34 @@
 
 ### Configure MySQL
 
-- Create DB _jeuxdb_
+- `CREATE DATABASE jeuxdb;`
 - Import [_jeuxdb-empty.sql_](https://github.com/marthjod/jeux/blob/master/jeuxdb-empty.sql)
+```
+wget https://raw.githubusercontent.com/marthjod/jeux/master/jeuxdb-empty.sql
+mysql jeuxdb < jeuxdb-empty.sql
+```
 - Add user:
 
 ```sql
-CREATE USER 'jeuxdb_user'@'localhost'
+CREATE USER 'jeuxdb_user'@'<DB_HOST>'
 IDENTIFIED BY '***';
 
 GRANT SELECT, INSERT, UPDATE, DELETE
 ON `jeuxdb`.*
-TO 'jeuxdb_user'@'localhost';
+TO 'jeuxdb_user'@'<DB_HOST>';
 ```
 
 ### Configure JBoss AS
 
-#### Add data source
+#### Modify config template
+
+- Cf. configuration in [_standalone.xml_](https://github.com/marthjod/jeux/blob/master/.openshift/config/standalone.xml)
+
+
+#### Alt.: manual config changes
+
+##### Add data source
+
 - Copy driver JAR ([mysql-connector-java-VERSION-bin.jar](http://dev.mysql.com/downloads/connector/j/)) to  _JBOSS_DIR/standalone/deployments_ first (**NB Does not work with versions >= 5.1.30, cf. https://bugzilla.redhat.com/show_bug.cgi?id=1107120**)
 
 ```xml
@@ -41,8 +53,6 @@ TO 'jeuxdb_user'@'localhost';
 </datasource>
 ```
 
-
-#### Authentication
 
 ##### Handle users for HTTP Basic authentication
 
@@ -69,7 +79,7 @@ TO 'jeuxdb_user'@'localhost';
     - _roles.properties_: `newuser=jeux-admin`
     - _users.properties_: `newuser=<cleartext password>`
 
-#### Logging
+##### Logging
 
 - Set log level to DEBUG (_JBOSS_DIR/standalone/configuration/standalone.xml_)
 
@@ -84,14 +94,6 @@ TO 'jeuxdb_user'@'localhost';
                 <level name="DEBUG"/>
             </logger>
 ```
-
-#### Allow public access (USE AT YOUR OWN RISK)
-
-- _JBOSS_DIR/standalone/configuration/standalone.xml_:
-```xml
-<virtual-server name="default-host" enable-welcome-root="false">
-```
-
 
 ## Develop
 
