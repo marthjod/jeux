@@ -1,13 +1,13 @@
 # Jeux
 
-## Compile/deploy
-
-### Build (Maven)
+## Build (Maven)
 
 - Run `mvn clean install` on _jeux-ejb_, _jeux-web_ and  _jeux-ear_, in sequence
 - Deploy resulting EAR file on JBoss AS (_JBOSS_DIR/standalone/deployments_)
 
-### Configure MySQL
+## Configure 
+
+### MySQL DB
 
 - `CREATE DATABASE jeuxdb;`
 - Import [_jeuxdb-empty.sql_](https://github.com/marthjod/jeux/blob/master/jeuxdb-empty.sql)
@@ -26,18 +26,19 @@ ON `jeuxdb`.*
 TO 'jeuxdb_user'@'<DB_HOST>';
 ```
 
-### Configure JBoss AS
+### JBoss AS
 
-#### Modify config template
+#### DB driver
+
+- Copy driver JAR ([mysql-connector-java-VERSION-bin.jar](http://dev.mysql.com/downloads/connector/j/)) to  _JBOSS_DIR/standalone/deployments_ first (**NB: Does not work with versions >= 5.1.30, cf. https://bugzilla.redhat.com/show_bug.cgi?id=1107120**)
+
+#### Alt. 1: Modify config template
 
 - Cf. configuration in [_standalone.xml_](https://github.com/marthjod/jeux/blob/master/.openshift/config/standalone.xml)
 
-
-#### Alt.: manual config changes
+#### Alt. 2: Manual config changes
 
 ##### Add data source
-
-- Copy driver JAR ([mysql-connector-java-VERSION-bin.jar](http://dev.mysql.com/downloads/connector/j/)) to  _JBOSS_DIR/standalone/deployments_ first (**NB Does not work with versions >= 5.1.30, cf. https://bugzilla.redhat.com/show_bug.cgi?id=1107120**)
 
 ```xml
 <!-- jboss-as-7.1.1.Final/standalone/configuration/standalone.xml -->
@@ -52,7 +53,6 @@ TO 'jeuxdb_user'@'<DB_HOST>';
     ...
 </datasource>
 ```
-
 
 ##### Handle users for HTTP Basic authentication
 
