@@ -10,7 +10,7 @@
 ### Configure MySQL
 
 - Create DB _jeuxdb_
-- Import _jeuxdb-empty.sql_
+- Import [_jeuxdb-empty.sql_](https://github.com/marthjod/jeux/blob/master/jeuxdb-empty.sql)
 - Add user:
 
 ```sql
