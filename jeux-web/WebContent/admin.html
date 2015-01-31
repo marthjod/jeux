@@ -29,7 +29,7 @@
         <div id="container" class="container">
             <h1 class="btn btn-default btn-lg" onclick="$('#show-groups').toggle();
                     if ($('#show-groups').is(':visible')) {
-                        showGroups($('#show-groups'), $('#player-select-group'), $('#rule-source-group'), $('#rule-destination-group'));
+                        showGroups($('#show-groups'), $('#player-select-group'), $('#rule-source-group'), $('#rule-destination-group'), this);
                     }">
                 Groups
             </h1>
@@ -80,7 +80,7 @@
             <br />
             <h1 class="btn btn-default btn-lg" onclick="$('#show-players').toggle();
                     if ($('#show-players').is(':visible')) {
-                        showPlayers($('#show-players'));
+                        showPlayers($('#show-players'), this);
                     }">
                 Players
             </h1>
@@ -114,7 +114,7 @@
             <br />
             <h1 class="btn btn-default btn-lg" onclick="$('#show-rules').toggle();
                     if ($('#show-rules').is(':visible')) {
-                        showRules($('#show-rules'));
+                        showRules($('#show-rules'), this);
                     }">
                 Tournament rules
             </h1>
@@ -167,7 +167,7 @@
             <br />
             <h1 class="btn btn-default btn-lg" onclick="$('#show-unplayed-games').toggle();
                     if ($('#show-unplayed-games').is(':visible')) {
-                        showGames($('#show-unplayed-games'), 'unplayed', true);
+                        showGames($('#show-unplayed-games'), 'unplayed', true, this);
                     }">
                 Unplayed games
             </h1>
@@ -177,7 +177,7 @@
             <br />
             <h1 class="btn btn-default btn-lg" onclick="$('#show-played-games').toggle();
                     if ($('#show-played-games').is(':visible')) {
-                        showGames($('#show-played-games'), 'played', true);
+                        showGames($('#show-played-games'), 'played', true, this);
                     }">
                 Played games
             </h1>

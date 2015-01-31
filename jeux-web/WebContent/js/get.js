@@ -81,9 +81,12 @@ var showRankings = function (rankingsDiv) {
 };
 
 
-var showGames = function (gamesDiv, status, editable) {
+var showGames = function (gamesDiv, status, editable, button) {
     "use strict";
 
+    if (button) {
+        $(button).attr("disabled", "disabled");
+    }
     gamesDiv.removeAttr("hidden");
 
     getGames(status, editable, function (games) {
@@ -96,15 +99,24 @@ var showGames = function (gamesDiv, status, editable) {
                 gamesDiv.append(table);
             });
         });
+
+        if (button) {
+            $(button).removeAttr("disabled");
+        }
     });
 };
 
-var showGroups = function (showGroupsDiv, playerGroupSelect, ruleSrcGroupSelect, ruleDestGroupSelect) {
+var showGroups = function (showGroupsDiv, playerGroupSelect, ruleSrcGroupSelect, ruleDestGroupSelect, button) {
     "use strict";
     var table = null,
             row = null,
             playerGroupSelectOK = false,
             ruleGroupSelectsOK = false;
+
+    if (button) {
+        $(button).attr("disabled", "disabled");
+    }
+
     $.get("rest/audience/groups", function (data) {
 
         if (playerGroupSelect && playerGroupSelect !== null) {
@@ -200,19 +212,23 @@ var showGroups = function (showGroupsDiv, playerGroupSelect, ruleSrcGroupSelect,
             });
             showGroupsDiv.append(table);
         }
+
+        if (button) {
+            $(button).removeAttr("disabled");
+        }
     });
 };
 
-
-
-
-
-var showPlayers = function (showPlayersDiv) {
+var showPlayers = function (showPlayersDiv, button) {
     "use strict";
     var i = 0,
             table = null,
             row = null,
             groupPlayersDiv = null;
+
+    if (button) {
+        $(button).attr("disabled", "disabled");
+    }
 
     $(showPlayersDiv).empty();
 
@@ -270,6 +286,10 @@ var showPlayers = function (showPlayersDiv) {
                 }(group));
             });
         }
+
+        if (button) {
+            $(button).removeAttr("disabled");
+        }
     });
 };
 
@@ -277,12 +297,17 @@ var showPlayers = function (showPlayersDiv) {
 
 
 
-var showRules = function (showRulesDiv) {
+var showRules = function (showRulesDiv, button) {
     "use strict";
     var table = null,
             startWithRank = 0,
             additionalPlayers = 0,
             lastRank = 0;
+
+    if (button) {
+        $(button).attr("disabled", "disabled");
+    }
+
     if (showRulesDiv && showRulesDiv !== null) {
         $(showRulesDiv).empty();
         $.get("rest/audience/roundswitchrules", function (rulesData) {
@@ -314,6 +339,10 @@ var showRules = function (showRulesDiv) {
                 });
                 showRulesDiv.append(table);
             }
+
+            if (button) {
+                $(button).removeAttr("disabled");
+            }
         });
     }
 };
@@ -324,13 +353,10 @@ var getShuffledGames = function (groupId, format) {
     if (format && format !== null && typeof format === 'string') {
         url += ";format=" + format;
     }
-
     window.open(url);
 };
-
 var sortArrayByKeyName = function (array, name) {
     "use strict";
-
     if ($.isArray(array)) {
         array.sort(function (a, b) {
             var retval = 0;
@@ -348,12 +374,11 @@ var sortArrayByKeyName = function (array, name) {
         });
     }
 
-    // unaltered if no array
+// unaltered if no array
     return array;
 };
 var sortGamesByTime = function (games) {
     "use strict";
-
     if ($.isArray(games) && games.length > 0) {
         games.sort(function (a, b) {
             if (a.hasOwnProperty("playedAt") && typeof a.playedAt !== 'number') {
