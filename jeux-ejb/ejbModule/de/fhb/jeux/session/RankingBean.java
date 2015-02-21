@@ -22,68 +22,71 @@ import de.fhb.jeux.persistence.ShowdownPlayer;
 @SuppressWarnings("ucd")
 public class RankingBean implements RankingRemote, RankingLocal {
 
-	protected static Logger logger = Logger.getLogger(RankingBean.class);
+    protected static Logger logger = Logger.getLogger(RankingBean.class);
 
-	public RankingBean() {
-	}
+    public RankingBean() {
+    }
 
-	@EJB
-	private PlayerDAO playerDAO;
+    @EJB
+    private PlayerDAO playerDAO;
 
-	@Override
-	public List<IPlayer> getRankedPlayers(IGroup group) {
-		List<IPlayer> rankedPlayers = new ArrayList<IPlayer>();
-		// player entities
-		List<ShowdownPlayer> players = group.getPlayers();
+    @Override
+    public List<IPlayer> getRankedPlayers(IGroup group) {
+        List<IPlayer> rankedPlayers = new ArrayList<IPlayer>();
 
-		if (!players.isEmpty()) {
-			Comparator<IPlayer> comparator;
-			// more than 1 set per game means we sort by bonus points first
-			if (group.getMaxSets() > 1) {
-				comparator = new BonuspointsComparator(playerDAO);
-			} else {
-				// 1 set per game: sort by won games, then score ratio
-				comparator = new WonGamesComparator(playerDAO);
-			}
+        if (group != null) {
+            // player entities
+            List<ShowdownPlayer> players = group.getPlayers();
 
-			// used for sorting
-			PriorityQueue<IPlayer> sortedPlayers = new PriorityQueue<IPlayer>(
-					5, comparator);
+            if (!players.isEmpty()) {
+                Comparator<IPlayer> comparator;
+                // more than 1 set per game means we sort by bonus points first
+                if (group.getMaxSets() > 1) {
+                    comparator = new BonuspointsComparator(playerDAO);
+                } else {
+                    // 1 set per game: sort by won games, then score ratio
+                    comparator = new WonGamesComparator(playerDAO);
+                }
+
+                // used for sorting
+                PriorityQueue<IPlayer> sortedPlayers = new PriorityQueue<IPlayer>(
+                        5, comparator);
 
 			// go thru player entities, convert them and add to queue
-			// which maintains order defined by comparator
-			for (IPlayer player : players) {
-				sortedPlayers.add(player);
-			}
+                // which maintains order defined by comparator
+                for (IPlayer player : players) {
+                    sortedPlayers.add(player);
+                }
 
 			// use "rank" field for (ephemeral) ranking info
-			// so no one has to guess whether returned list is sorted or not
-			// and in what manner
-			int rank = 0;
-			IPlayer temp = null;
-			logger.debug("Ranking " + group.getName() + ":");
-			while (sortedPlayers.peek() != null) {
-				temp = sortedPlayers.poll();
-				temp.setRank(++rank);
-				logger.debug(temp.getRank() + ". " + temp.getName());
-				rankedPlayers.add(temp);
-			}
-		}
+                // so no one has to guess whether returned list is sorted or not
+                // and in what manner
+                int rank = 0;
+                IPlayer temp = null;
+                logger.debug("Ranking " + group.getName() + ":");
+                while (sortedPlayers.peek() != null) {
+                    temp = sortedPlayers.poll();
+                    temp.setRank(++rank);
+                    logger.debug(temp.getRank() + ". " + temp.getName());
+                    rankedPlayers.add(temp);
+                }
+            }
+        }
 
-		return rankedPlayers;
-	}
+        return rankedPlayers;
+    }
 
-	// DRY
-	@Override
-	public List<PlayerDTO> getRankedPlayerDTOs(IGroup group) {
+    // DRY
+    @Override
+    public List<PlayerDTO> getRankedPlayerDTOs(IGroup group) {
 
-		// return at least an empty, but initialized list
-		List<PlayerDTO> rankedPlayerDTOs = new ArrayList<PlayerDTO>();
+        // return at least an empty, but initialized list
+        List<PlayerDTO> rankedPlayerDTOs = new ArrayList<PlayerDTO>();
 
-		for (IPlayer player : getRankedPlayers(group)) {
-			rankedPlayerDTOs.add(new PlayerDTO(player));
-		}
+        for (IPlayer player : getRankedPlayers(group)) {
+            rankedPlayerDTOs.add(new PlayerDTO(player));
+        }
 
-		return rankedPlayerDTOs;
-	}
+        return rankedPlayerDTOs;
+    }
 }
