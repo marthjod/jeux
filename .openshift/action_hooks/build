@@ -16,7 +16,7 @@ $maven -f jeux-ear/pom.xml $goals
 
 # trigger undeploy
 prev_artifact=$(find $OPENSHIFT_JBOSSAS_DIR/standalone/deployments -name 'jeux*.ear' | head -1)
-rm -f ${prev_artifact}.deployed
+rm -f ${prev_artifact}*
 
 curr_version="$($maven -f jeux-ear/pom.xml org.apache.maven.plugins:maven-help-plugin:2.1.1:evaluate -Dexpression=project.version | egrep '^[0-9]+\.[0-9]+\.[0-9]+.*')"
 artifact="$OPENSHIFT_HOMEDIR/.m2/repository/de/fhb/jeux-ear/$curr_version/jeux-ear-$curr_version.ear"
