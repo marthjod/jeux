@@ -40,11 +40,12 @@ public class RankingBean implements RankingRemote, RankingLocal {
 
             if (!players.isEmpty()) {
                 Comparator<IPlayer> comparator;
-                // more than 1 set per game means we sort by bonus points first
-                if (group.getMaxSets() > 1) {
+                // best-of-3: sort by bonus points first
+                if (group.getMaxSets() == 3) {
                     comparator = new BonuspointsComparator(playerDAO);
                 } else {
-                    // 1 set per game: sort by won games, then score ratio
+                    // best-of-1, best-of-5, best-of-7, etc.:
+                    // sort by won games first, then score ratio
                     comparator = new WonGamesComparator(playerDAO);
                 }
 
@@ -52,27 +53,29 @@ public class RankingBean implements RankingRemote, RankingLocal {
                 PriorityQueue<IPlayer> sortedPlayers = new PriorityQueue<IPlayer>(
                         5, comparator);
 
-			// go thru player entities, convert them and add to queue
+                // go thru player entities, convert them and add to queue
                 // which maintains order defined by comparator
                 for (IPlayer player : players) {
                     sortedPlayers.add(player);
                 }
 
-			// use "rank" field for (ephemeral) ranking info
+                // use "rank" field for (ephemeral) ranking info
                 // so no one has to guess whether returned list is sorted or not
                 // and in what manner
                 int rank = 0;
                 IPlayer temp = null;
-                logger.debug("Ranking " + group.getName() + ":");
                 while (sortedPlayers.peek() != null) {
                     temp = sortedPlayers.poll();
                     temp.setRank(++rank);
-                    logger.debug(temp.getRank() + ". " + temp.getName());
+                    // logger.debug(temp.getRank() + ". " + temp.getName());
                     rankedPlayers.add(temp);
                 }
             }
         }
 
+        if (!rankedPlayers.isEmpty()) {
+            logger.debug("'" + group.getName() + "': " + rankedPlayers.toString());
+        }
         return rankedPlayers;
     }
 
