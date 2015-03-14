@@ -31,7 +31,7 @@
         <servlet-class>de.fhb.jeux.controller.AdminLoginServlet</servlet-class>
         <init-param>
             <param-name>SERVER_SECRET</param-name>
-            <param-value>feiy#ahloo_y]oo5Quaxai;pie^x5sho8ohdoh6rohh^ier3su4FosaeChoonuSh</param-value>
+            <param-value>${serverSecret}</param-value>
         </init-param>
     </servlet>
     <filter>
@@ -39,7 +39,7 @@
         <filter-class>de.fhb.jeux.filter.AdminViewFilter</filter-class>
         <init-param>
             <param-name>SERVER_SECRET</param-name>
-            <param-value>feiy#ahloo_y]oo5Quaxai;pie^x5sho8ohdoh6rohh^ier3su4FosaeChoonuSh</param-value>
+            <param-value>${serverSecret}</param-value>
         </init-param>
     </filter>
     <servlet-mapping>

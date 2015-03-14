@@ -9,6 +9,7 @@
     <properties>
         <timestamp>${maven.build.timestamp}</timestamp>
         <maven.build.timestamp.format>yyyyMMddHHmm</maven.build.timestamp.format>
+        <serverSecret>### OVERRIDE IN PRODUCTION VIA "mvn install -DserverSecret=..."! ###</serverSecret>
     </properties>
     <build>
         <plugins>

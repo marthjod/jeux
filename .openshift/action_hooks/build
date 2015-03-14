@@ -1,7 +1,7 @@
 #!/bin/bash
 
 maven=$(which mvn)
-projects="jeux-ejb jeux-web jeux-ear"
+#projects="jeux-ejb jeux-web jeux-ear"
 goals="clean install"
 jboss_deployment_dir="$OPENSHIFT_JBOSSAS_DIR/standalone/deployments"
 
@@ -9,9 +9,10 @@ jboss_deployment_dir="$OPENSHIFT_JBOSSAS_DIR/standalone/deployments"
 #echo -e "<settings><localRepository>$OPENSHIFT_DATA_DIR/m2/repository</localRepository>\n</settings>\n" > $OPENSHIFT_DATA_DIR/settings.xml
 
 cd $OPENSHIFT_REPO_DIR
-for project in $projects; do
-	$maven -f $project/pom.xml $goals
-done
+$maven -f jeux-ejb/pom.xml $goals
+# set via "rhc set env key=value -a appname"
+$maven -f jeux-web/pom.xml -DserverSecret="$JEUX_SERVER_SECRET" $goals
+$maven -f jeux-ear/pom.xml $goals
 
 # trigger undeploy
 prev_artifact=$(find $OPENSHIFT_JBOSSAS_DIR/standalone/deployments -name 'jeux*.ear' | head -1)
