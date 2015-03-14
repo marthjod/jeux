@@ -21,6 +21,7 @@ var getRankings = function (callback) {
                 $.get("rest/audience/rankings/group/id/" + group.id, function (rankingsData) {
                     rankings.push({
                         "groupName": group.name,
+                        "roundId": group.roundId,
                         "rankings": rankingsData
                     });
                     // hacky
@@ -69,7 +70,7 @@ var showRankings = function (rankingsDiv) {
     "use strict";
 
     getRankings(function (rankings) {
-        rankings = sortArrayByKeyName(rankings, "groupName");
+        rankings = sortArrayByKeyNames(rankings, ["roundId", "groupName"]);
         rankingsDiv.empty();
         $.each(rankings, function (id, ranking) {
             rankingsDiv
@@ -90,7 +91,7 @@ var showGames = function (gamesDiv, status, editable, button) {
     gamesDiv.removeAttr("hidden");
 
     getGames(status, editable, function (games) {
-        games = sortArrayByKeyName(games, "groupName");
+        games = sortArrayByKeyNames(games, ["groupName"]);
         gamesDiv.empty();
         $.each(games, function (id, game) {
             gamesDiv.append($("<h3>").html(game.groupName));
@@ -355,28 +356,33 @@ var getShuffledGames = function (groupId, format) {
     }
     window.open(url);
 };
-var sortArrayByKeyName = function (array, name) {
+
+var sortArrayByKeyNames = function (array, names) {
     "use strict";
-    if ($.isArray(array)) {
+
+    var i,
+            comp;
+
+    if ($.isArray(array) && $.isArray(names)) {
         array.sort(function (a, b) {
-            var retval = 0;
+            for (i = 0; i < names.length; i++) {
+                comp = 0;
+                if (a[names[i]] < b[names[i]]) {
+                    comp = -1;
+                } else if (a[names[i]] > b[names[i]]) {
+                    comp = 1;
+                }
 
-            if (a.hasOwnProperty(name) && b.hasOwnProperty(name)) {
-
-                if (a[name] < b[name]) {
-                    retval = -1;
-                } else if (a[name] > b[name]) {
-                    retval = 1;
+                if (comp !== 0) {
+                    return comp;
                 }
             }
-
-            return retval;
         });
     }
 
-// unaltered if no array
     return array;
 };
+
 var sortGamesByTime = function (games) {
     "use strict";
     if ($.isArray(games) && games.length > 0) {
