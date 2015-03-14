@@ -83,7 +83,7 @@ TO 'jeuxdb_user'@'<DB_HOST>';
 
 ##### Logging
 
-- Set log level to DEBUG (_JBOSS_DIR/standalone/configuration/standalone.xml_)
+- Set log level (_DEBUG_ in dev, _INFO_ in prod) in _JBOSS_DIR/standalone/configuration/standalone.xml_:
 
 ```xml
 ...

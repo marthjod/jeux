@@ -56,7 +56,7 @@
                 </formatter>
             </console-handler>
             <logger category="de.fhb.jeux">
-                <level name="DEBUG"/>
+                <level name="INFO"/>
             </logger>
             <logger category="com.arjuna">
                 <level name="WARN"/>
