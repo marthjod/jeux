@@ -68,11 +68,12 @@ public class RankingBean implements RankingRemote, RankingLocal {
                     rankedPlayers.add(temp);
                 }
             }
+
+            if (!rankedPlayers.isEmpty()) {
+                logger.debug("'" + group.getName() + "': " + rankedPlayers);
+            }
         }
 
-        if (!rankedPlayers.isEmpty()) {
-            logger.debug("'" + group.getName() + "': " + rankedPlayers.toString());
-        }
         return rankedPlayers;
     }
 

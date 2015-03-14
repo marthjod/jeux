@@ -22,7 +22,6 @@ import de.fhb.jeux.model.IGameSet;
 import de.fhb.jeux.model.IGroup;
 import de.fhb.jeux.model.IPlayer;
 import de.fhb.jeux.persistence.ShowdownGameSet;
-import java.sql.Timestamp;
 import java.util.Date;
 
 @Stateless
@@ -155,7 +154,7 @@ public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
                                 || (setsWonByPlayer1 == minSets && setsWonByPlayer2 != minSets)
                                 || (setsWonByPlayer2 == minSets && setsWonByPlayer1 != minSets)) {
                             gameOver = true;
-                            logger.debug("Game over");
+                            logger.info("Game over");
                         }
 
                         if (gameOver) {
@@ -257,7 +256,7 @@ public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
     // needed in rare case where client JSON might be mixed up
     private GameDTO alignPlayers(GameDTO unalignedDTO) {
         // log level info because unusual
-        logger.info("Unaligned DTO: " + unalignedDTO);
+        logger.debug("Unaligned DTO: " + unalignedDTO);
 
         GameDTO alignedDTO = new GameDTO(unalignedDTO);
         // vice versa
@@ -268,19 +267,19 @@ public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
         // align set list
         ArrayList<GameSetDTO> alignedSets = new ArrayList<GameSetDTO>();
         for (GameSetDTO set : unalignedDTO.getSets()) {
-            logger.info("Unaligned set: " + set);
+            logger.debug("Unaligned set: " + set);
             // vice versa
             // we have to set any winner to null
             GameSetDTO alignedSet = new GameSetDTO(set.getId(),
                     set.getGameId(), 0, set.getPlayer2Score(),
                     set.getPlayer1Score(), null, set.getNumber());
-            logger.info("Aligned set: " + alignedSet);
+            logger.debug("Aligned set: " + alignedSet);
 
             alignedSets.add(alignedSet);
         }
 
         alignedDTO.setSets(alignedSets);
-        logger.info("Aligned DTO: " + alignedDTO);
+        logger.debug("Aligned DTO: " + alignedDTO);
 
         return alignedDTO;
     }
@@ -350,9 +349,9 @@ public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
             resultPlayer2Score += set.getPlayer2Score();
         }
 
-        logger.debug(player1.getName() + " has scored " + resultPlayer1Score
+        logger.info(player1.getName() + " has scored " + resultPlayer1Score
                 + " in total");
-        logger.debug(player2.getName() + " has scored " + resultPlayer2Score
+        logger.info(player2.getName() + " has scored " + resultPlayer2Score
                 + " in total");
 
         difference = Math.abs(resultPlayer1Score - resultPlayer2Score);
