@@ -1,15 +1,5 @@
 package de.fhb.jeux.session;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.PriorityQueue;
-
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
-
-import org.jboss.logging.Logger;
-
 import de.fhb.jeux.comparator.BonuspointsComparator;
 import de.fhb.jeux.comparator.WonGamesComparator;
 import de.fhb.jeux.dao.PlayerDAO;
@@ -17,6 +7,13 @@ import de.fhb.jeux.dto.PlayerDTO;
 import de.fhb.jeux.model.IGroup;
 import de.fhb.jeux.model.IPlayer;
 import de.fhb.jeux.persistence.ShowdownPlayer;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.PriorityQueue;
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import org.jboss.logging.Logger;
 
 @Stateless
 @SuppressWarnings("ucd")
