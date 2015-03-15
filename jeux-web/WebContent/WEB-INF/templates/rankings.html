@@ -1,0 +1,53 @@
+{% extends "base" %}
+
+{% block title %}
+Rankings {{ groupName }}
+{% endblock %}
+
+{% block content %}
+<h3> {{ groupName }} </h3>
+
+{% if rankings is empty %}
+No rankings available
+{% else %}
+<table class="table table-hover table-bordered table-condensed">
+    <tr>
+        <th>
+            Rank
+        </th>
+        <th>
+            Name
+        </th>
+        <th>
+            Won games
+        </th>
+        <th>
+            Points
+        </th>
+        <th>
+            Score ratio
+        </th>
+    </tr>
+    {% for ranking in rankings %}
+    <tr>
+        <td>
+            {{ ranking.rank }}
+        </td>
+        <td>
+            {{ ranking.name }}
+        </td>
+        <td>
+            {{ ranking.wonGames }}
+        </td>
+        <td>
+            {{ ranking.points }}
+        </td>
+        <td>
+            {{ ranking.scoreRatio }}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endif %}
+
+{% endblock %}

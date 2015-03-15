@@ -1,0 +1,18 @@
+{% extends "base" %}
+
+{% block content %}
+<h3></h3>
+{% for group in groups %}
+<div>
+    <p>
+        <a class="btn btn-primary btn-lg" href="rankings/group/{{ group.id }}">
+            Rankings {{ group.name }}
+        </a>
+        &nbsp;
+        <a class="btn btn-default btn-lg" href="results/group/{{ group.id }}">
+            Results {{ group.name }}
+        </a>
+    </p>
+</div>
+{% endfor %}
+{% endblock %}

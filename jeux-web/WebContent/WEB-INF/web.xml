@@ -47,6 +47,10 @@
         <url-pattern>/rest/*</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+        <servlet-name>JAX-RS Servlet</servlet-name>
+        <url-pattern>/gui/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>AdminLoginServlet</servlet-name>
         <url-pattern>/login/*</url-pattern>
     </servlet-mapping>
