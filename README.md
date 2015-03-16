@@ -11,11 +11,11 @@
 
 ### MySQL DB
 
-- `CREATE DATABASE jeuxdb;`
+- `CREATE DATABASE jeux;`
 - Import [_jeuxdb-empty.sql_](https://github.com/marthjod/jeux/blob/master/jeuxdb-empty.sql)
 ```
 wget https://raw.githubusercontent.com/marthjod/jeux/master/jeuxdb-empty.sql
-mysql jeuxdb < jeuxdb-empty.sql
+mysql jeux < jeuxdb-empty.sql
 ```
 - Add user:
 
@@ -24,7 +24,7 @@ CREATE USER 'jeuxdb_user'@'<DB_HOST>'
 IDENTIFIED BY '***';
 
 GRANT SELECT, INSERT, UPDATE, DELETE
-ON `jeuxdb`.*
+ON `jeux`.*
 TO 'jeuxdb_user'@'<DB_HOST>';
 ```
 
