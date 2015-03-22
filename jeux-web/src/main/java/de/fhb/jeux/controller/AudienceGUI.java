@@ -5,6 +5,7 @@ import com.mitchellbosecke.pebble.error.PebbleException;
 import com.mitchellbosecke.pebble.loader.Loader;
 import com.mitchellbosecke.pebble.loader.ServletLoader;
 import com.mitchellbosecke.pebble.template.PebbleTemplate;
+import de.fhb.jeux.dto.GameDTO;
 import de.fhb.jeux.model.IGroup;
 import de.fhb.jeux.model.IPlayer;
 import de.fhb.jeux.session.GameLocal;
@@ -16,6 +17,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -166,8 +168,21 @@ public class AudienceGUI {
 
             context.put("prefix", "/" + servletContext.getServletContextName() + "/gui/audience");
             if (player != null) {
+                // save extra DB call
+                List<GameDTO> playedGames = playerBean.getPlayedGames(player);
+                int countPlayedGames = playedGames.size();
+                Long countWonGames = playerBean.getCountWonGames(player);
+                float pctgWon = 0.0f;
+                // avoid NullPointer
+                if (countPlayedGames > 0) {
+                    pctgWon = (countWonGames * 100.0f) / countPlayedGames;
+                }
                 context.put("playerName", player.getName());
-                context.put("results", playerBean.getPlayedGames(player));
+                context.put("results", playedGames);
+                context.put("playedGames", countPlayedGames);
+                context.put("wonGames", countWonGames);
+                context.put("pctgWon", pctgWon);
+
             } else {
                 context.put("playerName", "Player not found");
                 context.put("results", new ArrayList());

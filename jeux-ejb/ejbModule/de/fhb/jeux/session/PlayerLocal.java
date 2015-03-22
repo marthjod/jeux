@@ -11,4 +11,8 @@ public interface PlayerLocal {
     public IPlayer getPlayerById(int playerId);
 
     public List<GameDTO> getPlayedGames(IPlayer player);
+
+    public Long getCountPlayedGames(IPlayer player);
+
+    public Long getCountWonGames(IPlayer player);
 }

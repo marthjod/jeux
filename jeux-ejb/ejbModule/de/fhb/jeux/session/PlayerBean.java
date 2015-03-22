@@ -36,4 +36,14 @@ public class PlayerBean implements PlayerRemote, PlayerLocal {
 
         return playedGameDTOs;
     }
+
+    @Override
+    public Long getCountPlayedGames(IPlayer player) {
+        return playerDAO.getCountPlayedGames(player);
+    }
+
+    @Override
+    public Long getCountWonGames(IPlayer player) {
+        return playerDAO.getCountWonGames(player);
+    }
 }

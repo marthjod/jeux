@@ -10,6 +10,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import org.jboss.logging.Logger;
 
@@ -127,5 +128,21 @@ public class PlayerDAO {
         playedGames = query.getResultList();
 
         return playedGames;
+    }
+
+    public Long getCountGames(IPlayer player, String queryName) {
+        Query query = em.createNamedQuery(queryName);
+        query.setParameter("player", player);
+        Object res = query.getSingleResult();
+        Long count = (Long) res;
+        return count;
+    }
+
+    public Long getCountPlayedGames(IPlayer player) {
+        return getCountGames(player, "Game.countPlayedByPlayer");
+    }
+
+    public Long getCountWonGames(IPlayer player) {
+        return getCountGames(player, "Game.countWonByPlayer");
     }
 }
