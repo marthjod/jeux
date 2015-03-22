@@ -18,5 +18,12 @@
             {% block content %}
             {% endblock %}
         </div>
+        <div class="container" id="footer">
+            {% if prefix is not null %}
+            <a class="btn btn-default btn-lg" href="{% block overviewlink %}{% endblock %}">
+                Overview
+            </a>
+            {% endif %}
+        </div>
     </body>
 </html>

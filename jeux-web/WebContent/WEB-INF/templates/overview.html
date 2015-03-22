@@ -5,11 +5,11 @@
 {% for group in groups %}
 <div>
     <p>
-        <a class="btn btn-primary btn-lg" href="rankings/group/{{ group.id }}">
+        <a class="btn btn-primary btn-lg" href="{{ prefix }}/rankings/group/{{ group.id }}">
             Rankings {{ group.name }}
         </a>
         &nbsp;
-        <a class="btn btn-default btn-lg" href="results/group/{{ group.id }}">
+        <a class="btn btn-default btn-lg" href="{{ prefix }}/results/group/{{ group.id }}">
             Results {{ group.name }}
         </a>
     </p>

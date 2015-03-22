@@ -1,12 +1,3 @@
-{% extends "base" %}
-
-{% block title %}
-Results {{ groupName }}
-{% endblock %}
-
-{% block content %}
-<h3> {{ groupName }} </h3>
-
 {% if results is empty %}
 No results available
 {% else %}
@@ -17,19 +8,24 @@ No results available
             Set
         </th>
         <th>
-            {{ result.player1Name }}
+            <a href="{{ prefix }}/results/player/{{ result.player1Id }}">
+                {{ result.player1Name }}
+            </a>
             {% if result.player1Id == result.winnerId %}
             (winner)
             {% endif %}
         </th>
         <th>
-            {{ result.player2Name }}
+            <a href="{{ prefix }}/results/player/{{ result.player2Id }}">
+                {{ result.player2Name }}
+            </a>
             {% if result.player2Id == result.winnerId %}
             (winner)
             {% endif %}
         </th>
     </tr>
     {% for set in result.sets %}
+    {% if set.player1Score > 0 or set.player2Score > 0 %}
     <tr>
         <td>
             {{ set.number }}
@@ -41,14 +37,13 @@ No results available
             {{ set.player2Score }}
         </td>
     </tr>
+    {% endif %}
     {% endfor %}
-    <tr>
+    <!--<tr>
         <td colspan="3">
             Last updated {{ result.playedAt | date("yyyy/MM/dd HH:mm") }}
         </td>
-    </tr>
+    </tr>-->
 </table>
 {% endfor %}
 {% endif %}
-
-{% endblock %}

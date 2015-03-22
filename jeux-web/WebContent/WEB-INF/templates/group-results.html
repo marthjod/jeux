@@ -1,0 +1,15 @@
+{% extends "base" %}
+
+{% block title %}
+Results {{ groupName }}
+{% endblock %}
+
+{% block content %}
+<h3> {{ groupName }} </h3>
+
+{% include "results" %}
+
+{% endblock %}
+{% block overviewlink %}
+{{ prefix }}
+{% endblock %}

@@ -117,4 +117,15 @@ public class PlayerDAO {
         // caller must check for null
         return winner;
     }
+
+    public List<IGame> getPlayedGames(IPlayer player) {
+        List<IGame> playedGames = new ArrayList<IGame>();
+
+        TypedQuery<IGame> query = em.createNamedQuery("Game.findPlayedByPlayer",
+                IGame.class);
+        query.setParameter("player", player);
+        playedGames = query.getResultList();
+
+        return playedGames;
+    }
 }

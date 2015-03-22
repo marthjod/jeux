@@ -1,9 +1,12 @@
 package de.fhb.jeux.persistence;
 
+import de.fhb.jeux.model.IGame;
+import de.fhb.jeux.model.IGroup;
+import de.fhb.jeux.model.IPlayer;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -17,14 +20,9 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
-
-import de.fhb.jeux.model.IGame;
-import de.fhb.jeux.model.IGroup;
-import de.fhb.jeux.model.IPlayer;
-import java.util.Date;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "Game")
@@ -34,6 +32,7 @@ import javax.persistence.TemporalType;
     @NamedQuery(name = "Game.findAllInGroup", query = "SELECT g FROM ShowdownGame g WHERE g.group = :group"),
     @NamedQuery(name = "Game.findUnplayedInGroup", query = "SELECT g FROM ShowdownGame g WHERE g.group = :group AND g.winner = null"),
     @NamedQuery(name = "Game.findPlayedInGroup", query = "SELECT g FROM ShowdownGame g WHERE g.group = :group AND g.winner <> null"),
+    @NamedQuery(name = "Game.findPlayedByPlayer", query = "SELECT g FROM ShowdownGame g WHERE (g.player1 = :player OR g.player2 = :player) AND g.winner <> null"),
     @NamedQuery(name = "Game.findByContainedPlayers", query = "SELECT g FROM ShowdownGame g WHERE g.group = :group AND ( (g.player1 = :player1 AND g.player2 = :player2) OR (g.player2 = :player1 AND g.player1 = :player2))")})
 public class ShowdownGame implements IGame, Serializable {
 

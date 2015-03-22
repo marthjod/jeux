@@ -6,8 +6,10 @@ import com.mitchellbosecke.pebble.loader.Loader;
 import com.mitchellbosecke.pebble.loader.ServletLoader;
 import com.mitchellbosecke.pebble.template.PebbleTemplate;
 import de.fhb.jeux.model.IGroup;
+import de.fhb.jeux.model.IPlayer;
 import de.fhb.jeux.session.GameLocal;
 import de.fhb.jeux.session.GroupLocal;
+import de.fhb.jeux.session.PlayerLocal;
 import de.fhb.jeux.session.RankingLocal;
 import java.io.IOException;
 import java.io.StringWriter;
@@ -41,6 +43,9 @@ public class AudienceGUI {
 
     @EJB
     private GroupLocal groupBean;
+
+    @EJB
+    private PlayerLocal playerBean;
 
     @EJB
     private GameLocal gameBean;
@@ -88,6 +93,7 @@ public class AudienceGUI {
 
         if (compiledTemplate != null) {
             Map<String, Object> context = new HashMap<String, Object>();
+            context.put("prefix", "/" + servletContext.getServletContextName() + "/gui/audience");
             context.put("groups", groupBean.getAllGroupDTOs());
             writer = renderTemplate(compiledTemplate, context);
         }
@@ -106,6 +112,7 @@ public class AudienceGUI {
             Map<String, Object> context = new HashMap<String, Object>();
             IGroup group = groupBean.getGroupById(groupId);
 
+            context.put("prefix", "/" + servletContext.getServletContextName() + "/gui/audience");
             if (group != null) {
                 context.put("groupName", group.getName());
                 context.put("rankings", playerRankingBean.getRankedPlayerDTOs(group));
@@ -125,17 +132,44 @@ public class AudienceGUI {
     public String getResultsInGroup(@Context ServletContext servletContext,
             @PathParam("groupId") int groupId) {
         Writer writer = new StringWriter();
-        PebbleTemplate compiledTemplate = getTemplate(servletContext, "results");
+        PebbleTemplate compiledTemplate = getTemplate(servletContext, "group-results");
 
         if (compiledTemplate != null) {
             Map<String, Object> context = new HashMap<String, Object>();
             IGroup group = groupBean.getGroupById(groupId);
 
+            context.put("prefix", "/" + servletContext.getServletContextName() + "/gui/audience");
             if (group != null) {
                 context.put("groupName", group.getName());
                 context.put("results", gameBean.getPlayedGameDTOsInGroup(group));
             } else {
                 context.put("groupName", "Group not found");
+                context.put("results", new ArrayList());
+            }
+            writer = renderTemplate(compiledTemplate, context);
+        }
+
+        return writer.toString();
+    }
+
+    @GET
+    @Path("/results/player/{playerId}")
+    @Produces(MediaType.TEXT_HTML)
+    public String getPlayerResults(@Context ServletContext servletContext,
+            @PathParam("playerId") int playerId) {
+        Writer writer = new StringWriter();
+        PebbleTemplate compiledTemplate = getTemplate(servletContext, "player-results");
+
+        if (compiledTemplate != null) {
+            Map<String, Object> context = new HashMap<String, Object>();
+            IPlayer player = playerBean.getPlayerById(playerId);
+
+            context.put("prefix", "/" + servletContext.getServletContextName() + "/gui/audience");
+            if (player != null) {
+                context.put("playerName", player.getName());
+                context.put("results", playerBean.getPlayedGames(player));
+            } else {
+                context.put("playerName", "Player not found");
                 context.put("results", new ArrayList());
             }
             writer = renderTemplate(compiledTemplate, context);

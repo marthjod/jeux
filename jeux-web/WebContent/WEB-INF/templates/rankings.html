@@ -34,7 +34,9 @@ No rankings available
             {{ ranking.rank }}
         </td>
         <td>
-            {{ ranking.name }}
+            <a href="{{ prefix }}/results/player/{{ ranking.id }}">
+                {{ ranking.name }}
+            </a>
         </td>
         <td>
             {{ ranking.wonGames }}
@@ -50,4 +52,7 @@ No rankings available
 </table>
 {% endif %}
 
+{% endblock %}
+{% block overviewlink %}
+{{ prefix }}
 {% endblock %}

@@ -1,0 +1,15 @@
+{% extends "base" %}
+
+{% block title %}
+Results {{ playerName }}
+{% endblock %}
+
+{% block content %}
+<h3> {{ playerName }} </h3>
+
+{% include "results" %}
+
+{% endblock %}
+{% block overviewlink %}
+{{ prefix }}
+{% endblock %}
