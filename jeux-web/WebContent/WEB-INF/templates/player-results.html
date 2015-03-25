@@ -5,7 +5,13 @@ Results {{ playerName }}
 {% endblock %}
 
 {% block content %}
-<h3> {{ playerName }} {{ wonGames }}/{{ playedGames }} ({{ pctgWon | numberformat("#.##") }}%)</h3>
+<h3>{{ playerName }}</h3>
+<p>
+    Won {{ wonGames }} of {{ playedGames }} ({{ pctgWon | numberformat("#.##") }}%)
+</p>
+<p>
+    Streak: {{ streak }}
+</p>
 
 {% include "results" %}
 

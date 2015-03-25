@@ -17,6 +17,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import javax.ejb.EJB;
@@ -84,6 +85,40 @@ public class AudienceGUI {
         }
 
         return w;
+    }
+
+    private String getStreakInfo(List<GameDTO> games, IPlayer player) {
+
+        String streakInfo = "N/A";
+        int streakWon = 0;
+        int streakLost = 0;
+
+        if (games != null && player != null) {
+            Iterator<GameDTO> gamesIterator = games.iterator();
+            while (gamesIterator.hasNext()) {
+                if (gamesIterator.next().getWinnerId() == player.getId()) {
+                    if (streakLost == 0) {
+                        streakWon++;
+                        // logger.debug(player.getName() + " W" + streakWon);
+                    } else {
+                        // W becomes L or vice versa
+                        // logger.debug("Streak broke for " + player.getName());
+                        break;
+                    }
+                } else {
+                    if (streakWon == 0) {
+                        streakLost++;
+                        // logger.debug(player.getName() + " L" + streakLost);
+                    } else {
+                        // W becomes L or vice versa
+                        // logger.debug("Streak broke for " + player.getName());
+                        break;
+                    }
+                }
+            }
+            streakInfo = streakWon > 0 ? "W" + streakWon : "L" + streakLost;
+        }
+        return streakInfo;
     }
 
     @GET
@@ -170,6 +205,7 @@ public class AudienceGUI {
             if (player != null) {
                 // save extra DB call
                 List<GameDTO> playedGames = playerBean.getPlayedGames(player);
+
                 int countPlayedGames = playedGames.size();
                 Long countWonGames = playerBean.getCountWonGames(player);
                 float pctgWon = 0.0f;
@@ -182,7 +218,7 @@ public class AudienceGUI {
                 context.put("playedGames", countPlayedGames);
                 context.put("wonGames", countWonGames);
                 context.put("pctgWon", pctgWon);
-
+                context.put("streak", getStreakInfo(playedGames, player));
             } else {
                 context.put("playerName", "Player not found");
                 context.put("results", new ArrayList());
