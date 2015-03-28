@@ -242,6 +242,8 @@ public class CalcGamesBean implements CalcGamesRemote, CalcGamesLocal {
                                 "PLAYER1NAME", game.getPlayer1().getName())
                                 .replaceAll("PLAYER2NAME",
                                         game.getPlayer2().getName()));
+                        // avoid TeX's "Too many unprocessed floats"
+                        sb.append("\n\\clearpage\n\n");
                         sb.append("\n\\newpage\n\n");
                     }
                     sb.append("\n");
