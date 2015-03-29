@@ -131,10 +131,11 @@ public class PlayerDAO {
     }
 
     public Long getCountGames(IPlayer player, String queryName) {
+        Long count = 0L;
         Query query = em.createNamedQuery(queryName);
         query.setParameter("player", player);
         Object res = query.getSingleResult();
-        Long count = (Long) res;
+        count = (Long) res;
         return count;
     }
 

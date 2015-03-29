@@ -1,20 +1,18 @@
 package de.fhb.jeux.dao;
 
+import de.fhb.jeux.model.IGame;
+import de.fhb.jeux.model.IGroup;
+import de.fhb.jeux.persistence.ShowdownGame;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-
 import org.jboss.logging.Logger;
-
-import de.fhb.jeux.model.IGame;
-import de.fhb.jeux.model.IGroup;
-import de.fhb.jeux.persistence.ShowdownGame;
 
 @Stateless
 @LocalBean
@@ -38,6 +36,15 @@ public class GameDAO {
 
     public void updateGame(IGame game) {
         em.merge(game);
+    }
+
+    public Long getCountPlayedGamesInGroup(IGroup group) {
+        Long count = 0L;
+        Query query = em.createNamedQuery("Game.findCountPlayedInGroup");
+        query.setParameter("group", group);
+        Object res = query.getSingleResult();
+        count = (Long) res;
+        return count;
     }
 
     public List<IGame> getPlayedGamesInGroup(IGroup group) {

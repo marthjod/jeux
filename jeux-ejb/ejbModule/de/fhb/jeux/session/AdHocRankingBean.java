@@ -2,6 +2,7 @@ package de.fhb.jeux.session;
 
 import de.fhb.jeux.comparator.BonuspointsComparator;
 import de.fhb.jeux.comparator.WonGamesComparator;
+import de.fhb.jeux.dao.GameDAO;
 import de.fhb.jeux.dao.PlayerDAO;
 import de.fhb.jeux.dto.PlayerDTO;
 import de.fhb.jeux.model.IGroup;
@@ -16,7 +17,6 @@ import javax.ejb.Stateless;
 import org.jboss.logging.Logger;
 
 @Stateless
-@SuppressWarnings("ucd")
 public class AdHocRankingBean implements AdHocRankingRemote, AdHocRankingLocal {
 
     protected static Logger logger = Logger.getLogger(AdHocRankingBean.class);
@@ -27,53 +27,66 @@ public class AdHocRankingBean implements AdHocRankingRemote, AdHocRankingLocal {
     @EJB
     private PlayerDAO playerDAO;
 
+    @EJB
+    private GameDAO gameDAO;
+
     @Override
     public List<IPlayer> getRankedPlayers(IGroup group) {
         List<IPlayer> rankedPlayers = new ArrayList<IPlayer>();
+        int rank = 0;
 
         if (group != null) {
             // player entities
             List<ShowdownPlayer> players = group.getPlayers();
 
             if (!players.isEmpty()) {
-                Comparator<IPlayer> comparator;
-                // best-of-3: sort by bonus points first
-                if (group.getMaxSets() == 3) {
-                    comparator = new BonuspointsComparator(playerDAO);
+                // only calculate if games have been actually played
+                if (gameDAO.getCountPlayedGamesInGroup(group) > 0) {
+                    Comparator<IPlayer> comparator;
+                    // best-of-3: sort by bonus points first
+                    if (group.getMaxSets() == 3) {
+                        comparator = new BonuspointsComparator(playerDAO);
+                    } else {
+                        // best-of-1, best-of-5, best-of-7, etc.:
+                        // sort by won games first, then score ratio
+                        comparator = new WonGamesComparator(playerDAO);
+                    }
+
+                    // used for sorting
+                    PriorityQueue<IPlayer> sortedPlayers = new PriorityQueue<IPlayer>(
+                            5, comparator);
+
+                    // go thru player entities, convert them and add to queue
+                    // which maintains order defined by comparator
+                    for (IPlayer player : players) {
+                        sortedPlayers.add(player);
+                    }
+
+                    // use "rank" field for (ephemeral) ranking info
+                    // so no one has to guess whether returned list is sorted or not
+                    // and in what manner
+                    IPlayer temp = null;
+                    while (sortedPlayers.peek() != null) {
+                        temp = sortedPlayers.poll();
+                        temp.setRank(++rank);
+                        // logger.debug(temp.getRank() + ". " + temp.getName());
+                        rankedPlayers.add(temp);
+                    }
                 } else {
-                    // best-of-1, best-of-5, best-of-7, etc.:
-                    // sort by won games first, then score ratio
-                    comparator = new WonGamesComparator(playerDAO);
+                    // no games won yet --
+                    // apply arbitrary ranking, skipping comparators etc.
+                    logger.debug("Skipped ranking calculation, applying arbitrary ranks");
+                    for (IPlayer temp : group.getPlayers()) {
+                        temp.setRank(++rank);
+                        rankedPlayers.add(temp);
+                    }
                 }
 
-                // used for sorting
-                PriorityQueue<IPlayer> sortedPlayers = new PriorityQueue<IPlayer>(
-                        5, comparator);
-
-                // go thru player entities, convert them and add to queue
-                // which maintains order defined by comparator
-                for (IPlayer player : players) {
-                    sortedPlayers.add(player);
+                if (!rankedPlayers.isEmpty()) {
+                    logger.debug("'" + group.getName() + "': " + rankedPlayers);
                 }
-
-                // use "rank" field for (ephemeral) ranking info
-                // so no one has to guess whether returned list is sorted or not
-                // and in what manner
-                int rank = 0;
-                IPlayer temp = null;
-                while (sortedPlayers.peek() != null) {
-                    temp = sortedPlayers.poll();
-                    temp.setRank(++rank);
-                    // logger.debug(temp.getRank() + ". " + temp.getName());
-                    rankedPlayers.add(temp);
-                }
-            }
-
-            if (!rankedPlayers.isEmpty()) {
-                logger.debug("'" + group.getName() + "': " + rankedPlayers);
             }
         }
-
         return rankedPlayers;
     }
 

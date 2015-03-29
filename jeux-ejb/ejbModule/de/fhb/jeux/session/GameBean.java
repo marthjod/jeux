@@ -1,15 +1,13 @@
 package de.fhb.jeux.session;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
-
 import de.fhb.jeux.dao.GameDAO;
 import de.fhb.jeux.dto.GameDTO;
 import de.fhb.jeux.model.IGame;
 import de.fhb.jeux.model.IGroup;
+import java.util.ArrayList;
+import java.util.List;
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
 
 @Stateless
 @SuppressWarnings("ucd")
@@ -44,5 +42,4 @@ public class GameBean implements GameRemote, GameLocal {
 
         return unplayedGameDTOs;
     }
-
 }
