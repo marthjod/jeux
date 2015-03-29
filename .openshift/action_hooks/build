@@ -15,11 +15,14 @@ $maven -f jeux-web/pom.xml -DserverSecret="$JEUX_SERVER_SECRET" $goals
 $maven -f jeux-ear/pom.xml $goals
 
 # trigger undeploy
-prev_artifact=$(find $OPENSHIFT_JBOSSAS_DIR/standalone/deployments -name 'jeux*.ear' | head -1)
-rm -vf ${prev_artifact}*
+prev_artifact=$(find $OPENSHIFT_JBOSSAS_DIR/standalone/deployments -type f -name 'jeux*.ear' | head -1)
+rm -vf ${prev_artifact}
+rm -vf ${prev_artifact}.failed
+rm -vf ${prev_artifact}.deployed
 
-curr_version="$($maven -f jeux-ear/pom.xml org.apache.maven.plugins:maven-help-plugin:2.1.1:evaluate -Dexpression=project.version | egrep '^[0-9]+\.[0-9]+\.[0-9]+.*')"
-artifact="$OPENSHIFT_HOMEDIR/.m2/repository/de/fhb/jeux-ear/$curr_version/jeux-ear-$curr_version.ear"
+curr_version="$($maven -f jeux-ear/pom.xml org.apache.maven.plugins:maven-help-plugin:2.1.1:evaluate -Dexpression=project.version | egrep '^[0-9]+\.[0-9]+\.?[0-9]+?.*')"
+echo "Current version = $curr_version"
+artifact="$OPENSHIFT_HOMEDIR/.m2/repository/de/fhb/jeux-ear/$curr_version/jeux-ear-${curr_version}.ear"
 
 # deploy
 cp -v $artifact $jboss_deployment_dir/
