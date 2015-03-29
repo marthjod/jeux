@@ -143,19 +143,30 @@ public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
                         // - all sets have been played OR enough sets have been
                         // played
                         // - one player has won more sets than the other
+                        // - no one player has played more than min amount of sets
                         // we'll also calculate and write back
                         // - (bonus) points for won sets
                         // - score ratios for opponents
                         // (only) one of the players has won minimum required sets
-                        if (setsPlayed == maxSets
-                                || (setsWonByPlayer1 == minSets && setsWonByPlayer2 != minSets)
-                                || (setsWonByPlayer2 == minSets && setsWonByPlayer1 != minSets)) {
+                        if (setsPlayed == maxSets) {
+                            if (maxSets > setsWonByPlayer1 && maxSets > setsWonByPlayer2) {
+                                gameOver = true;
+                            } else {
+                                logger.error("One player has won one set too much (max sets "
+                                        + maxSets + "), sets won by players: "
+                                        + setsWonByPlayer1 + ", "
+                                        + setsWonByPlayer2);
+                            }
+                        } else if (setsWonByPlayer1 == minSets && setsWonByPlayer2 < minSets) {
                             gameOver = true;
-                            logger.info("Game over");
+                        } else if (setsWonByPlayer2 == minSets && setsWonByPlayer1 < minSets) {
+                            gameOver = true;
+                        } else {
+                            logger.error("Unable to determine winner for sets in game");
                         }
 
                         if (gameOver) {
-
+                            logger.info("Game over");
                             // write score ratios already (no need to know the
                             // winner yet)
                             updateScoreRatios(game, true);
