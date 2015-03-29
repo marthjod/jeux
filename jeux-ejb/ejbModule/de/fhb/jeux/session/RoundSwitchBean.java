@@ -4,7 +4,9 @@ import de.fhb.jeux.dao.GroupDAO;
 import de.fhb.jeux.dao.RoundSwitchRuleDAO;
 import de.fhb.jeux.model.IGroup;
 import de.fhb.jeux.model.IPlayer;
+import de.fhb.jeux.model.IRanking;
 import de.fhb.jeux.model.IRoundSwitchRule;
+import de.fhb.jeux.persistence.ShowdownRanking;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -20,7 +22,10 @@ public class RoundSwitchBean implements RoundSwitchRemote, RoundSwitchLocal {
     private RoundSwitchRuleDAO ruleDAO;
 
     @EJB
-    private RankingLocal rankingBean;
+    private AdHocRankingLocal adHocRankingBean;
+
+    @EJB
+    private FinalRankingLocal finalRankingBean;
 
     private static Logger logger = Logger.getLogger(RoundSwitchBean.class);
 
@@ -36,9 +41,17 @@ public class RoundSwitchBean implements RoundSwitchRemote, RoundSwitchLocal {
         for (IGroup group : groupDAO.getGroupsInRound(roundId, true)) {
 
             // rankings done once before players get moved
-            List<IPlayer> rankedPlayers = rankingBean.getRankedPlayers(group);
+            List<IPlayer> rankedPlayers = adHocRankingBean.getRankedPlayers(group);
             // final ranking for group
             logger.info("'" + group.getName() + "' (final): " + rankedPlayers);
+            logger.info("Persisting final ranking");
+            for (IPlayer player : rankedPlayers) {
+                IRanking ranking = new ShowdownRanking(player, player.getGroup());
+                finalRankingBean.addRanking(ranking);
+            }
+
+            // from now on, show historical/final rankings instead of ad-hoc ones
+            group.setActive(false);
 
             // find appropriate round-switch rules (RSRs)
             for (IRoundSwitchRule rule : ruleDAO.getRulesForSrcGroup(group)) {

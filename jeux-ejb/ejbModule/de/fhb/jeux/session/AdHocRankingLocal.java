@@ -9,7 +9,7 @@ import de.fhb.jeux.model.IGroup;
 import de.fhb.jeux.model.IPlayer;
 
 @Local
-public interface RankingLocal {
+public interface AdHocRankingLocal {
 
 	public List<IPlayer> getRankedPlayers(IGroup group);
 

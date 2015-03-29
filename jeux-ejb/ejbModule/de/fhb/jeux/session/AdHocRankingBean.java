@@ -17,11 +17,11 @@ import org.jboss.logging.Logger;
 
 @Stateless
 @SuppressWarnings("ucd")
-public class RankingBean implements RankingRemote, RankingLocal {
+public class AdHocRankingBean implements AdHocRankingRemote, AdHocRankingLocal {
 
-    protected static Logger logger = Logger.getLogger(RankingBean.class);
+    protected static Logger logger = Logger.getLogger(AdHocRankingBean.class);
 
-    public RankingBean() {
+    public AdHocRankingBean() {
     }
 
     @EJB

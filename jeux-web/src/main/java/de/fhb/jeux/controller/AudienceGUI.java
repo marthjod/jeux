@@ -8,10 +8,11 @@ import com.mitchellbosecke.pebble.template.PebbleTemplate;
 import de.fhb.jeux.dto.GameDTO;
 import de.fhb.jeux.model.IGroup;
 import de.fhb.jeux.model.IPlayer;
+import de.fhb.jeux.session.AdHocRankingLocal;
+import de.fhb.jeux.session.FinalRankingLocal;
 import de.fhb.jeux.session.GameLocal;
 import de.fhb.jeux.session.GroupLocal;
 import de.fhb.jeux.session.PlayerLocal;
-import de.fhb.jeux.session.RankingLocal;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -54,7 +55,10 @@ public class AudienceGUI {
     private GameLocal gameBean;
 
     @EJB
-    private RankingLocal playerRankingBean;
+    private AdHocRankingLocal adHocRankingBean;
+
+    @EJB
+    private FinalRankingLocal finalRankingBean;
 
     private PebbleTemplate getTemplate(ServletContext ctx, String templateName) {
         PebbleTemplate compiledTemplate = null;
@@ -89,7 +93,6 @@ public class AudienceGUI {
 
     private String getStreakInfo(List<GameDTO> games, IPlayer player) {
 
-        String streakInfo = "N/A";
         int streakWon = 0;
         int streakLost = 0;
 
@@ -116,9 +119,8 @@ public class AudienceGUI {
                     }
                 }
             }
-            streakInfo = streakWon > 0 ? "W" + streakWon : "L" + streakLost;
         }
-        return streakInfo;
+        return streakWon > 0 ? "W" + streakWon : "L" + streakLost;
     }
 
     @GET
@@ -152,7 +154,11 @@ public class AudienceGUI {
             context.put("prefix", "/" + servletContext.getServletContextName() + "/gui/audience");
             if (group != null) {
                 context.put("groupName", group.getName());
-                context.put("rankings", playerRankingBean.getRankedPlayerDTOs(group));
+                if (group.isActive()) {
+                    context.put("rankings", adHocRankingBean.getRankedPlayerDTOs(group));
+                } else {
+                    context.put("rankings", finalRankingBean.getRankingDTOs(group));
+                }
             } else {
                 context.put("groupName", "Group not found");
                 context.put("rankings", new ArrayList());

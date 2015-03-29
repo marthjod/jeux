@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jan 17, 2015 at 08:16 PM
+-- Generation Time: Mar 28, 2015 at 05:04 PM
 -- Server version: 5.6.14
 -- PHP Version: 5.5.6
 
@@ -70,7 +70,7 @@ CREATE TABLE IF NOT EXISTS `Group_` (
   `roundId` int(11) NOT NULL COMMENT 'Round this group belongs to',
   `minSets` int(3) NOT NULL DEFAULT '1' COMMENT 'Minimum number of sets to be played in each of the group''s games',
   `maxSets` int(4) NOT NULL DEFAULT '1' COMMENT 'Maximum number of sets to be played in each of the group''s games',
-  `active` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Is this group''s games currently being played?',
+  `active` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Is this group part of the current round?',
   `completed` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Have all this group''s games been played?',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=5 ;
@@ -92,6 +92,23 @@ CREATE TABLE IF NOT EXISTS `Player` (
   PRIMARY KEY (`id`),
   KEY `fk_Player_Group1_idx` (`groupId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `Ranking`
+--
+
+CREATE TABLE IF NOT EXISTS `Ranking` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `playerId` int(11) NOT NULL,
+  `groupId` int(11) NOT NULL,
+  `rank` int(11) NOT NULL DEFAULT '0',
+  `scoreRatio` int(11) DEFAULT NULL,
+  `wonGames` int(11) NOT NULL DEFAULT '0',
+  `points` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 

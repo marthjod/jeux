@@ -19,7 +19,7 @@ import de.fhb.jeux.dto.RoundSwitchRuleDTO;
 import de.fhb.jeux.model.IGroup;
 import de.fhb.jeux.session.GameLocal;
 import de.fhb.jeux.session.GroupLocal;
-import de.fhb.jeux.session.RankingLocal;
+import de.fhb.jeux.session.AdHocRankingLocal;
 import de.fhb.jeux.session.RoundSwitchRuleLocal;
 
 @Stateless
@@ -39,7 +39,7 @@ public class AudienceAPI {
 	private RoundSwitchRuleLocal roundSwitchRuleBean;
 
 	@EJB
-	private RankingLocal playerRankingBean;
+	private AdHocRankingLocal playerRankingBean;
 
 	@GET
 	@Path("/status")

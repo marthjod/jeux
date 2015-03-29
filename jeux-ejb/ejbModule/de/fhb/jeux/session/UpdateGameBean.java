@@ -1,15 +1,5 @@
 package de.fhb.jeux.session;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.ListIterator;
-
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
-
-import org.jboss.logging.Logger;
-
 import de.fhb.jeux.config.BonusPointsDistribution;
 import de.fhb.jeux.config.BonusPointsDistributor;
 import de.fhb.jeux.dao.GameDAO;
@@ -22,7 +12,14 @@ import de.fhb.jeux.model.IGameSet;
 import de.fhb.jeux.model.IGroup;
 import de.fhb.jeux.model.IPlayer;
 import de.fhb.jeux.persistence.ShowdownGameSet;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.ListIterator;
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import org.jboss.logging.Logger;
 
 @Stateless
 @SuppressWarnings("ucd")
@@ -217,11 +214,8 @@ public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
                         // set group = completed if this was its last game
                         if (gameDAO.getUnplayedGamesInGroup(group).isEmpty()) {
                             group.setCompleted(true);
-                            group.setActive(false);
-
-                            logger.info("Group " + group.getName()
-                                    + " completed:" + group.isCompleted()
-                                    + ", active:" + group.isActive());
+                            // DO NOT setActive(false) here,
+                            // group stays active until round switched!
 
                             // if this was also the _round's_ last game
                             if (groupDAO.roundFinished(group.getRoundId())) {
