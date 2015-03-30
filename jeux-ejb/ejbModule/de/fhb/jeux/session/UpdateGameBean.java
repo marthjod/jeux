@@ -156,6 +156,12 @@ public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
                                         + maxSets + "), sets won by players: "
                                         + setsWonByPlayer1 + ", "
                                         + setsWonByPlayer2);
+                                // - clear sets
+                                for (ShowdownGameSet set : game.getSets()) {
+                                    set.setPlayer1Score(0);
+                                    set.setPlayer2Score(0);
+                                    set.setWinner(null);
+                                }
                             }
                         } else if (setsWonByPlayer1 == minSets && setsWonByPlayer2 < minSets) {
                             gameOver = true;
