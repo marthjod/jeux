@@ -21,13 +21,13 @@ public class RankingDTO {
     // parametrized constructor for conversion from interface implementations
     // (i.e. Persistent Entities)
     public RankingDTO(IRanking rankingEntity) {
-        this.id = rankingEntity.getPlayer().getId();
-        this.name = rankingEntity.getPlayer().getName();
-        this.groupName = rankingEntity.getGroup().getName();
-        this.points = rankingEntity.getPoints();
-        this.scoreRatio = rankingEntity.getScoreRatio();
-        this.wonGames = rankingEntity.getWonGames();
-        this.rank = rankingEntity.getRank();
+        id = rankingEntity.getPlayer().getId();
+        name = rankingEntity.getPlayer().getName();
+        groupName = rankingEntity.getGroup().getName();
+        points = rankingEntity.getPoints();
+        scoreRatio = rankingEntity.getScoreRatio();
+        wonGames = rankingEntity.getWonGames();
+        rank = rankingEntity.getRank();
     }
 
     // getters necessary or not added to DTO in template otherwise!
@@ -79,13 +79,21 @@ public class RankingDTO {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("<");
-        sb.append("#" + rank + " ");
+        sb.append("#");
+        sb.append(rank);
+        sb.append(" ");
         sb.append(name);
-        sb.append(" (" + id + ")");
-        sb.append(", group: " + groupName);
-        sb.append(", score ratio " + scoreRatio);
-        sb.append(", won games: " + wonGames);
-        sb.append(", points: " + points);
+        sb.append(" (");
+        sb.append(id);
+        sb.append(")");
+        sb.append(", group: ");
+        sb.append(groupName);
+        sb.append(", score ratio ");
+        sb.append(scoreRatio);
+        sb.append(", won games: ");
+        sb.append(wonGames);
+        sb.append(", points: ");
+        sb.append(points);
         sb.append(">");
         return sb.toString();
     }

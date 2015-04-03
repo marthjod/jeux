@@ -86,6 +86,7 @@ public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
 
                         while (setsIterator.hasNext()) {
                             IGameSet oldSet = setsIterator.next();
+                            String oldSetGroupName = oldSet.getGame().getGroup().getName();
                             // DTOs get counted and index-accessed in parallel
                             GameSetDTO newSet = newSets.get(numDTOs++);
 
@@ -101,7 +102,7 @@ public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
                                         .getPlayer2Score()) {
                                     oldSet.setWinner(oldSet.getGame().getPlayer1());
 
-                                    logger.info("Set winner: "
+                                    logger.info("'" + oldSetGroupName + "' Set winner: "
                                             + oldSet.getGame().getPlayer1()
                                             .getName() + ", "
                                             + oldSet.getPlayer1Score() + ":"
@@ -110,7 +111,7 @@ public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
                                         .getPlayer1Score()) {
                                     oldSet.setWinner(oldSet.getGame().getPlayer2());
 
-                                    logger.info("Set winner: "
+                                    logger.info("'" + oldSetGroupName + "' Set winner: "
                                             + oldSet.getGame().getPlayer2()
                                             .getName() + ", "
                                             + oldSet.getPlayer2Score() + ":"
@@ -328,8 +329,9 @@ public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
             IPlayer winner, IPlayer loser) {
         winner.setPoints(winner.getPoints() + bonusPoints.get("winner"));
         loser.setPoints(loser.getPoints() + bonusPoints.get("loser"));
+        String groupName = winner.getGroup().getName();
 
-        logger.info("Bonus points: " + winner.getName() + " +"
+        logger.info("'" + groupName + "' Bonus points: " + winner.getName() + " +"
                 + bonusPoints.get("winner") + " = " + winner.getPoints() + ", "
                 + loser.getName() + " +" + bonusPoints.get("loser") + " = "
                 + loser.getPoints());
@@ -339,8 +341,9 @@ public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
             IPlayer winner, IPlayer loser) {
         winner.setPoints(winner.getPoints() - bonusPoints.get("winner"));
         loser.setPoints(loser.getPoints() - bonusPoints.get("loser"));
+        String groupName = winner.getGroup().getName();
 
-        logger.info("Bonus points: " + winner.getName() + " -"
+        logger.info("'" + groupName + "' Bonus points: " + winner.getName() + " -"
                 + bonusPoints.get("winner") + " = " + winner.getPoints() + ", "
                 + loser.getName() + " -" + bonusPoints.get("loser") + " = "
                 + loser.getPoints());
@@ -354,15 +357,16 @@ public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
 
         IPlayer player1 = game.getPlayer1();
         IPlayer player2 = game.getPlayer2();
+        String groupName = game.getGroup().getName();
 
         for (ShowdownGameSet set : game.getSets()) {
             resultPlayer1Score += set.getPlayer1Score();
             resultPlayer2Score += set.getPlayer2Score();
         }
 
-        logger.info(player1.getName() + " has scored " + resultPlayer1Score
+        logger.info("'" + groupName + "' " + player1.getName() + " has scored " + resultPlayer1Score
                 + " in total");
-        logger.info(player2.getName() + " has scored " + resultPlayer2Score
+        logger.info("'" + groupName + "' " + player2.getName() + " has scored " + resultPlayer2Score
                 + " in total");
 
         difference = Math.abs(resultPlayer1Score - resultPlayer2Score);
@@ -372,18 +376,18 @@ public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
             if (addToTotal) {
                 player1.setScoreRatio(player1.getScoreRatio() + difference);
                 player2.setScoreRatio(player2.getScoreRatio() - difference);
-                logger.info(player1.getName() + " +" + difference + " = "
+                logger.info("'" + groupName + "' " + player1.getName() + " +" + difference + " = "
                         + player1.getScoreRatio());
-                logger.info(player2.getName() + " -" + difference + " = "
+                logger.info("'" + groupName + "' " + player2.getName() + " -" + difference + " = "
                         + player2.getScoreRatio());
             } else {
                 logger.debug("Resetting scores");
                 player2.setScoreRatio(player2.getScoreRatio() + difference);
                 player1.setScoreRatio(player1.getScoreRatio() - difference);
 
-                logger.info(player2.getName() + " +" + difference + " = "
+                logger.info("'" + groupName + "' " + player2.getName() + " +" + difference + " = "
                         + player2.getScoreRatio());
-                logger.info(player1.getName() + " -" + difference + " = "
+                logger.info("'" + groupName + "' " + player1.getName() + " -" + difference + " = "
                         + player1.getScoreRatio());
             }
 
@@ -392,17 +396,17 @@ public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
                 player2.setScoreRatio(player2.getScoreRatio() + difference);
                 player1.setScoreRatio(player1.getScoreRatio() - difference);
 
-                logger.info(player2.getName() + " +" + difference + " = "
+                logger.info("'" + groupName + "' " + player2.getName() + " +" + difference + " = "
                         + player2.getScoreRatio());
-                logger.info(player1.getName() + " -" + difference + " = "
+                logger.info("'" + groupName + "' " + player1.getName() + " -" + difference + " = "
                         + player1.getScoreRatio());
             } else {
                 logger.debug("Resetting scores");
                 player1.setScoreRatio(player1.getScoreRatio() + difference);
                 player2.setScoreRatio(player2.getScoreRatio() - difference);
-                logger.info(player1.getName() + " +" + difference + " = "
+                logger.info("'" + groupName + "' " + player1.getName() + " +" + difference + " = "
                         + player1.getScoreRatio());
-                logger.info(player2.getName() + " -" + difference + " = "
+                logger.info("'" + groupName + "' " + player2.getName() + " -" + difference + " = "
                         + player2.getScoreRatio());
             }
         } else {
