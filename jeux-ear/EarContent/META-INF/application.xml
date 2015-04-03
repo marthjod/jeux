@@ -2,11 +2,11 @@
 <application xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/application_6.xsd" id="Application_ID" version="6">
   <display-name>Jeux</display-name>
   <module>
-    <ejb>jeux-ejb-0.2.3.jar</ejb>
+    <ejb>jeux-ejb-0.2.4.jar</ejb>
   </module>
   <module>
     <web>
-      <web-uri>jeux-web-0.2.3.war</web-uri>
+      <web-uri>jeux-web-0.2.4.war</web-uri>
       <context-root>JeuxWeb</context-root>
     </web>
   </module>
