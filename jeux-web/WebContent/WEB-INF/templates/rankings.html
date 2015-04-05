@@ -1,11 +1,16 @@
 {% extends "base" %}
 
 {% block title %}
-Rankings {{ groupName }}
+Rankings {{ group.name }}
 {% endblock %}
 
 {% block content %}
-<h3> {{ groupName }} </h3>
+<h3>
+    {{ group.name }}
+    {% if group.completed %}
+    (final)
+    {% endif %}
+</h3>
 
 {% if rankings is empty %}
 No rankings available

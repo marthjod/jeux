@@ -1,11 +1,13 @@
 {% extends "base" %}
 
 {% block title %}
-Results {{ groupName }}
+Results {{ group.name }}
 {% endblock %}
 
 {% block content %}
-<h3> {{ groupName }} </h3>
+<h3>
+    {{ group.name }}
+</h3>
 
 {% include "results" %}
 

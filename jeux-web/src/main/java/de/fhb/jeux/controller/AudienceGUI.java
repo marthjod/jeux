@@ -6,6 +6,7 @@ import com.mitchellbosecke.pebble.loader.Loader;
 import com.mitchellbosecke.pebble.loader.ServletLoader;
 import com.mitchellbosecke.pebble.template.PebbleTemplate;
 import de.fhb.jeux.dto.GameDTO;
+import de.fhb.jeux.dto.GroupDTO;
 import de.fhb.jeux.model.IGroup;
 import de.fhb.jeux.model.IPlayer;
 import de.fhb.jeux.session.AdHocRankingLocal;
@@ -153,14 +154,14 @@ public class AudienceGUI {
 
             context.put("prefix", "/" + servletContext.getServletContextName() + "/gui/audience");
             if (group != null) {
-                context.put("groupName", group.getName());
+                context.put("group", group);
                 if (group.isActive()) {
                     context.put("rankings", adHocRankingBean.getRankedPlayerDTOs(group));
                 } else {
                     context.put("rankings", finalRankingBean.getRankingDTOs(group));
                 }
             } else {
-                context.put("groupName", "Group not found");
+                context.put("group", new GroupDTO("Group not found", false));
                 context.put("rankings", new ArrayList());
             }
             writer = renderTemplate(compiledTemplate, context);
@@ -183,10 +184,10 @@ public class AudienceGUI {
 
             context.put("prefix", "/" + servletContext.getServletContextName() + "/gui/audience");
             if (group != null) {
-                context.put("groupName", group.getName());
+                context.put("group", group);
                 context.put("results", gameBean.getPlayedGameDTOsInGroup(group));
             } else {
-                context.put("groupName", "Group not found");
+                context.put("group", new GroupDTO("Group not found", false));
                 context.put("results", new ArrayList());
             }
             writer = renderTemplate(compiledTemplate, context);
