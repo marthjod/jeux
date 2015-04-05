@@ -26,11 +26,14 @@ import de.fhb.jeux.session.InsertGameBean;
 import de.fhb.jeux.session.PlayerLocal;
 import de.fhb.jeux.session.RoundSwitchRuleLocal;
 import de.fhb.jeux.session.UpdateGameLocal;
+import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -48,6 +51,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import org.apache.commons.io.FileUtils;
 import org.jboss.logging.Logger;
 
 @Stateless
@@ -315,6 +319,47 @@ public class AdminAPI {
             case CalcGamesBean.TOO_FEW_GROUP_MEMBERS:
                 response = Response.status(428).build();
                 break;
+        }
+
+        return response;
+    }
+
+    @GET
+    @Path("/log")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getLog(@Context ServletContext servletContext) {
+        int maxLines = 1000;
+        String response = "";
+        List<String> logLines = new ArrayList<>();
+        File logFile = new File(servletContext.getInitParameter("LOG_FILE_PATH"));
+        String absPath = logFile.getAbsolutePath();
+
+        try {
+            logLines = FileUtils.readLines(logFile, Charset.defaultCharset());
+        } catch (IOException ex) {
+            response = absPath + ": " + ex.getMessage();
+        }
+
+        int numLines = logLines.size();
+
+        if (numLines > 0) {
+            // logger.info("Read " + numLines + " lines from " + absPath);
+            // cut down to last third
+            if (numLines / 3 < maxLines) {
+                logLines = logLines.subList(numLines - numLines / 3, numLines);
+            } else {
+                logLines = logLines.subList(numLines - maxLines, numLines);
+            }
+
+            numLines = logLines.size();
+            // logger.info("Returning last " + numLines + " lines from log file");
+
+            StringBuilder sb = new StringBuilder(numLines);
+            for (String line : logLines) {
+                sb.append(line);
+                sb.append("\r\n");
+            }
+            response = sb.toString();
         }
 
         return response;

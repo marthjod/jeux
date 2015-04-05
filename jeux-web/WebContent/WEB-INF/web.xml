@@ -20,6 +20,10 @@
         <param-name>SCORESHEETS_LATEX_FOOTER</param-name>
         <param-value>/scoresheets/footer.tex</param-value>
     </context-param>
+    <context-param>
+        <param-name>LOG_FILE_PATH</param-name>
+        <param-value>${logFilePath}</param-value>
+    </context-param>
     <servlet>
         <description>JAX-RS Tools Generated - Do not modify</description>
         <servlet-name>JAX-RS Servlet</servlet-name>

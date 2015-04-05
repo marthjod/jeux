@@ -11,7 +11,7 @@ jboss_deployment_dir="$OPENSHIFT_JBOSSAS_DIR/standalone/deployments"
 cd $OPENSHIFT_REPO_DIR
 $maven -f jeux-ejb/pom.xml $goals
 # set via "rhc set env key=value -a appname"
-$maven -f jeux-web/pom.xml -DserverSecret="$JEUX_SERVER_SECRET" $goals
+$maven -f jeux-web/pom.xml -DserverSecret="$JEUX_SERVER_SECRET" -DlogFilePath="$OPENSHIFT_JBOSSAS_LOG_DIR/jbossas.log" $goals
 $maven -f jeux-ear/pom.xml $goals
 
 # trigger undeploy
