@@ -58,7 +58,7 @@ public class ShowdownPlayer implements IPlayer, Serializable {
         points = playerDTO.getPoints();
         scoreRatio = playerDTO.getScoreRatio();
         rank = playerDTO.getRank();
-        group = (ShowdownGroup) group;
+        this.group = (ShowdownGroup) group;
     }
 
     @Override
