@@ -12,6 +12,7 @@ import de.fhb.jeux.dto.GroupDTO;
 import de.fhb.jeux.dto.PlayerDTO;
 import de.fhb.jeux.dto.RoundSwitchRuleDTO;
 import de.fhb.jeux.model.IGroup;
+import de.fhb.jeux.model.IPlayer;
 import de.fhb.jeux.session.CalcGamesBean;
 import de.fhb.jeux.session.CalcGamesLocal;
 import de.fhb.jeux.session.CreateGroupLocal;
@@ -26,6 +27,7 @@ import de.fhb.jeux.session.InsertGameBean;
 import de.fhb.jeux.session.PlayerLocal;
 import de.fhb.jeux.session.RoundSwitchRuleLocal;
 import de.fhb.jeux.session.UpdateGameLocal;
+import de.fhb.jeux.session.UpdatePlayerLocal;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
@@ -75,6 +77,9 @@ public class AdminAPI {
 
     @EJB
     private CreatePlayerLocal createPlayerBean;
+
+    @EJB
+    private UpdatePlayerLocal updatePlayerBean;
 
     @EJB
     private CreateGroupLocal createGroupBean;
@@ -183,6 +188,30 @@ public class AdminAPI {
             if (createPlayerBean.createPlayer(playerDTO, group)) {
                 response = Response.status(Response.Status.CREATED).build();
             }
+        }
+
+        return response;
+    }
+
+    @POST
+    @Path("/edit-player")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response editPlayer(PlayerDTO playerDTO) {
+        Response response = Response.status(
+                Response.Status.INTERNAL_SERVER_ERROR).build();
+
+        if (playerDTO != null) {
+            logger.debug("Deserialized player DTO " + playerDTO);
+
+            // group must stay the same, only name changes allowed so far
+            IGroup originalGroup = groupBean.getGroupById(playerDTO.getGroupId());
+            IPlayer original = playerBean.getPlayerById(playerDTO.getId());
+            logger.info("Changing " + original.getName() + " to " + playerDTO.getName());
+            original.setName(playerDTO.getName());
+
+            // returns void...
+            updatePlayerBean.updatePlayer(original);
+            response = Response.status(Response.Status.CREATED).build();
         }
 
         return response;

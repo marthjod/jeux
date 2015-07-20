@@ -1,33 +1,36 @@
 package de.fhb.jeux.model;
 
 public interface IPlayer {
-	public int getId();
 
-	public IGroup getGroup();
+    public int getId();
 
-	public void setGroup(IGroup group);
+    public IGroup getGroup();
 
-	public String getName();
+    public void setGroup(IGroup group);
 
-	public int getPoints();
+    public String getName();
 
-	public int getScoreRatio();
+    public int getPoints();
 
-	public int getRank();
+    public int getScoreRatio();
 
-	public void setRank(int rank);
+    public int getRank();
 
-	public boolean equals(IPlayer player);
+    public void setRank(int rank);
 
-	public void setPoints(int points);
+    public boolean equals(IPlayer player);
 
-	public void setScoreRatio(int scoreRatio);
+    public void setPoints(int points);
 
-	public int getWonGames();
+    public void setScoreRatio(int scoreRatio);
 
-	public void setWonGames(int wonGames);
+    public int getWonGames();
 
-	public void addWonGame();
+    public void setWonGames(int wonGames);
 
-	public void subtractWonGame();
+    public void addWonGame();
+
+    public void subtractWonGame();
+
+    public void setName(String name);
 }

@@ -81,6 +81,7 @@ public class ShowdownPlayer implements IPlayer, Serializable {
         return name;
     }
 
+    @Override
     public void setName(String name) {
         this.name = name;
     }
