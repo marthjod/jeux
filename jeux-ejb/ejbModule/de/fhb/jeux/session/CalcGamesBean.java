@@ -23,7 +23,7 @@ public class CalcGamesBean implements CalcGamesRemote, CalcGamesLocal {
     private static Logger logger = Logger.getLogger(CalcGamesBean.class);
 
     private static final String FORMAT_LATEX = "latex";
-    private static final List<String> FORMATS = new ArrayList<String>(
+    private static final List<String> FORMATS = new ArrayList<>(
             Arrays.asList(FORMAT_LATEX));
 
     @EJB

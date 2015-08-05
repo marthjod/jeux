@@ -398,24 +398,37 @@ public class AdminAPI {
     @Path("/shuffled-games/group/id/{groupId}")
     @Produces(MediaType.TEXT_HTML)
     public String getShuffledGamesList(@PathParam("groupId") int groupId,
+            @MatrixParam("format") @DefaultValue("html") String format,
             @Context ServletContext servletContext) {
-        Writer writer = new StringWriter();
-        PebbleTemplate compiledTemplate = getTemplate(servletContext, "games-list");
 
-        if (compiledTemplate != null) {
-            Map<String, Object> context = new HashMap<>();
-            IGroup group = groupBean.getGroupById(groupId);
+        String ret = "";
+        IGroup group = groupBean.getGroupById(groupId);
 
-            if (group != null) {
-                context.put("groupName", group.getName());
-                context.put("games", calcGamesBean.calcGameDTOsForGroup(group, true));
-            } else {
-                context.put("groupName", "Group not found");
-                context.put("games", new ArrayList());
+        if ("html".equals(format)) {
+            PebbleTemplate compiledTemplate = getTemplate(servletContext, "games-list");
+
+            if (compiledTemplate != null) {
+                Writer writer = new StringWriter();
+                Map<String, Object> context = new HashMap<>();
+
+                if (group != null) {
+                    context.put("groupName", group.getName());
+                    context.put("games", calcGamesBean.calcGameDTOsForGroup(group, true));
+                } else {
+                    context.put("groupName", "Group not found");
+                    context.put("games", new ArrayList());
+                }
+                writer = renderTemplate(compiledTemplate, context);
+                ret = writer.toString();
             }
-            writer = renderTemplate(compiledTemplate, context);
+        } else if ("latex".equals(format)) {
+            if (group != null) {
+                ret = calcGamesBean
+                        .getShuffledGamesList(group, format, servletContext);
+            }
         }
 
-        return writer.toString();
+        return ret;
     }
+
 }
