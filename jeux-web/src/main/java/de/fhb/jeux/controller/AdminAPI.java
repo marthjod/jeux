@@ -366,7 +366,7 @@ public class AdminAPI {
         IGroup group = groupBean.getGroupById(groupId);
 
         if ("html".equals(format)) {
-            PebbleTemplate compiledTemplate = Template.getTemplate(servletContext, "games-list");
+            PebbleTemplate compiledTemplate = Template.getTemplate(servletContext, "admin-games-list");
 
             if (compiledTemplate != null) {
                 Map<String, Object> context = new HashMap<>();

@@ -1,4 +1,4 @@
-{% extends "base" %}
+{% extends "audience-base" %}
 
 {% block title %}
 Results {{ playerName }}
@@ -13,7 +13,7 @@ Results {{ playerName }}
     Streak: {{ streak }}
 </p>
 
-{% include "results" %}
+{% include "audience-results" %}
 
 {% endblock %}
 {% block overviewlink %}

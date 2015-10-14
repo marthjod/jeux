@@ -91,7 +91,7 @@ public class AudienceGUI {
     @Produces(MediaType.TEXT_HTML)
     public String getOverview(@Context ServletContext servletContext) {
         Writer writer = new StringWriter();
-        PebbleTemplate compiledTemplate = Template.getTemplate(servletContext, "overview");
+        PebbleTemplate compiledTemplate = Template.getTemplate(servletContext, "audience-overview");
 
         if (compiledTemplate != null) {
             Map<String, Object> context = new HashMap<>();
@@ -108,7 +108,7 @@ public class AudienceGUI {
     @Produces(MediaType.TEXT_HTML)
     public String getRankingsInGroup(@Context ServletContext servletContext, @PathParam("groupId") int groupId) {
         Writer writer = new StringWriter();
-        PebbleTemplate compiledTemplate = Template.getTemplate(servletContext, "rankings");
+        PebbleTemplate compiledTemplate = Template.getTemplate(servletContext, "audience-rankings");
 
         if (compiledTemplate != null) {
             Map<String, Object> context = new HashMap<>();
@@ -138,7 +138,7 @@ public class AudienceGUI {
     public String getResultsInGroup(@Context ServletContext servletContext,
             @PathParam("groupId") int groupId) {
         Writer writer = new StringWriter();
-        PebbleTemplate compiledTemplate = Template.getTemplate(servletContext, "group-results");
+        PebbleTemplate compiledTemplate = Template.getTemplate(servletContext, "audience-group-results");
 
         if (compiledTemplate != null) {
             Map<String, Object> context = new HashMap<>();
@@ -164,7 +164,7 @@ public class AudienceGUI {
     public String getPlayerResults(@Context ServletContext servletContext,
             @PathParam("playerId") int playerId) {
         Writer writer = new StringWriter();
-        PebbleTemplate compiledTemplate = Template.getTemplate(servletContext, "player-results");
+        PebbleTemplate compiledTemplate = Template.getTemplate(servletContext, "audience-player-results");
 
         if (compiledTemplate != null) {
             Map<String, Object> context = new HashMap<String, Object>();

@@ -1,4 +1,4 @@
-{% extends "base" %}
+{% extends "audience-base" %}
 
 {% block title %}
 Results {{ group.name }}
@@ -9,7 +9,7 @@ Results {{ group.name }}
     {{ group.name }}
 </h3>
 
-{% include "results" %}
+{% include "audience-results" %}
 
 {% endblock %}
 {% block overviewlink %}
