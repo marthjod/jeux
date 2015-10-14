@@ -10,7 +10,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 @Stateless
-@SuppressWarnings("ucd")
+
 public class PlayerBean implements PlayerRemote, PlayerLocal {
 
     @EJB

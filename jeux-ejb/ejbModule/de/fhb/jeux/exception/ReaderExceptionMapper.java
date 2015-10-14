@@ -9,7 +9,7 @@ import org.jboss.resteasy.spi.ReaderException;
 // used to map exceptions caused by bad client-provided JSON input to HTTP response 
 
 @Provider
-@SuppressWarnings("ucd")
+
 public class ReaderExceptionMapper implements
 		ExceptionMapper<org.jboss.resteasy.spi.ReaderException> {
 

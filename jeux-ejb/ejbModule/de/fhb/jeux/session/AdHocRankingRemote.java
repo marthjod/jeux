@@ -9,11 +9,11 @@ import de.fhb.jeux.model.IGroup;
 import de.fhb.jeux.model.IPlayer;
 
 @Remote
-@SuppressWarnings("ucd")
+
 public interface AdHocRankingRemote {
 
 	public List<IPlayer> getRankedPlayers(IGroup group);
 
-	@SuppressWarnings("ucd")
+	
 	public List<PlayerDTO> getRankedPlayerDTOs(IGroup group);
 }

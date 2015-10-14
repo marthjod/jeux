@@ -7,7 +7,7 @@ import de.fhb.jeux.dao.GroupDAO;
 import de.fhb.jeux.model.IGroup;
 
 @Stateless
-@SuppressWarnings("ucd")
+
 public class DeleteGroupBean implements DeleteGroupRemote, DeleteGroupLocal {
 
 	@EJB

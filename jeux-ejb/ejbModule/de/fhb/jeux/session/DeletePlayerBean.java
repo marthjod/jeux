@@ -6,7 +6,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 @Stateless
-@SuppressWarnings("ucd")
+
 public class DeletePlayerBean implements DeletePlayerRemote, DeletePlayerLocal {
 
     @EJB

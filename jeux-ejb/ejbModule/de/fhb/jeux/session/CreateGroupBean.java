@@ -9,7 +9,7 @@ import javax.ejb.Stateless;
 import org.jboss.logging.Logger;
 
 @Stateless
-@SuppressWarnings("ucd")
+
 public class CreateGroupBean implements CreateGroupRemote, CreateGroupLocal {
 
     protected static Logger logger = Logger.getLogger(CreateGroupBean.class);

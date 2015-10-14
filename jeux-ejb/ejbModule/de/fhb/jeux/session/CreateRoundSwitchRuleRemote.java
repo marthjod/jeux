@@ -6,9 +6,9 @@ import de.fhb.jeux.dto.RoundSwitchRuleDTO;
 import de.fhb.jeux.model.IGroup;
 
 @Remote
-@SuppressWarnings("ucd")
+
 public interface CreateRoundSwitchRuleRemote {
-	@SuppressWarnings("ucd")
+	
 	public int createRoundSwitchRule(RoundSwitchRuleDTO ruleDTO,
 			IGroup srcGroup, IGroup destGroup);
 }

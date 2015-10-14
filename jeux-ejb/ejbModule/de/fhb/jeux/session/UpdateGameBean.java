@@ -22,7 +22,7 @@ import javax.ejb.Stateless;
 import org.jboss.logging.Logger;
 
 @Stateless
-@SuppressWarnings("ucd")
+
 public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
 
     protected static Logger logger = Logger.getLogger(UpdateGameBean.class);

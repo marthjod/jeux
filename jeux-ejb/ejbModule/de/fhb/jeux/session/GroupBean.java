@@ -16,7 +16,7 @@ import de.fhb.jeux.model.IPlayer;
 import de.fhb.jeux.persistence.ShowdownPlayer;
 
 @Stateless
-@SuppressWarnings("ucd")
+
 public class GroupBean implements GroupRemote, GroupLocal {
 
 	protected static Logger logger = Logger.getLogger(GroupBean.class);

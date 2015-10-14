@@ -10,7 +10,7 @@ import javax.ejb.Stateless;
 import org.jboss.logging.Logger;
 
 @Stateless
-@SuppressWarnings("ucd")
+
 public class CreateRoundSwitchRuleBean implements CreateRoundSwitchRuleRemote,
         CreateRoundSwitchRuleLocal {
 

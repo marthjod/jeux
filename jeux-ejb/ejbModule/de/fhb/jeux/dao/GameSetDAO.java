@@ -15,7 +15,7 @@ import de.fhb.jeux.model.IGameSet;
 
 @Stateless
 @LocalBean
-@SuppressWarnings("ucd")
+
 // Bean visibility must be public
 public class GameSetDAO {
 
