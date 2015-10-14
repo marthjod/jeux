@@ -2,6 +2,7 @@ package de.fhb.jeux.session;
 
 import de.fhb.jeux.dao.PlayerDAO;
 import de.fhb.jeux.dto.GameDTO;
+import de.fhb.jeux.dto.PlayerDTO;
 import de.fhb.jeux.model.IGame;
 import de.fhb.jeux.model.IPlayer;
 import java.util.ArrayList;
@@ -45,5 +46,10 @@ public class PlayerBean implements PlayerRemote, PlayerLocal {
     @Override
     public Long getCountWonGames(IPlayer player) {
         return playerDAO.getCountWonGames(player);
+    }
+
+    @Override
+    public List<PlayerDTO> getAllPlayerDTOs() {
+        return playerDAO.getAllPlayerDTOs();
     }
 }

@@ -1,6 +1,9 @@
 package de.fhb.jeux.dao;
 
+import de.fhb.jeux.dto.GroupDTO;
+import de.fhb.jeux.dto.PlayerDTO;
 import de.fhb.jeux.model.IGame;
+import de.fhb.jeux.model.IGroup;
 import de.fhb.jeux.model.IPlayer;
 import de.fhb.jeux.persistence.ShowdownPlayer;
 import java.util.ArrayList;
@@ -53,7 +56,7 @@ public class PlayerDAO {
         em.merge(player);
     }
 
-    public List<IPlayer> getAllPlayers() {
+    private List<IPlayer> getAllPlayers() {
         List<IPlayer> players = new ArrayList<IPlayer>();
 
         TypedQuery<IPlayer> query = em.createNamedQuery("Player.findAll",
@@ -61,6 +64,18 @@ public class PlayerDAO {
         players = query.getResultList();
 
         return players;
+    }
+
+    public List<PlayerDTO> getAllPlayerDTOs() {
+        List<PlayerDTO> playerDTOs = new ArrayList<PlayerDTO>();
+        List<IPlayer> players = getAllPlayers();
+
+        for (IPlayer player : players) {
+            // populate list of group DTOs from Persistent Entities
+            playerDTOs.add(new PlayerDTO(player));
+        }
+
+        return playerDTOs;
     }
 
     public IPlayer getPlayerById(int playerId) {
