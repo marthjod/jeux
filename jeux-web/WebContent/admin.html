@@ -25,6 +25,31 @@
     </head>
     <body>
         <div id="container" class="container">
+
+            <hr>
+
+            <div id="groups">
+                <p>
+                    <a href="gui/admin/groups">
+                        <button class="btn btn-info">
+                            Groups
+                        </button>
+                    </a>
+                </p>
+            </div>
+
+            <div id="players">
+                <p>
+                    <a href="gui/admin/players">
+                        <button class="btn btn-info">
+                            Players
+                        </button>
+                    </a>
+                </p>
+            </div>
+
+            <hr>
+
             <h1 class="btn btn-default btn-lg" onclick="$('#show-groups').toggle();
                     if ($('#show-groups').is(':visible')) {
                         showGroups($('#show-groups'), $('#player-select-group'), $('#rule-source-group'), $('#rule-destination-group'), this);
