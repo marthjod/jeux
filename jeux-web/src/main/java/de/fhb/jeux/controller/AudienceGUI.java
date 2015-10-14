@@ -1,9 +1,5 @@
 package de.fhb.jeux.controller;
 
-import com.mitchellbosecke.pebble.PebbleEngine;
-import com.mitchellbosecke.pebble.error.PebbleException;
-import com.mitchellbosecke.pebble.loader.Loader;
-import com.mitchellbosecke.pebble.loader.ServletLoader;
 import com.mitchellbosecke.pebble.template.PebbleTemplate;
 import de.fhb.jeux.dto.GameDTO;
 import de.fhb.jeux.dto.GroupDTO;
@@ -14,7 +10,7 @@ import de.fhb.jeux.session.FinalRankingLocal;
 import de.fhb.jeux.session.GameLocal;
 import de.fhb.jeux.session.GroupLocal;
 import de.fhb.jeux.session.PlayerLocal;
-import java.io.IOException;
+import de.fhb.jeux.template.Template;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
@@ -40,9 +36,6 @@ public class AudienceGUI {
 
     protected static Logger logger = Logger.getLogger(AudienceGUI.class);
 
-    private final String TEMPLATE_PREFIX = "/WEB-INF/templates/";
-    private final String TEMPLATE_SUFFIX = ".html";
-
     @Context
     HttpServletRequest request;
 
@@ -60,37 +53,6 @@ public class AudienceGUI {
 
     @EJB
     private FinalRankingLocal finalRankingBean;
-
-    private PebbleTemplate getTemplate(ServletContext ctx, String templateName) {
-        PebbleTemplate compiledTemplate = null;
-        Loader templateLoader = new ServletLoader(ctx);
-        templateLoader.setPrefix(TEMPLATE_PREFIX);
-        templateLoader.setSuffix(TEMPLATE_SUFFIX);
-        PebbleEngine engine = new PebbleEngine(templateLoader);
-        engine.setStrictVariables(true);
-        try {
-            compiledTemplate = engine.getTemplate(templateName);
-        } catch (PebbleException ex) {
-            logger.warn(ex);
-        }
-        return compiledTemplate;
-    }
-
-    private Writer renderTemplate(PebbleTemplate template, Map<String, Object> context) {
-        Writer w = new StringWriter();
-
-        if (template != null && context != null) {
-            try {
-                template.evaluate(w, context);
-            } catch (PebbleException ex) {
-                logger.warn(ex);
-            } catch (IOException ex) {
-                logger.error(ex);
-            }
-        }
-
-        return w;
-    }
 
     private String getStreakInfo(List<GameDTO> games, IPlayer player) {
 
@@ -129,13 +91,13 @@ public class AudienceGUI {
     @Produces(MediaType.TEXT_HTML)
     public String getOverview(@Context ServletContext servletContext) {
         Writer writer = new StringWriter();
-        PebbleTemplate compiledTemplate = getTemplate(servletContext, "overview");
+        PebbleTemplate compiledTemplate = Template.getTemplate(servletContext, "overview");
 
         if (compiledTemplate != null) {
-            Map<String, Object> context = new HashMap<String, Object>();
+            Map<String, Object> context = new HashMap<>();
             context.put("prefix", "/" + servletContext.getServletContextName() + "/gui/audience");
             context.put("groups", groupBean.getAllGroupDTOs());
-            writer = renderTemplate(compiledTemplate, context);
+            writer = Template.renderTemplate(compiledTemplate, context);
         }
 
         return writer.toString();
@@ -146,10 +108,10 @@ public class AudienceGUI {
     @Produces(MediaType.TEXT_HTML)
     public String getRankingsInGroup(@Context ServletContext servletContext, @PathParam("groupId") int groupId) {
         Writer writer = new StringWriter();
-        PebbleTemplate compiledTemplate = getTemplate(servletContext, "rankings");
+        PebbleTemplate compiledTemplate = Template.getTemplate(servletContext, "rankings");
 
         if (compiledTemplate != null) {
-            Map<String, Object> context = new HashMap<String, Object>();
+            Map<String, Object> context = new HashMap<>();
             IGroup group = groupBean.getGroupById(groupId);
 
             context.put("prefix", "/" + servletContext.getServletContextName() + "/gui/audience");
@@ -164,7 +126,7 @@ public class AudienceGUI {
                 context.put("group", new GroupDTO("Group not found", false));
                 context.put("rankings", new ArrayList());
             }
-            writer = renderTemplate(compiledTemplate, context);
+            writer = Template.renderTemplate(compiledTemplate, context);
         }
 
         return writer.toString();
@@ -176,10 +138,10 @@ public class AudienceGUI {
     public String getResultsInGroup(@Context ServletContext servletContext,
             @PathParam("groupId") int groupId) {
         Writer writer = new StringWriter();
-        PebbleTemplate compiledTemplate = getTemplate(servletContext, "group-results");
+        PebbleTemplate compiledTemplate = Template.getTemplate(servletContext, "group-results");
 
         if (compiledTemplate != null) {
-            Map<String, Object> context = new HashMap<String, Object>();
+            Map<String, Object> context = new HashMap<>();
             IGroup group = groupBean.getGroupById(groupId);
 
             context.put("prefix", "/" + servletContext.getServletContextName() + "/gui/audience");
@@ -190,7 +152,7 @@ public class AudienceGUI {
                 context.put("group", new GroupDTO("Group not found", false));
                 context.put("results", new ArrayList());
             }
-            writer = renderTemplate(compiledTemplate, context);
+            writer = Template.renderTemplate(compiledTemplate, context);
         }
 
         return writer.toString();
@@ -202,7 +164,7 @@ public class AudienceGUI {
     public String getPlayerResults(@Context ServletContext servletContext,
             @PathParam("playerId") int playerId) {
         Writer writer = new StringWriter();
-        PebbleTemplate compiledTemplate = getTemplate(servletContext, "player-results");
+        PebbleTemplate compiledTemplate = Template.getTemplate(servletContext, "player-results");
 
         if (compiledTemplate != null) {
             Map<String, Object> context = new HashMap<String, Object>();
@@ -230,7 +192,7 @@ public class AudienceGUI {
                 context.put("playerName", "Player not found");
                 context.put("results", new ArrayList());
             }
-            writer = renderTemplate(compiledTemplate, context);
+            writer = Template.renderTemplate(compiledTemplate, context);
         }
 
         return writer.toString();

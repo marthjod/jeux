@@ -1,9 +1,5 @@
 package de.fhb.jeux.controller;
 
-import com.mitchellbosecke.pebble.PebbleEngine;
-import com.mitchellbosecke.pebble.error.PebbleException;
-import com.mitchellbosecke.pebble.loader.Loader;
-import com.mitchellbosecke.pebble.loader.ServletLoader;
 import com.mitchellbosecke.pebble.template.PebbleTemplate;
 import de.fhb.jeux.config.BonusPointsDistribution;
 import de.fhb.jeux.dao.GroupDAO;
@@ -28,9 +24,9 @@ import de.fhb.jeux.session.PlayerLocal;
 import de.fhb.jeux.session.RoundSwitchRuleLocal;
 import de.fhb.jeux.session.UpdateGameLocal;
 import de.fhb.jeux.session.UpdatePlayerLocal;
+import de.fhb.jeux.template.Template;
 import java.io.File;
 import java.io.IOException;
-import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -58,13 +54,9 @@ import org.jboss.logging.Logger;
 
 @Stateless
 @Path("/rest/admin")
-@SuppressWarnings("ucd")
 public class AdminAPI {
 
     protected static Logger logger = Logger.getLogger(AdminAPI.class);
-
-    private final String TEMPLATE_PREFIX = "/WEB-INF/templates/";
-    private final String TEMPLATE_SUFFIX = ".html";
 
     @EJB
     private GroupLocal groupBean;
@@ -101,37 +93,6 @@ public class AdminAPI {
 
     @EJB
     private DeleteRuleLocal deleteRuleBean;
-
-    private PebbleTemplate getTemplate(ServletContext ctx, String templateName) {
-        PebbleTemplate compiledTemplate = null;
-        Loader templateLoader = new ServletLoader(ctx);
-        templateLoader.setPrefix(TEMPLATE_PREFIX);
-        templateLoader.setSuffix(TEMPLATE_SUFFIX);
-        PebbleEngine engine = new PebbleEngine(templateLoader);
-        engine.setStrictVariables(true);
-        try {
-            compiledTemplate = engine.getTemplate(templateName);
-        } catch (PebbleException ex) {
-            logger.warn(ex);
-        }
-        return compiledTemplate;
-    }
-
-    private Writer renderTemplate(PebbleTemplate template, Map<String, Object> context) {
-        Writer w = new StringWriter();
-
-        if (template != null && context != null) {
-            try {
-                template.evaluate(w, context);
-            } catch (PebbleException ex) {
-                logger.warn(ex);
-            } catch (IOException ex) {
-                logger.error(ex);
-            }
-        }
-
-        return w;
-    }
 
     @DELETE
     @Path("/group/id/{groupId}")
@@ -405,10 +366,9 @@ public class AdminAPI {
         IGroup group = groupBean.getGroupById(groupId);
 
         if ("html".equals(format)) {
-            PebbleTemplate compiledTemplate = getTemplate(servletContext, "games-list");
+            PebbleTemplate compiledTemplate = Template.getTemplate(servletContext, "games-list");
 
             if (compiledTemplate != null) {
-                Writer writer = new StringWriter();
                 Map<String, Object> context = new HashMap<>();
 
                 if (group != null) {
@@ -418,7 +378,7 @@ public class AdminAPI {
                     context.put("groupName", "Group not found");
                     context.put("games", new ArrayList());
                 }
-                writer = renderTemplate(compiledTemplate, context);
+                Writer writer = Template.renderTemplate(compiledTemplate, context);
                 ret = writer.toString();
             }
         } else if ("latex".equals(format)) {
