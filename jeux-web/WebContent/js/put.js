@@ -1,4 +1,4 @@
-var createNewGroup = function (groupSubmit) {
+var createNewGroup = function (groupSubmit, prefix) {
     "use strict";
 
     var minSets = 0,
@@ -8,7 +8,12 @@ var createNewGroup = function (groupSubmit) {
             active = false,
             sendGroup = {},
             groupForm = null,
-            inputOK = false;
+            inputOK = false,
+            url = "rest/admin/create-group";
+
+    if (prefix && typeof prefix === 'string') {
+        url = prefix + '/' + url;
+    }
 
     groupForm = $(groupSubmit).parent();
 
@@ -49,23 +54,20 @@ var createNewGroup = function (groupSubmit) {
         // assumption: all input values present
         // see checkSubmitReady()
         $.ajax({
-            url: "rest/admin/create-group",
+            url: url,
             type: "PUT",
             data: JSON.stringify(sendGroup),
             contentType: "application/json",
             success: function () {
-
+                $("#user-feedback").html("Group '" + sendGroup['name'] + "' created.");
                 clearForm(groupForm);
-
-                // refresh
-                showGroups($("#show-groups"), $("#player-select-group"), $("#rule-source-group"), $("#rule-destination-group"));
-                window.scrollTo(0, 0);
             },
             statusCode: {
                 403: function () {
                     alert("Operation not permitted (unauthenticated request).");
                 },
                 500: function () {
+                    // TODO feedback label/field
                     $(groupSubmit).attr("value", "Failed to create group!");
                 },
                 400: function () {
@@ -76,7 +78,7 @@ var createNewGroup = function (groupSubmit) {
     }
 };
 
-var createNewPlayer = function (playerSubmit) {
+var createNewPlayer = function (playerSubmit, prefix) {
     "use strict";
 
     var playerForm = null,
@@ -84,7 +86,12 @@ var createNewPlayer = function (playerSubmit) {
             sendPlayer = {},
             groupOptionId = "",
             groupId = -1,
-            inputOK = false;
+            inputOK = false,
+            url = "rest/admin/create-player";
+
+    if (prefix && typeof prefix === 'string') {
+        url = prefix + '/' + url;
+    }
 
     playerForm = $(playerSubmit).parent();
 
@@ -109,14 +116,13 @@ var createNewPlayer = function (playerSubmit) {
         };
 
         $.ajax({
-            url: "rest/admin/create-player",
+            url: url,
             type: "PUT",
             data: JSON.stringify(sendPlayer),
             contentType: "application/json",
             success: function () {
-                showPlayers($("#show-players"));
+                $("#user-feedback").html("Player '" + sendPlayer['name'] + "' created.");
                 clearForm($(playerSubmit).parent());
-                window.scrollTo(0, 0);
             },
             statusCode: {
                 403: function () {

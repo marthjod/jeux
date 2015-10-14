@@ -348,9 +348,15 @@ var showRules = function (showRulesDiv, button) {
     }
 };
 
-var getShuffledGames = function (groupId, format) {
+var getShuffledGames = function (groupId, format, prefix) {
     "use strict";
+
     var url = "rest/admin/shuffled-games/group/id/" + groupId;
+
+    if (prefix && typeof prefix === 'string') {
+        url = prefix + '/' + url;
+    }
+
     if (format && format !== null && typeof format === 'string') {
         url += ";format=" + format;
     }

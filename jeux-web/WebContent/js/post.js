@@ -85,8 +85,14 @@ var updateGame = function (updateSubmit, gameId, player1Id, player2Id, action) {
     });
 };
 
-var generateGames = function (generateButton, groupId, shuffledMode) {
+var generateGames = function (generateButton, groupId, shuffledMode, prefix) {
     "use strict";
+
+    var url = "rest/admin/generate-games/group/id/" + groupId + ";shuffledMode=" + shuffledMode.toString();
+
+    if (prefix && typeof prefix === 'string') {
+        url = prefix + '/' + url;
+    }
 
     if (!shuffledMode || typeof shuffledMode !== "boolean") {
         shuffledMode = false;
@@ -98,7 +104,7 @@ var generateGames = function (generateButton, groupId, shuffledMode) {
 
     $.ajax({
         // access with @MatrixParam
-        url: "rest/admin/generate-games/group/id/" + groupId + ";shuffledMode=" + shuffledMode.toString(),
+        url: url,
         type: "POST",
         statusCode: {
             201: function () {

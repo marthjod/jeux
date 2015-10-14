@@ -1,0 +1,68 @@
+{% extends "admin-base" %}
+
+{% block title %}
+Players
+{% endblock %}
+
+{% block content %}
+
+<div>
+    <h3>
+        Players
+    </h3>
+    {% if players is not empty %}
+    <table class="table table-hover table-bordered table-condensed">
+        <tr>
+            <th>Name</th>
+            <th>Group</th>
+            <th>Delete</th>
+        </tr>
+        {% for player in players | sort %}
+        <tr>
+            <td>{{ player.name }}</td>
+            <td>{{ player.groupName }}</td>
+            <td>
+                <input type="submit" class="btn btn-danger"
+                       value="Delete player"
+                       onclick="deletePlayer('{{ player.id }}', '{{ prefix }}');">
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+    No players found.
+    {% endif %}
+</div>
+
+<div>
+    <h3>
+        Create player
+    </h3>
+    <form id="create-player" action="#" role="form">
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input id="name" type="text" class="form-control" placeholder="Player name" />
+        </div>
+        <div class="form-group">
+            <label for="player-select-group">
+                Group
+            </label>
+            <select id="player-select-group" class="form-control">
+                <option id="no-group-selected">
+                    No group selected
+                </option>
+                {% for group in groups %}
+                <option id="group-id-{{ group.id }}">
+                    {{ group.name }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+        <input id="submit-create-player" type="submit" value="Create player" onclick="createNewPlayer(this, '{{ prefix }}');"
+               class="btn btn-success" />
+    </form>
+    <div id="user-feedback">
+    </div>
+</div>
+
+{% endblock %}

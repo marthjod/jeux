@@ -1,5 +1,11 @@
-var deleteGroup = function (groupId, deleteButton) {
+var deleteGroup = function (groupId, deleteButton, prefix) {
     "use strict";
+
+    var url = "rest/admin/group/id/" + groupId;
+
+    if (prefix && typeof prefix === 'string') {
+        url = prefix + '/' + url;
+    }
 
     if (!window.confirm("Really delete group?")) {
         return false;
@@ -10,7 +16,7 @@ var deleteGroup = function (groupId, deleteButton) {
     }
 
     $.ajax({
-        url: "rest/admin/group/id/" + groupId,
+        url: url,
         type: "DELETE",
         success: function () {
             // alert("Group deleted");
