@@ -43,7 +43,7 @@ public class AdminLoginServlet extends HttpServlet {
                 response.addCookie(authCookie);
                 // TODO no hardcoded naming #app-design
                 nextView = response.encodeRedirectURL(request.getContextPath()
-                        + "/admin.html");
+                        + "/gui/admin/");
             } else {
                 logger.warn("Could not generate authentification token.");
             }
