@@ -4,7 +4,7 @@ import de.fhb.jeux.model.IGroup;
 
 // "flat" representation of Entity object better suitable
 // for generating data interchange format (JSON) from
-public class GroupDTO {
+public class GroupDTO implements Comparable {
 
     private int id;
     private String name;
@@ -69,14 +69,19 @@ public class GroupDTO {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("<");
-        sb.append("'" + name + "' (" + id + ")");
-        sb.append(", min sets: " + minSets);
-        sb.append(", max sets: " + maxSets);
-        sb.append(", round ID: " + roundId);
-        sb.append(", active: " + active);
-        sb.append(", completed: " + completed);
+        sb.append("'").append(name).append("' (").append(id).append(")");
+        sb.append(", min sets: ").append(minSets);
+        sb.append(", max sets: ").append(maxSets);
+        sb.append(", round ID: ").append(roundId);
+        sb.append(", active: ").append(active);
+        sb.append(", completed: ").append(completed);
         sb.append(">");
         return sb.toString();
+    }
+
+    @Override
+    public int compareTo(Object group) {
+        return this.name.compareTo(((GroupDTO) group).getName());
     }
 
 }
