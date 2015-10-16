@@ -24,7 +24,7 @@ class JeuxSimulation extends Simulation {
             http("rankings")
                 .get("/")
                 .check(status.is(200))
-                .check(regex("""rest-api-status"""))
+                .check(regex("""api-status"""))
                 .check(responseTimeInMillis.lessThan(responseThreshold)))
 
     setUp(scn
