@@ -5,8 +5,9 @@ import java.util.Date;
 
 import de.fhb.jeux.model.IGame;
 import de.fhb.jeux.persistence.ShowdownGameSet;
+import org.jboss.logging.Logger;
 
-public class GameDTO {
+public class GameDTO implements Comparable {
 
     private int id;
     private int player1Id;
@@ -156,25 +157,30 @@ public class GameDTO {
         int i;
 
         sb.append("<");
-        sb.append("ID " + id);
-        sb.append(", Player 1: " + player1Name);
-        sb.append(" (ID " + player1Id + ")");
-        sb.append(", Player 2: " + player2Name);
-        sb.append(" (ID " + player2Id + ")");
-        sb.append(", group ID: " + groupId);
-        sb.append(", Winner: " + winnerName);
-        sb.append(" (ID " + winnerId + ")");
+        sb.append("ID ").append(id);
+        sb.append(", Player 1: ").append(player1Name);
+        sb.append(" (ID ").append(player1Id).append(")");
+        sb.append(", Player 2: ").append(player2Name);
+        sb.append(" (ID ").append(player2Id).append(")");
+        sb.append(", group ID: ").append(groupId);
+        sb.append(", Winner: ").append(winnerName);
+        sb.append(" (ID ").append(winnerId).append(")");
 
         // game sets
         if (sets.size() > 0) {
             sb.append(" [");
             for (i = 0; i < sets.size(); i++) {
-                sb.append(sets.get(i) + ", ");
+                sb.append(sets.get(i)).append(", ");
             }
             sb.append("]");
         }
 
         sb.append(">");
         return sb.toString();
+    }
+
+    @Override
+    public int compareTo(Object game) {
+        return this.playedAt == null ? 0 : this.playedAt.compareTo(((GameDTO) game).getPlayedAt());
     }
 }
