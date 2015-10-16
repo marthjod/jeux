@@ -70,18 +70,18 @@ public class PlayerDTO implements Comparable {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("<");
-        sb.append("'" + name + "' (" + id + ")");
-        sb.append(", points: " + points);
-        sb.append(", score ratio: " + scoreRatio);
-        sb.append(", rank: " + rank);
-        sb.append(", group: " + groupName);
-        sb.append(" (" + groupId + ")");
+        sb.append("'").append(name).append("' (").append(id).append(")");
+        sb.append(", points: ").append(points);
+        sb.append(", score ratio: ").append(scoreRatio);
+        sb.append(", rank: ").append(rank);
+        sb.append(", group: ").append(groupName);
+        sb.append(" (").append(groupId).append(")");
         sb.append(">");
         return sb.toString();
     }
 
     @Override
-    public int compareTo(Object player2) {
-        return this.name.compareTo(((PlayerDTO) player2).getName());
+    public int compareTo(Object player) {
+        return this.name.compareTo(((PlayerDTO) player).getName());
     }
 }
