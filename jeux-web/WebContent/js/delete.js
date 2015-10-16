@@ -1,4 +1,4 @@
-var deleteGroup = function (groupId, deleteButton, prefix) {
+var deleteGroup = function (groupId, prefix) {
     "use strict";
 
     var url = "rest/admin/group/id/" + groupId;
@@ -7,31 +7,15 @@ var deleteGroup = function (groupId, deleteButton, prefix) {
         url = prefix + '/' + url;
     }
 
-    if (!window.confirm("Really delete group?")) {
-        return false;
-    }
-
-    if (deleteButton && deleteButton !== null) {
-        $(deleteButton).hide();
-    }
+//    if (!window.confirm("Really delete group?")) {
+//        return false;
+//    }
 
     $.ajax({
         url: url,
         type: "DELETE",
         success: function () {
-            // alert("Group deleted");
-
-            // remove as selectable option
-            $("#player-select-group").find("#group-id-" + groupId).remove();
-            $("#rule-source-group").find("#rule-source-group-id-" + groupId).remove();
-            $("#rule-destination-group").find("#rule-destination-group-id-" + groupId).remove();
-
-            showGroups($("#show-groups"));
-            showPlayers($("#show-players"));
-            // refresh because deletion cascades for games, too
-            showGames($("#show-unplayed-games"), "unplayed", true);
-            showGames($("#show-played-games"), "played", true);
-            showRules($("#show-rules"));
+            document.location.reload();
         },
         // errors
         statusCode: {
@@ -46,19 +30,21 @@ var deleteGroup = function (groupId, deleteButton, prefix) {
             }
         }
     });
-
 };
-
-var deletePlayer = function (playerId) {
+var deletePlayer = function (playerId, prefix) {
     "use strict";
 
+    var url = "rest/admin/player/id/" + playerId;
+
+    if (prefix && typeof prefix === 'string') {
+        url = prefix + '/' + url;
+    }
+
     $.ajax({
-        url: "rest/admin/player/id/" + playerId,
+        url: url,
         type: "DELETE",
         success: function () {
-            showPlayers($("#show-players"));
-            // refresh because player deletion cascades for his games, too
-            showGames($("#show-unplayed-games"), "unplayed", true);
+            document.location.reload();
         },
         statusCode: {
             403: function () {
@@ -70,15 +56,20 @@ var deletePlayer = function (playerId) {
         }
     });
 };
-
-var deleteRule = function (ruleId, deleteButton) {
+var deleteRule = function (ruleId, prefix) {
     "use strict";
 
+    var url = "rest/admin/roundswitchrule/id/" + ruleId;
+
+    if (prefix && typeof prefix === 'string') {
+        url = prefix + '/' + url;
+    }
+
     $.ajax({
-        url: "rest/admin/roundswitchrule/id/" + ruleId,
+        url: url,
         type: "DELETE",
         success: function () {
-            showRules($("#show-rules"));
+            document.location.reload();
         },
         statusCode: {
             403: function () {

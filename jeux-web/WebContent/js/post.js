@@ -67,12 +67,7 @@ var updateGame = function (updateSubmit, gameId, player1Id, player2Id, action) {
         data: JSON.stringify(updatedGame),
         contentType: "application/json",
         success: function () {
-            $(updateSubmit).attr("value", "Update game").removeAttr("disabled");
-            showGames($("#show-unplayed-games"), "unplayed", true);
-            showGames($("#show-played-games"), "played", true);
-            // also update group view in case one has been set to
-            // completed/inactive
-            showGroups($("#show-groups"));
+            // TODO
         },
         statusCode: {
             403: function () {

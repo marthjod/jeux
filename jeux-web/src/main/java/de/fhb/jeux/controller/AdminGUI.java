@@ -3,6 +3,7 @@ package de.fhb.jeux.controller;
 import com.mitchellbosecke.pebble.template.PebbleTemplate;
 import de.fhb.jeux.session.GroupLocal;
 import de.fhb.jeux.session.PlayerLocal;
+import de.fhb.jeux.session.RoundSwitchRuleLocal;
 import de.fhb.jeux.template.Template;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -29,6 +30,9 @@ public class AdminGUI {
 
     @EJB
     private PlayerLocal playerBean;
+
+    @EJB
+    private RoundSwitchRuleLocal roundSwitchRuleBean;
 
     @GET
     @Path("/groups")
@@ -58,6 +62,23 @@ public class AdminGUI {
             context.put("prefix", "/" + servletContext.getServletContextName());
             context.put("groups", groupBean.getAllGroupDTOs());
             context.put("players", playerBean.getAllPlayerDTOs());
+            writer = Template.renderTemplate(compiledTemplate, context);
+        }
+        return writer.toString();
+    }
+
+    @GET
+    @Path("/rules")
+    @Produces(MediaType.TEXT_HTML)
+    public String editRules(@Context ServletContext servletContext) {
+        Writer writer = new StringWriter();
+        PebbleTemplate compiledTemplate = Template.getTemplate(servletContext, "admin-rules");
+
+        if (compiledTemplate != null) {
+            Map<String, Object> context = new HashMap<>();
+            context.put("prefix", "/" + servletContext.getServletContextName());
+            context.put("groups", groupBean.getAllGroupDTOs());
+            context.put("rules", roundSwitchRuleBean.getAllRoundSwitchRuleDTOs());
             writer = Template.renderTemplate(compiledTemplate, context);
         }
         return writer.toString();

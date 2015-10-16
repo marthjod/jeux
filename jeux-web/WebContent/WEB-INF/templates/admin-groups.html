@@ -45,7 +45,7 @@ Groups
             <td>
                 <input type="submit" class="btn btn-danger"
                        value="Delete group"
-                       onclick="deleteGroup('{{ group.id }}', this, '{{ prefix }}');">
+                       onclick="deleteGroup({{ group.id }}, '{{ prefix }}');">
             </td>
         </tr>
         {% endfor %}

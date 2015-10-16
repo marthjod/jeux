@@ -59,8 +59,9 @@ var createNewGroup = function (groupSubmit, prefix) {
             data: JSON.stringify(sendGroup),
             contentType: "application/json",
             success: function () {
-                $("#user-feedback").html("Group '" + sendGroup['name'] + "' created.");
-                clearForm(groupForm);
+                //$("#user-feedback").html("Group '" + sendGroup['name'] + "' created.");
+                //clearForm(groupForm);
+                document.location.reload();
             },
             statusCode: {
                 403: function () {
@@ -121,8 +122,9 @@ var createNewPlayer = function (playerSubmit, prefix) {
             data: JSON.stringify(sendPlayer),
             contentType: "application/json",
             success: function () {
-                $("#user-feedback").html("Player '" + sendPlayer['name'] + "' created.");
-                clearForm($(playerSubmit).parent());
+                //$("#user-feedback").html("Player '" + sendPlayer['name'] + "' created.");
+                //clearForm($(playerSubmit).parent());
+                document.location.reload();
             },
             statusCode: {
                 403: function () {
@@ -136,7 +138,7 @@ var createNewPlayer = function (playerSubmit, prefix) {
     }
 };
 
-var createNewRoundSwitchRule = function (ruleSubmit, rulesDiv) {
+var createNewRoundSwitchRule = function (ruleSubmit, prefix) {
     "use strict";
 
     var ruleForm = null,
@@ -145,7 +147,12 @@ var createNewRoundSwitchRule = function (ruleSubmit, rulesDiv) {
             startWithRank = 0,
             additionalPlayers = 0,
             inputOK = false,
-            sendRule = {};
+            sendRule = {},
+            url = "rest/admin/create-roundswitchrule";
+
+    if (prefix && typeof prefix === 'string') {
+        url = prefix + '/' + url;
+    }
 
     ruleForm = $(ruleSubmit).parent();
 
@@ -173,14 +180,14 @@ var createNewRoundSwitchRule = function (ruleSubmit, rulesDiv) {
             };
 
             $.ajax({
-                url: "rest/admin/create-roundswitchrule",
+                url: url,
                 type: "PUT",
                 data: JSON.stringify(sendRule),
                 contentType: "application/json",
                 success: function () {
-                    clearForm(ruleSubmit);
-                    showRules($(rulesDiv));
-                    window.scrollTo(0, 0);
+                    //$("#user-feedback").html("Rule '" + sendRule + "' created.");
+                    //clearForm(ruleForm);
+                    document.location.reload();
                 },
                 statusCode: {
                     403: function () {

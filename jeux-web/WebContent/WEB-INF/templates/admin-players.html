@@ -24,7 +24,7 @@ Players
             <td>
                 <input type="submit" class="btn btn-danger"
                        value="Delete player"
-                       onclick="deletePlayer('{{ player.id }}', '{{ prefix }}');">
+                       onclick="deletePlayer({{ player.id }}, '{{ prefix }}');">
             </td>
         </tr>
         {% endfor %}
