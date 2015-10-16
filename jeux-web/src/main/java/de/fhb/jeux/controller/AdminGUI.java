@@ -1,13 +1,18 @@
 package de.fhb.jeux.controller;
 
 import com.mitchellbosecke.pebble.template.PebbleTemplate;
+import de.fhb.jeux.dto.GameDTO;
+import de.fhb.jeux.dto.GroupDTO;
+import de.fhb.jeux.session.GameLocal;
 import de.fhb.jeux.session.GroupLocal;
 import de.fhb.jeux.session.PlayerLocal;
 import de.fhb.jeux.session.RoundSwitchRuleLocal;
 import de.fhb.jeux.template.Template;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -32,7 +37,25 @@ public class AdminGUI {
     private PlayerLocal playerBean;
 
     @EJB
+    private GameLocal gameBean;
+
+    @EJB
     private RoundSwitchRuleLocal roundSwitchRuleBean;
+
+    @GET
+    @Path("/")
+    @Produces(MediaType.TEXT_HTML)
+    public String startView(@Context ServletContext servletContext) {
+        Writer writer = new StringWriter();
+        PebbleTemplate compiledTemplate = Template.getTemplate(servletContext, "admin-start");
+
+        if (compiledTemplate != null) {
+            Map<String, Object> context = new HashMap<>();
+            context.put("prefix", "/" + servletContext.getServletContextName());
+            writer = Template.renderTemplate(compiledTemplate, context);
+        }
+        return writer.toString();
+    }
 
     @GET
     @Path("/groups")
@@ -79,6 +102,56 @@ public class AdminGUI {
             context.put("prefix", "/" + servletContext.getServletContextName());
             context.put("groups", groupBean.getAllGroupDTOs());
             context.put("rules", roundSwitchRuleBean.getAllRoundSwitchRuleDTOs());
+            writer = Template.renderTemplate(compiledTemplate, context);
+        }
+        return writer.toString();
+    }
+
+    @GET
+    @Path("/unplayed-games")
+    @Produces(MediaType.TEXT_HTML)
+    public String getUnplayedGames(@Context ServletContext servletContext) {
+        Writer writer = new StringWriter();
+        PebbleTemplate compiledTemplate = Template.getTemplate(servletContext, "admin-unplayed-games");
+
+        if (compiledTemplate != null) {
+            Map<String, Object> context = new HashMap<>();
+            context.put("prefix", "/" + servletContext.getServletContextName());
+
+            List<Object> gamesByGroup = new ArrayList<>();
+            for (GroupDTO group : groupBean.getAllGroupDTOs()) {
+                Map<String, Object> games = new HashMap<>();
+                games.put("group", group);
+                games.put("games", gameBean.getUnplayedGameDTOsInGroup(
+                        groupBean.getGroupById(group.getId())));
+                gamesByGroup.add(games);
+            }
+            context.put("gamesByGroup", gamesByGroup);
+            writer = Template.renderTemplate(compiledTemplate, context);
+        }
+        return writer.toString();
+    }
+
+    @GET
+    @Path("/played-games")
+    @Produces(MediaType.TEXT_HTML)
+    public String getPlayedGames(@Context ServletContext servletContext) {
+        Writer writer = new StringWriter();
+        PebbleTemplate compiledTemplate = Template.getTemplate(servletContext, "admin-played-games");
+
+        if (compiledTemplate != null) {
+            Map<String, Object> context = new HashMap<>();
+            context.put("prefix", "/" + servletContext.getServletContextName());
+
+            List<Object> gamesByGroup = new ArrayList<>();
+            for (GroupDTO group : groupBean.getAllGroupDTOs()) {
+                Map<String, Object> games = new HashMap<>();
+                games.put("group", group);
+                games.put("games", gameBean.getPlayedGameDTOsInGroup(
+                        groupBean.getGroupById(group.getId())));
+                gamesByGroup.add(games);
+            }
+            context.put("gamesByGroup", gamesByGroup);
             writer = Template.renderTemplate(compiledTemplate, context);
         }
         return writer.toString();

@@ -10,10 +10,10 @@
         <script type="text/javascript" src="{{ prefix }}/js/put.js"></script>
         <script type="text/javascript" src="{{ prefix }}/js/post.js"></script>
         <script type="text/javascript" src="{{ prefix }}/js/delete.js"></script>
-        <script type="text/javascript" src="{{ prefix }}/js/tables.js"></script>
-        <script type="text/javascript" src="{{ prefix }}/js/input.js"></script>
         <!--  mobile first -->
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        {% block script %}
+        {% endblock %}
         <title>
             {% block title %}
             Jeux

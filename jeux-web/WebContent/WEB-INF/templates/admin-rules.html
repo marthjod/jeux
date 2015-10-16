@@ -30,6 +30,7 @@ Round-switch rules
                        onclick="deleteRule({{ rule.id }}, '{{ prefix }}');">
             </td>
         </tr>
+        {% else %}
         {% endfor %}
     </table>
     {% else %}

@@ -1,0 +1,86 @@
+{% extends "admin-base" %}
+
+{% block script %}
+<script>
+    $(document).ready(function () {
+        "use strict";
+        getApiStatus($("#api-status"), '{{ prefix }}');
+    });
+</script>
+{% endblock %}
+
+{% block title %}
+Jeux Admin View
+{% endblock %}
+
+{% block content %}
+
+<hr>
+
+<div id="groups">
+    <p>
+        <a href="groups">
+            <button class="btn btn-info">
+                Groups
+            </button>
+        </a>
+    </p>
+</div>
+
+<div id="players">
+    <p>
+        <a href="players">
+            <button class="btn btn-info">
+                Players
+            </button>
+        </a>
+    </p>
+</div>
+
+<div id="rules">
+    <p>
+        <a href="rules">
+            <button class="btn btn-info">
+                Round-switch rules
+            </button>
+        </a>
+    </p>
+</div>
+
+<div id="unplayed">
+    <p>
+        <a href="unplayed-games">
+            <button class="btn btn-info">
+                Unplayed games
+            </button>
+        </a>
+    </p>
+</div>
+
+<div id="played">
+    <p>
+        <a href="played-games">
+            <button class="btn btn-info">
+                Played games
+            </button>
+        </a>
+    </p>
+</div>
+
+<div id="log">
+    <p>
+        <a href="{{ prefix }}/rest/admin/log">
+            <button class="btn btn-default">
+                Log
+            </button>
+        </a>
+    </p>
+</div>
+
+<hr>
+
+<div id="api-status">
+</div>
+
+{% endblock %}
+

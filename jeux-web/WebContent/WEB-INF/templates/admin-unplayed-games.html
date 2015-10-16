@@ -1,0 +1,54 @@
+{% extends "admin-base" %}
+
+{% block title %}
+Unplayed games
+{% endblock %}
+
+{% block content %}
+
+<div>
+    <h2>
+        Unplayed games
+    </h2>
+    {% for g in gamesByGroup %}
+    {% if g.games is not empty %}
+
+    <h3>
+        {{ g.group.name }}
+    </h3>
+    {% for game in g.games %}
+    <table class="table table-bordered table-condensed">
+        <tr id="game-id-{{ game.id }}">
+            <th>Set #</th>
+            <th id="player-id-{{ game.player1Id }}">{{ game.player1Name }}</th>
+            <th id="player-id-{{ game.player2Id }}">{{ game.player2Name }}</th>
+        </tr>
+        {% for set in game.sets | sort %}
+        <tr id="gameset-id-{{ set.id }}">
+            <td>{{ set.number }}</td>
+            <td class="player1-score">
+                <input type="number" class="form-control" min="0"
+                       value="{{ set.player1Score }}">
+            </td>
+            <td class="player2-score">
+                <input type="number" class="form-control" min="0"
+                       value="{{ set.player2Score }}">
+            </td>
+        </tr>
+        {% else %}
+        {% endfor %}
+        <tr>
+            <td>
+                <input type="submit" value="Save game" class="btn btn-primary update-game"
+                       onclick="updateGame(this, {{ game.id }}, {{ game.player1Id }}, {{ game.player2Id }}, 'save', '{{ prefix }}');">
+            </td>
+        </tr>
+    </table>
+    {% endfor %}
+
+    {% endif %}
+
+    {% endfor %}
+</div>
+
+{% endblock %}

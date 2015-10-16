@@ -1,4 +1,4 @@
-var updateGame = function (updateSubmit, gameId, player1Id, player2Id, action) {
+var updateGame = function (updateSubmit, gameId, player1Id, player2Id, action, prefix) {
     "use strict";
 
     var inputOK = false,
@@ -7,19 +7,11 @@ var updateGame = function (updateSubmit, gameId, player1Id, player2Id, action) {
             set = {},
             player1Score = 0,
             player2Score = 0,
-            updatedGame = {};
+            updatedGame = {},
+            url = "rest/admin/update-game";
 
-    if (updateSubmit && updateSubmit !== null) {
-        $(updateSubmit).attr("disabled", "disabled");
-        if (action && typeof action === "string") {
-            if (action === "save") {
-                $(updateSubmit).attr("value", "Saving...");
-            } else if (action === "update") {
-                $(updateSubmit).attr("value", "Updating...");
-            }
-        } else {
-            $(updateSubmit).attr("value", "...");
-        }
+    if (prefix && typeof prefix === 'string') {
+        url = prefix + '/' + url;
     }
 
     updatedGame = {
@@ -62,7 +54,7 @@ var updateGame = function (updateSubmit, gameId, player1Id, player2Id, action) {
     });
 
     $.ajax({
-        url: "rest/admin/update-game",
+        url: url,
         type: "POST",
         data: JSON.stringify(updatedGame),
         contentType: "application/json",
@@ -91,10 +83,6 @@ var generateGames = function (generateButton, groupId, shuffledMode, prefix) {
 
     if (!shuffledMode || typeof shuffledMode !== "boolean") {
         shuffledMode = false;
-    }
-
-    if (generateButton && generateButton !== null) {
-        $(generateButton).attr("disabled", "disabled").attr("value", "Generating...");
     }
 
     $.ajax({
