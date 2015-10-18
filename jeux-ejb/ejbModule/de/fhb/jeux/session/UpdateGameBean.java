@@ -150,7 +150,9 @@ public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
                         // - score ratios for opponents
                         // (only) one of the players has won minimum required sets
                         if (setsPlayed == maxSets) {
-                            if (maxSets > setsWonByPlayer1 && maxSets > setsWonByPlayer2) {
+                            if (maxSets == 1
+                                    || maxSets > setsWonByPlayer1
+                                    && maxSets > setsWonByPlayer2) {
                                 gameOver = true;
                             } else {
                                 logger.error("One player has won one set too much (max sets "
