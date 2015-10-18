@@ -59,7 +59,7 @@ var updateGame = function (updateSubmit, gameId, player1Id, player2Id, action, p
         data: JSON.stringify(updatedGame),
         contentType: "application/json",
         success: function () {
-            // TODO
+            document.location.reload();
         },
         statusCode: {
             403: function () {

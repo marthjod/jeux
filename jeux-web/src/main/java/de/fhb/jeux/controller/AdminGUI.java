@@ -108,7 +108,7 @@ public class AdminGUI {
     }
 
     @GET
-    @Path("/unplayed-games")
+    @Path("/games/unplayed")
     @Produces(MediaType.TEXT_HTML)
     public String getUnplayedGames(@Context ServletContext servletContext) {
         Writer writer = new StringWriter();
@@ -133,7 +133,7 @@ public class AdminGUI {
     }
 
     @GET
-    @Path("/played-games")
+    @Path("/games/played")
     @Produces(MediaType.TEXT_HTML)
     public String getPlayedGames(@Context ServletContext servletContext) {
         Writer writer = new StringWriter();
