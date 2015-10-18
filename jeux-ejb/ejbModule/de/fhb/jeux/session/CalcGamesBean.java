@@ -176,7 +176,7 @@ public class CalcGamesBean implements CalcGamesRemote, CalcGamesLocal {
         if (group.getPlayers().size() < 2) {
             logger.info("Not calculating, too few group members");
             status = TOO_FEW_GROUP_MEMBERS;
-        } else if (groupDAO.hasGames(group)) {
+        } else if (group.hasGames()) {
             // do not calculate if group has games already
             logger.warn("Not calculating, games already exist in group");
             status = GROUP_ALREADY_CONTAINS_GAMES;

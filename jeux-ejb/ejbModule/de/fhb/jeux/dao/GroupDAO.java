@@ -21,147 +21,135 @@ import de.fhb.jeux.persistence.ShowdownPlayer;
 @LocalBean
 public class GroupDAO {
 
-	private static Logger logger = Logger.getLogger(GroupDAO.class);
+    private static Logger logger = Logger.getLogger(GroupDAO.class);
 
-	@PersistenceContext(unitName = "JeuxEJB")
-	private EntityManager em;
+    @PersistenceContext(unitName = "JeuxEJB")
+    private EntityManager em;
 
-	// mimick HTTP statuses
-	// 409 = violated constraints
-	public static final int DELETION_CONFLICT = 409;
-	public static final int DELETION_OK = 200;
-	private static final int DELETION_UNKNOWN_ERR = 500;
+    // mimick HTTP statuses
+    // 409 = violated constraints
+    public static final int DELETION_CONFLICT = 409;
+    public static final int DELETION_OK = 200;
+    private static final int DELETION_UNKNOWN_ERR = 500;
 
-	public GroupDAO() {
-	}
+    public GroupDAO() {
+    }
 
-	public void addGroup(IGroup group) {
-		em.persist(group);
-		logger.debug("Persisted group '" + group.getName() + "'");
-	}
+    public void addGroup(IGroup group) {
+        em.persist(group);
+        logger.debug("Persisted group '" + group.getName() + "'");
+    }
 
-	public int deleteGroup(IGroup group) {
-		int result = DELETION_UNKNOWN_ERR;
-		if (group != null) {
-			// save for debug message b/c group object may be removed then
-			// already
-			String groupName = group.getName();
+    public int deleteGroup(IGroup group) {
+        int result = DELETION_UNKNOWN_ERR;
+        if (group != null) {
+            // save for debug message b/c group object may be removed then
+            // already
+            String groupName = group.getName();
 
-			try {
-				em.remove(group);
-				result = DELETION_OK;
-				logger.debug("Deleted group '" + groupName + "'");
-			} catch (RuntimeException e) {
-				// PersistenceException, MySQLConstraintViolatedEx thrown only
-				// *after* em.remove() ?!!
-				result = DELETION_CONFLICT;
-				logger.error("Deleting group '" + groupName + "': "
-						+ e.getClass().getCanonicalName() + " "
-						+ e.getMessage());
-			} catch (Exception e) {
-				logger.error("Deleting group '" + groupName + "': "
-						+ e.getClass().getCanonicalName() + " "
-						+ e.getMessage());
-			}
-		}
-		return result;
-	}
+            try {
+                em.remove(group);
+                result = DELETION_OK;
+                logger.debug("Deleted group '" + groupName + "'");
+            } catch (RuntimeException e) {
+                // PersistenceException, MySQLConstraintViolatedEx thrown only
+                // *after* em.remove() ?!!
+                result = DELETION_CONFLICT;
+                logger.error("Deleting group '" + groupName + "': "
+                        + e.getClass().getCanonicalName() + " "
+                        + e.getMessage());
+            } catch (Exception e) {
+                logger.error("Deleting group '" + groupName + "': "
+                        + e.getClass().getCanonicalName() + " "
+                        + e.getMessage());
+            }
+        }
+        return result;
+    }
 
-	// returns null if non-existant or failure
-	public IGroup getGroupById(int groupId) {
-		IGroup group = null;
-		TypedQuery<IGroup> query = em.createNamedQuery("Group.findById",
-				IGroup.class);
-		query.setParameter("id", groupId);
+    // returns null if non-existant or failure
+    public IGroup getGroupById(int groupId) {
+        IGroup group = null;
+        TypedQuery<IGroup> query = em.createNamedQuery("Group.findById",
+                IGroup.class);
+        query.setParameter("id", groupId);
 
-		try {
-			group = query.getSingleResult();
-		} catch (NoResultException e) {
-			// reset because callers should test for null
-			group = null;
-			logger.error("Group ID " + groupId + ": " + e.getClass().getName()
-					+ " " + e.getMessage());
-		}
-		return group;
-	}
+        try {
+            group = query.getSingleResult();
+        } catch (NoResultException e) {
+            // reset because callers should test for null
+            group = null;
+            logger.error("Group ID " + groupId + ": " + e.getClass().getName()
+                    + " " + e.getMessage());
+        }
+        return group;
+    }
 
-	// private because handles PEs,
-	// but only DTOs should leave this layer
-	private List<IGroup> getAllGroups() {
-		List<IGroup> groups = new ArrayList<IGroup>();
+    // private because handles PEs,
+    // but only DTOs should leave this layer
+    private List<IGroup> getAllGroups() {
+        List<IGroup> groups = new ArrayList<IGroup>();
 
-		TypedQuery<IGroup> query = em.createNamedQuery("Group.findAll",
-				IGroup.class);
-		groups = query.getResultList();
+        TypedQuery<IGroup> query = em.createNamedQuery("Group.findAll",
+                IGroup.class);
+        groups = query.getResultList();
 
-		return groups;
-	}
+        return groups;
+    }
 
-	public List<GroupDTO> getAllGroupDTOs() {
-		List<GroupDTO> groupDTOs = new ArrayList<GroupDTO>();
-		List<IGroup> groups = getAllGroups();
+    public List<GroupDTO> getAllGroupDTOs() {
+        List<GroupDTO> groupDTOs = new ArrayList<GroupDTO>();
+        List<IGroup> groups = getAllGroups();
 
-		for (IGroup group : groups) {
-			// populate list of group DTOs from Persistent Entities
-			groupDTOs.add(new GroupDTO(group));
-		}
+        for (IGroup group : groups) {
+            // populate list of group DTOs from Persistent Entities
+            groupDTOs.add(new GroupDTO(group));
+        }
 
-		return groupDTOs;
-	}
+        return groupDTOs;
+    }
 
-	public List<ShowdownPlayer> getPlayersInGroup(IGroup group) {
-		List<ShowdownPlayer> players = new ArrayList<ShowdownPlayer>();
-		if (group != null) {
-			players = group.getPlayers();
-		}
-		return players;
-	}
+    public List<ShowdownPlayer> getPlayersInGroup(IGroup group) {
+        List<ShowdownPlayer> players = new ArrayList<ShowdownPlayer>();
+        if (group != null) {
+            players = group.getPlayers();
+        }
+        return players;
+    }
 
-	public List<IGroup> getGroupsInRound(int roundId, boolean completed) {
-		List<IGroup> groups = new ArrayList<IGroup>();
-		TypedQuery<IGroup> query = null;
+    public List<IGroup> getGroupsInRound(int roundId, boolean completed) {
+        List<IGroup> groups = new ArrayList<IGroup>();
+        TypedQuery<IGroup> query = null;
 
-		StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
 
-		if (completed) {
-			query = em.createNamedQuery("Group.findCompleteInRound",
-					IGroup.class);
-			sb.append("Completed");
-		} else {
-			query = em.createNamedQuery("Group.findIncompleteInRound",
-					IGroup.class);
-			sb.append("Incomplete");
-		}
+        if (completed) {
+            query = em.createNamedQuery("Group.findCompleteInRound",
+                    IGroup.class);
+            sb.append("Completed");
+        } else {
+            query = em.createNamedQuery("Group.findIncompleteInRound",
+                    IGroup.class);
+            sb.append("Incomplete");
+        }
 
-		if (query != null) {
-			query.setParameter("roundId", roundId);
-			groups = query.getResultList();
-		}
+        if (query != null) {
+            query.setParameter("roundId", roundId);
+            groups = query.getResultList();
+        }
 
-		sb.append(" groups in round ");
-		sb.append(roundId);
-		sb.append(": ");
-		sb.append(groups.size());
-		sb.append(".");
-		logger.debug(sb.toString());
+        sb.append(" groups in round ");
+        sb.append(roundId);
+        sb.append(": ");
+        sb.append(groups.size());
+        sb.append(".");
+        logger.debug(sb.toString());
 
-		return groups;
-	}
+        return groups;
+    }
 
-	// check if round which this group is in is over
-	public boolean roundFinished(int roundId) {
-		return getGroupsInRound(roundId, false).isEmpty();
-	}
-
-	public boolean hasGames(IGroup group) {
-		boolean hasGames = false;
-
-		TypedQuery<IGame> query = em.createNamedQuery("Game.findAllInGroup",
-				IGame.class);
-		query.setParameter("group", group);
-		hasGames = query.getResultList().size() > 0;
-
-		return hasGames;
-	}
-
+    // check if round which this group is in is over
+    public boolean roundFinished(int roundId) {
+        return getGroupsInRound(roundId, false).isEmpty();
+    }
 }

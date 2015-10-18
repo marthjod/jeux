@@ -11,11 +11,11 @@ import de.fhb.jeux.model.IGroup;
 @Remote
 
 public interface GroupRemote {
-	public List<GroupDTO> getAllGroupDTOs();
 
-	
-	public IGroup getGroupById(int groupId);
+    public List<GroupDTO> getAllGroupDTOs();
 
-	
-	public List<PlayerDTO> getPlayerDTOsInGroup(IGroup group);
+    public IGroup getGroupById(int groupId);
+
+    public List<PlayerDTO> getPlayerDTOsInGroup(IGroup group);
+
 }

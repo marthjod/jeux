@@ -13,6 +13,8 @@ public class GroupDTO implements Comparable {
     private boolean active;
     private boolean completed;
     private int roundId;
+    private boolean hasGames;
+    private int size;
 
     // argument-less constructor for converter libs (Jackson...)
     // client-provided data -> DTO
@@ -30,6 +32,8 @@ public class GroupDTO implements Comparable {
         this.minSets = groupEntity.getMinSets();
         this.maxSets = groupEntity.getMaxSets();
         this.roundId = groupEntity.getRoundId();
+        this.hasGames = groupEntity.hasGames();
+        this.size = groupEntity.getSize();
     }
 
     public GroupDTO(String name, boolean completed) {
@@ -65,6 +69,14 @@ public class GroupDTO implements Comparable {
         return roundId;
     }
 
+    public boolean hasGames() {
+        return this.hasGames;
+    }
+
+    public int getSize() {
+        return this.size;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -75,6 +87,8 @@ public class GroupDTO implements Comparable {
         sb.append(", round ID: ").append(roundId);
         sb.append(", active: ").append(active);
         sb.append(", completed: ").append(completed);
+        sb.append(", size: ").append(size);
+        sb.append(", has games: ").append(hasGames);
         sb.append(">");
         return sb.toString();
     }

@@ -32,9 +32,11 @@ Groups
             <td>{{ group.active }}</td>
             <td>{{ group.completed }}</td>
             <td>
+                {% if group.size > 1 and not group.hasGames %}
                 <input type="submit" class="btn btn-success"
                        value="Generate"
                        onclick="generateGames(this, '{{ group.id }}', false, '{{ prefix }}');">
+                {% endif %}
                 <input type="submit" class="btn btn-default"
                        value="List"
                        onclick="getShuffledGames('{{ group.id }}', 'html', '{{ prefix }}');">

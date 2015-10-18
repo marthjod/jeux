@@ -22,7 +22,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 
 @Entity
 @Table(name = "Game")
@@ -81,12 +80,6 @@ public class ShowdownGame implements IGame, Serializable {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "game")
     private List<ShowdownGameSet> sets;
-
-    @Transient
-    private int player1Score;
-
-    @Transient
-    private int player2Score;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date playedAt = null;

@@ -19,39 +19,36 @@ import de.fhb.jeux.persistence.ShowdownPlayer;
 
 public class GroupBean implements GroupRemote, GroupLocal {
 
-	protected static Logger logger = Logger.getLogger(GroupBean.class);
+    protected static Logger logger = Logger.getLogger(GroupBean.class);
 
-	@EJB
-	private GroupDAO groupDAO;
+    @EJB
+    private GroupDAO groupDAO;
 
-	@EJB
-	private PlayerLocal playerBean;
+    public GroupBean() {
+    }
 
-	public GroupBean() {
-	}
+    @Override
+    public List<GroupDTO> getAllGroupDTOs() {
+        return groupDAO.getAllGroupDTOs();
+    }
 
-	@Override
-	public List<GroupDTO> getAllGroupDTOs() {
-		return groupDAO.getAllGroupDTOs();
-	}
+    @Override
+    public IGroup getGroupById(int groupId) {
+        return groupDAO.getGroupById(groupId);
+    }
 
-	@Override
-	public IGroup getGroupById(int groupId) {
-		return groupDAO.getGroupById(groupId);
-	}
+    private List<ShowdownPlayer> getPlayersInGroup(IGroup group) {
+        return groupDAO.getPlayersInGroup(group);
+    }
 
-	private List<ShowdownPlayer> getPlayersInGroup(IGroup group) {
-		return groupDAO.getPlayersInGroup(group);
-	}
-
-	@Override
-	public List<PlayerDTO> getPlayerDTOsInGroup(IGroup group) {
-		List<PlayerDTO> playerDTOs = new ArrayList<PlayerDTO>();
-		if (group != null) {
-			for (IPlayer player : getPlayersInGroup(group)) {
-				playerDTOs.add(new PlayerDTO(player));
-			}
-		}
-		return playerDTOs;
-	}
+    @Override
+    public List<PlayerDTO> getPlayerDTOsInGroup(IGroup group) {
+        List<PlayerDTO> playerDTOs = new ArrayList<PlayerDTO>();
+        if (group != null) {
+            for (IPlayer player : getPlayersInGroup(group)) {
+                playerDTOs.add(new PlayerDTO(player));
+            }
+        }
+        return playerDTOs;
+    }
 }

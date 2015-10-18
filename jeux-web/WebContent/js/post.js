@@ -91,13 +91,10 @@ var generateGames = function (generateButton, groupId, shuffledMode, prefix) {
         type: "POST",
         statusCode: {
             201: function () {
-                $(generateButton).remove();
-                showGames($("#show-unplayed-games"), "unplayed", true);
+                document.location.reload();
             },
             409: function () {
                 alert("Conflict: one or more game(s) already exist(s) in this group.");
-                // disable button
-                $(generateButton).remove();
             },
             500: function () {
                 alert("Unknown error.");
@@ -107,7 +104,6 @@ var generateGames = function (generateButton, groupId, shuffledMode, prefix) {
             },
             428: function () {
                 alert("Cannot calculate games: Too few group members.");
-                $(generateButton).removeAttr("disabled").attr("value", "Generate games");
             }
         }
     });

@@ -58,7 +58,7 @@ public class RoundSwitchBean implements RoundSwitchRemote, RoundSwitchLocal {
                 IGroup destGroup = rule.getDestGroup();
                 // dest group should be incomplete, without games or
                 // players etc.
-                if (groupDAO.hasGames(destGroup)) {
+                if (destGroup.hasGames()) {
                     logger.warn("Destination group " + destGroup
                             + " already contains games");
                     // break;

@@ -5,27 +5,30 @@ import java.util.List;
 import de.fhb.jeux.persistence.ShowdownPlayer;
 
 public interface IGroup {
-	public int getId();
 
-	public String getName();
+    public int getId();
 
-	public int getRoundId();
+    public String getName();
 
-	public int getMinSets();
+    public int getRoundId();
 
-	public int getMaxSets();
+    public int getMinSets();
 
-	public int getSize();
+    public int getMaxSets();
 
-	public List<ShowdownPlayer> getPlayers();
+    public int getSize();
 
-	public boolean isActive();
+    public boolean hasGames();
 
-	public void setActive(boolean active);
+    public List<ShowdownPlayer> getPlayers();
 
-	public boolean isCompleted();
+    public boolean isActive();
 
-	public void setCompleted(boolean completed);
+    public void setActive(boolean active);
 
-	public boolean equals(IGroup group);
+    public boolean isCompleted();
+
+    public void setCompleted(boolean completed);
+
+    public boolean equals(IGroup group);
 }
