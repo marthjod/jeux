@@ -8,6 +8,5 @@ import de.fhb.jeux.dto.GroupDTO;
 
 public interface CreateGroupRemote {
 
-	
-	public boolean createGroup(GroupDTO groupDTO);
+    public int createGroup(GroupDTO groupDTO);
 }

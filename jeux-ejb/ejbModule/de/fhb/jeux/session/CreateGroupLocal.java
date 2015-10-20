@@ -6,5 +6,6 @@ import de.fhb.jeux.dto.GroupDTO;
 
 @Local
 public interface CreateGroupLocal {
-	public boolean createGroup(GroupDTO groupDTO);
+
+    public int createGroup(GroupDTO groupDTO);
 }

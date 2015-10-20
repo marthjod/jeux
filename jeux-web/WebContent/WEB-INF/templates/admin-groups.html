@@ -105,8 +105,50 @@ Groups
 
     <form action="groups/import" method="post" enctype="multipart/form-data">
         <p><input type="file" name="file" class="btn btn-file"></p>
-        <input type="submit" class="btn btn-warning" value="Import CSV (beta)">
+        <input type="submit" class="btn btn-warning" value="Import JSON (beta)">
     </form>
+
+    <input type="submit" class="btn btn-default" value="Example"
+           onclick="$('#input-example').toggle()">
+    <div id="input-example" hidden="hidden">
+        <code>
+            [
+            {
+            "name": "Group A",
+            "minSets": 1,
+            "maxSets": 1,
+            "roundId": 1,
+            "active": true,
+            "completed": false,
+            "players": [
+            "First Player",
+            "Second Player"
+            ]
+            },
+            {
+            "name": "Group B",
+            "minSets": 1,
+            "maxSets": 1,
+            "roundId": 1,
+            "active": true,
+            "completed": false,
+            "players": [
+            "Third Player",
+            "Fourth Player"
+            ]
+            },
+            {
+            "name": "Group C",
+            "minSets": 2,
+            "maxSets": 3,
+            "roundId": 2,
+            "active": false,
+            "completed": false,
+            "players": []
+            }
+            ]
+        </code>
+    </div>
 
 </div>
 

@@ -21,12 +21,12 @@ public class CreateGroupBean implements CreateGroupRemote, CreateGroupLocal {
     }
 
     @Override
-    public boolean createGroup(GroupDTO groupDTO) {
+    public int createGroup(GroupDTO groupDTO) {
 
         boolean checkOK = false;
-        boolean created = false;
+        int id = -1;
 
-		// min sets <= max sets;
+        // min sets <= max sets;
         // creating "completed" groups is disallowed
         if (groupDTO.getMinSets() <= groupDTO.getMaxSets()
                 && !groupDTO.isCompleted()) {
@@ -34,14 +34,14 @@ public class CreateGroupBean implements CreateGroupRemote, CreateGroupLocal {
         }
 
         if (checkOK) {
-			// persist new Group entity after having
+            // persist new Group entity after having
             // converted it from DTO
             IGroup newGroup = new ShowdownGroup(groupDTO);
             groupDAO.addGroup(newGroup);
-            created = true;
-            // logger.debug("Added group '" + newGroup.getName() + "'");
+
+            id = newGroup.getId();
         }
 
-        return created;
+        return id;
     }
 }

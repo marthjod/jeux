@@ -6,8 +6,12 @@ import de.fhb.jeux.session.GameLocal;
 import de.fhb.jeux.session.GroupLocal;
 import de.fhb.jeux.session.PlayerLocal;
 import de.fhb.jeux.session.RoundSwitchRuleLocal;
-import de.fhb.jeux.bulkimport.CSVImporter;
+import de.fhb.jeux.bulkimport.ImportGroup;
+import de.fhb.jeux.bulkimport.JSONImporter;
+import de.fhb.jeux.dto.PlayerDTO;
+import de.fhb.jeux.model.IGroup;
 import de.fhb.jeux.session.CreateGroupLocal;
+import de.fhb.jeux.session.CreatePlayerLocal;
 import de.fhb.jeux.template.Template;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -21,7 +25,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.servlet.ServletContext;
@@ -55,6 +58,9 @@ public class AdminGUI {
 
     @EJB
     private CreateGroupLocal createGroupBean;
+
+    @EJB
+    private CreatePlayerLocal createPlayerBean;
 
     @EJB
     private RoundSwitchRuleLocal roundSwitchRuleBean;
@@ -181,6 +187,8 @@ public class AdminGUI {
             MultipartFormDataInput input) {
         Response response = Response.serverError().build();
         URI returnUrl = null;
+        List<ImportGroup> importGroups = new ArrayList<>();
+
         try {
             String uri = request.getRequestURI();
             returnUrl = new URI(uri.substring(request.getContextPath().length(),
@@ -196,31 +204,38 @@ public class AdminGUI {
                 try {
                     InputStream instream = inputPart.getBody(InputStream.class, null);
                     BufferedReader bufreader = new BufferedReader(new InputStreamReader(instream));
-                    List<GroupDTO> groups = CSVImporter.getGroups(bufreader);
-
-                    if (groups.size() > 0) {
-                        boolean allOK = false;
-                        for (GroupDTO groupDTO : groups) {
-                            allOK = createGroupBean.createGroup(groupDTO);
-                            if (!allOK) {
-                                break;
-                            }
-                        }
-                        if (allOK) {
-                            response = Response.seeOther(returnUrl).build();
-                        } else {
-                            response = Response.serverError().build();
-                        }
-                    } else {
-                        response = Response.noContent().build();
-                    }
+                    importGroups = JSONImporter.importFromJson(bufreader);
                 } catch (IOException ex) {
                     logger.error(ex.getMessage());
+                }
+
+                if (saveImportGroups(importGroups)) {
+                    response = Response.seeOther(returnUrl).build();
                 }
             }
         } else {
             response = Response.status(Response.Status.BAD_REQUEST).build();
         }
         return response;
+    }
+
+    private boolean saveImportGroups(List<ImportGroup> importGroups) {
+        boolean success = false;
+
+        if (importGroups != null) {
+            for (ImportGroup ig : importGroups) {
+                GroupDTO groupDTO = new GroupDTO(ig.getName(),
+                        ig.getMinSets(), ig.getMaxSets(),
+                        ig.getRoundId(), ig.isActive(), ig.isCompleted());
+                int groupId = createGroupBean.createGroup(groupDTO);
+                IGroup group = groupBean.getGroupById(groupId);
+                for (String playerName : ig.getPlayers()) {
+                    PlayerDTO player = new PlayerDTO(playerName);
+                    createPlayerBean.createPlayer(player, group);
+                }
+            }
+            success = true;
+        }
+        return success;
     }
 }

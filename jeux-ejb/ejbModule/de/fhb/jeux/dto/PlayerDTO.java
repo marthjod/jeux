@@ -30,6 +30,10 @@ public class PlayerDTO implements Comparable {
         this.groupName = playerEntity.getGroup().getName();
     }
 
+    public PlayerDTO(String name) {
+        this.name = name;
+    }
+
     public int getId() {
         return id;
     }

@@ -125,7 +125,7 @@ public class AdminAPI {
 
         if (groupDTO != null) {
             logger.debug("Deserialized group DTO " + groupDTO);
-            if (createGroupBean.createGroup(groupDTO)) {
+            if (createGroupBean.createGroup(groupDTO) != -1) {
                 response = Response.status(Response.Status.CREATED).build();
             }
         }

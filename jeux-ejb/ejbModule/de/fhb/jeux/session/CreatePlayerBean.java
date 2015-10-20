@@ -15,39 +15,38 @@ import de.fhb.jeux.persistence.ShowdownPlayer;
 
 public class CreatePlayerBean implements CreatePlayerRemote, CreatePlayerLocal {
 
-	protected static Logger logger = Logger.getLogger(CreatePlayerBean.class);
+    protected static Logger logger = Logger.getLogger(CreatePlayerBean.class);
 
-	@EJB
-	private PlayerDAO playerDAO;
+    @EJB
+    private PlayerDAO playerDAO;
 
-	public CreatePlayerBean() {
-	}
+    public CreatePlayerBean() {
+    }
 
-	@Override
-	public boolean createPlayer(PlayerDTO playerDTO, IGroup group) {
+    @Override
+    public boolean createPlayer(PlayerDTO playerDTO, IGroup group) {
 
-		boolean checkOK = false;
-		boolean created = false;
+        boolean checkOK = false;
+        boolean created = false;
 
-		// rank, points, score ratio, won games must be 0 initially
-		if (playerDTO != null && playerDTO.getRank() == 0
-				&& playerDTO.getScoreRatio() == 0 && playerDTO.getPoints() == 0
-				&& playerDTO.getWonGames() == 0) {
-			checkOK = true;
-		}
+        // rank, points, score ratio, won games must be 0 initially
+        if (playerDTO != null && playerDTO.getRank() == 0
+                && playerDTO.getScoreRatio() == 0
+                && playerDTO.getPoints() == 0
+                && playerDTO.getWonGames() == 0) {
+            checkOK = true;
+        }
 
-		// TODO how to handle same names? #business-logic
+        // TODO how to handle same names? #business-logic
+        // TODO check if group exists #business-logic
+        if (checkOK) {
+            // persist after converting
+            IPlayer newPlayer = new ShowdownPlayer(playerDTO, group);
+            playerDAO.addPlayer(newPlayer);
+            created = true;
+            logger.debug("Added player '" + newPlayer.getName() + "'");
+        }
 
-		// TODO check if group exists #business-logic
-
-		if (checkOK) {
-			// persist after converting
-			IPlayer newPlayer = new ShowdownPlayer(playerDTO, group);
-			playerDAO.addPlayer(newPlayer);
-			created = true;
-			logger.debug("Added player '" + newPlayer.getName() + "'");
-		}
-
-		return created;
-	}
+        return created;
+    }
 }
