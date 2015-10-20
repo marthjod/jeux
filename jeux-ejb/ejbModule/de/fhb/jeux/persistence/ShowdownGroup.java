@@ -1,11 +1,9 @@
 package de.fhb.jeux.persistence;
 
-import de.fhb.jeux.dao.GroupDAO;
 import de.fhb.jeux.dto.GroupDTO;
 import de.fhb.jeux.model.IGroup;
 import java.io.Serializable;
 import java.util.List;
-import javax.ejb.EJB;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;

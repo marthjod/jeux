@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>de.fhb</groupId>
     <artifactId>jeux-ear</artifactId>
-    <version>0.5.1-wip</version>
+    <version>0.5.3-wip</version>
     <packaging>ear</packaging>
     <name>JEUX EAR package - ${project.groupId}.${project.artifactId}-${project.version}</name>
     <build>
@@ -23,13 +23,13 @@
         <dependency>
             <groupId>de.fhb</groupId>
             <artifactId>jeux-web</artifactId>
-            <version>0.5.1-wip</version>
+            <version>0.5.3-wip</version>
             <type>war</type>
         </dependency>
         <dependency>
             <groupId>de.fhb</groupId>
             <artifactId>jeux-ejb</artifactId>
-            <version>0.5.1-wip</version>
+            <version>0.5.3-wip</version>
             <type>ejb</type>
         </dependency>
     </dependencies>

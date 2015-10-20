@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <groupId>de.fhb</groupId>
-    <version>0.5.1-wip</version>
+    <version>0.5.3-wip</version>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>jeux-web</artifactId>
     <packaging>war</packaging>
@@ -114,9 +114,20 @@
             <version> 1.4.3 </version>
         </dependency>
         <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-multipart-provider</artifactId>
+            <version>3.0.13.Final</version>
+            <!-- https://stackoverflow.com/questions/15603662/asynchronousdispatcher-error
+            "If deploying to JBoss 7.x you need to change the scope of your
+            resteasy dependencies to provided. This is because those particular libraries
+            are already included in JBoss as modules"
+            -->
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>de.fhb</groupId>
             <artifactId>jeux-ejb</artifactId>
-            <version>0.5.1-wip</version>
+            <version>0.5.3-wip</version>
             <type>ejb</type>
         </dependency>
     </dependencies>

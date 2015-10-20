@@ -100,5 +100,15 @@ Groups
     </div>
 </div>
 
+<div>
+    <h3>Import</h3>
+
+    <form action="groups/import" method="post" enctype="multipart/form-data">
+        <p><input type="file" name="file" class="btn btn-file"></p>
+        <input type="submit" class="btn btn-warning" value="Import CSV (beta)">
+    </form>
+
+</div>
+
 
 {% endblock %}
