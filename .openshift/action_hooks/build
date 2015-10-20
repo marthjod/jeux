@@ -15,7 +15,7 @@ $maven -f jeux-web/pom.xml -DserverSecret="$JEUX_SERVER_SECRET" -DlogFilePath="$
 $maven -f jeux-ear/pom.xml $goals
 
 # trigger undeploy
-prev_artifact=$(find $OPENSHIFT_JBOSSAS_DIR/standalone/deployments -type f -name 'jeux*.ear' | head -1)
+prev_artifact=$(find $OPENSHIFT_JBOSSAS_DIR/standalone/deployments/ -type f -name 'jeux*.ear' | head -1)
 rm -vf ${prev_artifact}
 rm -vf ${prev_artifact}.failed
 rm -vf ${prev_artifact}.deployed
