@@ -52,8 +52,6 @@ Groups
         </tr>
         {% endfor %}
     </table>
-    {% else %}
-    No groups found.
     {% endif %}
 </div>
 
@@ -112,41 +110,43 @@ Groups
            onclick="$('#input-example').toggle()">
     <div id="input-example" hidden="hidden">
         <code>
-            [
-            {
-            "name": "Group A",
-            "minSets": 1,
-            "maxSets": 1,
-            "roundId": 1,
-            "active": true,
-            "completed": false,
-            "players": [
+            <pre>
+[
+    {
+        "name": "Group A",
+        "minSets": 1,
+        "maxSets": 1,
+        "roundId": 1,
+        "active": true,
+        "completed": false,
+        "players": [
             "First Player",
             "Second Player"
-            ]
-            },
-            {
-            "name": "Group B",
-            "minSets": 1,
-            "maxSets": 1,
-            "roundId": 1,
-            "active": true,
-            "completed": false,
-            "players": [
+        ]
+    },
+    {
+        "name": "Group B",
+        "minSets": 1,
+        "maxSets": 1,
+        "roundId": 1,
+        "active": true,
+        "completed": false,
+        "players": [
             "Third Player",
             "Fourth Player"
-            ]
-            },
-            {
-            "name": "Group C",
-            "minSets": 2,
-            "maxSets": 3,
-            "roundId": 2,
-            "active": false,
-            "completed": false,
-            "players": []
-            }
-            ]
+        ]
+    },
+    {
+        "name": "Group C",
+        "minSets": 2,
+        "maxSets": 3,
+        "roundId": 2,
+        "active": false,
+        "completed": false,
+        "players": []
+    }
+]
+            </pre>
         </code>
     </div>
 
