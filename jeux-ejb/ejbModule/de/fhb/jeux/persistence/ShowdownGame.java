@@ -34,6 +34,7 @@ import javax.persistence.TemporalType;
     @NamedQuery(name = "Game.findPlayedInGroup", query = "SELECT g FROM ShowdownGame g WHERE g.group = :group AND g.winner <> null ORDER BY playedAt DESC"),
     @NamedQuery(name = "Game.findCountPlayedInGroup", query = "SELECT COUNT(g) FROM ShowdownGame g WHERE g.group = :group AND g.winner <> null"),
     @NamedQuery(name = "Game.findPlayedByPlayer", query = "SELECT g FROM ShowdownGame g WHERE (g.player1 = :player OR g.player2 = :player) AND g.winner <> null ORDER BY playedAt DESC"),
+    @NamedQuery(name = "Game.findUnplayedByPlayer", query = "SELECT g FROM ShowdownGame g WHERE (g.player1 = :player OR g.player2 = :player) AND g.winner = null ORDER BY playedAt DESC"),
     @NamedQuery(name = "Game.countPlayedByPlayer", query = "SELECT COUNT(g) FROM ShowdownGame g WHERE (g.player1 = :player OR g.player2 = :player) AND g.winner <> null"),
     @NamedQuery(name = "Game.countWonByPlayer", query = "SELECT COUNT(g) FROM ShowdownGame g WHERE g.winner = :player"),
     @NamedQuery(name = "Game.findByContainedPlayers", query = "SELECT g FROM ShowdownGame g WHERE g.group = :group AND ( (g.player1 = :player1 AND g.player2 = :player2) OR (g.player2 = :player1 AND g.player1 = :player2))")

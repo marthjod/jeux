@@ -1,0 +1,26 @@
+{% extends "audience-base" %}
+
+{% block title %}
+Games {{ playerName }}
+{% endblock %}
+
+{% block content %}
+<h3>{{ playerName }}</h3>
+{% if wonGames is not null and countPlayedGames is not null and pctgWon is not null and streak is not null %}
+<div>
+    <p>
+        Won {{ wonGames }} of {{ countPlayedGames }} ({{ pctgWon | numberformat("#.##") }}%)
+    </p>
+    <p>
+        Streak: {{ streak }}
+    </p>
+</div>
+{% endif %}
+<br />
+
+{% include "audience-games" %}
+
+{% endblock %}
+{% block overviewlink %}
+{{ prefix }}
+{% endblock %}

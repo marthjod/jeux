@@ -39,6 +39,19 @@ public class PlayerBean implements PlayerRemote, PlayerLocal {
     }
 
     @Override
+    public List<GameDTO> getUnplayedGames(IPlayer player) {
+
+        List<IGame> playedGames = playerDAO.getUnplayedGames(player);
+        List<GameDTO> playedGameDTOs = new ArrayList<GameDTO>();
+
+        for (IGame playedGame : playedGames) {
+            playedGameDTOs.add(new GameDTO(playedGame));
+        }
+
+        return playedGameDTOs;
+    }
+
+    @Override
     public Long getCountPlayedGames(IPlayer player) {
         return playerDAO.getCountPlayedGames(player);
     }

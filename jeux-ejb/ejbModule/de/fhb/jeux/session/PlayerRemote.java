@@ -14,6 +14,8 @@ public interface PlayerRemote {
 
     public List<GameDTO> getPlayedGames(IPlayer player);
 
+    public List<GameDTO> getUnplayedGames(IPlayer player);
+
     public Long getCountPlayedGames(IPlayer player);
 
     public Long getCountWonGames(IPlayer player);

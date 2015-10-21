@@ -1,0 +1,70 @@
+{% if playedGames is not empty %}
+<h4>Results</h4>
+{% for result in playedGames %}
+<table class="table table-hover table-bordered table-condensed">
+    <tr>
+        <th>
+            {{ result.groupName }}
+        </th>
+        <th>
+            <a href="{{ prefix }}/games/player/{{ result.player1Id }}">{{ result.player1Name }}</a>
+            {% if result.player1Id == result.winnerId %}
+            (winner)
+            {% endif %}
+        </th>
+        <th>
+            <a href="{{ prefix }}/games/player/{{ result.player2Id }}">{{ result.player2Name }}</a>
+            {% if result.player2Id == result.winnerId %}
+            (winner)
+            {% endif %}
+        </th>
+    </tr>
+    {% for set in result.sets %}
+    {% if set.player1Score > 0 or set.player2Score > 0 %}
+    <tr>
+        <td>
+            {{ set.number }}
+        </td>
+        <td>
+            {{ set.player1Score }}
+        </td>
+        <td>
+            {{ set.player2Score }}
+        </td>
+    </tr>
+    {% endif %}
+    {% endfor %}
+    <!--<tr>
+        <td colspan="3">
+            Last updated {{ result.playedAt | date("yyyy/MM/dd HH:mm") }}
+        </td>
+    </tr>-->
+</table>
+{% endfor %}
+{% endif %}
+
+{% if unplayedGames is not empty %}
+<h4>Unplayed games</h4>
+<table class="table table-hover table-bordered table-condensed">
+    {% for game in unplayedGames %}
+
+    <tr>
+        <td>
+            {{ game.groupName }}
+        </td>
+        <td>
+            <a href="{{ prefix }}/games/player/{{ game.player1Id }}">{{ game.player1Name }}</a>
+            {% if game.player1Id == game.winnerId %}
+            (winner)
+            {% endif %}
+        </td>
+        <td>
+            <a href="{{ prefix }}/games/player/{{ game.player2Id }}">{{ game.player2Name }}</a>
+            {% if game.player2Id == game.winnerId %}
+            (winner)
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endif %}

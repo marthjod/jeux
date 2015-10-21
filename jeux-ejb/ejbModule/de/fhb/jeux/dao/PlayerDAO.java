@@ -145,6 +145,17 @@ public class PlayerDAO {
         return playedGames;
     }
 
+    public List<IGame> getUnplayedGames(IPlayer player) {
+        List<IGame> playedGames = new ArrayList<IGame>();
+
+        TypedQuery<IGame> query = em.createNamedQuery("Game.findUnplayedByPlayer",
+                IGame.class);
+        query.setParameter("player", player);
+        playedGames = query.getResultList();
+
+        return playedGames;
+    }
+
     public Long getCountGames(IPlayer player, String queryName) {
         Long count = 0L;
         Query query = em.createNamedQuery(queryName);

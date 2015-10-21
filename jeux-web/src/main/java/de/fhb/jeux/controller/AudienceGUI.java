@@ -91,7 +91,7 @@ public class AudienceGUI {
     @Produces(MediaType.TEXT_HTML)
     public String getOverview(@Context ServletContext servletContext) {
         Writer writer = new StringWriter();
-        PebbleTemplate compiledTemplate = Template.getTemplate(servletContext, "audience-overview");
+        PebbleTemplate compiledTemplate = Template.getTemplate(servletContext, "audience-start");
 
         if (compiledTemplate != null) {
             Map<String, Object> context = new HashMap<>();
@@ -124,7 +124,6 @@ public class AudienceGUI {
                 }
             } else {
                 context.put("group", new GroupDTO("Group not found", false));
-                context.put("rankings", new ArrayList());
             }
             writer = Template.renderTemplate(compiledTemplate, context);
         }
@@ -133,12 +132,12 @@ public class AudienceGUI {
     }
 
     @GET
-    @Path("/results/group/{groupId}")
+    @Path("/games/group/{groupId}")
     @Produces(MediaType.TEXT_HTML)
-    public String getResultsInGroup(@Context ServletContext servletContext,
+    public String getGamesInGroup(@Context ServletContext servletContext,
             @PathParam("groupId") int groupId) {
         Writer writer = new StringWriter();
-        PebbleTemplate compiledTemplate = Template.getTemplate(servletContext, "audience-group-results");
+        PebbleTemplate compiledTemplate = Template.getTemplate(servletContext, "audience-group-games");
 
         if (compiledTemplate != null) {
             Map<String, Object> context = new HashMap<>();
@@ -147,10 +146,10 @@ public class AudienceGUI {
             context.put("prefix", "/" + servletContext.getServletContextName() + "/gui/audience");
             if (group != null) {
                 context.put("group", group);
-                context.put("results", gameBean.getPlayedGameDTOsInGroup(group));
+                context.put("playedGames", gameBean.getPlayedGameDTOsInGroup(group));
+                context.put("unplayedGames", gameBean.getUnplayedGameDTOsInGroup(group));
             } else {
                 context.put("group", new GroupDTO("Group not found", false));
-                context.put("results", new ArrayList());
             }
             writer = Template.renderTemplate(compiledTemplate, context);
         }
@@ -159,12 +158,12 @@ public class AudienceGUI {
     }
 
     @GET
-    @Path("/results/player/{playerId}")
+    @Path("/games/player/{playerId}")
     @Produces(MediaType.TEXT_HTML)
-    public String getPlayerResults(@Context ServletContext servletContext,
+    public String getGamesForPlayer(@Context ServletContext servletContext,
             @PathParam("playerId") int playerId) {
         Writer writer = new StringWriter();
-        PebbleTemplate compiledTemplate = Template.getTemplate(servletContext, "audience-player-results");
+        PebbleTemplate compiledTemplate = Template.getTemplate(servletContext, "audience-player-games");
 
         if (compiledTemplate != null) {
             Map<String, Object> context = new HashMap<String, Object>();
@@ -174,6 +173,7 @@ public class AudienceGUI {
             if (player != null) {
                 // save extra DB call
                 List<GameDTO> playedGames = playerBean.getPlayedGames(player);
+                List<GameDTO> unplayedGames = playerBean.getUnplayedGames(player);
 
                 int countPlayedGames = playedGames.size();
                 Long countWonGames = playerBean.getCountWonGames(player);
@@ -183,14 +183,14 @@ public class AudienceGUI {
                     pctgWon = (countWonGames * 100.0f) / countPlayedGames;
                 }
                 context.put("playerName", player.getName());
-                context.put("results", playedGames);
-                context.put("playedGames", countPlayedGames);
+                context.put("playedGames", playedGames);
+                context.put("unplayedGames", unplayedGames);
+                context.put("countPlayedGames", countPlayedGames);
                 context.put("wonGames", countWonGames);
                 context.put("pctgWon", pctgWon);
                 context.put("streak", getStreakInfo(playedGames, player));
             } else {
                 context.put("playerName", "Player not found");
-                context.put("results", new ArrayList());
             }
             writer = Template.renderTemplate(compiledTemplate, context);
         }
