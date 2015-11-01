@@ -199,9 +199,15 @@ public class AdminGUI {
 
         Map<String, List<InputPart>> formParts = input.getFormDataMap();
         List<InputPart> inPart = formParts.get("file");
-        if (inPart != null) {
+
+        if (inPart != null && inPart.size() > 0) {
             for (InputPart inputPart : inPart) {
+
                 try {
+                    if (inputPart.getBodyAsString().equals("")) {
+                        response = Response.status(Response.Status.BAD_REQUEST).build();
+                        break;
+                    }
                     InputStream instream = inputPart.getBody(InputStream.class, null);
                     BufferedReader bufreader = new BufferedReader(new InputStreamReader(instream));
                     importGroups = JSONImporter.importFromJson(bufreader);
