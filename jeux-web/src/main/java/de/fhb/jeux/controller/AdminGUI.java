@@ -29,7 +29,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.servlet.ServletContext;
@@ -247,7 +246,7 @@ public class AdminGUI {
             for (ImportGroup ig : importGroups) {
                 GroupDTO groupDTO = new GroupDTO(ig.getName(),
                         ig.getMinSets(), ig.getMaxSets(),
-                        ig.getRoundId(), ig.isActive(), ig.isCompleted());
+                        ig.getRoundId(), ig.isActive(), false);
                 int groupId = createGroupBean.createGroup(groupDTO);
                 IGroup group = groupBean.getGroupById(groupId);
                 for (String playerName : ig.getPlayers()) {
@@ -268,7 +267,7 @@ public class AdminGUI {
                 RoundSwitchRuleDTO ruleDTO = new RoundSwitchRuleDTO(
                         ir.getSrcGroupName(), ir.getDestGroupName(),
                         ir.getStartWithRank(), ir.getAdditionalPlayers());
-                logger.debug(ruleDTO);
+
                 int status = createRuleBean.createRoundSwitchRule(ruleDTO,
                         groupBean.getGroupByName(ir.getSrcGroupName()),
                         groupBean.getGroupByName(ir.getDestGroupName()));

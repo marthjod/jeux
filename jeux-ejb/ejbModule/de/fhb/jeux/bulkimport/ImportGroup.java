@@ -9,7 +9,6 @@ public class ImportGroup {
     private int maxSets;
     private int roundId;
     private boolean active;
-    private boolean completed;
     private List<String> players;
 
     public ImportGroup() {
@@ -33,10 +32,6 @@ public class ImportGroup {
 
     public boolean isActive() {
         return active;
-    }
-
-    public boolean isCompleted() {
-        return completed;
     }
 
     public List<String> getPlayers() {
