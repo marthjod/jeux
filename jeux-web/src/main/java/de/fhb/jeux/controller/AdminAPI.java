@@ -21,6 +21,7 @@ import de.fhb.jeux.session.DeleteRuleLocal;
 import de.fhb.jeux.session.GroupLocal;
 import de.fhb.jeux.session.InsertGameBean;
 import de.fhb.jeux.session.PlayerLocal;
+import de.fhb.jeux.session.RoundSwitchLocal;
 import de.fhb.jeux.session.RoundSwitchRuleLocal;
 import de.fhb.jeux.session.UpdateGameLocal;
 import de.fhb.jeux.session.UpdatePlayerLocal;
@@ -87,6 +88,9 @@ public class AdminAPI {
 
     @EJB
     private RoundSwitchRuleLocal roundSwitchRuleBean;
+
+    @EJB
+    private RoundSwitchLocal roundSwitchBean;
 
     @EJB
     private CalcGamesLocal calcGamesBean;
@@ -389,6 +393,22 @@ public class AdminAPI {
         }
 
         return ret;
+    }
+
+    @POST
+    @Path("/round-switch")
+    public Response doRoundSwitch() {
+        Response response = Response.status(
+                Response.Status.NO_CONTENT).build();
+
+        if (roundSwitchBean.currentRoundFinished()) {
+            if (roundSwitchBean.switchRound()) {
+                response = Response.status(
+                        Response.Status.CREATED).build();
+            }
+        }
+
+        return response;
     }
 
 }

@@ -27,7 +27,8 @@ import org.jboss.logging.Logger;
     @NamedQuery(name = "Group.findById", query = "SELECT g FROM ShowdownGroup g WHERE g.id = :id"),
     @NamedQuery(name = "Group.findByName", query = "SELECT g FROM ShowdownGroup g WHERE g.name = :name"),
     @NamedQuery(name = "Group.findCompleteInRound", query = "SELECT g FROM ShowdownGroup g WHERE g.roundId = :roundId AND g.completed = true"),
-    @NamedQuery(name = "Group.findIncompleteInRound", query = "SELECT g FROM ShowdownGroup g WHERE g.roundId = :roundId AND g.completed = false")})
+    @NamedQuery(name = "Group.findIncompleteInRound", query = "SELECT g FROM ShowdownGroup g WHERE g.roundId = :roundId AND g.completed = false"),
+    @NamedQuery(name = "Group.findCurrentRoundId", query = "SELECT MAX(g.roundId) FROM ShowdownGroup g WHERE g.completed = true OR g.active = true")})
 public class ShowdownGroup implements IGroup, Serializable {
 
     private static final long serialVersionUID = 4301340014397931722L;

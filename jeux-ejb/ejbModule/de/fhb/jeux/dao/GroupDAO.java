@@ -164,7 +164,22 @@ public class GroupDAO {
         return groups;
     }
 
-    // check if round which this group is in is over
+    public int getCurrentRoundId() {
+        int currentRoundId = 0;
+        TypedQuery<Integer> query = em.createNamedQuery("Group.findCurrentRoundId",
+                Integer.class);
+
+        try {
+            currentRoundId = query.getSingleResult();
+        } catch (NullPointerException ex) {
+            // EntityManager throws NPE
+        }
+
+        logger.debug("Current round ID: " + currentRoundId);
+        return currentRoundId;
+    }
+
+    // check if round which this group belongs to is over
     public boolean roundFinished(int roundId) {
         return getGroupsInRound(roundId, false).isEmpty();
     }

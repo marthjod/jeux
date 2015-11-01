@@ -243,11 +243,6 @@ public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
                                 logger.info("Round " + group.getRoundId()
                                         + " is finished.");
 
-                                // TODO we should not do this automatically in
-                                // case the last game entered has to be corrected
-                                // again...
-                                roundSwitchBean.switchRound(group.getRoundId());
-
                                 // TODO
                                 success = true;
                             } else {

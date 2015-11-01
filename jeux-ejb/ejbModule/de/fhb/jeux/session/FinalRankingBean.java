@@ -32,7 +32,7 @@ public class FinalRankingBean implements FinalRankingLocal, FinalRankingRemote {
     public List<RankingDTO> getRankingDTOs(IGroup group) {
         List<RankingDTO> rankings = rankingDAO.getRankingDTOs(group);
         if (!rankings.isEmpty()) {
-            logger.debug("'" + group.getName() + "': " + rankings);
+            logger.debug(rankings);
         }
         return rankings;
     }

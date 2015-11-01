@@ -234,6 +234,8 @@ public class AdminGUI {
 
         if (saveImportRules(importRules)) {
             response = Response.seeOther(returnUrl).build();
+        } else {
+            response = Response.status(Response.Status.CONFLICT).build();
         }
 
         return response;

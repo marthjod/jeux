@@ -108,3 +108,29 @@ var generateGames = function (generateButton, groupId, shuffledMode, prefix) {
         }
     });
 };
+
+
+var switchRound = function (switchButton, url) {
+    "use strict";
+
+    $(switchButton).attr("disabled", "disabled");
+    window.setTimeout(function () {
+        $(switchButton).removeAttr("disabled");
+    }, 5000);
+
+    $.ajax({
+        url: url,
+        type: 'POST',
+        statusCode: {
+            204: function () {
+                alert("Current round not over yet.");
+            },
+            201: function () {
+                $(switchButton).attr("class", "btn btn-lg btn-success");
+                window.setTimeout(function () {
+                    $(switchButton).attr("class", "btn btn-lg btn-danger");
+                }, 3000);
+            }
+        }
+    });
+};

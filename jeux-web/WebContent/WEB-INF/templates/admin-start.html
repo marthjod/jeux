@@ -3,8 +3,8 @@
 {% block script %}
 <script>
     $(document).ready(function () {
-        "use strict";
-        getApiStatus($("#api-status"), '{{ prefix }}');
+    "use strict";
+            getApiStatus($("#api-status"), '{{ prefix }}');
     });
 </script>
 {% endblock %}
@@ -66,6 +66,16 @@ Jeux Admin View
         </a>
     </p>
 </div>
+
+<div id="round-switch">
+    <p>
+        <button class="btn btn-lg btn-danger"
+                onclick="switchRound(this, '{{ prefix }}/rest/admin/round-switch');">
+            Switch to next round
+        </button>
+    </p>
+</div>
+
 
 <div id="log">
     <p>

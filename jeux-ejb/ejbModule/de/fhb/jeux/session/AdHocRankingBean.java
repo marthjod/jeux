@@ -32,7 +32,7 @@ public class AdHocRankingBean implements AdHocRankingRemote, AdHocRankingLocal {
 
     @Override
     public List<IPlayer> getRankedPlayers(IGroup group) {
-        List<IPlayer> rankedPlayers = new ArrayList<IPlayer>();
+        List<IPlayer> rankings = new ArrayList<IPlayer>();
         int rank = 0;
 
         if (group != null) {
@@ -70,7 +70,7 @@ public class AdHocRankingBean implements AdHocRankingRemote, AdHocRankingLocal {
                         temp = sortedPlayers.poll();
                         temp.setRank(++rank);
                         // logger.debug(temp.getRank() + ". " + temp.getName());
-                        rankedPlayers.add(temp);
+                        rankings.add(temp);
                     }
                 } else {
                     // no games won yet --
@@ -78,16 +78,16 @@ public class AdHocRankingBean implements AdHocRankingRemote, AdHocRankingLocal {
                     logger.debug("Skipped ranking calculation, applying arbitrary ranks");
                     for (IPlayer temp : group.getPlayers()) {
                         temp.setRank(++rank);
-                        rankedPlayers.add(temp);
+                        rankings.add(temp);
                     }
                 }
 
-                if (!rankedPlayers.isEmpty()) {
-                    logger.debug("'" + group.getName() + "': " + rankedPlayers);
+                if (!rankings.isEmpty()) {
+                    logger.debug(rankings);
                 }
             }
         }
-        return rankedPlayers;
+        return rankings;
     }
 
     // DRY

@@ -5,6 +5,8 @@ import javax.ejb.Local;
 @Local
 public interface RoundSwitchLocal {
 
-	public boolean switchRound(int roundId);
+    public boolean currentRoundFinished();
+
+    public boolean switchRound();
 
 }

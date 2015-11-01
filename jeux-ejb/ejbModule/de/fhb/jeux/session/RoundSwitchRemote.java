@@ -4,5 +4,8 @@ import javax.ejb.Remote;
 
 @Remote
 public interface RoundSwitchRemote {
-	public boolean switchRound(int roundId);
+
+    public boolean currentRoundFinished();
+
+    public boolean switchRound();
 }
