@@ -13,7 +13,6 @@ import javax.persistence.TypedQuery;
 import org.jboss.logging.Logger;
 
 import de.fhb.jeux.dto.GroupDTO;
-import de.fhb.jeux.model.IGame;
 import de.fhb.jeux.model.IGroup;
 import de.fhb.jeux.persistence.ShowdownPlayer;
 
@@ -80,6 +79,23 @@ public class GroupDAO {
             // reset because callers should test for null
             group = null;
             logger.error("Group ID " + groupId + ": " + e.getClass().getName()
+                    + " " + e.getMessage());
+        }
+        return group;
+    }
+
+    public IGroup getGroupByName(String name) {
+        IGroup group = null;
+        TypedQuery<IGroup> query = em.createNamedQuery("Group.findByName",
+                IGroup.class);
+        query.setParameter("name", name);
+
+        try {
+            group = query.getSingleResult();
+        } catch (NoResultException e) {
+            // reset because callers should test for null
+            group = null;
+            logger.error("Group '" + name + "': " + e.getClass().getName()
                     + " " + e.getMessage());
         }
         return group;

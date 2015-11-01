@@ -43,12 +43,11 @@ public class GroupDTO implements Comparable {
 
     public GroupDTO(String name, int minSets, int maxSets, int roundId,
             boolean active, boolean completed) {
-        this.name = name;
+        this(name, completed);
         this.minSets = minSets;
         this.maxSets = maxSets;
         this.roundId = roundId;
         this.active = active;
-        this.completed = completed;
     }
 
     public int getId() {

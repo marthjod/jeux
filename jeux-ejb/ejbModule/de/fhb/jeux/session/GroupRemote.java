@@ -16,6 +16,8 @@ public interface GroupRemote {
 
     public IGroup getGroupById(int groupId);
 
+    public IGroup getGroupByName(String name);
+
     public List<PlayerDTO> getPlayerDTOsInGroup(IGroup group);
 
 }

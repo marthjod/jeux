@@ -23,7 +23,7 @@ Round-switch rules
         <tr>
             <td>{{ rule.srcGroupName }}</td>
             <td>{{ rule.destGroupName }}</td>
-            <td>{{ rule.startWithRank }}-{{ rule.additionalPlayers }}</td>
+            <td>{{ rule.startWithRank }}-{{ rule.startWithRank + rule.additionalPlayers }}</td>
             <td>{{ rule.additionalPlayers + 1 }}</td>
             <td><input type="submit" class="btn btn-danger"
                        value="Delete rule"
@@ -89,6 +89,51 @@ Round-switch rules
     </form>
     <div id="user-feedback">
     </div>
+</div>
+
+<div>
+    <h3>Import</h3>
+
+    <form action="rules/import" method="post" enctype="multipart/form-data">
+        <p><input type="file" name="file" class="btn btn-file"></p>
+        <input type="submit" class="btn btn-warning" value="Import JSON (beta)">
+    </form>
+
+    <input type="submit" class="btn btn-default" value="Example"
+           onclick="$('#input-example').toggle()">
+    <div id="input-example" hidden="hidden">
+        <code>
+            <pre>
+[
+    {
+        "srcGroupName": "Group A",
+        "destGroupName": "Group C",
+        "startWithRank": 1,
+        "additionalPlayers": 1
+    },
+    {
+        "srcGroupName": "Group B",
+        "destGroupName": "Group C",
+        "startWithRank": 1,
+        "additionalPlayers": 1
+    },
+    {
+        "srcGroupName": "Group A",
+        "destGroupName": "Group D",
+        "startWithRank": 3,
+        "additionalPlayers": 0
+    },
+    {
+        "srcGroupName": "Group B",
+        "destGroupName": "Group D",
+        "startWithRank": 3,
+        "additionalPlayers": 0
+    },
+]
+            </pre>
+        </code>
+    </div>
+
 </div>
 
 

@@ -7,11 +7,15 @@ import de.fhb.jeux.session.GroupLocal;
 import de.fhb.jeux.session.PlayerLocal;
 import de.fhb.jeux.session.RoundSwitchRuleLocal;
 import de.fhb.jeux.bulkimport.ImportGroup;
+import de.fhb.jeux.bulkimport.ImportRule;
 import de.fhb.jeux.bulkimport.JSONImporter;
 import de.fhb.jeux.dto.PlayerDTO;
+import de.fhb.jeux.dto.RoundSwitchRuleDTO;
 import de.fhb.jeux.model.IGroup;
 import de.fhb.jeux.session.CreateGroupLocal;
 import de.fhb.jeux.session.CreatePlayerLocal;
+import de.fhb.jeux.session.CreateRoundSwitchRuleBean;
+import de.fhb.jeux.session.CreateRoundSwitchRuleLocal;
 import de.fhb.jeux.template.Template;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -25,6 +29,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.servlet.ServletContext;
@@ -64,6 +69,9 @@ public class AdminGUI {
 
     @EJB
     private RoundSwitchRuleLocal roundSwitchRuleBean;
+
+    @EJB
+    private CreateRoundSwitchRuleLocal createRuleBean;
 
     @GET
     @Path("/")
@@ -186,42 +194,49 @@ public class AdminGUI {
     public Response importGroups(@Context HttpServletRequest request,
             MultipartFormDataInput input) {
         Response response = Response.serverError().build();
-        URI returnUrl = null;
+        URI returnUrl = getReturnUrl(request);
         List<ImportGroup> importGroups = new ArrayList<>();
 
+        BufferedReader bufreader = getReaderFromFormData(input);
         try {
-            String uri = request.getRequestURI();
-            returnUrl = new URI(uri.substring(request.getContextPath().length(),
-                    uri.lastIndexOf("/")));
-        } catch (URISyntaxException ex) {
+            if (!bufreader.ready()) {
+                response = Response.status(Response.Status.BAD_REQUEST).build();
+            }
+        } catch (IOException ex) {
             logger.error(ex.getMessage());
         }
+        importGroups = JSONImporter.importGroupsFromJson(bufreader);
 
-        Map<String, List<InputPart>> formParts = input.getFormDataMap();
-        List<InputPart> inPart = formParts.get("file");
-
-        if (inPart != null && inPart.size() > 0) {
-            for (InputPart inputPart : inPart) {
-
-                try {
-                    if (inputPart.getBodyAsString().equals("")) {
-                        response = Response.status(Response.Status.BAD_REQUEST).build();
-                        break;
-                    }
-                    InputStream instream = inputPart.getBody(InputStream.class, null);
-                    BufferedReader bufreader = new BufferedReader(new InputStreamReader(instream));
-                    importGroups = JSONImporter.importFromJson(bufreader);
-                } catch (IOException ex) {
-                    logger.error(ex.getMessage());
-                }
-
-                if (saveImportGroups(importGroups)) {
-                    response = Response.seeOther(returnUrl).build();
-                }
-            }
-        } else {
-            response = Response.status(Response.Status.BAD_REQUEST).build();
+        if (saveImportGroups(importGroups)) {
+            response = Response.seeOther(returnUrl).build();
         }
+
+        return response;
+    }
+
+    @POST
+    @Path("/rules/import")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    public Response importRules(@Context HttpServletRequest request,
+            MultipartFormDataInput input) {
+        Response response = Response.serverError().build();
+        URI returnUrl = getReturnUrl(request);
+        List<ImportRule> importRules = new ArrayList<>();
+
+        BufferedReader bufreader = getReaderFromFormData(input);
+        try {
+            if (!bufreader.ready()) {
+                response = Response.status(Response.Status.BAD_REQUEST).build();
+            }
+        } catch (IOException ex) {
+            logger.error(ex.getMessage());
+        }
+        importRules = JSONImporter.importRulesFromJson(bufreader);
+
+        if (saveImportRules(importRules)) {
+            response = Response.seeOther(returnUrl).build();
+        }
+
         return response;
     }
 
@@ -243,5 +258,57 @@ public class AdminGUI {
             success = true;
         }
         return success;
+    }
+
+    private boolean saveImportRules(List<ImportRule> importRules) {
+        boolean success = false;
+
+        if (importRules != null) {
+            for (ImportRule ir : importRules) {
+                RoundSwitchRuleDTO ruleDTO = new RoundSwitchRuleDTO(
+                        ir.getSrcGroupName(), ir.getDestGroupName(),
+                        ir.getStartWithRank(), ir.getAdditionalPlayers());
+                logger.debug(ruleDTO);
+                int status = createRuleBean.createRoundSwitchRule(ruleDTO,
+                        groupBean.getGroupByName(ir.getSrcGroupName()),
+                        groupBean.getGroupByName(ir.getDestGroupName()));
+                if (status == CreateRoundSwitchRuleBean.STATUS_OK) {
+                    success = true;
+                }
+            }
+        }
+
+        return success;
+    }
+
+    private BufferedReader getReaderFromFormData(MultipartFormDataInput input) {
+        BufferedReader bufreader = null;
+
+        Map<String, List<InputPart>> formParts = input.getFormDataMap();
+        List<InputPart> inPart = formParts.get("file");
+        if (inPart != null && inPart.size() > 0) {
+            for (InputPart inputPart : inPart) {
+                try {
+                    InputStream instream = inputPart.getBody(InputStream.class, null);
+                    bufreader = new BufferedReader(new InputStreamReader(instream));
+                } catch (IOException ex) {
+                    logger.error(ex.getMessage());
+                }
+            }
+        }
+
+        return bufreader;
+    }
+
+    private URI getReturnUrl(HttpServletRequest request) {
+        URI returnUrl = null;
+        try {
+            String uri = request.getRequestURI();
+            returnUrl = new URI(uri.substring(request.getContextPath().length(),
+                    uri.lastIndexOf("/")));
+        } catch (URISyntaxException ex) {
+            logger.error(ex.getMessage());
+        }
+        return returnUrl;
     }
 }

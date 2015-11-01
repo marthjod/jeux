@@ -15,6 +15,8 @@ public interface GroupLocal {
 
     public IGroup getGroupById(int groupId);
 
+    public IGroup getGroupByName(String name);
+
     public List<PlayerDTO> getPlayerDTOsInGroup(IGroup group);
 
 }

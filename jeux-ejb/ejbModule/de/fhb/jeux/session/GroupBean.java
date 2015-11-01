@@ -37,6 +37,11 @@ public class GroupBean implements GroupRemote, GroupLocal {
         return groupDAO.getGroupById(groupId);
     }
 
+    @Override
+    public IGroup getGroupByName(String name) {
+        return groupDAO.getGroupByName(name);
+    }
+
     private List<ShowdownPlayer> getPlayersInGroup(IGroup group) {
         return groupDAO.getPlayersInGroup(group);
     }

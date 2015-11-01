@@ -25,6 +25,7 @@ import org.jboss.logging.Logger;
 @NamedQueries({
     @NamedQuery(name = "Group.findAll", query = "SELECT g FROM ShowdownGroup g"),
     @NamedQuery(name = "Group.findById", query = "SELECT g FROM ShowdownGroup g WHERE g.id = :id"),
+    @NamedQuery(name = "Group.findByName", query = "SELECT g FROM ShowdownGroup g WHERE g.name = :name"),
     @NamedQuery(name = "Group.findCompleteInRound", query = "SELECT g FROM ShowdownGroup g WHERE g.roundId = :roundId AND g.completed = true"),
     @NamedQuery(name = "Group.findIncompleteInRound", query = "SELECT g FROM ShowdownGroup g WHERE g.roundId = :roundId AND g.completed = false")})
 public class ShowdownGroup implements IGroup, Serializable {
