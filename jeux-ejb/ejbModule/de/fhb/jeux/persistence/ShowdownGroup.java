@@ -70,6 +70,17 @@ public class ShowdownGroup implements IGroup, Serializable {
     public ShowdownGroup() {
     }
 
+    public ShowdownGroup(int id, String name, int roundId, int minSets,
+            int maxSets, boolean active, boolean completed) {
+        this.id = id;
+        this.name = name;
+        this.roundId = roundId;
+        this.minSets = minSets;
+        this.maxSets = maxSets;
+        this.active = active;
+        this.completed = completed;
+    }
+
     // constructor for converting DTO to Entity
     public ShowdownGroup(GroupDTO groupDTO) {
         this.id = groupDTO.getId();

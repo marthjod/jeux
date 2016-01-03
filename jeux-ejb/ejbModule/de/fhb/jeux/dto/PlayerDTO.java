@@ -34,6 +34,18 @@ public class PlayerDTO implements Comparable {
         this.name = name;
     }
 
+    public PlayerDTO(int id, String name, int points, int scoreRatio,
+            int wonGames, int rank, int groupId, String groupName) {
+        this.id = id;
+        this.points = points;
+        this.scoreRatio = scoreRatio;
+        this.wonGames = wonGames;
+        this.rank = rank;
+        this.name = name;
+        this.groupId = groupId;
+        this.groupName = groupName;
+    }
+
     public int getId() {
         return id;
     }
@@ -54,10 +66,6 @@ public class PlayerDTO implements Comparable {
         return wonGames;
     }
 
-    public void setRank(int rank) {
-        this.rank = rank;
-    }
-
     public String getName() {
         return name;
     }
@@ -68,6 +76,10 @@ public class PlayerDTO implements Comparable {
 
     public String getGroupName() {
         return groupName;
+    }
+
+    public void setRank(int rank) {
+        this.rank = rank;
     }
 
     @Override

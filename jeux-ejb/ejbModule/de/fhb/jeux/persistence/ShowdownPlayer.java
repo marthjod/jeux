@@ -66,13 +66,25 @@ public class ShowdownPlayer implements IPlayer, Serializable {
         this.group = (ShowdownGroup) player.getGroup();
     }
 
+    public ShowdownPlayer(int id, String name, int points, int scoreRatio, int rank,
+            int wonGames, ShowdownGroup group) {
+        this.id = id;
+        this.points = points;
+        this.scoreRatio = scoreRatio;
+        this.rank = rank;
+        this.wonGames = wonGames;
+        this.name = name;
+        this.group = group;
+    }
+
     // constructor for converting DTO to Entity
     public ShowdownPlayer(PlayerDTO playerDTO, IGroup group) {
-        id = playerDTO.getId();
-        name = playerDTO.getName();
-        points = playerDTO.getPoints();
-        scoreRatio = playerDTO.getScoreRatio();
-        rank = playerDTO.getRank();
+        this.id = playerDTO.getId();
+        this.name = playerDTO.getName();
+        this.points = playerDTO.getPoints();
+        this.scoreRatio = playerDTO.getScoreRatio();
+        this.rank = playerDTO.getRank();
+        this.wonGames = playerDTO.getWonGames();
         this.group = (ShowdownGroup) group;
     }
 
