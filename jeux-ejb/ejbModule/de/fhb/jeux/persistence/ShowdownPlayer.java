@@ -51,11 +51,6 @@ public class ShowdownPlayer implements IPlayer, Serializable {
     public ShowdownPlayer() {
     }
 
-    public ShowdownPlayer(int id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
     // copy constructor
     public ShowdownPlayer(IPlayer player) {
         this.id = player.getId();

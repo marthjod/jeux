@@ -2,6 +2,7 @@ package de.fhb.jeux.comparator;
 
 import de.fhb.jeux.dao.PlayerDAO;
 import de.fhb.jeux.model.IPlayer;
+import de.fhb.jeux.persistence.ShowdownGroup;
 import de.fhb.jeux.persistence.ShowdownPlayer;
 import java.util.Comparator;
 import org.junit.Before;
@@ -19,16 +20,14 @@ public class BonuspointsComparatorTest {
     private Comparator comparator;
     private IPlayer player1;
     private IPlayer player2;
+    private ShowdownGroup group;
 
     public BonuspointsComparatorTest() {
         playerDAO = mock(PlayerDAO.class);
+        group = mock(ShowdownGroup.class);
         comparator = new BonuspointsComparator(playerDAO);
-        player1 = new ShowdownPlayer(1, "Player 1");
-        player2 = new ShowdownPlayer(2, "Player 2");
-        player1.setPoints(4);
-        player2.setPoints(4);
-        player1.setScoreRatio(5);
-        player2.setScoreRatio(5);
+        player1 = new ShowdownPlayer(1, "Player 1", 4, 5, 0, 2, group);
+        player2 = new ShowdownPlayer(2, "Player 2", 4, 5, 0, 2, group);
     }
 
     @Before
