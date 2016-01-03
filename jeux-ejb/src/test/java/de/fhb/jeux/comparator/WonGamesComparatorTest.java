@@ -13,6 +13,7 @@ public class WonGamesComparatorTest {
 
     private static final int PLAYER_1_WINS = -1;
     private static final int PLAYER_2_WINS = 1;
+    private static final int NO_WINNER = 0;
 
     private PlayerDAO playerDAO;
     private Comparator comparator;
@@ -72,6 +73,13 @@ public class WonGamesComparatorTest {
         when(playerDAO.directComparison(player1.getId(), player2.getId())).
                 thenReturn(new ShowdownPlayer(player2));
         assertEquals(PLAYER_2_WINS, comparator.compare(player1, player2));
+    }
+
+    @Test
+    public void testCompareNoWinner() {
+        when(playerDAO.directComparison(player1.getId(), player2.getId())).
+                thenReturn(null);
+        assertEquals(NO_WINNER, comparator.compare(player1, player2));
     }
 
 }
