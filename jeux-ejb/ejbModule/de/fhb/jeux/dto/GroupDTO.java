@@ -36,18 +36,15 @@ public class GroupDTO implements Comparable {
         this.size = groupEntity.getSize();
     }
 
-    public GroupDTO(String name, boolean completed) {
-        this.name = name;
-        this.completed = completed;
-    }
-
-    public GroupDTO(String name, int minSets, int maxSets, int roundId,
+    public GroupDTO(int id, String name, int minSets, int maxSets, int roundId,
             boolean active, boolean completed) {
-        this(name, completed);
+        this.id = id;
+        this.name = name;
         this.minSets = minSets;
         this.maxSets = maxSets;
         this.roundId = roundId;
         this.active = active;
+        this.completed = completed;
     }
 
     public int getId() {

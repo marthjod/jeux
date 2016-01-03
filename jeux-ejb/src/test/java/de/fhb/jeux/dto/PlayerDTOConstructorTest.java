@@ -4,11 +4,12 @@ import de.fhb.jeux.model.IGroup;
 import de.fhb.jeux.model.IPlayer;
 import de.fhb.jeux.persistence.ShowdownGroup;
 import de.fhb.jeux.persistence.ShowdownPlayer;
+import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-public class PlayerDTOConstructorTest {
+public class PlayerDTOConstructorTest extends TestCase {
 
     private IGroup group;
     private PlayerDTO playerDTO;
@@ -21,6 +22,7 @@ public class PlayerDTOConstructorTest {
     }
 
     @Before
+    @Override
     public void setUp() {
         playerDTO = new PlayerDTO(player);
     }

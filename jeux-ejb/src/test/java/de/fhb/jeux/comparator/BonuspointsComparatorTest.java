@@ -5,12 +5,12 @@ import de.fhb.jeux.model.IPlayer;
 import de.fhb.jeux.persistence.ShowdownGroup;
 import de.fhb.jeux.persistence.ShowdownPlayer;
 import java.util.Comparator;
+import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
-public class BonuspointsComparatorTest {
+public class BonuspointsComparatorTest extends TestCase {
 
     private static final int PLAYER_1_WINS = -1;
     private static final int PLAYER_2_WINS = 1;
@@ -31,6 +31,7 @@ public class BonuspointsComparatorTest {
     }
 
     @Before
+    @Override
     public void setUp() {
         when(playerDAO.getPlayerById(1)).thenReturn(player1);
         when(playerDAO.getPlayerById(2)).thenReturn(player2);
@@ -63,14 +64,14 @@ public class BonuspointsComparatorTest {
     @Test
     public void testComparePlayer1WinsByDirectComparison() {
         when(playerDAO.directComparison(player1.getId(), player2.getId())).
-                thenReturn(new ShowdownPlayer(player1));
+                thenReturn(player1);
         assertEquals(PLAYER_1_WINS, comparator.compare(player1, player2));
     }
 
     @Test
     public void testComparePlayer2WinsByDirectComparison() {
         when(playerDAO.directComparison(player1.getId(), player2.getId())).
-                thenReturn(new ShowdownPlayer(player2));
+                thenReturn(player2);
         assertEquals(PLAYER_2_WINS, comparator.compare(player1, player2));
     }
 

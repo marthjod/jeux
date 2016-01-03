@@ -3,6 +3,7 @@ package de.fhb.jeux.persistence;
 import de.fhb.jeux.dto.GroupDTO;
 import de.fhb.jeux.model.IGroup;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -79,17 +80,15 @@ public class ShowdownGroup implements IGroup, Serializable {
         this.maxSets = maxSets;
         this.active = active;
         this.completed = completed;
+        this.games = new ArrayList<>();
+        this.players = new ArrayList<>();
     }
 
     // constructor for converting DTO to Entity
     public ShowdownGroup(GroupDTO groupDTO) {
-        this.id = groupDTO.getId();
-        this.name = groupDTO.getName();
-        this.active = groupDTO.isActive();
-        this.completed = groupDTO.isCompleted();
-        this.minSets = groupDTO.getMinSets();
-        this.maxSets = groupDTO.getMaxSets();
-        this.roundId = groupDTO.getRoundId();
+        this(groupDTO.getId(), groupDTO.getName(), groupDTO.getRoundId(),
+                groupDTO.getMinSets(), groupDTO.getMaxSets(),
+                groupDTO.isActive(), groupDTO.isCompleted());
     }
 
     @Override
