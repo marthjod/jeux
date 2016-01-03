@@ -58,14 +58,6 @@ public class ShowdownRanking implements IRanking, Serializable {
         this.wonGames = this.player.getWonGames();
     }
 
-//    public ShowdownRanking(RankingDTO rankingDTO, IPlayer player, IGroup group) {
-//        this.group = (ShowdownGroup) group;
-//        this.player = (ShowdownPlayer) player;
-//        this.rank = this.player.getRank();
-//        this.points = rankingDTO.getPoints();
-//        this.scoreRatio = rankingDTO.getScoreRatio();
-//        this.wonGames = rankingDTO.getWonGames();
-//    }
     @Override
     public int getId() {
         return id;

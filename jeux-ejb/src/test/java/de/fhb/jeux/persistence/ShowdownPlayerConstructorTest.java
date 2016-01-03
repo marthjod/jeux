@@ -3,11 +3,11 @@ package de.fhb.jeux.persistence;
 import de.fhb.jeux.dto.PlayerDTO;
 import de.fhb.jeux.model.IGroup;
 import de.fhb.jeux.model.IPlayer;
-import junit.framework.TestCase;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-public class ShowdownPlayerConstructorTest extends TestCase {
+public class ShowdownPlayerConstructorTest {
 
     private IGroup group;
     private PlayerDTO playerDTO;
@@ -20,7 +20,6 @@ public class ShowdownPlayerConstructorTest extends TestCase {
     }
 
     @Before
-    @Override
     public void setUp() {
         player = new ShowdownPlayer(playerDTO, group);
     }

@@ -4,12 +4,11 @@ import de.fhb.jeux.model.IGroup;
 import de.fhb.jeux.model.IPlayer;
 import de.fhb.jeux.persistence.ShowdownGroup;
 import de.fhb.jeux.persistence.ShowdownPlayer;
-import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-public class PlayerDTOConstructorTest extends TestCase {
+public class PlayerDTOConstructorTest {
 
     private IGroup group;
     private PlayerDTO playerDTO;
@@ -22,48 +21,47 @@ public class PlayerDTOConstructorTest extends TestCase {
     }
 
     @Before
-    @Override
     public void setUp() {
         playerDTO = new PlayerDTO(player);
     }
 
     @Test
-    public void testConstructorPlayerId() {
+    public void constructorPlayerId() {
         assertEquals(playerDTO.getId(), player.getId());
     }
 
     @Test
-    public void testConstructorGroupId() {
+    public void constructorGroupId() {
         assertEquals(playerDTO.getGroupId(), player.getGroup().getId());
     }
 
     @Test
-    public void testConstructorGroupName() {
+    public void constructorGroupName() {
         assertEquals(playerDTO.getGroupName(), player.getGroup().getName());
     }
 
     @Test
-    public void testConstructorPlayerName() {
+    public void constructorPlayerName() {
         assertEquals(playerDTO.getName(), player.getName());
     }
 
     @Test
-    public void testConstructorBonuspoints() {
+    public void constructorBonuspoints() {
         assertEquals(playerDTO.getPoints(), player.getPoints());
     }
 
     @Test
-    public void testConstructorScoreRatio() {
+    public void constructorScoreRatio() {
         assertEquals(playerDTO.getScoreRatio(), player.getScoreRatio());
     }
 
     @Test
-    public void testConstructorWonGames() {
+    public void constructorWonGames() {
         assertEquals(playerDTO.getWonGames(), player.getWonGames());
     }
 
     @Test
-    public void testConstructorRank() {
+    public void constructorRank() {
         assertEquals(playerDTO.getRank(), player.getRank());
     }
 }

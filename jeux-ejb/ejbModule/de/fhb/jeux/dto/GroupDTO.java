@@ -21,6 +21,11 @@ public class GroupDTO implements Comparable {
     public GroupDTO() {
     }
 
+    public GroupDTO(String name, boolean completed) {
+        this.name = name;
+        this.completed = completed;
+    }
+
     // parametrized constructor for conversion from IGroup implementations
     // (i.e. Persistent Entities)
     // Entity -> DTO
@@ -36,15 +41,20 @@ public class GroupDTO implements Comparable {
         this.size = groupEntity.getSize();
     }
 
-    public GroupDTO(int id, String name, int minSets, int maxSets, int roundId,
+    public GroupDTO(String name, int minSets, int maxSets, int roundId,
             boolean active, boolean completed) {
-        this.id = id;
         this.name = name;
         this.minSets = minSets;
         this.maxSets = maxSets;
         this.roundId = roundId;
         this.active = active;
         this.completed = completed;
+    }
+
+    public GroupDTO(int id, String name, int minSets, int maxSets, int roundId,
+            boolean active, boolean completed) {
+        this(name, minSets, maxSets, roundId, active, completed);
+        this.id = id;
     }
 
     public int getId() {

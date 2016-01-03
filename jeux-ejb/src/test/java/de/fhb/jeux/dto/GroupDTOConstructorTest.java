@@ -2,11 +2,11 @@ package de.fhb.jeux.dto;
 
 import de.fhb.jeux.model.IGroup;
 import de.fhb.jeux.persistence.ShowdownGroup;
-import junit.framework.TestCase;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-public class GroupDTOConstructorTest extends TestCase {
+public class GroupDTOConstructorTest {
 
     private IGroup group;
     private GroupDTO groupDTO;
@@ -16,53 +16,52 @@ public class GroupDTOConstructorTest extends TestCase {
     }
 
     @Before
-    @Override
     public void setUp() {
         groupDTO = new GroupDTO(group);
     }
 
     @Test
-    public void testConstructorId() {
+    public void constructorId() {
         assertEquals(groupDTO.getId(), group.getId());
     }
 
     @Test
-    public void testConstructorName() {
+    public void constructorName() {
         assertEquals(groupDTO.getName(), group.getName());
     }
 
     @Test
-    public void testConstructorActive() {
+    public void constructorActive() {
         assertEquals(groupDTO.isActive(), group.isActive());
     }
 
     @Test
-    public void testConstructorCompleted() {
+    public void constructorCompleted() {
         assertEquals(groupDTO.isCompleted(), group.isCompleted());
     }
 
     @Test
-    public void testConstructorMinSets() {
+    public void constructorMinSets() {
         assertEquals(groupDTO.getMinSets(), group.getMinSets());
     }
 
     @Test
-    public void testConstructorMaxSets() {
+    public void constructorMaxSets() {
         assertEquals(groupDTO.getMaxSets(), group.getMaxSets());
     }
 
     @Test
-    public void testConstructorRoundId() {
+    public void constructorRoundId() {
         assertEquals(groupDTO.getRoundId(), group.getRoundId());
     }
 
     @Test
-    public void testConstructorHasGames() {
+    public void constructorHasGames() {
         assertEquals(groupDTO.hasGames(), group.hasGames());
     }
 
     @Test
-    public void testConstructorSize() {
+    public void constructorSize() {
         assertEquals(groupDTO.getSize(), group.getSize());
     }
 
