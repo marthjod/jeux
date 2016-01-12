@@ -25,42 +25,42 @@ public class ShowdownPlayerConstructorTest {
     }
 
     @Test
-    public void testDTOConstructorPlayerId() {
+    public void dtoConstructorPlayerId() {
         assertEquals(player.getId(), playerDTO.getId());
     }
 
     @Test
-    public void testDTOConstructorGroupId() {
+    public void dtoConstructorGroupId() {
         assertEquals(player.getGroup().getId(), playerDTO.getGroupId());
     }
 
     @Test
-    public void testDTOConstructorGroupName() {
+    public void dtoConstructorGroupName() {
         assertEquals(player.getGroup().getName(), playerDTO.getGroupName());
     }
 
     @Test
-    public void testDTOConstructorPlayerName() {
+    public void dtoConstructorPlayerName() {
         assertEquals(player.getName(), playerDTO.getName());
     }
 
     @Test
-    public void testDTOConstructorBonuspoints() {
+    public void dtoConstructorBonuspoints() {
         assertEquals(player.getPoints(), playerDTO.getPoints());
     }
 
     @Test
-    public void testDTOConstructorScoreRatio() {
+    public void dtoConstructorScoreRatio() {
         assertEquals(player.getScoreRatio(), playerDTO.getScoreRatio());
     }
 
     @Test
-    public void testDTOConstructorWonGames() {
+    public void dtoConstructorWonGames() {
         assertEquals(player.getWonGames(), playerDTO.getWonGames());
     }
 
     @Test
-    public void testDTOConstructorRank() {
+    public void dtoConstructorRank() {
         assertEquals(player.getRank(), playerDTO.getRank());
     }
 

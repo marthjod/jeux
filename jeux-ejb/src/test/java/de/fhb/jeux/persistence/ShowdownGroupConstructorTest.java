@@ -2,11 +2,11 @@ package de.fhb.jeux.persistence;
 
 import de.fhb.jeux.dto.GroupDTO;
 import de.fhb.jeux.model.IGroup;
-import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;
+import static org.junit.Assert.*;
 
-public class ShowdownGroupConstructorTest extends TestCase {
+public class ShowdownGroupConstructorTest {
 
     private IGroup group;
     private GroupDTO groupDTO;
@@ -16,53 +16,52 @@ public class ShowdownGroupConstructorTest extends TestCase {
     }
 
     @Before
-    @Override
     public void setUp() {
         group = new ShowdownGroup(groupDTO);
     }
 
     @Test
-    public void testDTOConstructorId() {
+    public void dtoConstructorId() {
         assertEquals(group.getId(), groupDTO.getId());
     }
 
     @Test
-    public void testDTOConstructorName() {
+    public void dtoConstructorName() {
         assertEquals(group.getName(), groupDTO.getName());
     }
 
     @Test
-    public void testDTOConstructorActive() {
+    public void dtoConstructorActive() {
         assertEquals(groupDTO.isActive(), group.isActive());
     }
 
     @Test
-    public void testDTOConstructorCompleted() {
+    public void dtoConstructorCompleted() {
         assertEquals(groupDTO.isCompleted(), group.isCompleted());
     }
 
     @Test
-    public void testDTOConstructorMinSets() {
+    public void dtoConstructorMinSets() {
         assertEquals(groupDTO.getMinSets(), group.getMinSets());
     }
 
     @Test
-    public void testDTOConstructorMaxSets() {
+    public void dtoConstructorMaxSets() {
         assertEquals(groupDTO.getMaxSets(), group.getMaxSets());
     }
 
     @Test
-    public void testDTOConstructorRoundId() {
+    public void dtoConstructorRoundId() {
         assertEquals(groupDTO.getRoundId(), group.getRoundId());
     }
 
     @Test
-    public void testDTOConstructorHasGames() {
+    public void dtoConstructorHasGames() {
         assertEquals(groupDTO.hasGames(), group.hasGames());
     }
 
     @Test
-    public void testDTOConstructorSize() {
+    public void dtoConstructorSize() {
         assertEquals(groupDTO.getSize(), group.getSize());
     }
 
