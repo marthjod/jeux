@@ -8,6 +8,7 @@ import com.mitchellbosecke.pebble.template.PebbleTemplate;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.Locale;
 import java.util.Map;
 import javax.servlet.ServletContext;
 import org.jboss.logging.Logger;
@@ -16,6 +17,7 @@ public class Template {
 
     private final static String TEMPLATE_PREFIX = "/WEB-INF/templates/";
     private final static String TEMPLATE_SUFFIX = ".html";
+    private final static Locale TEMPLATE_LOCALE = Locale.GERMAN;
 
     protected static Logger logger = Logger.getLogger(Template.class);
 
@@ -25,6 +27,7 @@ public class Template {
         templateLoader.setPrefix(Template.TEMPLATE_PREFIX);
         templateLoader.setSuffix(Template.TEMPLATE_SUFFIX);
         PebbleEngine engine = new PebbleEngine(templateLoader);
+        engine.setDefaultLocale(TEMPLATE_LOCALE);
         engine.setStrictVariables(true);
         try {
             compiledTemplate = engine.getTemplate(templateName);

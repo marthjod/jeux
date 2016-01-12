@@ -1,14 +1,14 @@
 {% extends "audience-base" %}
 
 {% block title %}
-Games list {{ groupName }}
+{{ i18n("AdminGUI", "Games") }} {{ groupName }}
 {% endblock %}
 
 {% block content %}
-<h3>{{ groupName }}</h3>
+<h3>{{ i18n("AdminGUI", "Games") }} {{ groupName }}</h3>
 
 {% if games is empty %}
-Unable to calculate games.
+{{ i18n("AdminGUI", "Unable_to_calculate_games") }}
 {% else %}
 <table class="table table-hover table-bordered table-condensed">
     {% for game in games %}

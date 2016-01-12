@@ -10,7 +10,7 @@
 {% endblock %}
 
 {% block title %}
-Jeux Admin View
+Jeux {{ i18n('AdminGUI', 'Admin_view') }}
 {% endblock %}
 
 {% block content %}
@@ -21,7 +21,7 @@ Jeux Admin View
     <p>
         <a href="groups">
             <button class="btn btn-lg btn-info">
-                Groups
+                {{ i18n('AdminGUI', 'Groups') }}
             </button>
         </a>
     </p>
@@ -31,7 +31,7 @@ Jeux Admin View
     <p>
         <a href="players">
             <button class="btn btn-lg btn-info">
-                Players
+                {{ i18n('AdminGUI', 'Players') }}
             </button>
         </a>
     </p>
@@ -41,7 +41,7 @@ Jeux Admin View
     <p>
         <a href="rules">
             <button class="btn btn-lg btn-info">
-                Round-switch rules
+                {{ i18n('AdminGUI', 'Roundswitch_rules') }}
             </button>
         </a>
     </p>
@@ -51,7 +51,7 @@ Jeux Admin View
     <p>
         <a href="games/unplayed">
             <button class="btn btn-lg btn-info">
-                Unplayed games
+                {{ i18n('AdminGUI', 'Unplayed_games') }}
             </button>
         </a>
     </p>
@@ -61,7 +61,7 @@ Jeux Admin View
     <p>
         <a href="games/played">
             <button class="btn btn-lg btn-info">
-                Played games
+                {{ i18n('AdminGUI', 'Played_games') }}
             </button>
         </a>
     </p>
@@ -71,7 +71,7 @@ Jeux Admin View
     <p>
         <button class="btn btn-lg btn-danger"
                 onclick="switchRound(this, '{{ prefix }}/rest/admin/round-switch');">
-            Switch to next round
+            {{ i18n("AdminGUI", "Switch_round") }}
         </button>
     </p>
 </div>

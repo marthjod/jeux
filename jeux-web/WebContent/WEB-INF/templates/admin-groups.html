@@ -1,27 +1,27 @@
 {% extends "admin-base" %}
 
 {% block title %}
-Groups
+{{ i18n("AdminGUI", "Groups") }}
 {% endblock %}
 
 {% block content %}
 
 <div>
     <h3>
-        Groups
+        {{ i18n("AdminGUI", "Groups") }}
     </h3>
 
     {% if groups is not empty %}
     <table class="table table-hover table-bordered table-condensed">
         <tr>
-            <th>Name</th>
-            <th>Round</th>
-            <th>Min sets</th>
-            <th>Max sets</th>
-            <th>Active?</th>
-            <th>Completed?</th>
-            <th>Games</th>
-            <th>Delete</th>
+            <th>{{ i18n("AdminGUI", "Name") }}</th>
+            <th>{{ i18n("AdminGUI", "Round") }}</th>
+            <th>{{ i18n("AdminGUI", "Minimum_sets_per_game") }}</th>
+            <th>{{ i18n("AdminGUI", "Maximum_sets_per_game") }}</th>
+            <th>{{ i18n("AdminGUI", "Active") }}</th>
+            <th>{{ i18n("AdminGUI", "Completed") }}</th>
+            <th>{{ i18n("AdminGUI", "Games") }}</th>
+            <th></th>
         </tr>
         {% for group in groups %}
         <tr>
@@ -29,16 +29,28 @@ Groups
             <td>{{ group.roundId }}</td>
             <td>{{ group.minSets }}</td>
             <td>{{ group.maxSets }}</td>
-            <td>{{ group.active }}</td>
-            <td>{{ group.completed }}</td>
+            <td>
+                {% if group.active %}
+                {{ i18n("AdminGUI", "yes") }}
+                {% else %}
+                {{ i18n("AdminGUI", "no") }}
+                {% endif %}
+            </td>
+            <td>
+                {% if group.completed %}
+                {{ i18n("AdminGUI", "yes") }}
+                {% else %}
+                {{ i18n("AdminGUI", "no") }}
+                {% endif %}
+            </td>
             <td>
                 {% if group.size > 1 and not group.hasGames %}
                 <input type="submit" class="btn btn-success"
-                       value="Generate"
+                       value="{{ i18n('AdminGUI', 'Generate') }}"
                        onclick="generateGames(this, '{{ group.id }}', false, '{{ prefix }}');">
                 {% endif %}
                 <input type="submit" class="btn btn-default"
-                       value="List"
+                       value="{{ i18n('AdminGUI', 'List_verb') }}"
                        onclick="getShuffledGames('{{ group.id }}', 'html', '{{ prefix }}');">
                 <input type="submit" class="btn btn-default"
                        value="Scoresheets"
@@ -46,7 +58,7 @@ Groups
             </td>
             <td>
                 <input type="submit" class="btn btn-danger"
-                       value="Delete group"
+                       value="{{ i18n('AdminGUI', 'Delete') }}"
                        onclick="deleteGroup({{ group.id }}, '{{ prefix }}');">
             </td>
         </tr>
@@ -57,40 +69,40 @@ Groups
 
 <div>
     <h3>
-        Create group
+        {{ i18n("AdminGUI", "Create_group") }}
     </h3>
     <form id="create-group" action="#" role="form">
         <div class="form-group">
             <label for="name">
-                Name
+                {{ i18n("AdminGUI", "Name") }}
             </label>
-            <input type="text" class="form-control" id="name" placeholder="Group name" />
+            <input type="text" class="form-control" id="name" placeholder="{{ i18n('AdminGUI', 'Group_name') }}" />
         </div>
         <div class="form-group">
             <label for="round">
-                Round
+                {{ i18n("AdminGUI", "Round") }}
             </label>
-            <input id="round" class="form-control" placeholder="Round number" type="number" min="1" />
+            <input id="round" class="form-control" placeholder="{{ i18n('AdminGUI', 'Round_number') }}" type="number" min="1" />
         </div>
         <div class="form group">
             <label for="min-sets">
-                Minimum set(s) per game
+                {{ i18n("AdminGUI", "Minimum_sets_per_game") }}
             </label>
-            <input id="min-sets" class="form-control" placeholder="Min sets" type="number" min="1" />
+            <input id="min-sets" class="form-control" placeholder="{{ i18n('AdminGUI', 'Minimum_sets_per_game') }}" type="number" min="1" />
         </div>
         <div class="form group">
             <label for="max-sets">
-                Maximum set(s) per game
+                {{ i18n("AdminGUI", "Maximum_sets_per_game") }}
             </label>
-            <input id="max-sets" class="form-control" placeholder="Max sets" type="number" min="1" />
+            <input id="max-sets" class="form-control" placeholder="{{ i18n('AdminGUI', 'Maximum_sets_per_game') }}" type="number" min="1" />
         </div>
         <div class="form group">
             <label for="group-active">
                 <input id="group-active" type="checkbox" />
-                Active?
+                {{ i18n("AdminGUI", "Active") }}
             </label>
         </div>
-        <input id="submit-create-group" type="submit" value="Create group"
+        <input id="submit-create-group" type="submit" value="{{ i18n('AdminGUI', 'Create') }}"
                onclick="createNewGroup(this, '{{ prefix }}');"
                class="btn btn-success" />
     </form>
@@ -99,14 +111,14 @@ Groups
 </div>
 
 <div>
-    <h3>Import</h3>
+    <h3>{{ i18n("AdminGUI", "Import") }}</h3>
 
     <form action="groups/import" method="post" enctype="multipart/form-data">
         <p><input type="file" name="file" class="btn btn-file"></p>
-        <input type="submit" class="btn btn-warning" value="Import JSON (beta)">
+        <input type="submit" class="btn btn-warning" value="{{ i18n('AdminGUI', 'Import_JSON_beta') }}">
     </form>
 
-    <input type="submit" class="btn btn-default" value="Example"
+    <input type="submit" class="btn btn-default" value="{{ i18n('AdminGUI', 'Example') }}"
            onclick="$('#input-example').toggle()">
     <div id="input-example" hidden="hidden">
         <code>

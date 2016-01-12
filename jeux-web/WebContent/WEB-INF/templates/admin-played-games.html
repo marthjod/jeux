@@ -1,14 +1,14 @@
 {% extends "admin-base" %}
 
 {% block title %}
-Played games
+{{ i18n("AdminGUI", "Played_games") }}
 {% endblock %}
 
 {% block content %}
 
 <div>
     <h2>
-        Played games
+        {{ i18n("AdminGUI", "Played_games") }}
     </h2>
     {% for g in gamesByGroup %}
     {% if g.games is not empty %}
@@ -21,7 +21,7 @@ Played games
     {{ game.playedAt }}
     <table class="table table-bordered table-condensed">
         <tr id="game-id-{{ game.id }}">
-            <th>Set #</th>
+            <th>{{ i18n("AdminGUI", "Set") }}</th>
             <th id="player-id-{{ game.player1Id }}">{{ game.player1Name }}</th>
             <th id="player-id-{{ game.player2Id }}">{{ game.player2Name }}</th>
         </tr>
@@ -41,8 +41,11 @@ Played games
         {% endfor %}
         <tr>
             <td>
-                <input type="submit" value="Update game" class="btn btn-warning update-game"
-                       onclick="updateGame(this, {{ game.id }}, {{ game.player1Id }}, {{ game.player2Id }}, 'update', '{{ prefix }}');">
+                <input type="submit" value="{{ i18n('AdminGUI', 'Update') }}"
+                       class="btn btn-warning update-game"
+                       onclick="updateGame(this, {{ game.id }},
+                       {{ game.player1Id }}, {{ game.player2Id }},
+                           'update', '{{ prefix }}');">
             </td>
         </tr>
     </table>
