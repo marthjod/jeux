@@ -1,7 +1,7 @@
 {% extends "audience-base" %}
 
 {% block title %}
-Games {{ playerName }}
+{{ i18n("AudienceGUI", "Games") }} {{ playerName }}
 {% endblock %}
 
 {% block content %}
@@ -9,10 +9,10 @@ Games {{ playerName }}
 {% if wonGames is not null and countPlayedGames is not null and pctgWon is not null and streak is not null %}
 <div>
     <p>
-        Won {{ wonGames }} of {{ countPlayedGames }} ({{ pctgWon | numberformat("#.##") }}%)
+        {{ i18n("AudienceGUI", "Won") }} {{ wonGames }} {{ i18n("AudienceGUI", "of") }} {{ countPlayedGames }} ({{ pctgWon | numberformat("#.##") }}%)
     </p>
     <p>
-        Streak: {{ streak }}
+        {{ i18n("AudienceGUI", "Streak") }}: {{ streak }}
     </p>
 </div>
 {% endif %}

@@ -6,14 +6,14 @@
 <div>
     <p>
         <a class="btn btn-primary btn-lg" href="{{ prefix }}/rankings/group/{{ group.id }}">
-            Rankings {{ group.name }}
+            {{ i18n("AudienceGUI", "Rankings") }} {{ group.name }}
             {% if group.completed %}
-            (final)
+            ({{ i18n("AudienceGUI", "final") }})
             {% endif %}
         </a>
         &nbsp;
         <a class="btn btn-default btn-lg" href="{{ prefix }}/games/group/{{ group.id }}">
-            Games {{ group.name }}
+            {{ i18n("AudienceGUI", "Games") }} {{ group.name }}
         </a>
     </p>
 </div>

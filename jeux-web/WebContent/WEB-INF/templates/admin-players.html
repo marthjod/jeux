@@ -1,21 +1,21 @@
 {% extends "admin-base" %}
 
 {% block title %}
-Players
+{{ i18n("AdminGUI", "Players") }}
 {% endblock %}
 
 {% block content %}
 
 <div>
     <h3>
-        Players
+        {{ i18n("AdminGUI", "Players") }}
     </h3>
     {% if players is not empty %}
     <table class="table table-hover table-bordered table-condensed">
         <tr>
-            <th>Name</th>
-            <th>Group</th>
-            <th>Delete</th>
+            <th>{{ i18n("AdminGUI", "Name") }}</th>
+            <th>{{ i18n("AdminGUI", "Group") }}</th>
+            <th></th>
         </tr>
         {% for player in players | sort %}
         <tr>
@@ -23,33 +23,33 @@ Players
             <td>{{ player.groupName }}</td>
             <td>
                 <input type="submit" class="btn btn-danger"
-                       value="Delete player"
+                       value="{{ i18n('AdminGUI', 'Delete') }}"
                        onclick="deletePlayer({{ player.id }}, '{{ prefix }}');">
             </td>
         </tr>
         {% endfor %}
     </table>
     {% else %}
-    No players found.
+    {{ i18n("AdminGUI", "No_players_found") }}
     {% endif %}
 </div>
 
 <div>
     <h3>
-        Create player
+        {{ i18n("AdminGUI", "Create") }}
     </h3>
     <form id="create-player" action="#" role="form">
         <div class="form-group">
-            <label for="name">Name</label>
-            <input id="name" type="text" class="form-control" placeholder="Player name" />
+            <label for="name">{{ i18n("AdminGUI", "Name") }}</label>
+            <input id="name" type="text" class="form-control" placeholder="{{ i18n("AdminGUI", "Name") }}" />
         </div>
         <div class="form-group">
             <label for="player-select-group">
-                Group
+                {{ i18n("AdminGUI", "Group") }}
             </label>
             <select id="player-select-group" class="form-control">
                 <option id="no-group-selected">
-                    No group selected
+                    {{ i18n("AdminGUI", "Select...") }}
                 </option>
                 {% for group in groups %}
                 <option id="group-id-{{ group.id }}">
@@ -58,7 +58,7 @@ Players
                 {% endfor %}
             </select>
         </div>
-        <input id="submit-create-player" type="submit" value="Create player" onclick="createNewPlayer(this, '{{ prefix }}');"
+        <input id="submit-create-player" type="submit" value="{{ i18n('AdminGUI', 'Create') }}" onclick="createNewPlayer(this, '{{ prefix }}');"
                class="btn btn-success" />
     </form>
     <div id="user-feedback">

@@ -1,22 +1,22 @@
 {% extends "admin-base" %}
 
 {% block title %}
-Round-switch rules
+{{ i18n("AdminGUI", "Roundswitch_rules") }}
 {% endblock %}
 
 {% block content %}
 
 <div>
     <h3>
-        Round-switch rules
+        {{ i18n("AdminGUI", "Roundswitch_rules") }}
     </h3>
     {% if rules is not empty %}
     <table class="table table-hover table-bordered table-condensed">
         <tr>
-            <th>Source group</th>
-            <th>Destination group</th>
-            <th>Ranks</th>
-            <th>&Sigma;</th>
+            <th>{{ i18n("AdminGUI", "Source_group") }}</th>
+            <th>{{ i18n("AdminGUI", "Destination_group") }}</th>
+            <th>{{ i18n("AdminGUI", "Ranks") }}</th>
+            <th>{{ i18n("AdminGUI", "Total") }}</th>
             <th></th>
         </tr>
         {% for rule in rules  %}
@@ -26,7 +26,7 @@ Round-switch rules
             <td>{{ rule.startWithRank }}-{{ rule.startWithRank + rule.additionalPlayers }}</td>
             <td>{{ rule.additionalPlayers + 1 }}</td>
             <td><input type="submit" class="btn btn-danger"
-                       value="Delete rule"
+                       value="{{ i18n('AdminGUI', 'Delete') }}"
                        onclick="deleteRule({{ rule.id }}, '{{ prefix }}');">
             </td>
         </tr>
@@ -38,16 +38,16 @@ Round-switch rules
 
 <div>
     <h3>
-        Create rule
+        {{ i18n("AdminGUI", "Create") }}
     </h3>
     <form id="create-roundswitchrule" action="#" role="form">
         <div class="form-group">
             <label for="rule-source-group">
-                Source group
+                {{ i18n("AdminGUI", "Source_group") }}
             </label>
             <select id="rule-source-group" class="form-control">
                 <option id="no-source-group-selected">
-                    No source group selected
+                    {{ i18n("AdminGUI", "Select...") }}
                 </option>
                 {% for group in groups %}
                 <option id="rule-source-group-id-{{ group.id }}">
@@ -58,11 +58,11 @@ Round-switch rules
         </div>
         <div class="form-group">
             <label for="rule-destination-group">
-                Destination group
+                {{ i18n("AdminGUI", "Destination_group") }}
             </label>
             <select id="rule-destination-group" class="form-control">
                 <option id="no-destination-group-selected">
-                    No destination group selected
+                    {{ i18n("AdminGUI", "Select...") }}
                 </option>
                 {% for group in groups %}
                 <option id="rule-destination-group-id-{{ group.id }}">
@@ -73,18 +73,18 @@ Round-switch rules
         </div>
         <div class="form-group">
             <label for="rule-start-rank">
-                Start with rank
+                {{ i18n("AdminGUI", "Start_with_rank") }}
             </label>
             <input id="rule-start-rank" type="number" class="form-control" min="1" />
         </div>
         <div class="form-group">
             <label for="rule-additional-players">
-                Additional players
+                {{ i18n("AdminGUI", "Additional_players") }}
             </label>
             <input id="rule-additional-players" type="number" class="form-control" min="0" />
         </div>
         <input id="submit-create-rule" type="submit" class="btn btn-success"
-               value="Create round-switch rule"
+               value="{{ i18n('AdminGUI', 'Create') }}"
                onclick="createNewRoundSwitchRule(this, '{{ prefix }}');">
     </form>
     <div id="user-feedback">
@@ -92,14 +92,14 @@ Round-switch rules
 </div>
 
 <div>
-    <h3>Import</h3>
+    <h3>{{ i18n("AdminGUI", "Import") }}</h3>
 
     <form action="rules/import" method="post" enctype="multipart/form-data">
         <p><input type="file" name="file" class="btn btn-file"></p>
-        <input type="submit" class="btn btn-warning" value="Import JSON (beta)">
+        <input type="submit" class="btn btn-warning" value="{{ i18n('AdminGUI', 'Import_JSON_beta') }}">
     </form>
 
-    <input type="submit" class="btn btn-default" value="Example"
+    <input type="submit" class="btn btn-default" value="{{ i18n('AdminGUI', 'Example') }}"
            onclick="$('#input-example').toggle()">
     <div id="input-example" hidden="hidden">
         <code>

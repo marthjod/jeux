@@ -1,14 +1,14 @@
 {% extends "audience-base" %}
 
 {% block title %}
-Rankings {{ group.name }}
+{{ i18n("AudienceGUI", "Rankings") }} {{ group.name }}
 {% endblock %}
 
 {% block content %}
 <h3>
     {{ group.name }}
     {% if group.completed %}
-    (final)
+    ({{ i18n("AudienceGUI", "final") }})
     {% endif %}
 </h3>
 
@@ -16,19 +16,19 @@ Rankings {{ group.name }}
 <table class="table table-hover table-bordered table-condensed">
     <tr>
         <th>
-            Rank
+            {{ i18n("AudienceGUI", "Rank") }}
         </th>
         <th>
-            Name
+            {{ i18n("AudienceGUI", "Name") }}
         </th>
         <th>
-            Won games
+            {{ i18n("AudienceGUI", "Won_games") }}
         </th>
         <th>
-            Points
+            {{ i18n("AudienceGUI", "Points") }}
         </th>
         <th>
-            Score ratio
+            {{ i18n("AudienceGUI", "Score_ratio") }}
         </th>
     </tr>
     {% for ranking in rankings %}

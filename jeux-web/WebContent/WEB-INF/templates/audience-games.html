@@ -1,5 +1,5 @@
 {% if playedGames is not empty %}
-<h4>Results</h4>
+<h4>{{ i18n("AudienceGUI", "Results") }}</h4>
 {% for result in playedGames %}
 <table class="table table-hover table-bordered table-condensed">
     <tr>
@@ -9,13 +9,13 @@
         <th>
             <a href="{{ prefix }}/games/player/{{ result.player1Id }}">{{ result.player1Name }}</a>
             {% if result.player1Id == result.winnerId %}
-            (winner)
+            ({{ i18n("AudienceGUI", "winner") }})
             {% endif %}
         </th>
         <th>
             <a href="{{ prefix }}/games/player/{{ result.player2Id }}">{{ result.player2Name }}</a>
             {% if result.player2Id == result.winnerId %}
-            (winner)
+            ({{ i18n("AudienceGUI", "winner") }})
             {% endif %}
         </th>
     </tr>
@@ -44,7 +44,7 @@
 {% endif %}
 
 {% if unplayedGames is not empty %}
-<h4>Unplayed games</h4>
+<h4>{{ i18n("AudienceGUI", "Unplayed_games") }}</h4>
 <table class="table table-hover table-bordered table-condensed">
     {% for game in unplayedGames %}
 
@@ -55,13 +55,13 @@
         <td>
             <a href="{{ prefix }}/games/player/{{ game.player1Id }}">{{ game.player1Name }}</a>
             {% if game.player1Id == game.winnerId %}
-            (winner)
+            ({{ i18n("AudienceGUI", "Results") }})
             {% endif %}
         </td>
         <td>
             <a href="{{ prefix }}/games/player/{{ game.player2Id }}">{{ game.player2Name }}</a>
             {% if game.player2Id == game.winnerId %}
-            (winner)
+            ({{ i18n("AudienceGUI", "Results") }})
             {% endif %}
         </td>
     </tr>
