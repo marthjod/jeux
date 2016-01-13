@@ -8,20 +8,20 @@
 <h3>{{ i18n("AdminGUI", "Games") }} {{ groupName }}</h3>
 
 {% if games is empty %}
-{{ i18n("AdminGUI", "Unable_to_calculate_games") }}
+    {{ i18n("AdminGUI", "Unable_to_calculate_games") }}
 {% else %}
-<table class="table table-hover table-bordered table-condensed">
-    {% for game in games %}
-    <tr>
-        <td>
-            {{ game.player1Name }}
-        </td>
-        <td>
-            {{ game.player2Name }}
-        </td>
-    </tr>
-    {% endfor %}
-</table>
+    <table class="table table-hover table-bordered table-condensed">
+        {% for game in games %}
+        <tr>
+            <td>
+                {{ game.player1Name }}
+            </td>
+            <td>
+                {{ game.player2Name }}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
 {% endif %}
 {% endblock %}
 

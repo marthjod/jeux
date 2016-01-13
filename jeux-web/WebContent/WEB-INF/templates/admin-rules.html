@@ -33,6 +33,8 @@
         {% else %}
         {% endfor %}
     </table>
+    {% else %}
+        {{ i18n("AdminGUI", "No_rules_found") }}
     {% endif %}
 </div>
 
