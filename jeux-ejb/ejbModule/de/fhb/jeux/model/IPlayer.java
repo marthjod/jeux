@@ -33,4 +33,6 @@ public interface IPlayer {
     public void subtractWonGame();
 
     public void setName(String name);
+
+    public void resetStats();
 }

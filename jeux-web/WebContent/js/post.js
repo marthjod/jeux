@@ -134,3 +134,38 @@ var switchRound = function (switchButton, url) {
         }
     });
 };
+
+var doTakeover = function (groupId, prefix) {
+    "use strict";
+
+    var url = "rest/admin/takeover/group/" + groupId;
+
+    if (prefix && typeof prefix === 'string') {
+        url = prefix + '/' + url;
+    }
+
+    $.ajax({
+        url: url,
+        type: "POST",
+        statusCode: {
+            200: function () {
+                document.location.reload();
+            },
+            204: function () {
+                alert("Nothing to do.");
+            },
+            403: function () {
+                alert("Operation not permitted (unauthenticated request).");
+            },
+            409: function () {
+                alert("Destination group conflict.");
+            },
+            428: function () {
+                alert("Source group conflict.");
+            },
+            500: function () {
+                alert("Failed to do takeover for group.");
+            }
+        }
+    });
+};

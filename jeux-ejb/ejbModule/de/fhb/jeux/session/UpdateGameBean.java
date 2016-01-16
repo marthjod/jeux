@@ -233,22 +233,10 @@ public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
                         IGroup group = game.getGroup();
                         // set group = completed if this was its last game
                         if (gameDAO.getUnplayedGamesInGroup(group).isEmpty()) {
-                            group.setCompleted(true);
+                            group.setCompleted();
                             // DO NOT setActive(false) here,
                             // group stays active until round switched!
-
-                            // if this was also the _round's_ last game
-                            if (groupDAO.roundFinished(group.getRoundId())) {
-
-                                logger.info("Round " + group.getRoundId()
-                                        + " is finished.");
-
-                                // TODO
-                                success = true;
-                            } else {
-                                // !
-                                success = true;
-                            }
+                            success = true;
                         } else {
                             // !
                             success = true;
@@ -274,7 +262,7 @@ public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
         alignedDTO.setPlayer2Id(unalignedDTO.getPlayer1Id());
         alignedDTO.setPlayer2Name(unalignedDTO.getPlayer1Name());
         // align set list
-        ArrayList<GameSetDTO> alignedSets = new ArrayList<GameSetDTO>();
+        ArrayList<GameSetDTO> alignedSets = new ArrayList<>();
         for (GameSetDTO set : unalignedDTO.getSets()) {
             logger.debug("Unaligned set: " + set);
             // vice versa

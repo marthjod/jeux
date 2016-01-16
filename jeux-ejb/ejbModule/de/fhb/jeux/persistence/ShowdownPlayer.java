@@ -150,6 +150,14 @@ public class ShowdownPlayer implements IPlayer, Serializable {
     }
 
     @Override
+    public void resetStats() {
+        this.wonGames = 0;
+        this.points = 0;
+        this.scoreRatio = 0;
+        this.rank = 0;
+    }
+
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("<");
@@ -170,4 +178,5 @@ public class ShowdownPlayer implements IPlayer, Serializable {
 
         return sb.toString();
     }
+
 }

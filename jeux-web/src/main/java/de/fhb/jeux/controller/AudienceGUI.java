@@ -125,6 +125,7 @@ public class AudienceGUI {
             } else {
                 context.put("group", new GroupDTO("Group not found", false));
             }
+
             writer = Template.renderTemplate(compiledTemplate, context);
         }
 

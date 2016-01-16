@@ -29,102 +29,119 @@ public class RoundSwitchBean implements RoundSwitchRemote, RoundSwitchLocal {
 
     private static Logger logger = Logger.getLogger(RoundSwitchBean.class);
 
+    // 201 Created
+    public static final int TAKEOVER_OK = 200;
+    // 204 No Content
+    public static final int NOTHING_TO_DO = 204;
+    // 409 Cconflict
+    public static final int DEST_GROUP_CONFLICT = 409;
+    // 428 Precondition Required
+    public static final int SRC_GROUP_CONFLICT = 428;
+    // 500 Internal Server Error
+    static final int UNKNOWN_ERR = 500;
+
     public RoundSwitchBean() {
     }
 
-    @Override
-    public boolean currentRoundFinished() {
-        boolean finished = false;
-        int currentRoundId = groupDAO.getCurrentRoundId();
-        if (currentRoundId > 0) {
-            finished = groupDAO.roundFinished(currentRoundId);
+    protected boolean checkDestGroup(IGroup destGroup) {
+        boolean ok = false;
+
+        if (destGroup != null) {
+            if (destGroup.hasGames()) {
+                logger.warn("Destination group " + destGroup
+                        + " already contains games");
+            } else if (destGroup.isCompleted()) {
+                logger.warn("Destination group " + destGroup
+                        + " is completed already");
+            } else {
+                ok = true;
+            }
+        } else {
+            logger.error("Destination group " + destGroup
+                    + " does not exist");
         }
-        return finished;
+
+        return ok;
+    }
+
+    protected boolean checkSrcGroups(IGroup destGroup, List<IRoundSwitchRule> rules) {
+        boolean ok = true;
+
+        if (!rules.isEmpty()) {
+            for (IRoundSwitchRule rule : rules) {
+                IGroup srcGroup = rule.getSrcGroup();
+                if (!srcGroup.isCompleted()) {
+                    ok = false;
+                    logger.warn("Source group " + srcGroup + " not completed yet");
+                    break;
+                }
+            }
+        } else {
+            ok = false;
+        }
+
+        return ok;
+    }
+
+    private void doFinalRanking(List<IPlayer> rankedPlayers) {
+        for (IPlayer player : rankedPlayers) {
+            IRanking ranking = new ShowdownRanking(player, player.getGroup());
+            finalRankingBean.addRanking(ranking);
+        }
+    }
+
+    private void applyRule(IGroup destGroup, IRoundSwitchRule rule) {
+        IGroup srcGroup = rule.getSrcGroup();
+        List<IPlayer> rankedPlayers = adHocRankingBean.getRankedPlayers(srcGroup);
+        doFinalRanking(rankedPlayers);
+        srcGroup.setInactive();
+
+        // TODO moving players fails if higher-ranked player cannot
+        // be determined definitively
+        for (int rank = rule.getStartWithRank() - 1; rank < (rule
+                .getStartWithRank() + rule.getAdditionalPlayers()); rank++) {
+
+            IPlayer rankedPlayer = rankedPlayers.get(rank);
+            rankedPlayer.setGroup(destGroup);
+            rankedPlayer.resetStats();
+
+            logger.info("Applied " + rule);
+        }
     }
 
     @Override
-    public boolean switchRound() {
-        boolean success = true;
+    public int doTakeover(IGroup destGroup) {
+        int status = UNKNOWN_ERR;
 
-        int roundId = groupDAO.getCurrentRoundId();
-        if (roundId > 0) {
-            logger.info("Switching round " + roundId);
+        if (checkDestGroup(destGroup)) {
+            List<IRoundSwitchRule> rules = ruleDAO.getRulesForDestGroup(destGroup);
 
-            for (IGroup group : groupDAO.getGroupsInRound(roundId, true)) {
+            if (!rules.isEmpty()) {
+                logger.info("Starting takeover for " + destGroup);
 
-                // rankings done once before players get moved
-                List<IPlayer> rankedPlayers = adHocRankingBean.getRankedPlayers(group);
-                // final ranking for group
-                logger.info(group.getName() + " (final): " + rankedPlayers);
-                for (IPlayer player : rankedPlayers) {
-                    IRanking ranking = new ShowdownRanking(player, player.getGroup());
-                    finalRankingBean.addRanking(ranking);
-                }
+                if (checkSrcGroups(destGroup, rules)) {
 
-                // from now on, show historical/final rankings instead of ad-hoc ones
-                group.setActive(false);
-
-                // find appropriate round-switch rules (RSRs)
-                for (IRoundSwitchRule rule : ruleDAO.getRulesForSrcGroup(group)) {
-                    IGroup destGroup = rule.getDestGroup();
-                    // dest group should be incomplete, without games or
-                    // players etc.
-                    if (destGroup.hasGames()) {
-                        logger.warn("Destination group " + destGroup
-                                + " already contains games");
-                        // break;
-                    } else if (destGroup.isCompleted()) {
-                        logger.warn("Destination group " + destGroup
-                                + " is completed already");
-                        // break;
-                    } else if (destGroup.isActive()) {
-                        // logger.info("Destination group " + destGroup
-                        // + " is active already");
-                    } else if (destGroup.getPlayers().size() > 0) {
-                        // logger.info("Destination group " + destGroup
-                        // + " already has players");
-                        // break;
+                    for (IRoundSwitchRule rule : rules) {
+                        applyRule(destGroup, rule);
                     }
-                    // does the destination group exist?
-                    if (groupDAO.getGroupById(destGroup.getId()) != null) {
-
-                        destGroup.setActive(true);
-
-                        // list index starts at 0 (= rank 1)
-                        // move players according to ranking
-                        logger.debug("Applying " + rule);
-
-                        // TODO moving players fails if higher-ranked player cannot
-                        // be determined definitively
-                        for (int rank = rule.getStartWithRank() - 1; rank < (rule
-                                .getStartWithRank() + rule.getAdditionalPlayers()); rank++) {
-
-                            IPlayer rankedPlayer = rankedPlayers.get(rank);
-                            // move players to destination group
-                            rankedPlayer.setGroup(rule.getDestGroup());
-
-                            // tabula rasa: clear won games, bonus points, points
-                            // ratio, rank
-                            rankedPlayer.setWonGames(0);
-                            rankedPlayer.setPoints(0);
-                            rankedPlayer.setRank(0);
-                            rankedPlayer.setScoreRatio(0);
-
-                            logger.info(rankedPlayers.get(rank).getName() + " ("
-                                    + group.getName() + "'s #" + (rank + 1)
-                                    + ") --> " + rule.getDestGroup().getName());
-                        }
-
-                    } else {
-                        logger.error("Destination group " + destGroup
-                                + " does not exist");
-                        success = false;
-                    }
+                    destGroup.setActive();
+                    status = TAKEOVER_OK;
+                    logger.info("Takeover for " + destGroup + " finished successfully");
+                } else {
+                    status = SRC_GROUP_CONFLICT;
+                    logger.warn("Takeover for " + destGroup
+                            + " failed: source group(s) conflict");
                 }
+            } else {
+                status = NOTHING_TO_DO;
+                logger.info("No rules found for " + destGroup);
             }
-
-            logger.info("--- Round-switch finished. ---");
+        } else {
+            status = DEST_GROUP_CONFLICT;
+            logger.warn("Takeover for " + destGroup
+                    + " failed: destination group conflict");
         }
-        return success;
+
+        return status;
     }
 }

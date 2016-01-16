@@ -22,6 +22,7 @@
             <th>{{ i18n("AdminGUI", "Completed") }}</th>
             <th>{{ i18n("AdminGUI", "Games") }}</th>
             <th></th>
+            <th></th>
         </tr>
         {% for group in groups %}
         <tr>
@@ -60,6 +61,11 @@
                 <input type="submit" class="btn btn-danger"
                        value="{{ i18n('AdminGUI', 'Delete') }}"
                        onclick="deleteGroup({{ group.id }}, '{{ prefix }}');">
+            </td>
+            <td>
+                <input type="submit" class="btn btn-warning"
+                       value="{{ i18n('AdminGUI', 'Takeover') }}"
+                       onclick="doTakeover({{ group.id }}, '{{ prefix }}');">
             </td>
         </tr>
         {% endfor %}

@@ -21,6 +21,7 @@ import de.fhb.jeux.session.DeleteRuleLocal;
 import de.fhb.jeux.session.GroupLocal;
 import de.fhb.jeux.session.InsertGameBean;
 import de.fhb.jeux.session.PlayerLocal;
+import de.fhb.jeux.session.RoundSwitchBean;
 import de.fhb.jeux.session.RoundSwitchLocal;
 import de.fhb.jeux.session.RoundSwitchRuleLocal;
 import de.fhb.jeux.session.UpdateGameLocal;
@@ -396,15 +397,32 @@ public class AdminAPI {
     }
 
     @POST
-    @Path("/round-switch")
-    public Response doRoundSwitch() {
+    @Path("/takeover/group/{groupId}")
+    public Response doTakeover(@PathParam("groupId") int groupId) {
         Response response = Response.status(
-                Response.Status.NO_CONTENT).build();
+                Response.Status.INTERNAL_SERVER_ERROR).build();
 
-        if (roundSwitchBean.currentRoundFinished()) {
-            if (roundSwitchBean.switchRound()) {
-                response = Response.status(
-                        Response.Status.CREATED).build();
+        IGroup group = groupBean.getGroupById(groupId);
+
+        if (group != null) {
+
+            int status = roundSwitchBean.doTakeover(group);
+            // for status code meaning, see appr. bean
+            switch (status) {
+                case RoundSwitchBean.DEST_GROUP_CONFLICT:
+                    response = Response.status(Response.Status.CONFLICT).build();
+                    break;
+
+                case RoundSwitchBean.SRC_GROUP_CONFLICT:
+                    response = Response.status(428).build();
+                    break;
+
+                case RoundSwitchBean.TAKEOVER_OK:
+                    response = Response.status(Response.Status.OK).build();
+                    break;
+
+                case RoundSwitchBean.NOTHING_TO_DO:
+                    response = Response.status(Response.Status.NO_CONTENT).build();
             }
         }
 

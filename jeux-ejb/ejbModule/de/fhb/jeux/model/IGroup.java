@@ -24,11 +24,15 @@ public interface IGroup {
 
     public boolean isActive();
 
-    public void setActive(boolean active);
+    public void setActive();
+
+    public void setInactive();
 
     public boolean isCompleted();
 
-    public void setCompleted(boolean completed);
+    public void setCompleted();
+
+    public void setIncomplete();
 
     public boolean equals(IGroup group);
 }

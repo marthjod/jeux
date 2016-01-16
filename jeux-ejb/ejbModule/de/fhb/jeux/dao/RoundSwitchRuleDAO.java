@@ -20,83 +20,88 @@ import de.fhb.jeux.persistence.ShowdownRoundSwitchRule;
 @LocalBean
 public class RoundSwitchRuleDAO {
 
-	private static Logger logger = Logger.getLogger(RoundSwitchRuleDAO.class);
+    private static Logger logger = Logger.getLogger(RoundSwitchRuleDAO.class);
 
-	@PersistenceContext(unitName = "JeuxEJB")
-	private EntityManager em;
+    @PersistenceContext(unitName = "JeuxEJB")
+    private EntityManager em;
 
-	public RoundSwitchRuleDAO() {
-	}
+    public RoundSwitchRuleDAO() {
+    }
 
-	public boolean addRule(IRoundSwitchRule rule) {
-		boolean success = false;
-		try {
-			em.persist(rule);
-			success = true;
-			// logger.debug("Persisted round-switch-rule " + rule);
-		} catch (Exception e) {
-			logger.error(rule + ": " + e.getClass().getName() + " "
-					+ e.getMessage());
-		}
-		return success;
-	}
+    public boolean addRule(IRoundSwitchRule rule) {
+        boolean success = false;
+        try {
+            em.persist(rule);
+            success = true;
+            // logger.debug("Persisted round-switch-rule " + rule);
+        } catch (Exception e) {
+            logger.error(rule + ": " + e.getClass().getName() + " "
+                    + e.getMessage());
+        }
+        return success;
+    }
 
-	public boolean deleteRule(IRoundSwitchRule rule) {
-		boolean success = false;
+    public boolean deleteRule(IRoundSwitchRule rule) {
+        boolean success = false;
 
-		if (rule != null) {
-			IRoundSwitchRule tempRule = rule;
-			try {
-				em.remove(rule);
-				success = true;
-				logger.debug("Deleted rule " + tempRule);
-			} catch (Exception e) {
-				logger.error("Failed to delete round-switch rule " + tempRule);
-				logger.error(e.getClass().getCanonicalName() + " "
-						+ e.getMessage());
-			}
-		}
-		return success;
-	}
+        if (rule != null) {
+            IRoundSwitchRule tempRule = rule;
+            try {
+                em.remove(rule);
+                success = true;
+                logger.debug("Deleted rule " + tempRule);
+            } catch (Exception e) {
+                logger.error("Failed to delete round-switch rule " + tempRule);
+                logger.error(e.getClass().getCanonicalName() + " "
+                        + e.getMessage());
+            }
+        }
+        return success;
+    }
 
-	public List<IRoundSwitchRule> getAllRules() {
-		return runQuery("RoundSwitchRule.findAll", null, null);
-	}
+    public List<IRoundSwitchRule> getAllRules() {
+        return runQuery("RoundSwitchRule.findAll", null, null);
+    }
 
-	public List<IRoundSwitchRule> getRulesForSrcGroup(IGroup group) {
-		return runQuery("RoundSwitchRule.findBySrcGroup", "srcGroup", group);
-	}
+    public List<IRoundSwitchRule> getRulesForSrcGroup(IGroup group) {
+        return runQuery("RoundSwitchRule.findBySrcGroup", "srcGroup", group);
+    }
 
-	// if paramName = null, paramName and paramGroup are ignored
-	private List<IRoundSwitchRule> runQuery(String queryName, String paramName,
-			IGroup groupParam) {
-		List<IRoundSwitchRule> rules = new ArrayList<IRoundSwitchRule>();
-		if (queryName != null) {
-			TypedQuery<IRoundSwitchRule> query = em.createNamedQuery(queryName,
-					IRoundSwitchRule.class);
-			if (paramName != null && groupParam != null) {
-				query.setParameter(paramName, groupParam);
-			}
-			rules = query.getResultList();
-		}
+    public List<IRoundSwitchRule> getRulesForDestGroup(IGroup group) {
+        return runQuery("RoundSwitchRule.findByDestGroup", "destGroup", group);
+    }
 
-		return rules;
-	}
+    // if paramName = null, paramName and paramGroup are ignored
+    private List<IRoundSwitchRule> runQuery(String queryName, String paramName,
+            IGroup groupParam) {
+        List<IRoundSwitchRule> rules = new ArrayList<>();
+        if (queryName != null) {
+            TypedQuery<IRoundSwitchRule> query = em.createNamedQuery(queryName,
+                    IRoundSwitchRule.class);
+            if (paramName != null && groupParam != null) {
+                query.setParameter(paramName, groupParam);
+            }
+            rules = query.getResultList();
+        }
 
-	public IRoundSwitchRule getRuleById(int id) {
-		IRoundSwitchRule rule = new ShowdownRoundSwitchRule();
-		TypedQuery<IRoundSwitchRule> query = em.createNamedQuery(
-				"RoundSwitchRule.findById", IRoundSwitchRule.class);
-		query.setParameter("id", id);
+        return rules;
+    }
 
-		try {
-			rule = query.getSingleResult();
-		} catch (NoResultException e) {
-			// reset because callers should test for null
-			rule = null;
-			logger.error("RSR ID " + id + ": " + e.getMessage() + " ("
-					+ e.getClass().getName() + ")");
-		}
-		return rule;
-	}
+    public IRoundSwitchRule getRuleById(int id) {
+        IRoundSwitchRule rule = new ShowdownRoundSwitchRule();
+        TypedQuery<IRoundSwitchRule> query = em.createNamedQuery(
+                "RoundSwitchRule.findById", IRoundSwitchRule.class);
+        query.setParameter("id", id);
+
+        try {
+            rule = query.getSingleResult();
+        } catch (NoResultException e) {
+            // reset because callers should test for null
+            rule = null;
+            logger.error("RSR ID " + id + ": " + e.getMessage() + " ("
+                    + e.getClass().getName() + ")");
+        }
+        return rule;
+    }
+
 }

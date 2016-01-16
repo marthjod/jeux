@@ -1,12 +1,11 @@
 package de.fhb.jeux.session;
 
+import de.fhb.jeux.model.IGroup;
 import javax.ejb.Local;
 
 @Local
 public interface RoundSwitchLocal {
 
-    public boolean currentRoundFinished();
-
-    public boolean switchRound();
+    public int doTakeover(IGroup destGroup);
 
 }

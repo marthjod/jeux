@@ -124,9 +124,13 @@ public class ShowdownGroup implements IGroup, Serializable {
     }
 
     @Override
-    public void setActive(boolean active) {
-        this.active = active;
-        logger.debug(this.name + " active: " + this.active);
+    public void setActive() {
+        this.active = true;
+    }
+
+    @Override
+    public void setInactive() {
+        this.active = false;
     }
 
     @Override
@@ -135,9 +139,13 @@ public class ShowdownGroup implements IGroup, Serializable {
     }
 
     @Override
-    public void setCompleted(boolean completed) {
-        this.completed = completed;
-        logger.debug(this.name + " completed: " + this.completed);
+    public void setCompleted() {
+        this.completed = true;
+    }
+
+    @Override
+    public void setIncomplete() {
+        this.completed = false;
     }
 
     @Override
