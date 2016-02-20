@@ -2,7 +2,6 @@ package de.fhb.jeux.session;
 
 import de.fhb.jeux.dao.RoundSwitchRuleDAO;
 import de.fhb.jeux.persistence.*;
-import de.fhb.jeux.dto.GroupDTO;
 import de.fhb.jeux.model.IGroup;
 import de.fhb.jeux.model.IRoundSwitchRule;
 import java.util.ArrayList;

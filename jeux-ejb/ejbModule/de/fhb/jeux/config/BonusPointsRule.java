@@ -26,27 +26,67 @@ package de.fhb.jeux.config;
 
  */
 public class BonusPointsRule {
-	private int setsWonByWinner;
-	private int totalSets;
-	private int bonusPointsWinner;
-	private int bonusPointsLoser;
 
-	public BonusPointsRule() {
-	}
+    private int setsWonByWinner;
+    private int totalSets;
+    private int bonusPointsWinner;
+    private int bonusPointsLoser;
 
-	public int getSetsWonByWinner() {
-		return setsWonByWinner;
-	}
+    public BonusPointsRule(int setsWonByWinner, int totalSets,
+            int bonusPointsWinner, int bonusPointsLoser) {
+        this.setsWonByWinner = setsWonByWinner;
+        this.totalSets = totalSets;
+        this.bonusPointsWinner = bonusPointsWinner;
+        this.bonusPointsLoser = bonusPointsLoser;
+    }
 
-	public int getTotalSets() {
-		return totalSets;
-	}
+    public BonusPointsRule() {
+    }
 
-	public int getBonusPointsWinner() {
-		return bonusPointsWinner;
-	}
+    public int getSetsWonByWinner() {
+        return setsWonByWinner;
+    }
 
-	public int getBonusPointsLoser() {
-		return bonusPointsLoser;
-	}
+    public int getTotalSets() {
+        return totalSets;
+    }
+
+    public int getBonusPointsWinner() {
+        return bonusPointsWinner;
+    }
+
+    public int getBonusPointsLoser() {
+        return bonusPointsLoser;
+    }
+
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof BonusPointsRule)) {
+            return false;
+        }
+        BonusPointsRule rule = (BonusPointsRule) o;
+
+        return setsWonByWinner == rule.getSetsWonByWinner()
+                && totalSets == rule.getTotalSets()
+                && bonusPointsWinner == rule.getBonusPointsWinner()
+                && bonusPointsLoser == rule.getBonusPointsLoser();
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("<");
+        sb.append(setsWonByWinner);
+        sb.append("/");
+        sb.append(totalSets);
+        sb.append(":");
+        sb.append(" W +");
+        sb.append(bonusPointsWinner);
+        sb.append(" L +");
+        sb.append(bonusPointsLoser);
+        sb.append(">");
+        return sb.toString();
+    }
 }
