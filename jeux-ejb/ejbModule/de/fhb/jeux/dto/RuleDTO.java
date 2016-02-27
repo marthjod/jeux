@@ -2,21 +2,21 @@ package de.fhb.jeux.dto;
 
 import de.fhb.jeux.model.IRoundSwitchRule;
 
-public class RoundSwitchRuleDTO {
+public class RuleDTO {
 
-    private int id;
-    private int srcGroupId;
-    private int destGroupId;
+    private transient int id;
+    private transient int srcGroupId;
+    private transient int destGroupId;
     private String srcGroupName;
     private String destGroupName;
     private int previousRoundId;
     private int startWithRank;
     private int additionalPlayers;
 
-    public RoundSwitchRuleDTO() {
+    public RuleDTO() {
     }
 
-    public RoundSwitchRuleDTO(IRoundSwitchRule roundSwitchRuleEntity) {
+    public RuleDTO(IRoundSwitchRule roundSwitchRuleEntity) {
         id = roundSwitchRuleEntity.getId();
         srcGroupId = roundSwitchRuleEntity.getSrcGroup().getId();
         srcGroupName = roundSwitchRuleEntity.getSrcGroup().getName();
@@ -27,7 +27,7 @@ public class RoundSwitchRuleDTO {
         additionalPlayers = roundSwitchRuleEntity.getAdditionalPlayers();
     }
 
-    public RoundSwitchRuleDTO(String srcGroupName, String destGroupName,
+    public RuleDTO(String srcGroupName, String destGroupName,
             int startWithRank, int additionalPlayers) {
         this.srcGroupName = srcGroupName;
         this.destGroupName = destGroupName;

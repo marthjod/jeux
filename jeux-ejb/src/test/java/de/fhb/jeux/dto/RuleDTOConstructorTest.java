@@ -12,7 +12,7 @@ public class RuleDTOConstructorTest {
     private IGroup srcGroup;
     private IGroup destGroup;
     private ShowdownRoundSwitchRule rule;
-    private RoundSwitchRuleDTO ruleDTO;
+    private RuleDTO ruleDTO;
 
     public RuleDTOConstructorTest() {
         srcGroup = new ShowdownGroup(12, "Group A", 1, 2, 3, true, false);
@@ -22,7 +22,7 @@ public class RuleDTOConstructorTest {
 
     @Before
     public void setUp() {
-        ruleDTO = new RoundSwitchRuleDTO(rule);
+        ruleDTO = new RuleDTO(rule);
     }
 
     @Test

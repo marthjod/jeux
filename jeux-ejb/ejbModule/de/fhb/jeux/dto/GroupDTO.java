@@ -1,12 +1,15 @@
 package de.fhb.jeux.dto;
 
 import de.fhb.jeux.model.IGroup;
+import de.fhb.jeux.model.IPlayer;
+import java.util.ArrayList;
+import java.util.List;
 
 // "flat" representation of Entity object better suitable
 // for generating data interchange format (JSON) from
 public class GroupDTO implements Comparable {
 
-    private int id;
+    private transient int id;
     private String name;
     private int minSets;
     private int maxSets;
@@ -15,6 +18,7 @@ public class GroupDTO implements Comparable {
     private int roundId;
     private boolean hasGames;
     private int size;
+    private List<String> players = new ArrayList<>();
 
     // argument-less constructor for converter libs (Jackson...)
     // client-provided data -> DTO
@@ -39,6 +43,9 @@ public class GroupDTO implements Comparable {
         this.roundId = groupEntity.getRoundId();
         this.hasGames = groupEntity.hasGames();
         this.size = groupEntity.getSize();
+        for (IPlayer player : groupEntity.getPlayers()) {
+            this.players.add(player.getName());
+        }
     }
 
     public GroupDTO(String name, int minSets, int maxSets, int roundId,
@@ -91,6 +98,10 @@ public class GroupDTO implements Comparable {
 
     public int getSize() {
         return this.size;
+    }
+
+    public List<String> getPlayers() {
+        return this.players;
     }
 
     @Override

@@ -6,11 +6,9 @@ import de.fhb.jeux.session.GameLocal;
 import de.fhb.jeux.session.GroupLocal;
 import de.fhb.jeux.session.PlayerLocal;
 import de.fhb.jeux.session.RoundSwitchRuleLocal;
-import de.fhb.jeux.bulkimport.ImportGroup;
-import de.fhb.jeux.bulkimport.ImportRule;
-import de.fhb.jeux.bulkimport.JSONImporter;
+import de.fhb.jeux.bulk.bulkimport.JSONImporter;
 import de.fhb.jeux.dto.PlayerDTO;
-import de.fhb.jeux.dto.RoundSwitchRuleDTO;
+import de.fhb.jeux.dto.RuleDTO;
 import de.fhb.jeux.model.IGroup;
 import de.fhb.jeux.session.CreateGroupLocal;
 import de.fhb.jeux.session.CreatePlayerLocal;
@@ -67,7 +65,7 @@ public class AdminGUI {
     private CreatePlayerLocal createPlayerBean;
 
     @EJB
-    private RoundSwitchRuleLocal roundSwitchRuleBean;
+    private RoundSwitchRuleLocal ruleBean;
 
     @EJB
     private CreateRoundSwitchRuleLocal createRuleBean;
@@ -131,7 +129,7 @@ public class AdminGUI {
             Map<String, Object> context = new HashMap<>();
             context.put("prefix", "/" + servletContext.getServletContextName());
             context.put("groups", groupBean.getAllGroupDTOs());
-            context.put("rules", roundSwitchRuleBean.getAllRoundSwitchRuleDTOs());
+            context.put("rules", ruleBean.getAllRoundSwitchRuleDTOs());
             writer = Template.renderTemplate(compiledTemplate, context);
         }
         return writer.toString();
@@ -194,7 +192,6 @@ public class AdminGUI {
             MultipartFormDataInput input) {
         Response response = Response.serverError().build();
         URI returnUrl = getReturnUrl(request);
-        List<ImportGroup> importGroups = new ArrayList<>();
 
         BufferedReader bufreader = getReaderFromFormData(input);
         try {
@@ -204,9 +201,9 @@ public class AdminGUI {
         } catch (IOException ex) {
             logger.error(ex.getMessage());
         }
-        importGroups = JSONImporter.importGroupsFromJson(bufreader);
+        List<GroupDTO> importGroups = JSONImporter.importGroupsFromJson(bufreader);
 
-        if (saveImportGroups(importGroups)) {
+        if (saveImportedGroups(importGroups)) {
             response = Response.seeOther(returnUrl).build();
         }
 
@@ -220,7 +217,7 @@ public class AdminGUI {
             MultipartFormDataInput input) {
         Response response = Response.serverError().build();
         URI returnUrl = getReturnUrl(request);
-        List<ImportRule> importRules = new ArrayList<>();
+        List<RuleDTO> importRules = new ArrayList<>();
 
         BufferedReader bufreader = getReaderFromFormData(input);
         try {
@@ -232,7 +229,7 @@ public class AdminGUI {
         }
         importRules = JSONImporter.importRulesFromJson(bufreader);
 
-        if (saveImportRules(importRules)) {
+        if (saveImportedRules(importRules)) {
             response = Response.seeOther(returnUrl).build();
         } else {
             response = Response.status(Response.Status.CONFLICT).build();
@@ -241,17 +238,16 @@ public class AdminGUI {
         return response;
     }
 
-    private boolean saveImportGroups(List<ImportGroup> importGroups) {
+    private boolean saveImportedGroups(List<GroupDTO> importGroups) {
         boolean success = false;
 
         if (importGroups != null) {
-            for (ImportGroup ig : importGroups) {
-                GroupDTO groupDTO = new GroupDTO(ig.getName(),
-                        ig.getMinSets(), ig.getMaxSets(),
-                        ig.getRoundId(), ig.isActive(), false);
-                int groupId = createGroupBean.createGroup(groupDTO);
+            for (GroupDTO dto : importGroups) {
+
+                int groupId = createGroupBean.createGroup(dto);
                 IGroup group = groupBean.getGroupById(groupId);
-                for (String playerName : ig.getPlayers()) {
+
+                for (String playerName : dto.getPlayers()) {
                     PlayerDTO player = new PlayerDTO(playerName);
                     createPlayerBean.createPlayer(player, group);
                 }
@@ -261,18 +257,15 @@ public class AdminGUI {
         return success;
     }
 
-    private boolean saveImportRules(List<ImportRule> importRules) {
+    private boolean saveImportedRules(List<RuleDTO> importRules) {
         boolean success = false;
 
         if (importRules != null) {
-            for (ImportRule ir : importRules) {
-                RoundSwitchRuleDTO ruleDTO = new RoundSwitchRuleDTO(
-                        ir.getSrcGroupName(), ir.getDestGroupName(),
-                        ir.getStartWithRank(), ir.getAdditionalPlayers());
+            for (RuleDTO dto : importRules) {
 
-                int status = createRuleBean.createRoundSwitchRule(ruleDTO,
-                        groupBean.getGroupByName(ir.getSrcGroupName()),
-                        groupBean.getGroupByName(ir.getDestGroupName()));
+                int status = createRuleBean.createRoundSwitchRule(dto,
+                        groupBean.getGroupByName(dto.getSrcGroupName()),
+                        groupBean.getGroupByName(dto.getDestGroupName()));
                 if (status == CreateRoundSwitchRuleBean.STATUS_OK) {
                     success = true;
                 }

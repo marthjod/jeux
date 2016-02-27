@@ -10,7 +10,7 @@ import javax.ejb.Stateless;
 import org.jboss.logging.Logger;
 
 import de.fhb.jeux.dao.RoundSwitchRuleDAO;
-import de.fhb.jeux.dto.RoundSwitchRuleDTO;
+import de.fhb.jeux.dto.RuleDTO;
 import de.fhb.jeux.model.IRoundSwitchRule;
 
 @Stateless
@@ -34,12 +34,12 @@ public class RoundSwitchRuleBean implements RoundSwitchRuleRemote,
 	}
 
 	@Override
-	public List<RoundSwitchRuleDTO> getAllRoundSwitchRuleDTOs() {
+	public List<RuleDTO> getAllRoundSwitchRuleDTOs() {
 		List<IRoundSwitchRule> rules = getAllRoundSwitchRules();
-		List<RoundSwitchRuleDTO> ruleSetsDTO = new ArrayList<RoundSwitchRuleDTO>();
+		List<RuleDTO> ruleSetsDTO = new ArrayList<RuleDTO>();
 
 		for (IRoundSwitchRule rule : rules) {
-			RoundSwitchRuleDTO newRoundSwitchRuleDTO = new RoundSwitchRuleDTO(
+			RuleDTO newRoundSwitchRuleDTO = new RuleDTO(
 					rule);
 			ruleSetsDTO.add(newRoundSwitchRuleDTO);
 		}

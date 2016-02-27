@@ -26,3 +26,26 @@ var getShuffledGames = function (groupId, format, prefix) {
     window.open(url);
 };
 
+var exportGroups = function (prefix) {
+    "use strict";
+
+    exportItems("groups", prefix);
+};
+
+var exportRules = function (prefix) {
+    "use strict";
+
+    exportItems("rules", prefix);
+};
+
+var exportItems = function (itemType, prefix) {
+    "use strict";
+
+    var url = "rest/admin/" + itemType + "/export";
+
+    if (prefix && typeof prefix === 'string') {
+        url = prefix + '/' + url;
+    }
+
+    window.open(url);
+};

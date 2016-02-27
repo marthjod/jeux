@@ -15,7 +15,7 @@ import org.jboss.logging.Logger;
 import de.fhb.jeux.dto.GameDTO;
 import de.fhb.jeux.dto.GroupDTO;
 import de.fhb.jeux.dto.PlayerDTO;
-import de.fhb.jeux.dto.RoundSwitchRuleDTO;
+import de.fhb.jeux.dto.RuleDTO;
 import de.fhb.jeux.model.IGroup;
 import de.fhb.jeux.session.GameLocal;
 import de.fhb.jeux.session.GroupLocal;
@@ -59,7 +59,7 @@ public class AudienceAPI {
 	@GET
 	@Path("/roundswitchrules")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<RoundSwitchRuleDTO> getAllRoundSwitchRuleDTOs() {
+	public List<RuleDTO> getAllRoundSwitchRuleDTOs() {
 		return roundSwitchRuleBean.getAllRoundSwitchRuleDTOs();
 	}
 

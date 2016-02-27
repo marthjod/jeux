@@ -178,6 +178,10 @@
     </div>
 
 </div>
-
+<div>
+    <h3>{{ i18n("AdminGUI", "Export") }}</h3>
+        <input class="btn btn-warning" onclick="exportGroups('{{ prefix }}');"
+           value="{{ i18n('AdminGUI', 'Export_JSON_beta') }}">
+</div>
 
 {% endblock %}

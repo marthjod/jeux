@@ -1,6 +1,6 @@
 package de.fhb.jeux.persistence;
 
-import de.fhb.jeux.dto.RoundSwitchRuleDTO;
+import de.fhb.jeux.dto.RuleDTO;
 import de.fhb.jeux.model.IGroup;
 import static org.junit.Assert.*;
 import org.junit.Before;
@@ -12,12 +12,12 @@ public class ShowdownRoundSwitchRuleConstructorTest {
     private IGroup srcGroup;
     private IGroup destGroup;
     private ShowdownRoundSwitchRule rule;
-    private RoundSwitchRuleDTO ruleDTO;
+    private RuleDTO ruleDTO;
 
     public ShowdownRoundSwitchRuleConstructorTest() {
         srcGroup = new ShowdownGroup(12, "Group A", 1, 2, 3, true, false);
         destGroup = new ShowdownGroup(13, "Group B", 2, 2, 3, false, false);
-        ruleDTO = new RoundSwitchRuleDTO(srcGroup.getName(),
+        ruleDTO = new RuleDTO(srcGroup.getName(),
                 destGroup.getName(), 1, 0);
     }
 

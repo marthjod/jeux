@@ -13,7 +13,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import de.fhb.jeux.dto.RoundSwitchRuleDTO;
+import de.fhb.jeux.dto.RuleDTO;
 import de.fhb.jeux.model.IGroup;
 import de.fhb.jeux.model.IRoundSwitchRule;
 
@@ -41,7 +41,7 @@ public class ShowdownRoundSwitchRule implements IRoundSwitchRule, Serializable {
         this.destGroup = (ShowdownGroup) destGroup;
     }
 
-    public ShowdownRoundSwitchRule(RoundSwitchRuleDTO ruleDTO, IGroup srcGroup,
+    public ShowdownRoundSwitchRule(RuleDTO ruleDTO, IGroup srcGroup,
             IGroup destGroup) {
         this(ruleDTO.getPreviousRoundId(), ruleDTO.getStartWithRank(),
                 ruleDTO.getAdditionalPlayers(), srcGroup, destGroup);

@@ -1,7 +1,7 @@
 package de.fhb.jeux.session;
 
 import de.fhb.jeux.dao.RoundSwitchRuleDAO;
-import de.fhb.jeux.dto.RoundSwitchRuleDTO;
+import de.fhb.jeux.dto.RuleDTO;
 import de.fhb.jeux.model.IGroup;
 import de.fhb.jeux.model.IRoundSwitchRule;
 import de.fhb.jeux.persistence.ShowdownRoundSwitchRule;
@@ -40,7 +40,7 @@ public class CreateRoundSwitchRuleBean implements CreateRoundSwitchRuleRemote,
     }
 
     @Override
-    public int createRoundSwitchRule(RoundSwitchRuleDTO ruleDTO,
+    public int createRoundSwitchRule(RuleDTO ruleDTO,
             IGroup srcGroup, IGroup destGroup) {
 
         int status = UNKNOWN_ERR;

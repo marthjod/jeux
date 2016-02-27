@@ -1,12 +1,13 @@
 package de.fhb.jeux.controller;
 
 import com.mitchellbosecke.pebble.template.PebbleTemplate;
+import de.fhb.jeux.bulk.bulkexport.JSONExporter;
 import de.fhb.jeux.config.BonusPointsDistribution;
 import de.fhb.jeux.dao.GroupDAO;
 import de.fhb.jeux.dto.GameDTO;
 import de.fhb.jeux.dto.GroupDTO;
 import de.fhb.jeux.dto.PlayerDTO;
-import de.fhb.jeux.dto.RoundSwitchRuleDTO;
+import de.fhb.jeux.dto.RuleDTO;
 import de.fhb.jeux.model.IGroup;
 import de.fhb.jeux.model.IPlayer;
 import de.fhb.jeux.session.CalcGamesBean;
@@ -88,7 +89,7 @@ public class AdminAPI {
     private CreateRoundSwitchRuleLocal createRoundSwitchRuleBean;
 
     @EJB
-    private RoundSwitchRuleLocal roundSwitchRuleBean;
+    private RoundSwitchRuleLocal ruleBean;
 
     @EJB
     private RoundSwitchLocal roundSwitchBean;
@@ -199,7 +200,7 @@ public class AdminAPI {
     @PUT
     @Path("/create-roundswitchrule")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createRoundSwitchRule(RoundSwitchRuleDTO rule) {
+    public Response createRoundSwitchRule(RuleDTO rule) {
         Response response = Response.status(
                 Response.Status.INTERNAL_SERVER_ERROR).build();
 
@@ -249,7 +250,7 @@ public class AdminAPI {
         Response response = Response.status(
                 Response.Status.INTERNAL_SERVER_ERROR).build();
 
-        if (deleteRuleBean.deleteRule(roundSwitchRuleBean
+        if (deleteRuleBean.deleteRule(ruleBean
                 .getRoundSwitchRuleById(ruleId))) {
             response = Response.status(Response.Status.OK).build();
         }
@@ -429,4 +430,17 @@ public class AdminAPI {
         return response;
     }
 
+    @GET
+    @Path("/groups/export")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String exportGroups() {
+        return JSONExporter.exportGroupsToJson(groupBean.getAllGroupDTOs());
+    }
+
+    @GET
+    @Path("/rules/export")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String exportRules() {
+        return JSONExporter.exportRulesToJson(ruleBean.getAllRoundSwitchRuleDTOs());
+    }
 }
