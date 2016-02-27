@@ -6,6 +6,16 @@
 
 {% block content %}
 
+{% for g in gamesByGroup %}
+{% if g.games is not empty %}
+<div>
+    <a href="#group-{{ loop.index }}">
+        {{ i18n("AdminGUI", "Go_to") }} {{ g.group.name }}
+    </a>
+</div>
+{% endif %}
+{% endfor %}
+
 <div>
     <h2>
         {{ i18n("AdminGUI", "Unplayed_games") }}
@@ -14,7 +24,7 @@
     {% if g.games is not empty %}
 
     <h3>
-        {{ g.group.name }}
+        <a name="group-{{ loop.index }}">{{ g.group.name }}</a>
     </h3>
     {% for game in g.games %}
     <table class="table table-bordered table-condensed">

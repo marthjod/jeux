@@ -6,6 +6,16 @@
 
 {% block content %}
 
+{% for g in gamesByGroup %}
+{% if g.games is not empty %}
+<div>
+    <a href="#group-{{ loop.index }}">
+        {{ i18n("AdminGUI", "Go_to") }} {{ g.group.name }}
+    </a>
+</div>
+{% endif %}
+{% endfor %}
+
 <div>
     <h2>
         {{ i18n("AdminGUI", "Played_games") }}
