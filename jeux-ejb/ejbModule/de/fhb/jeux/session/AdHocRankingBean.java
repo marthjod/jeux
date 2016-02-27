@@ -95,7 +95,7 @@ public class AdHocRankingBean implements AdHocRankingRemote, AdHocRankingLocal {
     public List<PlayerDTO> getRankedPlayerDTOs(IGroup group) {
 
         // return at least an empty, but initialized list
-        List<PlayerDTO> rankedPlayerDTOs = new ArrayList<PlayerDTO>();
+        List<PlayerDTO> rankedPlayerDTOs = new ArrayList<>();
 
         for (IPlayer player : getRankedPlayers(group)) {
             rankedPlayerDTOs.add(new PlayerDTO(player));

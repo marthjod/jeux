@@ -5,7 +5,6 @@ import java.util.Date;
 
 import de.fhb.jeux.model.IGame;
 import de.fhb.jeux.persistence.ShowdownGameSet;
-import org.jboss.logging.Logger;
 
 public class GameDTO implements Comparable {
 

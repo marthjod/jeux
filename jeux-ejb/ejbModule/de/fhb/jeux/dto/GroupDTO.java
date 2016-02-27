@@ -3,7 +3,6 @@ package de.fhb.jeux.dto;
 import de.fhb.jeux.model.IGroup;
 import de.fhb.jeux.model.IPlayer;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 // "flat" representation of Entity object better suitable

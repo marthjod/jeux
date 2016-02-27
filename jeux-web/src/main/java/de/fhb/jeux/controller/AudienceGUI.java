@@ -117,9 +117,9 @@ public class AudienceGUI {
             if (group != null) {
                 context.put("group", group);
                 if (group.isActive()) {
-                    context.put("rankings", adHocRankingBean.getRankedPlayerDTOs(group));
+                    context.put("rankedPlayers", adHocRankingBean.getRankedPlayerDTOs(group));
                 } else {
-                    context.put("rankings", finalRankingBean.getRankingDTOs(group));
+                    context.put("rankedPlayers", finalRankingBean.getRankingDTOs(group));
                 }
             } else {
                 context.put("group", new GroupDTO("Group not found", false));

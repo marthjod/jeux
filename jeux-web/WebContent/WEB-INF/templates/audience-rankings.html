@@ -12,7 +12,7 @@
     {% endif %}
 </h3>
 
-{% if rankings is not empty %}
+{% if rankedPlayers is not empty %}
 <table class="table table-hover table-bordered table-condensed">
     <tr>
         <th>
@@ -31,24 +31,24 @@
             {{ i18n("AudienceGUI", "Score_ratio") }}
         </th>
     </tr>
-    {% for ranking in rankings %}
+    {% for rankedPlayer in rankedPlayers %}
     <tr>
         <td>
-            {{ ranking.rank }}
+            {{ rankedPlayer.rank }}
         </td>
         <td>
-            <a href="{{ prefix }}/games/player/{{ ranking.playerId }}">
-                {{ ranking.playerName }}
+            <a href="{{ prefix }}/games/player/{{ rankedPlayer.id }}">
+                {{ rankedPlayer.name }}
             </a>
         </td>
         <td>
-            {{ ranking.wonGames }}
+            {{ rankedPlayer.wonGames }}
         </td>
         <td>
-            {{ ranking.points }}
+            {{ rankedPlayer.points }}
         </td>
         <td>
-            {{ ranking.scoreRatio }}
+            {{ rankedPlayer.scoreRatio }}
         </td>
     </tr>
     {% endfor %}
