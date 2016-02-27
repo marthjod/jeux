@@ -6,12 +6,12 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-public class GroupDTOConstructorTest {
+public class GroupDTOTest {
 
     private IGroup group;
     private GroupDTO groupDTO;
 
-    public GroupDTOConstructorTest() {
+    public GroupDTOTest() {
         group = new ShowdownGroup(12, "Group A", 1, 2, 3, true, false);
     }
 
@@ -63,6 +63,22 @@ public class GroupDTOConstructorTest {
     @Test
     public void constructorSize() {
         assertEquals(groupDTO.getSize(), group.getSize());
+    }
+
+    @Test
+    public void compareRoundIds() {
+        GroupDTO dto1 = new GroupDTO(1, "in round 1", 2, 3, 1, false, false);
+        GroupDTO dto2 = new GroupDTO(2, "in round 2", 2, 3, 2, false, false);
+        GroupDTO dto3 = new GroupDTO(3, "also in round 2", 2, 3, 2, false, false);
+
+        assertEquals(dto1.compareTo(dto2), -1);
+        assertEquals(dto2.compareTo(dto1), 1);
+
+        assertEquals(dto1.compareTo(dto3), -1);
+        assertEquals(dto3.compareTo(dto1), 1);
+
+        assertEquals(dto2.compareTo(dto3), 0);
+        assertEquals(dto3.compareTo(dto2), 0);
     }
 
 }

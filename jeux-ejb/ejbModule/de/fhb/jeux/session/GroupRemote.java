@@ -12,7 +12,7 @@ import de.fhb.jeux.model.IGroup;
 
 public interface GroupRemote {
 
-    public List<GroupDTO> getAllGroupDTOs();
+    public List<GroupDTO> getAllGroupDTOs(boolean sort);
 
     public IGroup getGroupById(int groupId);
 

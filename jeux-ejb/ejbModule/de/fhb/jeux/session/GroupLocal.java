@@ -11,7 +11,7 @@ import de.fhb.jeux.model.IGroup;
 @Local
 public interface GroupLocal {
 
-    public List<GroupDTO> getAllGroupDTOs();
+    public List<GroupDTO> getAllGroupDTOs(boolean sort);
 
     public IGroup getGroupById(int groupId);
 

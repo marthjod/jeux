@@ -1,8 +1,12 @@
 {% extends "audience-base" %}
 
 {% block content %}
-<h3></h3>
+{% set currentRound = 0 %}
 {% for group in groups %}
+{% if group.roundId > currentRound %}
+{% set currentRound = group.roundId %}
+<h3>{{ i18n("AudienceGUI", "Round") }} {{ currentRound }}</h3>
+{% endif %}
 <div>
     <p>
         <a class="btn btn-primary btn-lg" href="{{ prefix }}/rankings/group/{{ group.id }}">

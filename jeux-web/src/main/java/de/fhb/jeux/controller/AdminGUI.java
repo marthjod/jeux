@@ -95,7 +95,7 @@ public class AdminGUI {
         if (compiledTemplate != null) {
             Map<String, Object> context = new HashMap<>();
             context.put("prefix", "/" + servletContext.getServletContextName());
-            context.put("groups", groupBean.getAllGroupDTOs());
+            context.put("groups", groupBean.getAllGroupDTOs(true));
             writer = Template.renderTemplate(compiledTemplate, context);
         }
         return writer.toString();
@@ -111,7 +111,7 @@ public class AdminGUI {
         if (compiledTemplate != null) {
             Map<String, Object> context = new HashMap<>();
             context.put("prefix", "/" + servletContext.getServletContextName());
-            context.put("groups", groupBean.getAllGroupDTOs());
+            context.put("groups", groupBean.getAllGroupDTOs(true));
             context.put("players", playerBean.getAllPlayerDTOs());
             writer = Template.renderTemplate(compiledTemplate, context);
         }
@@ -128,7 +128,7 @@ public class AdminGUI {
         if (compiledTemplate != null) {
             Map<String, Object> context = new HashMap<>();
             context.put("prefix", "/" + servletContext.getServletContextName());
-            context.put("groups", groupBean.getAllGroupDTOs());
+            context.put("groups", groupBean.getAllGroupDTOs(true));
             context.put("rules", ruleBean.getAllRoundSwitchRuleDTOs());
             writer = Template.renderTemplate(compiledTemplate, context);
         }
@@ -147,7 +147,7 @@ public class AdminGUI {
             context.put("prefix", "/" + servletContext.getServletContextName());
 
             List<Object> gamesByGroup = new ArrayList<>();
-            for (GroupDTO group : groupBean.getAllGroupDTOs()) {
+            for (GroupDTO group : groupBean.getAllGroupDTOs(true)) {
                 Map<String, Object> games = new HashMap<>();
                 games.put("group", group);
                 games.put("games", gameBean.getUnplayedGameDTOsInGroup(
@@ -172,7 +172,7 @@ public class AdminGUI {
             context.put("prefix", "/" + servletContext.getServletContextName());
 
             List<Object> gamesByGroup = new ArrayList<>();
-            for (GroupDTO group : groupBean.getAllGroupDTOs()) {
+            for (GroupDTO group : groupBean.getAllGroupDTOs(true)) {
                 Map<String, Object> games = new HashMap<>();
                 games.put("group", group);
                 games.put("games", gameBean.getPlayedGameDTOsInGroup(

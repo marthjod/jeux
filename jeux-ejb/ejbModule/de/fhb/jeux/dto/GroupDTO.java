@@ -3,11 +3,12 @@ package de.fhb.jeux.dto;
 import de.fhb.jeux.model.IGroup;
 import de.fhb.jeux.model.IPlayer;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 // "flat" representation of Entity object better suitable
 // for generating data interchange format (JSON) from
-public class GroupDTO implements Comparable {
+public class GroupDTO implements Comparable<GroupDTO> {
 
     private transient int id;
     private String name;
@@ -121,8 +122,8 @@ public class GroupDTO implements Comparable {
     }
 
     @Override
-    public int compareTo(Object group) {
-        return this.name.compareTo(((GroupDTO) group).getName());
+    public int compareTo(GroupDTO dto) {
+        return this.roundId - dto.getRoundId();
     }
 
 }

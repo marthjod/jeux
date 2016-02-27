@@ -434,7 +434,7 @@ public class AdminAPI {
     @Path("/groups/export")
     @Produces(MediaType.APPLICATION_JSON)
     public String exportGroups() {
-        return JSONExporter.exportGroupsToJson(groupBean.getAllGroupDTOs());
+        return JSONExporter.exportGroupsToJson(groupBean.getAllGroupDTOs(false));
     }
 
     @GET

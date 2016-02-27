@@ -14,6 +14,7 @@ import de.fhb.jeux.dto.PlayerDTO;
 import de.fhb.jeux.model.IGroup;
 import de.fhb.jeux.model.IPlayer;
 import de.fhb.jeux.persistence.ShowdownPlayer;
+import java.util.Collections;
 
 @Stateless
 
@@ -28,8 +29,14 @@ public class GroupBean implements GroupRemote, GroupLocal {
     }
 
     @Override
-    public List<GroupDTO> getAllGroupDTOs() {
-        return groupDAO.getAllGroupDTOs();
+    public List<GroupDTO> getAllGroupDTOs(boolean sort) {
+        List<GroupDTO> groups = groupDAO.getAllGroupDTOs();
+
+        if (sort) {
+            Collections.sort(groups);
+        }
+
+        return groups;
     }
 
     @Override

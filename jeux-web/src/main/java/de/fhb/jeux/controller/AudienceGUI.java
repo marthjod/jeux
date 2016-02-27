@@ -13,7 +13,6 @@ import de.fhb.jeux.session.PlayerLocal;
 import de.fhb.jeux.template.Template;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -96,7 +95,7 @@ public class AudienceGUI {
         if (compiledTemplate != null) {
             Map<String, Object> context = new HashMap<>();
             context.put("prefix", "/" + servletContext.getServletContextName() + "/gui/audience");
-            context.put("groups", groupBean.getAllGroupDTOs());
+            context.put("groups", groupBean.getAllGroupDTOs(true));
             writer = Template.renderTemplate(compiledTemplate, context);
         }
 

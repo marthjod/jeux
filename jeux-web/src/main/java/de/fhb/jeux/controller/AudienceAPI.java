@@ -27,74 +27,74 @@ import de.fhb.jeux.session.RoundSwitchRuleLocal;
 
 public class AudienceAPI {
 
-	protected static Logger logger = Logger.getLogger(AudienceAPI.class);
+    protected static Logger logger = Logger.getLogger(AudienceAPI.class);
 
-	@EJB
-	private GroupLocal groupBean;
+    @EJB
+    private GroupLocal groupBean;
 
-	@EJB
-	private GameLocal gameBean;
+    @EJB
+    private GameLocal gameBean;
 
-	@EJB
-	private RoundSwitchRuleLocal roundSwitchRuleBean;
+    @EJB
+    private RoundSwitchRuleLocal roundSwitchRuleBean;
 
-	@EJB
-	private AdHocRankingLocal playerRankingBean;
+    @EJB
+    private AdHocRankingLocal playerRankingBean;
 
-	@GET
-	@Path("/status")
-	@Produces(MediaType.TEXT_PLAIN)
-	public String apiStatus() {
-		// logger.debug("-> ReST API status");
-		return "OK\n";
-	}
+    @GET
+    @Path("/status")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String apiStatus() {
+        // logger.debug("-> ReST API status");
+        return "OK\n";
+    }
 
-	@GET
-	@Path("/groups")
-	@Produces(MediaType.APPLICATION_JSON)
-	public List<GroupDTO> getAllGroupDTOs() {
-		return groupBean.getAllGroupDTOs();
-	}
+    @GET
+    @Path("/groups")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<GroupDTO> getAllGroupDTOs() {
+        return groupBean.getAllGroupDTOs(false);
+    }
 
-	@GET
-	@Path("/roundswitchrules")
-	@Produces(MediaType.APPLICATION_JSON)
-	public List<RuleDTO> getAllRoundSwitchRuleDTOs() {
-		return roundSwitchRuleBean.getAllRoundSwitchRuleDTOs();
-	}
+    @GET
+    @Path("/roundswitchrules")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<RuleDTO> getAllRoundSwitchRuleDTOs() {
+        return roundSwitchRuleBean.getAllRoundSwitchRuleDTOs();
+    }
 
-	@GET
-	@Path("/players/group/id/{groupId}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public List<PlayerDTO> getPlayerDTOsInGroup(
-			@PathParam("groupId") int groupId) {
-		IGroup group = groupBean.getGroupById(groupId);
-		return groupBean.getPlayerDTOsInGroup(group);
-	}
+    @GET
+    @Path("/players/group/id/{groupId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<PlayerDTO> getPlayerDTOsInGroup(
+            @PathParam("groupId") int groupId) {
+        IGroup group = groupBean.getGroupById(groupId);
+        return groupBean.getPlayerDTOsInGroup(group);
+    }
 
-	@GET
-	@Path("/games/played/group/id/{groupId}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public List<GameDTO> getPlayedGameDTOsInGroup(
-			@PathParam("groupId") int groupId) {
-		IGroup group = groupBean.getGroupById(groupId);
-		return gameBean.getPlayedGameDTOsInGroup(group);
-	}
+    @GET
+    @Path("/games/played/group/id/{groupId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<GameDTO> getPlayedGameDTOsInGroup(
+            @PathParam("groupId") int groupId) {
+        IGroup group = groupBean.getGroupById(groupId);
+        return gameBean.getPlayedGameDTOsInGroup(group);
+    }
 
-	@GET
-	@Path("/games/unplayed/group/id/{groupId}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public List<GameDTO> getUnplayedGameDTOsInGroup(
-			@PathParam("groupId") int groupId) {
-		IGroup group = groupBean.getGroupById(groupId);
-		return gameBean.getUnplayedGameDTOsInGroup(group);
-	}
+    @GET
+    @Path("/games/unplayed/group/id/{groupId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<GameDTO> getUnplayedGameDTOsInGroup(
+            @PathParam("groupId") int groupId) {
+        IGroup group = groupBean.getGroupById(groupId);
+        return gameBean.getUnplayedGameDTOsInGroup(group);
+    }
 
-	@GET
-	@Path("/rankings/group/id/{groupId}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public List<PlayerDTO> getRankingInGroup(@PathParam("groupId") int groupId) {
-		IGroup group = groupBean.getGroupById(groupId);
-		return playerRankingBean.getRankedPlayerDTOs(group);
-	}
+    @GET
+    @Path("/rankings/group/id/{groupId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<PlayerDTO> getRankingInGroup(@PathParam("groupId") int groupId) {
+        IGroup group = groupBean.getGroupById(groupId);
+        return playerRankingBean.getRankedPlayerDTOs(group);
+    }
 }
