@@ -5,7 +5,6 @@
 - Run `mvn clean install` on _jeux-ejb_, _jeux-web_ and  _jeux-ear_, in sequence
 - Deploy resulting EAR file on JBoss AS (_JBOSS_DIR/standalone/deployments_)
 - For production use, set custom server secret (used for admin auth) via `mvn -DserverSecret=...` when building _jeux-web_
-    - The OpenShift [build action hook](https://github.com/marthjod/jeux/blob/master/.openshift/action_hooks/build) uses the `$JEUX_SERVER_SECRET` environment variable set via `rhc env set ...`
 
 ## Configure
 
@@ -104,4 +103,6 @@ TO 'jeuxdb_user'@'<DB_HOST>';
 
 ## OpenShift
 
+- The OpenShift [build action hook](https://github.com/marthjod/jeux/blob/master/.openshift/action_hooks/build) uses the `$JEUX_SERVER_SECRET` environment variable set via `rhc env set ...`
+- `mysql -e "CREATE USER jeuxdb_user@$OPENSHIFT_MYSQL_DB_HOST identified by '...';"`
 - MySQL dump: `mysqldump -h $OPENSHIFT_MYSQL_DB_HOST -u $OPENSHIFT_MYSQL_DB_USERNAME -p"$OPENSHIFT_MYSQL_DB_PASSWORD" -P $OPENSHIFT_MYSQL_DB_PORT jeux > $OPENSHIFT_DATA_DIR/jeux-$(date +%Y%m%d-%H%M%S).sql`
