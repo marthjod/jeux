@@ -21,6 +21,7 @@ echo "$admin=$password" > $OPENSHIFT_JBOSSAS_DIR/standalone/configuration/users.
 
 read -p "JEUX_SERVER_SECRET: " ssecret
 echo $ssecret > $HOME/.env/user_vars/JEUX_SERVER_SECRET
+export JEUX_SERVER_SECRET=$ssecret
 
 echo "Building & redeploying app"
 $OPENSHIFT_REPO_DIR/.openshift/action_hooks/build
