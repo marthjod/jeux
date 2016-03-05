@@ -24,3 +24,4 @@ bootstrap.css
 # NetBeans
 nbactions.xml
 nb-configuration.xml
+/jeux-web/WebContent/css/bootstrap.min.css

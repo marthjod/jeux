@@ -4,7 +4,7 @@
         <meta name="application-name" content="${name} ${timestamp} ${os.name}-${os.version}">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="robots" content="noindex, nofollow" />
-        <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="{{ prefix }}/css/bootstrap.min.css">
         <!--  mobile first -->
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>
@@ -19,7 +19,7 @@
             {% endblock %}
         </div>
         <div class="container" id="footer">
-            {% if prefix is not null %}
+            {% if audiencePrefix is not null %}
             <a class="btn btn-default btn-lg" href="{% block overviewlink %}{% endblock %}">
                 {{ i18n("AudienceGUI", "Overview") }}
             </a>
