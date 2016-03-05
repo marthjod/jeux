@@ -2,9 +2,11 @@
 
 set -e
 
-mysql --host=$OPENSHIFT_MYSQL_DB_HOST --port=$OPENSHIFT_MYSQL_DB_PORT --user=$OPENSHIFT_MYSQL_DB_USERNAME --password=$OPENSHIFT_MYSQL_DB_PASSWORD -e "DROP DATABASE jeux; CREATE DATABASE jeux;"
+mysql="mysql --host=$OPENSHIFT_MYSQL_DB_HOST --port=$OPENSHIFT_MYSQL_DB_PORT --user=$OPENSHIFT_MYSQL_DB_USERNAME --password=$OPENSHIFT_MYSQL_DB_PASSWORD"
+
+$mysql -e "DROP DATABASE jeux; CREATE DATABASE jeux;"
 wget https://raw.githubusercontent.com/marthjod/jeux/master/jeuxdb-empty.sql -O /tmp/jeuxdb-empty.sql
-mysql jeux < /tmp/jeuxdb-empty.sql
+$mysql jeux < /tmp/jeuxdb-empty.sql
 rm /tmp/jeuxdb-empty.sql
 
 read -p "JEUX admin " admin
