@@ -94,9 +94,7 @@ public class AudienceGUI {
 
         if (compiledTemplate != null) {
             Map<String, Object> context = new HashMap<>();
-            String ctxName = servletContext.getServletContextName();
-            context.put("prefix", "/" + ctxName);
-            context.put("audiencePrefix", "/" + ctxName + "/gui/audience");
+            context.put("prefix", "/" + servletContext.getServletContextName() + "/gui/audience");
             context.put("groups", groupBean.getAllGroupDTOs(true));
             writer = Template.renderTemplate(compiledTemplate, context);
         }

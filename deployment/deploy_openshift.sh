@@ -7,13 +7,10 @@ mysql="mysql --host=$OPENSHIFT_MYSQL_DB_HOST --port=$OPENSHIFT_MYSQL_DB_PORT --u
 echo "Dropping DB"
 $mysql -e "DROP DATABASE jeux; CREATE DATABASE jeux;"
 echo "Fetching DB schema"
-wget https://raw.githubusercontent.com/marthjod/jeux/master/jeuxdb-empty.sql -O /tmp/jeuxdb-empty.sql
+wget -q https://raw.githubusercontent.com/marthjod/jeux/master/jeuxdb-empty.sql -O /tmp/jeuxdb-empty.sql
 echo "Importing DB schema"
 $mysql jeux < /tmp/jeuxdb-empty.sql
 rm /tmp/jeuxdb-empty.sql
-
-echo "Fecthing bootstrap CSS"
-wget https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css -O $OPENSHIFT_REPO_DIR/jeux-web/WebContent/css/bootstrap.min.css
 
 read -p "JEUX admin: " admin
 read -p "$admin's password: " password
