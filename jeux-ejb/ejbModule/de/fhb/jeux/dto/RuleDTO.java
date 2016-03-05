@@ -9,7 +9,6 @@ public class RuleDTO {
     private transient int destGroupId;
     private String srcGroupName;
     private String destGroupName;
-    private int previousRoundId;
     private int startWithRank;
     private int additionalPlayers;
 
@@ -22,7 +21,6 @@ public class RuleDTO {
         srcGroupName = roundSwitchRuleEntity.getSrcGroup().getName();
         destGroupId = roundSwitchRuleEntity.getDestGroup().getId();
         destGroupName = roundSwitchRuleEntity.getDestGroup().getName();
-        previousRoundId = roundSwitchRuleEntity.getPreviousRoundId();
         startWithRank = roundSwitchRuleEntity.getStartWithRank();
         additionalPlayers = roundSwitchRuleEntity.getAdditionalPlayers();
     }
@@ -45,10 +43,6 @@ public class RuleDTO {
 
     public int getDestGroupId() {
         return destGroupId;
-    }
-
-    public int getPreviousRoundId() {
-        return previousRoundId;
     }
 
     public int getStartWithRank() {

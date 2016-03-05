@@ -17,17 +17,12 @@ public class RuleDTOConstructorTest {
     public RuleDTOConstructorTest() {
         srcGroup = new ShowdownGroup(12, "Group A", 1, 2, 3, true, false);
         destGroup = new ShowdownGroup(12, "Group B", 2, 2, 3, false, false);
-        rule = new ShowdownRoundSwitchRule(1, 1, 0, srcGroup, destGroup);
+        rule = new ShowdownRoundSwitchRule(1, 0, srcGroup, destGroup);
     }
 
     @Before
     public void setUp() {
         ruleDTO = new RuleDTO(rule);
-    }
-
-    @Test
-    public void constructorPreviosRoundId() {
-        assertEquals(ruleDTO.getPreviousRoundId(), rule.getPreviousRoundId());
     }
 
     @Test

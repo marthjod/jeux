@@ -70,7 +70,7 @@ public class RoundSwitchBeanTest {
     @Test
     public void checkSrcGroupsOk() {
         when(srcGroup.isCompleted()).thenReturn(Boolean.TRUE);
-        rules.add(new ShowdownRoundSwitchRule(1, 1,
+        rules.add(new ShowdownRoundSwitchRule(1,
                 0, srcGroup, destGroup));
         assertTrue(bean.checkSrcGroups(destGroup, rules));
     }

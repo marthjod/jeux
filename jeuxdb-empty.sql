@@ -82,7 +82,6 @@ CREATE TABLE IF NOT EXISTS `RoundSwitchRule` (
   `destGroupId` int(11) NOT NULL COMMENT 'Group players should be in in the next round.',
   `startWithRank` int(11) NOT NULL COMMENT 'Player with this rank in source group is the first to be moved from source group to destination group.',
   `additionalPlayers` int(11) NOT NULL COMMENT 'How many additional players should be moved from source to destination group?',
-  `previousRoundId` int(11) NOT NULL COMMENT '(For safety. Remove if unused.) ',
   PRIMARY KEY (`id`),
   KEY `fk_rule_src_group` (`srcGroupId`),
   KEY `fk_rule_dest_group` (`destGroupId`)

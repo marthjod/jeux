@@ -27,11 +27,6 @@ public class ShowdownRoundSwitchRuleConstructorTest {
     }
 
     @Test
-    public void constructorPreviousRoundId() {
-        assertEquals(rule.getPreviousRoundId(), ruleDTO.getPreviousRoundId());
-    }
-
-    @Test
     public void constructorStartWithRank() {
         assertEquals(rule.getStartWithRank(), ruleDTO.getStartWithRank());
     }

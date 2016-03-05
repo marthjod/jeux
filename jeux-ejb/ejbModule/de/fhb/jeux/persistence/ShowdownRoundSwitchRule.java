@@ -31,10 +31,9 @@ public class ShowdownRoundSwitchRule implements IRoundSwitchRule, Serializable {
     public ShowdownRoundSwitchRule() {
     }
 
-    public ShowdownRoundSwitchRule(int previousRoundId, int startWithRank,
+    public ShowdownRoundSwitchRule(int startWithRank,
             int additionalPlayers, IGroup srcGroup,
             IGroup destGroup) {
-        this.previousRoundId = previousRoundId;
         this.startWithRank = startWithRank;
         this.additionalPlayers = additionalPlayers;
         this.srcGroup = (ShowdownGroup) srcGroup;
@@ -43,16 +42,13 @@ public class ShowdownRoundSwitchRule implements IRoundSwitchRule, Serializable {
 
     public ShowdownRoundSwitchRule(RuleDTO ruleDTO, IGroup srcGroup,
             IGroup destGroup) {
-        this(ruleDTO.getPreviousRoundId(), ruleDTO.getStartWithRank(),
+        this(ruleDTO.getStartWithRank(),
                 ruleDTO.getAdditionalPlayers(), srcGroup, destGroup);
     }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
-    @Column
-    private int previousRoundId;
 
     @Column
     private int startWithRank;
@@ -101,11 +97,6 @@ public class ShowdownRoundSwitchRule implements IRoundSwitchRule, Serializable {
     @Override
     public int getAdditionalPlayers() {
         return additionalPlayers;
-    }
-
-    @Override
-    public int getPreviousRoundId() {
-        return previousRoundId;
     }
 
     @Override
