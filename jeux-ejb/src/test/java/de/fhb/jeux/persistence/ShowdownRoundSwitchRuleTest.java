@@ -7,14 +7,14 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-public class ShowdownRoundSwitchRuleConstructorTest {
+public class ShowdownRoundSwitchRuleTest {
 
     private IGroup srcGroup;
     private IGroup destGroup;
     private ShowdownRoundSwitchRule rule;
     private RuleDTO ruleDTO;
 
-    public ShowdownRoundSwitchRuleConstructorTest() {
+    public ShowdownRoundSwitchRuleTest() {
         srcGroup = new ShowdownGroup(12, "Group A", 1, 2, 3, true, false);
         destGroup = new ShowdownGroup(13, "Group B", 2, 2, 3, false, false);
         ruleDTO = new RuleDTO(srcGroup.getName(),

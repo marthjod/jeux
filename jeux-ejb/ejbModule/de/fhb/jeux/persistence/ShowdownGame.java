@@ -51,7 +51,7 @@ public class ShowdownGame implements IGame, Serializable {
         this.group = (ShowdownGroup) group;
         this.player1 = (ShowdownPlayer) player1;
         this.player2 = (ShowdownPlayer) player2;
-        this.sets = new ArrayList<ShowdownGameSet>();
+        this.sets = new ArrayList<>();
 
         // TODO differentiate maxSets and actual sets #business-logic
         for (int i = 0; i < group.getMaxSets(); i++) {
@@ -103,6 +103,14 @@ public class ShowdownGame implements IGame, Serializable {
     @Override
     public IPlayer getPlayer2() {
         return player2;
+    }
+
+    @Override
+    public List<IPlayer> getPlayers() {
+        List<IPlayer> list = new ArrayList<>();
+        list.add(player1);
+        list.add(player2);
+        return list;
     }
 
     @Override

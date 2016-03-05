@@ -21,117 +21,121 @@ import de.fhb.jeux.model.IPlayer;
 @Entity
 @Table(name = "GameSet")
 @NamedQueries({
-		@NamedQuery(name = "GameSet.findAll", query = "SELECT gs FROM ShowdownGameSet gs"),
-		@NamedQuery(name = "GameSet.findById", query = "SELECT gs FROM ShowdownGameSet gs WHERE gs.id = :id") })
+    @NamedQuery(name = "GameSet.findAll", query = "SELECT gs FROM ShowdownGameSet gs"),
+    @NamedQuery(name = "GameSet.findById", query = "SELECT gs FROM ShowdownGameSet gs WHERE gs.id = :id")})
 public class ShowdownGameSet implements IGameSet, Serializable {
 
-	private static final long serialVersionUID = 6276609884514398233L;
+    private static final long serialVersionUID = 6276609884514398233L;
 
-	public ShowdownGameSet() {
-	}
+    public ShowdownGameSet() {
+    }
 
-	// package visibility only
-	ShowdownGameSet(IGame game, int number) {
-		this.game = (ShowdownGame) game;
-		this.number = number;
-	}
+    public ShowdownGameSet(IGame game, int number) {
+        this.game = (ShowdownGame) game;
+        this.number = number;
+    }
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
 
-	@Column
-	private int player1Score;
+    @Column
+    private int player1Score;
 
-	@Column
-	private int player2Score;
+    @Column
+    private int player2Score;
 
-	@ManyToOne
-	@JoinColumn(name = "gameId")
-	private ShowdownGame game;
+    @ManyToOne
+    @JoinColumn(name = "gameId")
+    private ShowdownGame game;
 
-	@OneToOne
-	@JoinColumn(name = "winnerId")
-	private ShowdownPlayer winner;
-	
-	@Column
-	private int number;
+    @OneToOne
+    @JoinColumn(name = "winnerId")
+    private ShowdownPlayer winner;
 
-	@Override
-	public int getId() {
-		return id;
-	}
+    @Column
+    private int number;
 
-	@Override
-	public IPlayer getWinner() {
-		return winner;
-	}
+    @Override
+    public int getId() {
+        return id;
+    }
 
-	@Override
-	public boolean hasWinner() {
-		return winner != null;
-	}
+    @Override
+    public IPlayer getWinner() {
+        return winner;
+    }
 
-	@Override
-	public int getPlayer1Score() {
-		return player1Score;
-	}
+    @Override
+    public boolean hasWinner() {
+        return winner != null;
+    }
 
-	@Override
-	public int getPlayer2Score() {
-		return player2Score;
-	}
+    @Override
+    public int getPlayer1Score() {
+        return player1Score;
+    }
 
-	@Override
-	public IGame getGame() {
-		return game;
-	}
-	
-	@Override
-	public int getNumber() {
-		return number;
-	}
+    @Override
+    public int getPlayer2Score() {
+        return player2Score;
+    }
 
-	@Override
-	public boolean equals(IGameSet gameSet) {
-		// assuming unique IDs
-		return id == gameSet.getId();
-	}
+    @Override
+    public IGame getGame() {
+        return game;
+    }
 
-	@Override
-	public void setPlayer1Score(int score) {
-		player1Score = score;
-	}
+    @Override
+    public int getNumber() {
+        return number;
+    }
 
-	@Override
-	public void setPlayer2Score(int score) {
-		player2Score = score;
-	}
+    @Override
+    public boolean equals(IGameSet gameSet) {
+        // assuming unique IDs
+        return id == gameSet.getId();
+    }
 
-	@Override
-	public void setWinner(IPlayer winner) {
-		// this.
-		this.winner = (ShowdownPlayer) winner;
-	}
+    @Override
+    public void setPlayer1Score(int score) {
+        player1Score = score;
+    }
 
-	@Override
-	public boolean isUnplayed() {
-		return winner == null; // player1Score == 0 && player2Score == 0;
-	}
-	
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("{ ");
-		sb.append("(" + game.getId() + "/");
-		sb.append(id + ") ");
-		sb.append(player1Score);
-		sb.append(":" + player2Score);
-		if (winner != null) {
-			sb.append(" *" + winner.getName() + "*");
-		}
-		sb.append(" }");
-		return sb.toString();
-	}
+    @Override
+    public void setPlayer2Score(int score) {
+        player2Score = score;
+    }
+
+    @Override
+    public void setWinner(IPlayer winner) {
+        // this.
+        this.winner = (ShowdownPlayer) winner;
+    }
+
+    public void setGame(IGame game) {
+        this.game = (ShowdownGame) game;
+    }
+
+    @Override
+    public boolean isUnplayed() {
+        return winner == null; // player1Score == 0 && player2Score == 0;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("{ ");
+        sb.append(player1Score);
+        sb.append(":");
+        sb.append(player2Score);
+        if (winner != null) {
+            sb.append(" *");
+            sb.append(winner.getName());
+            sb.append("*");
+        }
+        sb.append(" }");
+        return sb.toString();
+    }
 
 }

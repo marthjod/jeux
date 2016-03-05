@@ -7,13 +7,13 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-public class ShowdownPlayerConstructorTest {
+public class ShowdownPlayerTest {
 
     private IGroup group;
     private PlayerDTO playerDTO;
     private IPlayer player;
 
-    public ShowdownPlayerConstructorTest() {
+    public ShowdownPlayerTest() {
         group = new ShowdownGroup(12, "Group A", 1, 2, 3, true, false);
         playerDTO = new PlayerDTO(23, "Player A", 42, 15, 3, 2,
                 group.getId(), group.getName());

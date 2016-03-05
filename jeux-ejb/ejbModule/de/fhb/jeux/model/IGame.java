@@ -15,6 +15,8 @@ public interface IGame {
 
     public IPlayer getPlayer2();
 
+    public List<IPlayer> getPlayers();
+
     public IPlayer getWinner();
 
     public IPlayer getLoser();

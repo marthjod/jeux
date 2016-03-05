@@ -18,6 +18,14 @@ public class BonusPointsDistribution {
 
     private List<BonusPointsRule> ruleList;
 
+    public BonusPointsDistribution(List<BonusPointsRule> ruleList) {
+        this.ruleList = ruleList;
+    }
+
+    public BonusPointsDistribution(String configPath) {
+        this.ruleList = marshalJson(stringFromPath(configPath));
+    }
+
     private static String stringFromPath(String path) {
         String json = null;
 
@@ -45,10 +53,6 @@ public class BonusPointsDistribution {
             }
         }
         return rules;
-    }
-
-    public BonusPointsDistribution(String configPath) {
-        this.ruleList = marshalJson(stringFromPath(configPath));
     }
 
     public List<BonusPointsRule> getRules() {

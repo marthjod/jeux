@@ -6,12 +6,12 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-public class ShowdownGroupConstructorTest {
+public class ShowdownGroupTest {
 
     private IGroup group;
     private GroupDTO groupDTO;
 
-    public ShowdownGroupConstructorTest() {
+    public ShowdownGroupTest() {
         groupDTO = new GroupDTO(12, "Group A", 1, 2, 3, true, false);
     }
 

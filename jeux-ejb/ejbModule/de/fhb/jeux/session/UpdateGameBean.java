@@ -50,6 +50,7 @@ public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
         boolean success = false;
         boolean updated = false;
         int numDTOs = 0;
+        BonusPointsDistributor bonusPointsDistributor = new BonusPointsDistributor(config);
 
         if (gameDTO != null) {
             IGame game = gameDAO.getGameById(gameDTO.getId());
@@ -57,7 +58,7 @@ public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
             if (game != null) {
 
                 if (game.hasWinner()) {
-                    clearGame(game, config);
+                    game = clearGame(game, config);
                 }
 
                 List<ShowdownGameSet> existingSets = game.getSets();
@@ -198,8 +199,8 @@ public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
                                 if (game.getSets().size() > 1) {
 
                                     addBonusPoints(
-                                            BonusPointsDistributor.getBonusPoints(
-                                                    config, setsPlayed,
+                                            bonusPointsDistributor.getBonusPoints(
+                                                    setsPlayed,
                                                     setsWonByPlayer1), player1,
                                             player2);
                                 }
@@ -219,8 +220,8 @@ public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
                                 // been played
                                 if (game.getSets().size() > 1) {
                                     addBonusPoints(
-                                            BonusPointsDistributor.getBonusPoints(
-                                                    config, setsPlayed,
+                                            bonusPointsDistributor.getBonusPoints(
+                                                    setsPlayed,
                                                     setsWonByPlayer2), player2,
                                             player1);
                                 }
@@ -252,7 +253,6 @@ public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
     // switch players if necessary (player1Score becomes player2Score etc.)
     // needed in rare case where client JSON might be mixed up
     private GameDTO alignPlayers(GameDTO unalignedDTO) {
-        // log level info because unusual
         logger.debug("Unaligned DTO: " + unalignedDTO);
 
         GameDTO alignedDTO = new GameDTO(unalignedDTO);
@@ -281,7 +281,8 @@ public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
         return alignedDTO;
     }
 
-    private void clearGame(IGame game, BonusPointsDistribution config) {
+    protected IGame clearGame(IGame game, BonusPointsDistribution config) {
+        BonusPointsDistributor bonusPointsDistributor = new BonusPointsDistributor(config);
         logger.debug("Before (already played): " + game);
 		// game has already been played, so user wants to edit it
         // that means we have to (in this order!):
@@ -294,7 +295,7 @@ public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
 
         // - clear any bonus points awarded before for this game
         subtractBonusPoints(
-                BonusPointsDistributor.getBonusPoints(config,
+                bonusPointsDistributor.getBonusPoints(
                         game.getSetsPlayed(), game.getSetsPlayedByWinner()),
                 game.getWinner(), game.getLoser());
 
@@ -307,6 +308,8 @@ public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
 
         // - clear the winner
         game.setWinner(null);
+
+        return game;
 
     }
 
