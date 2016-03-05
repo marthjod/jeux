@@ -4,8 +4,8 @@ import de.fhb.jeux.model.IRanking;
 
 public class RankingDTO {
 
-    private int playerId;
-    private String playerName;
+    private int id;
+    private String name;
     private String groupName;
     private int points;
     private int scoreRatio;
@@ -19,8 +19,8 @@ public class RankingDTO {
     // parametrized constructor for conversion from interface implementations
     // (i.e. Persistent Entities)
     public RankingDTO(IRanking rankingEntity) {
-        playerId = rankingEntity.getPlayer().getId();
-        playerName = rankingEntity.getPlayer().getName();
+        id = rankingEntity.getPlayer().getId();
+        name = rankingEntity.getPlayer().getName();
         groupName = rankingEntity.getGroup().getName();
         points = rankingEntity.getPoints();
         scoreRatio = rankingEntity.getScoreRatio();
@@ -29,12 +29,12 @@ public class RankingDTO {
     }
 
     // getters necessary or not added to DTO in template otherwise!
-    public int getPlayerId() {
-        return playerId;
+    public int getId() {
+        return id;
     }
 
-    public String getPlayerName() {
-        return playerName;
+    public String getName() {
+        return name;
     }
 
     public String getGroupName() {
@@ -80,9 +80,9 @@ public class RankingDTO {
         sb.append("#");
         sb.append(rank);
         sb.append(" ");
-        sb.append(playerName);
+        sb.append(name);
         sb.append(" (");
-        sb.append(playerId);
+        sb.append(id);
         sb.append(")");
         sb.append(", group: ");
         sb.append(groupName);

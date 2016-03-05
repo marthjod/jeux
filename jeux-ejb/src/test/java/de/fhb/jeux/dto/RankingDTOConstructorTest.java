@@ -30,12 +30,12 @@ public class RankingDTOConstructorTest {
 
     @Test
     public void constructorPlayerId() {
-        assertEquals(rankingDTO.getPlayerId(), ranking.getPlayer().getId());
+        assertEquals(rankingDTO.getId(), ranking.getPlayer().getId());
     }
 
     @Test
     public void constructorPlayerName() {
-        assertEquals(rankingDTO.getPlayerName(), ranking.getPlayer().getName());
+        assertEquals(rankingDTO.getName(), ranking.getPlayer().getName());
     }
 
     @Test
