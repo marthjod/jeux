@@ -1,15 +1,21 @@
 package de.fhb.jeux.dto;
 
 import de.fhb.jeux.model.IRoundSwitchRule;
+import com.google.gson.annotations.Expose;
 
 public class RuleDTO {
 
     private transient int id;
-    private transient int srcGroupId;
-    private transient int destGroupId;
+    private int srcGroupId;
+    private int destGroupId;
+
+    @Expose
     private String srcGroupName;
+    @Expose
     private String destGroupName;
+    @Expose
     private int startWithRank;
+    @Expose
     private int additionalPlayers;
 
     public RuleDTO() {

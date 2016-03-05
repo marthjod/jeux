@@ -1,6 +1,7 @@
 package de.fhb.jeux.bulk.bulkexport;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import de.fhb.jeux.dto.GroupDTO;
 import de.fhb.jeux.dto.RuleDTO;
 import java.util.List;
@@ -26,9 +27,10 @@ public class JSONExporter {
     public static String exportRulesToJson(List<RuleDTO> rules) {
 
         String json = "";
+        Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
 
         try {
-            json = new Gson().toJson(rules);
+            json = gson.toJson(rules);
         } catch (Exception ex) {
             logger.error(ex.getMessage());
         }

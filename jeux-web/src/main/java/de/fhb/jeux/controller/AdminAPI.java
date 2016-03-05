@@ -205,7 +205,6 @@ public class AdminAPI {
                 Response.Status.INTERNAL_SERVER_ERROR).build();
 
         if (rule != null) {
-            // logger.debug("Deserialized round switch rule DTO " + rule);
             IGroup srcGroup = groupBean.getGroupById(rule.getSrcGroupId());
             IGroup destGroup = groupBean.getGroupById(rule.getDestGroupId());
             int status = createRoundSwitchRuleBean.createRoundSwitchRule(rule,
@@ -239,6 +238,8 @@ public class AdminAPI {
                     break;
             }
 
+        } else {
+            logger.warn("Unable to deserialize into RuleDTO");
         }
 
         return response;

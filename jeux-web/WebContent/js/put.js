@@ -190,6 +190,9 @@ var createNewRoundSwitchRule = function (ruleSubmit, prefix) {
                     document.location.reload();
                 },
                 statusCode: {
+                    400: function () {
+                        alert("Bad request.");
+                    },
                     403: function () {
                         alert("Operation not permitted (unauthenticated request).");
                     },
