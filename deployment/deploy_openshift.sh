@@ -5,7 +5,7 @@ set -e
 mysql="mysql --host=$OPENSHIFT_MYSQL_DB_HOST --port=$OPENSHIFT_MYSQL_DB_PORT --user=$OPENSHIFT_MYSQL_DB_USERNAME --password=$OPENSHIFT_MYSQL_DB_PASSWORD"
 
 echo "Dropping DB"
-$mysql -e "DROP DATABASE jeux; CREATE DATABASE jeux;"
+$mysql -e "DROP DATABASE IF EXISTS jeux; CREATE DATABASE jeux;"
 echo "Fetching DB schema"
 wget -q https://raw.githubusercontent.com/marthjod/jeux/master/jeuxdb-empty.sql -O /tmp/jeuxdb-empty.sql
 echo "Importing DB schema"
