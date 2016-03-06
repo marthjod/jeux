@@ -12,6 +12,10 @@ public interface IPlayer {
 
     public int getPoints();
 
+    public int getScore();
+
+    public void setScore(int score);
+
     public int getScoreRatio();
 
     public int getRank();
@@ -35,4 +39,13 @@ public interface IPlayer {
     public void setName(String name);
 
     public void resetStats();
+
+    public int getWonSets();
+
+    public void setWonSets(int wonSets);
+
+    public int getLostSets();
+
+    public void setLostSets(int lostSets);
+
 }

@@ -56,9 +56,12 @@ CREATE TABLE IF NOT EXISTS `Player` (
   `groupId` int(11) NOT NULL COMMENT 'Group this player currently belongs to',
   `name` text COLLATE utf8_unicode_ci NOT NULL,
   `points` int(11) NOT NULL DEFAULT '0' COMMENT 'Total points (0-n) player has been awarded for won sets. May be 1 per won game if only 1 set is played per game',
+  `score` int(11) NOT NULL DEFAULT '0',
   `scoreRatio` int(11) DEFAULT NULL COMMENT 'Difference (-n...0...n) between player''s own and opponent''s scores (in games which this player participated in)',
   `rank` int(11) NOT NULL DEFAULT '0' COMMENT 'Rank in group. Updated after all this group''s games have been completed',
   `wonGames` int(11) NOT NULL DEFAULT '0',
+  `wonSets` int(11) NOT NULL DEFAULT '0',
+  `lostSets` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `fk_Player_Group1_idx` (`groupId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;

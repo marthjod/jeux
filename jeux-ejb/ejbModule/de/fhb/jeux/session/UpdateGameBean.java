@@ -45,225 +45,198 @@ public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
     public UpdateGameBean() {
     }
 
+    protected boolean updateSets(IGame game, GameDTO gameDTO) {
+        int updatedSets = 0;
+
+        List<ShowdownGameSet> existingSets = game.getSets();
+        gameDTO = alignPlayers(game, gameDTO);
+        List<GameSetDTO> newSets = gameDTO.getSets();
+
+        if (existingSets.size() == newSets.size()) {
+
+            ListIterator<ShowdownGameSet> setsIterator = existingSets.listIterator();
+            while (setsIterator.hasNext()) {
+                IGameSet oldSet = setsIterator.next();
+                IPlayer player1 = oldSet.getGame().getPlayer1();
+                IPlayer player2 = oldSet.getGame().getPlayer2();
+                // DTOs get counted and index-accessed in parallel
+                GameSetDTO newSet = newSets.get(updatedSets++);
+
+                // copy scores
+                oldSet.setPlayer1Score(newSet.getPlayer1Score());
+                oldSet.setPlayer2Score(newSet.getPlayer2Score());
+
+                // write set winner
+                if (oldSet.getPlayer1Score() > 0 || oldSet.getPlayer2Score() > 0) {
+
+                    if (oldSet.getPlayer1Score() > oldSet.getPlayer2Score()) {
+                        oldSet.setWinner(player1);
+
+                        logger.info("Set winner: " + player1 + ", "
+                                + oldSet.getPlayer1Score() + ":"
+                                + oldSet.getPlayer2Score());
+                    } else if (oldSet.getPlayer2Score() > oldSet.getPlayer1Score()) {
+                        oldSet.setWinner(player2);
+
+                        logger.info("Set winner: " + player2 + ", "
+                                + oldSet.getPlayer2Score() + ":"
+                                + oldSet.getPlayer1Score());
+                    }
+                }
+            }
+            game.setSets(existingSets);
+        }
+
+        return updatedSets > 0;
+    }
+
     @Override
     public boolean updateGame(GameDTO gameDTO, BonusPointsDistribution config) {
         boolean success = false;
-        boolean updated = false;
-        int numDTOs = 0;
-        BonusPointsDistributor bonusPointsDistributor = new BonusPointsDistributor(config);
+        boolean updated;
 
         if (gameDTO != null) {
             IGame game = gameDAO.getGameById(gameDTO.getId());
-
             if (game != null) {
-
                 if (game.hasWinner()) {
                     game = clearGame(game, config);
                 }
 
-                List<ShowdownGameSet> existingSets = game.getSets();
-                List<GameSetDTO> newSets = gameDTO.getSets();
+                updated = updateSets(game, gameDTO);
 
-                // same amount of overall sets required
-                if (existingSets.size() == newSets.size()) {
+                // sets updated, let's see if game over
+                if (updated) {
+                    int setsPlayed = game.getSetsPlayed();
+                    int setsWonByPlayer1 = game.getSetsWonByPlayer1();
+                    int setsWonByPlayer2 = game.getSetsWonByPlayer2();
+                    boolean gameOver = false;
+                    int minSets = game.getGroup().getMinSets();
+                    int maxSets = game.getGroup().getMaxSets();
 
-                    IPlayer player1 = game.getPlayer1();
-                    IPlayer player2 = game.getPlayer2();
-
-                    // copy scores from DTO to Entity
-                    // and try to determine set winner
-                    // pre-align if input is vice versa to save code (DRY)
-                    if (player1.getId() == gameDTO.getPlayer2Id()
-                            && player2.getId() == gameDTO.getPlayer1Id()) {
-                        gameDTO = alignPlayers(gameDTO);
-                    }
-
-                    // scores aligned (now)?
-                    if (player1.getId() == gameDTO.getPlayer1Id()
-                            && player2.getId() == gameDTO.getPlayer2Id()) {
-
-                        ListIterator<ShowdownGameSet> setsIterator = existingSets
-                                .listIterator();
-
-                        while (setsIterator.hasNext()) {
-                            IGameSet oldSet = setsIterator.next();
-                            String oldSetGroupName = oldSet.getGame().getGroup().getName();
-                            // DTOs get counted and index-accessed in parallel
-                            GameSetDTO newSet = newSets.get(numDTOs++);
-
-                            // copy scores
-                            oldSet.setPlayer1Score(newSet.getPlayer1Score());
-                            oldSet.setPlayer2Score(newSet.getPlayer2Score());
-
-                            // write set winner
-                            if (oldSet.getPlayer1Score() > 0
-                                    || oldSet.getPlayer2Score() > 0) {
-
-                                if (oldSet.getPlayer1Score() > oldSet
-                                        .getPlayer2Score()) {
-                                    oldSet.setWinner(oldSet.getGame().getPlayer1());
-
-                                    logger.info("'" + oldSetGroupName + "' Set winner: "
-                                            + oldSet.getGame().getPlayer1()
-                                            .getName() + ", "
-                                            + oldSet.getPlayer1Score() + ":"
-                                            + oldSet.getPlayer2Score());
-                                } else if (oldSet.getPlayer2Score() > oldSet
-                                        .getPlayer1Score()) {
-                                    oldSet.setWinner(oldSet.getGame().getPlayer2());
-
-                                    logger.info("'" + oldSetGroupName + "' Set winner: "
-                                            + oldSet.getGame().getPlayer2()
-                                            .getName() + ", "
-                                            + oldSet.getPlayer2Score() + ":"
-                                            + oldSet.getPlayer1Score());
-                                }
+                    // TODO make the following transactional #app-design
+                    // we have a game winner if
+                    // - all sets have been played OR enough sets have been
+                    // played
+                    // - one player has won more sets than the other
+                    // - no one player has played more than min amount of sets
+                    // we'll also calculate and write back
+                    // - (bonus) points for won sets
+                    // - score ratios for opponents
+                    // (only) one of the players has won minimum required sets
+                    if (setsPlayed == maxSets) {
+                        if (maxSets == 1
+                                || maxSets > setsWonByPlayer1
+                                && maxSets > setsWonByPlayer2) {
+                            gameOver = true;
+                        } else {
+                            logger.error("One player has won one set too much (max sets "
+                                    + maxSets + "), sets won by players: "
+                                    + setsWonByPlayer1 + ", "
+                                    + setsWonByPlayer2);
+                            // - clear sets
+                            // TODO Game.clearSets()
+                            for (ShowdownGameSet set : game.getSets()) {
+                                set.setPlayer1Score(0);
+                                set.setPlayer2Score(0);
+                                set.setWinner(null);
                             }
                         }
-
-                        if (numDTOs > 0) {
-                            updated = true;
-                            // write back
-                            game.setSets(existingSets);
-                        }
-
+                    } else if (setsWonByPlayer1 == minSets && setsWonByPlayer2 < minSets) {
+                        gameOver = true;
+                    } else if (setsWonByPlayer2 == minSets && setsWonByPlayer1 < minSets) {
+                        gameOver = true;
                     } else {
-                        logger.warn("Player ID mismatch");
+                        logger.error("Unable to determine winner for sets in game");
                     }
 
-                    // sets updated, let's see if game over
-                    if (updated) {
-                        int setsPlayed = game.getSetsPlayed();
-                        int setsWonByPlayer1 = game.getSetsWonByPlayer1();
-                        int setsWonByPlayer2 = game.getSetsWonByPlayer2();
-                        boolean gameOver = false;
-                        int minSets = game.getGroup().getMinSets();
-                        int maxSets = game.getGroup().getMaxSets();
-
-                        // TODO make the following transactional #app-design
-                        // we have a game winner if
-                        // - all sets have been played OR enough sets have been
-                        // played
-                        // - one player has won more sets than the other
-                        // - no one player has played more than min amount of sets
-                        // we'll also calculate and write back
-                        // - (bonus) points for won sets
-                        // - score ratios for opponents
-                        // (only) one of the players has won minimum required sets
-                        if (setsPlayed == maxSets) {
-                            if (maxSets == 1
-                                    || maxSets > setsWonByPlayer1
-                                    && maxSets > setsWonByPlayer2) {
-                                gameOver = true;
-                            } else {
-                                logger.error("One player has won one set too much (max sets "
-                                        + maxSets + "), sets won by players: "
-                                        + setsWonByPlayer1 + ", "
-                                        + setsWonByPlayer2);
-                                // - clear sets
-                                for (ShowdownGameSet set : game.getSets()) {
-                                    set.setPlayer1Score(0);
-                                    set.setPlayer2Score(0);
-                                    set.setWinner(null);
-                                }
-                            }
-                        } else if (setsWonByPlayer1 == minSets && setsWonByPlayer2 < minSets) {
-                            gameOver = true;
-                        } else if (setsWonByPlayer2 == minSets && setsWonByPlayer1 < minSets) {
-                            gameOver = true;
-                        } else {
-                            logger.error("Unable to determine winner for sets in game");
-                        }
-
-                        if (gameOver) {
-                            logger.info("Game over");
-                            // write score ratios already (no need to know the
-                            // winner yet)
-                            updateScoreRatios(game, true);
-
-                            game.setPlayedAt(new Date());
-
-                            if (setsWonByPlayer1 > setsWonByPlayer2) {
-
-                                // set player 1 as winner
-                                game.setWinner(player1);
-                                player1.addWonGame();
-                                playerDAO.updatePlayer(player1);
-
-                                logger.info("Game winner: " + player1.getName()
-                                        + ", " + setsWonByPlayer1 + ":"
-                                        + setsWonByPlayer2);
-
-                                // add bonus points (only) if more than one set has
-                                // been played
-                                if (game.getSets().size() > 1) {
-
-                                    addBonusPoints(
-                                            bonusPointsDistributor.getBonusPoints(
-                                                    setsPlayed,
-                                                    setsWonByPlayer1), player1,
-                                            player2);
-                                }
-
-                            } else if (setsWonByPlayer2 > setsWonByPlayer1) {
-
-                                // set player 2 as winner
-                                game.setWinner(player2);
-                                player2.addWonGame();
-                                playerDAO.updatePlayer(player2);
-
-                                logger.info("Game winner: " + player2.getName()
-                                        + ", " + setsWonByPlayer2 + ":"
-                                        + setsWonByPlayer1);
-
-                                // add bonus points (only) if more than one set has
-                                // been played
-                                if (game.getSets().size() > 1) {
-                                    addBonusPoints(
-                                            bonusPointsDistributor.getBonusPoints(
-                                                    setsPlayed,
-                                                    setsWonByPlayer2), player2,
-                                            player1);
-                                }
-                            }
-                        }
-
-                        // write back
-                        gameDAO.updateGame(game);
-
-                        IGroup group = game.getGroup();
-                        // set group = completed if this was its last game
-                        if (gameDAO.getUnplayedGamesInGroup(group).isEmpty()) {
-                            group.setCompleted();
-                            // DO NOT setActive(false) here,
-                            // group stays active until round switched!
-                            success = true;
-                        } else {
-                            // !
-                            success = true;
-                        }
+                    if (gameOver) {
+                        logger.info("Game over");
+                        game = finishGame(game, config);
                     }
+
+                    // write back
+                    gameDAO.updateGame(game);
+
+                    IGroup group = game.getGroup();
+                    // set group = completed if this was its last game
+                    if (gameDAO.getUnplayedGamesInGroup(group).isEmpty()) {
+                        group.setCompleted();
+                        // DO NOT setActive(false) here,
+                        // group stays active until round switched!
+                    }
+                    success = true;
                 }
+
             }
         }
 
         return success;
     }
 
-    // switch players if necessary (player1Score becomes player2Score etc.)
-    // needed in rare case where client JSON might be mixed up
-    private GameDTO alignPlayers(GameDTO unalignedDTO) {
-        logger.debug("Unaligned DTO: " + unalignedDTO);
+    protected IGame finishGame(IGame game, BonusPointsDistribution config) {
+        updateScoreRatios(game, true);
+        addScores(game);
+        game.setPlayedAt(new Date());
 
-        GameDTO alignedDTO = new GameDTO(unalignedDTO);
+        IPlayer winner;
+        IPlayer loser;
+        int setsWonByPlayer1 = game.getSetsWonByPlayer1();
+        int setsWonByPlayer2 = game.getSetsWonByPlayer2();
+        int setsWonByWinner;
+        int setsWonByLoser;
+        int setsPlayed = game.getSetsPlayed();
+
+        if (setsWonByPlayer1 == setsWonByPlayer2) {
+            return game;
+        } else {
+            if (setsWonByPlayer1 > setsWonByPlayer2) {
+                winner = game.getPlayer1();
+                loser = game.getPlayer2();
+                setsWonByWinner = game.getSetsWonByPlayer1();
+                setsWonByLoser = game.getSetsWonByPlayer2();
+            } else {
+                winner = game.getPlayer2();
+                loser = game.getPlayer1();
+                setsWonByWinner = game.getSetsWonByPlayer2();
+                setsWonByLoser = game.getSetsWonByPlayer1();
+            }
+        }
+
+        game.setWinner(winner);
+        winner.addWonGame();
+        playerDAO.updatePlayer(winner);
+
+        logger.info("Game winner: " + winner + ", "
+                + setsWonByWinner + ":" + setsWonByLoser);
+
+        // add bonus points (only) if more than one set has
+        // been played
+        if (game.getSets().size() > 1) {
+            addBonusPoints(new BonusPointsDistributor(config).getBonusPoints(
+                    setsPlayed, setsWonByWinner), winner, loser);
+        }
+
+        return game;
+    }
+
+    // switch players if necessary (player1Score becomes player2Score etc.)
+// needed in rare case where client JSON might be mixed up
+    private GameDTO alignPlayers(IGame game, GameDTO dto) {
+
+        if (game.getPlayer1().getId() == dto.getPlayer1Id()
+                && game.getPlayer2().getId() == dto.getPlayer2Id()) {
+            return dto;
+        }
+
+        GameDTO alignedDTO = new GameDTO(dto);
         // vice versa
-        alignedDTO.setPlayer1Id(unalignedDTO.getPlayer2Id());
-        alignedDTO.setPlayer1Name(unalignedDTO.getPlayer2Name());
-        alignedDTO.setPlayer2Id(unalignedDTO.getPlayer1Id());
-        alignedDTO.setPlayer2Name(unalignedDTO.getPlayer1Name());
+        alignedDTO.setPlayer1Id(dto.getPlayer2Id());
+        alignedDTO.setPlayer1Name(dto.getPlayer2Name());
+        alignedDTO.setPlayer2Id(dto.getPlayer1Id());
+        alignedDTO.setPlayer2Name(dto.getPlayer1Name());
         // align set list
         ArrayList<GameSetDTO> alignedSets = new ArrayList<>();
-        for (GameSetDTO set : unalignedDTO.getSets()) {
+        for (GameSetDTO set : dto.getSets()) {
             logger.debug("Unaligned set: " + set);
             // vice versa
             // we have to set any winner to null
@@ -317,11 +290,10 @@ public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
             IPlayer winner, IPlayer loser) {
         winner.setPoints(winner.getPoints() + bonusPoints.get("winner"));
         loser.setPoints(loser.getPoints() + bonusPoints.get("loser"));
-        String groupName = winner.getGroup().getName();
 
-        logger.info("'" + groupName + "' Bonus points: " + winner.getName() + " +"
+        logger.info("Bonus points: " + winner + " +"
                 + bonusPoints.get("winner") + " = " + winner.getPoints() + ", "
-                + loser.getName() + " +" + bonusPoints.get("loser") + " = "
+                + loser + " +" + bonusPoints.get("loser") + " = "
                 + loser.getPoints());
     }
 
@@ -329,76 +301,96 @@ public class UpdateGameBean implements UpdateGameRemote, UpdateGameLocal {
             IPlayer winner, IPlayer loser) {
         winner.setPoints(winner.getPoints() - bonusPoints.get("winner"));
         loser.setPoints(loser.getPoints() - bonusPoints.get("loser"));
-        String groupName = winner.getGroup().getName();
 
-        logger.info("'" + groupName + "' Bonus points: " + winner.getName() + " -"
+        logger.info("Bonus points: " + winner + " -"
                 + bonusPoints.get("winner") + " = " + winner.getPoints() + ", "
-                + loser.getName() + " -" + bonusPoints.get("loser") + " = "
+                + loser + " -" + bonusPoints.get("loser") + " = "
                 + loser.getPoints());
+    }
+
+    protected int getScore(IGame game, IPlayer player) {
+        int score = 0;
+        IPlayer player1 = game.getPlayer1();
+        IPlayer player2 = game.getPlayer2();
+
+        if (player != null) {
+            if (player.equals(player1)) {
+                for (ShowdownGameSet set : game.getSets()) {
+                    score += set.getPlayer1Score();
+                }
+            } else if (player.equals(player2)) {
+                for (ShowdownGameSet set : game.getSets()) {
+                    score += set.getPlayer2Score();
+                }
+            }
+        }
+
+        return score;
+    }
+
+    protected void addScores(IGame game) {
+        for (IPlayer player : game.getPlayers()) {
+            player.setScore(player.getScore() + getScore(game, player));
+        }
+    }
+
+    protected void subtractScores(IGame game) {
+        for (IPlayer player : game.getPlayers()) {
+            player.setScore(player.getScore() - getScore(game, player));
+        }
     }
 
     // NB: the winner is not necessarily the one who has scored more!
     private void updateScoreRatios(IGame game, boolean addToTotal) {
-        int resultPlayer1Score = 0;
-        int resultPlayer2Score = 0;
-        int difference = 0;
+        int player1Score = getScore(game, game.getPlayer1());
+        int player2Score = getScore(game, game.getPlayer2());
+        int difference = Math.abs(player1Score - player2Score);
 
         IPlayer player1 = game.getPlayer1();
         IPlayer player2 = game.getPlayer2();
-        String groupName = game.getGroup().getName();
 
-        for (ShowdownGameSet set : game.getSets()) {
-            resultPlayer1Score += set.getPlayer1Score();
-            resultPlayer2Score += set.getPlayer2Score();
-        }
+        logger.info(player1 + " has scored " + player1Score + " in total");
+        logger.info(player2 + " has scored " + player2Score + " in total");
 
-        logger.info("'" + groupName + "' " + player1.getName() + " has scored " + resultPlayer1Score
-                + " in total");
-        logger.info("'" + groupName + "' " + player2.getName() + " has scored " + resultPlayer2Score
-                + " in total");
-
-        difference = Math.abs(resultPlayer1Score - resultPlayer2Score);
-
-        if (resultPlayer1Score > resultPlayer2Score) {
+        if (player1Score > player2Score) {
 
             if (addToTotal) {
                 player1.setScoreRatio(player1.getScoreRatio() + difference);
                 player2.setScoreRatio(player2.getScoreRatio() - difference);
-                logger.info("'" + groupName + "' " + player1.getName() + " +" + difference + " = "
+                logger.info(player1 + " +" + difference + " = "
                         + player1.getScoreRatio());
-                logger.info("'" + groupName + "' " + player2.getName() + " -" + difference + " = "
+                logger.info(player2 + " -" + difference + " = "
                         + player2.getScoreRatio());
             } else {
-                logger.debug("Resetting scores");
+                logger.info("Resetting scores");
                 player2.setScoreRatio(player2.getScoreRatio() + difference);
                 player1.setScoreRatio(player1.getScoreRatio() - difference);
 
-                logger.info("'" + groupName + "' " + player2.getName() + " +" + difference + " = "
+                logger.info(player2 + " +" + difference + " = "
                         + player2.getScoreRatio());
-                logger.info("'" + groupName + "' " + player1.getName() + " -" + difference + " = "
+                logger.info(player1 + " -" + difference + " = "
                         + player1.getScoreRatio());
             }
 
-        } else if (resultPlayer2Score > resultPlayer1Score) {
+        } else if (player2Score > player1Score) {
             if (addToTotal) {
                 player2.setScoreRatio(player2.getScoreRatio() + difference);
                 player1.setScoreRatio(player1.getScoreRatio() - difference);
 
-                logger.info("'" + groupName + "' " + player2.getName() + " +" + difference + " = "
+                logger.info(player2 + " +" + difference + " = "
                         + player2.getScoreRatio());
-                logger.info("'" + groupName + "' " + player1.getName() + " -" + difference + " = "
+                logger.info(player1 + " -" + difference + " = "
                         + player1.getScoreRatio());
             } else {
-                logger.debug("Resetting scores");
+                logger.info("Resetting scores");
                 player1.setScoreRatio(player1.getScoreRatio() + difference);
                 player2.setScoreRatio(player2.getScoreRatio() - difference);
-                logger.info("'" + groupName + "' " + player1.getName() + " +" + difference + " = "
+
+                logger.info(player1 + " +" + difference + " = "
                         + player1.getScoreRatio());
-                logger.info("'" + groupName + "' " + player2.getName() + " -" + difference + " = "
+                logger.info(player2 + " -" + difference + " = "
                         + player2.getScoreRatio());
             }
-        } else {
-            // if scores are identical, nothing to do?
         }
     }
 }

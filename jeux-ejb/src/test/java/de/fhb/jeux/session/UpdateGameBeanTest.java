@@ -110,4 +110,22 @@ public class UpdateGameBeanTest {
         }
 
     }
+
+    @Test
+    public void addScores() {
+        game.getPlayer1().setScore(11);
+        game.getPlayer2().setScore(7);
+        bean.addScores(game);
+        assertEquals(33, game.getPlayer1().getScore());
+        assertEquals(7, game.getPlayer2().getScore());
+    }
+
+    @Test
+    public void subtractScores() {
+        game.getPlayer1().setScore(11);
+        game.getPlayer2().setScore(7);
+        bean.subtractScores(game);
+        assertEquals(-11, game.getPlayer1().getScore());
+        assertEquals(7, game.getPlayer2().getScore());
+    }
 }

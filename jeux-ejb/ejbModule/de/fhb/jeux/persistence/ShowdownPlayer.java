@@ -32,6 +32,9 @@ public class ShowdownPlayer implements IPlayer, Serializable {
     private int points;
 
     @Column
+    private int score;
+
+    @Column
     private int scoreRatio;
 
     @Column
@@ -39,6 +42,12 @@ public class ShowdownPlayer implements IPlayer, Serializable {
 
     @Column
     private int wonGames;
+
+    @Column
+    private int wonSets;
+
+    @Column
+    private int lostSets;
 
     @Column
     private String name;
@@ -105,6 +114,16 @@ public class ShowdownPlayer implements IPlayer, Serializable {
     }
 
     @Override
+    public int getScore() {
+        return score;
+    }
+
+    @Override
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    @Override
     public int getScoreRatio() {
         return scoreRatio;
     }
@@ -151,10 +170,33 @@ public class ShowdownPlayer implements IPlayer, Serializable {
 
     @Override
     public void resetStats() {
-        this.wonGames = 0;
-        this.points = 0;
-        this.scoreRatio = 0;
-        this.rank = 0;
+        wonGames = 0;
+        wonSets = 0;
+        lostSets = 0;
+        points = 0;
+        score = 0;
+        scoreRatio = 0;
+        rank = 0;
+    }
+
+    @Override
+    public int getWonSets() {
+        return wonSets;
+    }
+
+    @Override
+    public void setWonSets(int wonSets) {
+        this.wonSets = wonSets;
+    }
+
+    @Override
+    public int getLostSets() {
+        return lostSets;
+    }
+
+    @Override
+    public void setLostSets(int lostSets) {
+        this.lostSets = lostSets;
     }
 
     @Override
@@ -162,9 +204,7 @@ public class ShowdownPlayer implements IPlayer, Serializable {
         StringBuilder sb = new StringBuilder();
         sb.append("<");
         sb.append(name);
-        sb.append(" (");
-        sb.append(id);
-        sb.append("), group '");
+        sb.append(", group '");
         sb.append(group.getName());
         sb.append("', rank ");
         sb.append(rank);
@@ -172,7 +212,13 @@ public class ShowdownPlayer implements IPlayer, Serializable {
         sb.append(points);
         sb.append(", won games ");
         sb.append(wonGames);
-        sb.append(", scoreRatio ");
+        sb.append(", won sets ");
+        sb.append(wonSets);
+        sb.append(", lost sets ");
+        sb.append(lostSets);
+        sb.append(", score ");
+        sb.append(score);
+        sb.append(", score ratio ");
         sb.append(scoreRatio);
         sb.append(">");
 
