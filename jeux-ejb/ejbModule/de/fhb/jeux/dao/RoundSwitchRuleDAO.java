@@ -63,10 +63,9 @@ public class RoundSwitchRuleDAO {
         return runQuery("RoundSwitchRule.findAll", null, null);
     }
 
-    public List<IRoundSwitchRule> getRulesForSrcGroup(IGroup group) {
-        return runQuery("RoundSwitchRule.findBySrcGroup", "srcGroup", group);
-    }
-
+//    public List<IRoundSwitchRule> getRulesForSrcGroup(IGroup group) {
+//        return runQuery("RoundSwitchRule.findBySrcGroup", "srcGroup", group);
+//    }
     public List<IRoundSwitchRule> getRulesForDestGroup(IGroup group) {
         return runQuery("RoundSwitchRule.findByDestGroup", "destGroup", group);
     }

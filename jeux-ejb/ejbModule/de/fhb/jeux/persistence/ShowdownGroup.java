@@ -173,6 +173,11 @@ public class ShowdownGroup implements IGroup, Serializable {
     }
 
     @Override
+    public void setPlayers(List<ShowdownPlayer> players) {
+        this.players = players;
+    }
+
+    @Override
     public boolean hasGames() {
         return this.games.size() > 0;
     }
@@ -182,19 +187,26 @@ public class ShowdownGroup implements IGroup, Serializable {
         StringBuilder sb = new StringBuilder();
         sb.append("<");
         sb.append("'");
-        sb.append(this.name);
+        sb.append(name);
         sb.append("' (ID ");
-        sb.append(this.id);
-        sb.append("), round ");
-        sb.append(this.roundId);
+        sb.append(id);
+        sb.append("), ");
+        sb.append(getSize());
+        if (getSize() == 1) {
+            sb.append(" player");
+        } else {
+            sb.append(" players");
+        }
+        sb.append(", round ");
+        sb.append(roundId);
         sb.append(", active = ");
-        sb.append(this.active);
+        sb.append(active);
         sb.append(", completed = ");
-        sb.append(this.completed);
+        sb.append(completed);
         sb.append(", ");
-        sb.append(this.minSets);
+        sb.append(minSets);
         sb.append("-");
-        sb.append(this.maxSets);
+        sb.append(maxSets);
         sb.append(" sets");
         sb.append(">");
 

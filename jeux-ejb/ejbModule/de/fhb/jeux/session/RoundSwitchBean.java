@@ -6,6 +6,7 @@ import de.fhb.jeux.model.IGroup;
 import de.fhb.jeux.model.IPlayer;
 import de.fhb.jeux.model.IRanking;
 import de.fhb.jeux.model.IRoundSwitchRule;
+import de.fhb.jeux.persistence.ShowdownPlayer;
 import de.fhb.jeux.persistence.ShowdownRanking;
 import java.util.List;
 import javax.ejb.EJB;
@@ -41,6 +42,15 @@ public class RoundSwitchBean implements RoundSwitchRemote, RoundSwitchLocal {
     static final int UNKNOWN_ERR = 500;
 
     public RoundSwitchBean() {
+    }
+
+    // tests
+    public RoundSwitchBean(GroupDAO groupDAO, RoundSwitchRuleDAO ruleDAO,
+            AdHocRankingLocal adHocRankingBean, FinalRankingLocal finalRankingBean) {
+        this.groupDAO = groupDAO;
+        this.ruleDAO = ruleDAO;
+        this.adHocRankingBean = adHocRankingBean;
+        this.finalRankingBean = finalRankingBean;
     }
 
     protected boolean checkDestGroup(IGroup destGroup) {
@@ -87,14 +97,26 @@ public class RoundSwitchBean implements RoundSwitchRemote, RoundSwitchLocal {
         for (IPlayer player : rankedPlayers) {
             IRanking ranking = new ShowdownRanking(player, player.getGroup());
             finalRankingBean.addRanking(ranking);
+            logger.debug("Finalized ranking " + ranking);
         }
     }
 
     private void applyRule(IGroup destGroup, IRoundSwitchRule rule) {
         IGroup srcGroup = rule.getSrcGroup();
-        List<IPlayer> rankedPlayers = adHocRankingBean.getRankedPlayers(srcGroup);
-        doFinalRanking(rankedPlayers);
-        srcGroup.setInactive();
+
+        if (srcGroup.isActive()) {
+            logger.debug("Source group is active, will finalize ranking and set group inactive");
+            List<IPlayer> rankedPlayers = adHocRankingBean.getRankedPlayers(srcGroup);
+            logger.debug("ad-hoc ranked players: " + rankedPlayers);
+            doFinalRanking(rankedPlayers);
+            srcGroup.setInactive();
+        }
+
+        List<ShowdownPlayer> rankedPlayers = finalRankingBean.getRankedPlayers(srcGroup);
+        if (rankedPlayers.isEmpty()) {
+            logger.error("Cannot find ranked players for " + srcGroup);
+        }
+        logger.info("Final ranking in group: " + rankedPlayers);
 
         // TODO moving players fails if higher-ranked player cannot
         // be determined definitively
@@ -102,10 +124,25 @@ public class RoundSwitchBean implements RoundSwitchRemote, RoundSwitchLocal {
                 .getStartWithRank() + rule.getAdditionalPlayers()); rank++) {
 
             IPlayer rankedPlayer = rankedPlayers.get(rank);
-            rankedPlayer.setGroup(destGroup);
+            logger.debug("Applying " + rule + " to " + rankedPlayer);
             rankedPlayer.resetStats();
 
-            logger.info("Applied " + rule);
+            // this is sufficient for JPA
+            rankedPlayer.setGroup(destGroup);
+            // the following steps happen autmatically with JPA,
+            // so tests do not catch any problems wrt players
+            // having moved and group's player list indices
+            // becoming smaller
+            List<ShowdownPlayer> destGroupPlayers = destGroup.getPlayers();
+            destGroupPlayers.add((ShowdownPlayer) rankedPlayer);
+            destGroup.setPlayers(destGroupPlayers);
+            List<ShowdownPlayer> srcGroupPlayers = srcGroup.getPlayers();
+            srcGroupPlayers.remove((ShowdownPlayer) rankedPlayer);
+            srcGroup.setPlayers(srcGroupPlayers);
+
+            logger.info("Applied rule " + rule + ": " + rankedPlayer);
+            logger.info(destGroup + ": " + destGroup.getPlayers() + ", "
+                    + srcGroup + ": " + srcGroup.getPlayers());
         }
     }
 

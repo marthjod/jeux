@@ -22,6 +22,8 @@ public interface IGroup {
 
     public List<ShowdownPlayer> getPlayers();
 
+    public void setPlayers(List<ShowdownPlayer> players);
+
     public boolean isActive();
 
     public void setActive();

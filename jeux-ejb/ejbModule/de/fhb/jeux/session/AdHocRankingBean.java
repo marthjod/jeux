@@ -24,6 +24,11 @@ public class AdHocRankingBean implements AdHocRankingRemote, AdHocRankingLocal {
     public AdHocRankingBean() {
     }
 
+    // tests
+    public AdHocRankingBean(GameDAO gameDAO) {
+        this.gameDAO = gameDAO;
+    }
+
     @EJB
     private PlayerDAO playerDAO;
 
@@ -32,7 +37,7 @@ public class AdHocRankingBean implements AdHocRankingRemote, AdHocRankingLocal {
 
     @Override
     public List<IPlayer> getRankedPlayers(IGroup group) {
-        List<IPlayer> rankings = new ArrayList<IPlayer>();
+        List<IPlayer> rankings = new ArrayList<>();
         int rank = 0;
 
         if (group != null) {
@@ -40,6 +45,7 @@ public class AdHocRankingBean implements AdHocRankingRemote, AdHocRankingLocal {
             List<ShowdownPlayer> players = group.getPlayers();
 
             if (!players.isEmpty()) {
+
                 // only calculate if games have been actually played
                 if (gameDAO.getCountPlayedGamesInGroup(group) > 0) {
                     Comparator<IPlayer> comparator;
@@ -85,7 +91,11 @@ public class AdHocRankingBean implements AdHocRankingRemote, AdHocRankingLocal {
                 if (!rankings.isEmpty()) {
                     logger.debug(rankings);
                 }
+            } else {
+                logger.warn("No players in group " + group);
             }
+        } else {
+            logger.error("Group is null");
         }
         return rankings;
     }

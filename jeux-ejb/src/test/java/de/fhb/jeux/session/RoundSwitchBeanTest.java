@@ -1,6 +1,5 @@
 package de.fhb.jeux.session;
 
-import de.fhb.jeux.dao.RoundSwitchRuleDAO;
 import de.fhb.jeux.persistence.*;
 import de.fhb.jeux.model.IGroup;
 import de.fhb.jeux.model.IRoundSwitchRule;
@@ -16,7 +15,6 @@ public class RoundSwitchBeanTest {
     private RoundSwitchBean bean;
     private IGroup destGroup;
     private IGroup srcGroup;
-    private RoundSwitchRuleDAO ruleDAO;
     private List<IRoundSwitchRule> rules;
 
     public RoundSwitchBeanTest() {
@@ -28,7 +26,6 @@ public class RoundSwitchBeanTest {
     public void setUp() {
         destGroup = mock(ShowdownGroup.class);
         srcGroup = mock(ShowdownGroup.class);
-        ruleDAO = mock(RoundSwitchRuleDAO.class);
     }
 
     @Test
@@ -74,4 +71,5 @@ public class RoundSwitchBeanTest {
                 0, srcGroup, destGroup));
         assertTrue(bean.checkSrcGroups(destGroup, rules));
     }
+
 }
