@@ -26,19 +26,23 @@ public class CreateGroupBean implements CreateGroupRemote, CreateGroupLocal {
         boolean checkOK = false;
         int id = -1;
 
-        // min sets <= max sets;
-        // creating "completed" groups is disallowed
-        if (groupDTO.getMinSets() <= groupDTO.getMaxSets()
-                && !groupDTO.isCompleted()) {
+        // min sets must be <= max sets;
+        // creating "completed" groups is OK, because we may import intermediate
+        // states
+        if (groupDTO.getMinSets() <= groupDTO.getMaxSets()) {
             checkOK = true;
+        } else {
+            logger.warn("Min sets not <= max sets (" + groupDTO.getMinSets()
+                    + ", " + groupDTO.getMaxSets() + ")");
         }
 
         if (checkOK) {
             // persist new Group entity after having
             // converted it from DTO
             IGroup newGroup = new ShowdownGroup(groupDTO);
+            logger.debug("From DTO: " + newGroup);
             groupDAO.addGroup(newGroup);
-
+            logger.debug("Added " + newGroup);
             id = newGroup.getId();
         }
 
