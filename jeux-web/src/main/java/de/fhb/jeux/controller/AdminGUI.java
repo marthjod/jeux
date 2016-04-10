@@ -202,7 +202,6 @@ public class AdminGUI {
             logger.error(ex.getMessage());
         }
         List<GroupDTO> importGroups = JSONImporter.importGroupsFromJson(bufreader);
-        logger.debug(importGroups);
 
         if (saveImportedGroups(importGroups)) {
             response = Response.seeOther(returnUrl).build();
