@@ -102,7 +102,8 @@ TO 'jeuxdb_user'@'<DB_HOST>';
 
 - Use IDE with JBoss and Maven integration
 
-## OpenShift
+## Deployment on OpenShift
 
+- Initial deployment: see [_deploy_openshift.sh_](https://github.com/marthjod/jeux/blob/master/deployment/deploy_openshift.sh)
 - The OpenShift [build action hook](https://github.com/marthjod/jeux/blob/master/.openshift/action_hooks/build) uses the `$JEUX_SERVER_SECRET` environment variable set via `rhc env set ...`
 - MySQL dump: `mysqldump -h $OPENSHIFT_MYSQL_DB_HOST -u $OPENSHIFT_MYSQL_DB_USERNAME -p"$OPENSHIFT_MYSQL_DB_PASSWORD" -P $OPENSHIFT_MYSQL_DB_PORT jeux > $OPENSHIFT_DATA_DIR/jeux-$(date +%Y%m%d-%H%M%S).sql`
